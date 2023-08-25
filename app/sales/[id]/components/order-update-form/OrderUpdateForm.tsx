@@ -13,6 +13,11 @@ import toast from 'react-hot-toast'
 import { updateAmountOrder } from '@/app/sales/services/sale.services'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { useContext } from "react"
+import { OrderContext } from "../../context/orders-context/orderContext"
+import { OrderContextInterface } from "@/app/sales/models/sale.models"
+
+
 
 const formSchema = z.object({
   amount_product: z.string().transform((val) => parseInt(val)),
@@ -27,6 +32,7 @@ interface Props{
 export default function OrderUpdateForm({order}: Props) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
+  const {UpdateAmountOrders} = useContext(OrderContext) as OrderContextInterface
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -37,12 +43,7 @@ export default function OrderUpdateForm({order}: Props) {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     values.id_order = order.id
-    toast.promise(updateAmountOrder(values.id_order, values.amount_product), {
-      loading: 'Updated order...',
-      success: 'Orden Actualizada correctamente',
-      error: 'Error al actualizar'
-    })
-    router.refresh()
+    UpdateAmountOrders(values.id_order, values.amount_product)
     setOpen(false)
   }
 

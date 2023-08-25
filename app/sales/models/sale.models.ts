@@ -35,6 +35,15 @@ export interface Order {
   total: number;
 }
 
+
+export interface OrderContextInterface {
+  OrdersContext: Array<Order>;
+  setOrdersContext: (value: Array<Order>) => void;
+  UpdateAmountOrders: (id: string, amount_order: number) => void;
+  DeleteOrder: (id: string) => void;
+  AddOrder: (order: Order) => void;
+}
+
 export interface OrderCreate {
   sale_id: string;
   product_id: string;

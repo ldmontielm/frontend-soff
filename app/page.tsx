@@ -1,9 +1,12 @@
 import Link from "next/link"
 
+const statistics = [
+  
+]
+
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <Link href='/sales'>Ventas</Link>
+    <main className="p-24">
     </main>
   )
 }

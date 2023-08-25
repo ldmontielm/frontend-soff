@@ -1,6 +1,5 @@
-"use client"
- 
-import { addOrder, getProducts } from "@/app/sales/services/sale.services"
+"use client" 
+import { addOrder, getProducts, urlProducts } from "@/app/sales/services/sale.services"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -13,25 +12,23 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import useSWR from 'swr'
 import * as z from 'zod'
+import { useContext } from "react"
+import { OrderContext } from "../../context/orders-context/orderContext"
+import { OrderContextInterface } from "@/app/sales/models/sale.models"
+
+
 
 const formSchema = z.object({
   sale_id: z.string(),
-  product_id: z.string(),
-  amount_product: z.string().transform(Number)
+  product_id: z.string().uuid({message: 'Debe seleccionar un producto'}),
+  amount_product: z.number().min(1, 'Como mínimo debe vender un producto').transform(Number)
 })
 
-async function fetchGetAllProducts(){
-  return await getProducts()
-}
-
-// eslint-disable-next-line @next/next/no-async-client-component
 export default function HeadTable() {
   const params = useParams()
-  const [producto, setProducto] = useState(false)
-  const [amountProduct, setAmountProduct] = useState<number>()
-  const [value, setValue] = useState("")
   const router = useRouter()
-  const {data:products} = useSWR('/products', getProducts)
+  const {data:products} = useSWR(urlProducts, getProducts)
+  const {AddOrder} = useContext(OrderContext) as OrderContextInterface
 
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -45,19 +42,28 @@ export default function HeadTable() {
 
   async function onSubmit(values: z.infer<typeof formSchema>){
     values.sale_id = params.id.toString()
-    toast.promise(addOrder(values), {
-      loading: 'Add order...',
-      success: 'Orde agregada correctamente',
-      error: 'Error when fetching'
-    })
-    router.refresh()
+    const product: any = Array.isArray(products) && products.find((product) => product.id === values.product_id)
+    if(product != undefined && product != false){
+      const newOrder = {
+        id: crypto.randomUUID(),
+        sale_id: values.sale_id,
+        product_id: values.product_id,
+        product: product.name,
+        price: product.sale_price,
+        amount_product: values.amount_product,
+        total: values.amount_product * product.sale_price
+      }
+      AddOrder(newOrder)
+    }else{
+      toast.error('El producto no se pudo encontrar')
+    }
   }
 
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-wrap lg:flex-nowrap items-end  justify-between gap-2">
-        <div className="w-full flex flex-wrap lg:flex-nowrap items-center gap-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-wrap lg:flex-nowrap items-center  justify-between gap-2">
+        <div className="w-full flex flex-wrap lg:flex-nowrap items-start gap-2">
           <FormField 
             control={form.control}
             name="product_id"
@@ -66,7 +72,7 @@ export default function HeadTable() {
                 <FormLabel>Producto</FormLabel>
                 <FormControl>
                   <div className="w-full xl:w-[200px]">
-                    <Select defaultValue={field.value} onValueChange={field.onChange}>
+                    <Select onValueChange={field.onChange}>
                       <SelectTrigger className="uppercase">
                         <SelectValue  placeholder='Producto' />
                       </SelectTrigger>
@@ -92,7 +98,7 @@ export default function HeadTable() {
               <FormItem className="w-full md:w-[200px]">
                 <FormLabel>Cantidad</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Cantidad del producto" min="1" {...field} className="lg:w-fit"/>
+                  <Input type="number" placeholder="Cantidad del producto" min="1" {...form.register('amount_product', {valueAsNumber: true})} className="lg:w-fit"/>
                 </FormControl>
                 <FormMessage />
               </FormItem>

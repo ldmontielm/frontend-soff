@@ -9,7 +9,6 @@ import { Routes } from "@/models/routes.models";
 import { ToastAction } from "@/components/ui/toast"
 import toast from "react-hot-toast";
 
-
 export default function HeadTable() {
   const router = useRouter()
   return (

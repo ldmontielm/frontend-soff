@@ -17,19 +17,19 @@ import Link from 'next/link'
 import { Routes } from '@/models/routes.models'
 import { Sale } from '../../models/sale.models'
 import { createSala } from '../../services/sale.services'
-import { getSales, urlSales } from '../../services/sale.services'
 import { HeadTable } from '..'
 import useSWR from 'swr'
+import { getSales, urlSales } from '../../services/sale.services'
 
 
 export default function TableComponent() {
-  const {data: sales, isLoading, error} = useSWR(urlSales, getSales)
+  const {data: sales, isLoading, isValidating, error} = useSWR(urlSales, getSales)
+  
   return (
-    <div >
+    <div>
       <div className="w-full flex flex-wrap md:flex-nowrap items-center justify-between md:space-x-2 space-y-2 md:space-y-0 mb-5">
         <HeadTable />
       </div>
-      {isLoading ? "Cargando información...": <></>}
       <div className='border rounded'>
         <Table>
           <TableHeader>
@@ -40,21 +40,25 @@ export default function TableComponent() {
               <TableHead>Método</TableHead>
               <TableHead>Tipo</TableHead>
               <TableHead>Total</TableHead>
-              <TableHead className="text-right">Estado</TableHead>
+              <TableHead className='text-right'>Estado</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {Array.isArray(sales) && sales.map((sale) => (
-              <TableRow key={sale.id}>
-                <TableCell className="font-medium capitalize">{sale.client.name}</TableCell>
-                <TableCell>{convertDate(sale.sale_date)}</TableCell>
-                <TableCell>{sale.amount_order}</TableCell>
-                <TableCell className='capitalize'>{sale.payment_method}</TableCell>
-                <TableCell className='capitalize'>{sale.type_sale}</TableCell>
-                <TableCell>${convertToCOP(sale.total)}</TableCell>
-                <TableCell className="text-right"><Badge variant={sale.status === 'open' ? "open": sale.status === 'paid' ? "paid" : sale.status === 'pending' ? "pending": "default"}>{sale.status}</Badge></TableCell>
-              </TableRow>
-            ))}
+
+            {isValidating ? "Cargando información..." : 
+               Array.isArray(sales) && sales.map((sale) => (
+                <TableRow key={sale.id}>
+                  <TableCell>{sale.client.name}</TableCell>
+                  <TableCell>{sale.sale_date}</TableCell>
+                  <TableCell>{sale.amount_order}</TableCell>
+                  <TableCell>{sale.payment_method}</TableCell>
+                  <TableCell className='capitalize'>{sale.type_sale}</TableCell>
+                  <TableCell>${convertToCOP(sale.total)}</TableCell>
+                  <TableCell className="text-right"><Badge variant={sale.status === 'open' ? "open": sale.status === 'paid' ? "paid" : sale.status === 'pending' ? "pending": "default"}>{sale.status}</Badge></TableCell>
+                </TableRow>
+              ))
+            }
+           
           </TableBody>
         </Table>
       </div>
