@@ -1,3 +1,4 @@
 export enum Routes {
-  CREATESALE = '/sales'
+  CREATESALE = '/sales',
+  CREATEPURCHASE = '/purchases'
 }
