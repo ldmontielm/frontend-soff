@@ -1,0 +1,125 @@
+"use client"
+ 
+import { addOrder, getSupplies } from "@/app/purchases/services/purchase.services"
+import { Button } from "@/components/ui/button"
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { PlusIcon } from "@heroicons/react/24/outline"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { redirect, useParams, useRouter } from 'next/navigation'
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import toast from "react-hot-toast"
+import useSWR from 'swr'
+import * as z from 'zod'
+
+const formSchema = z.object({
+  purchase_id: z.string(),
+  supply_id: z.string(),
+  amount_supplies: z.string().transform(Number),
+  price_supplies: z.string().transform(Number)
+})
+
+// async function fetchGetAllSupplies(){
+//   return await getSupplies(url)
+// }
+
+export default function HeadTable() {
+  const params = useParams()
+  const [insumo, setInsumo] = useState(false)
+  const [amountSupply, setAmountSupply] = useState<number>()
+  const [value, setValue] = useState("")
+  const router = useRouter()
+  const {data:supplies} = useSWR('http://localhost:8000/supplies', getSupplies)
+
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      purchase_id: "",
+      supply_id: "",
+      amount_supplies: 0,
+      price_supplies: 0
+    }
+  })
+
+  async function onSubmit(values: z.infer<typeof formSchema>){
+    values.purchase_id = params.id.toString()
+    toast.promise(addOrder(values), {
+      loading: 'Add order...',
+      success: 'Orde agregada correctamente',
+      error: 'Error when fetching'
+    })
+    router.refresh()
+  }
+
+
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-wrap lg:flex-nowrap items-end  justify-between gap-2">
+        <div className="w-full flex flex-wrap lg:flex-nowrap items-center gap-2">
+          <FormField 
+            control={form.control}
+            name="supply_id"
+            render = {({field}) => (
+              <FormItem className="w-full md:w-[200px]">
+                <FormLabel>Insumo</FormLabel>
+                <FormControl>
+                  <div className="w-full xl:w-[200px]">
+                    <Select defaultValue={field.value} onValueChange={field.onChange}>
+                      <SelectTrigger className="uppercase">
+                        <SelectValue  placeholder='Insumo' />
+                      </SelectTrigger>
+                      <SelectContent >
+                        {
+                          Array.isArray(supplies) && supplies.map((supply) => (
+                            <SelectItem key={supply.id} value={supply.id} className="uppercase">{supply.name}</SelectItem>
+                          ))
+                        }
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+
+          />
+          <FormField
+            control={form.control}
+            name="amount_supplies"
+            render={({ field }) => (
+              <FormItem className="w-full md:w-[200px]">
+                <FormLabel>Cantidad</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="Cantidad del insumo" min="1" {...field} className="lg:w-fit"/>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )
+          }
+          />
+          <FormField
+            control={form.control}
+            name="price_supplies"
+            render={({ field }) => (
+              <FormItem className="w-full md:w-[200px]">
+                <FormLabel>Precio</FormLabel>
+                <FormControl>
+                  <Input type="number" placeholder="Precio del insumo" min="100" {...field} className="lg:w-fit"/>
+                </FormControl>
+              </FormItem>
+            )
+          }
+          />
+
+        </div>
+        <Button type="submit" className="w-full md:w-fit">
+          <PlusIcon className="w-4 h-4 mr-2" />
+          <span>Agregar</span>
+        </Button>
+      </form>
+    </Form>
+  )
+}
