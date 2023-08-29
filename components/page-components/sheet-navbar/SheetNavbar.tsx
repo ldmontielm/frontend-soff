@@ -16,7 +16,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet"
-import {ChartPieIcon, BanknotesIcon, ChevronRightIcon, ChevronDownIcon,BriefcaseIcon, UserGroupIcon, SwatchIcon, ShoppingBagIcon, CakeIcon} from '@heroicons/react/24/outline'
+import {ChartPieIcon, BanknotesIcon, Cog6ToothIcon, Square3Stack3DIcon, LockClosedIcon, ChevronRightIcon, ChevronDownIcon,BriefcaseIcon, UserGroupIcon, SwatchIcon, ShoppingBagIcon, CakeIcon} from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import {
   Collapsible,
@@ -97,15 +97,16 @@ export default function SheetNavbar() {
             <CollapsibleTrigger asChild>
                 <div className='w-full cursor-pointer flex items-center justify-between gap-4 p-3 rounded hover:bg-gray-100'>
                   <div className='flex items-center gap-4'>
-                    <UserGroupIcon className='w-6 h-6' />
-                    <p>Usuarios</p>
+                    <Cog6ToothIcon className='w-6 h-6' />
+                    <p>Configuración</p>
                   </div>
                   <ChevronDownIcon className={`transition ease-in-out w-4 h-4 ${isOpen ?  'rotate-180': 'rotate-0'}`} />
                 </div>
               </CollapsibleTrigger>
             <CollapsibleContent className="space-y-2 ">
-              <Link href={Routes.CREATESALE} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><ChevronRightIcon className='ml-6 w-4 h-4' /><p>Roles</p></Link>
-              <Link href={Routes.CREATESALE} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><ChevronRightIcon className='ml-6 w-4 h-4' /><p>Permisos</p></Link>
+              <Link href={Routes.CREATESALE} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><LockClosedIcon className='ml-6 w-6 h-6' /><p>Roles</p></Link>
+              <Link href={Routes.CREATESALE} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><Square3Stack3DIcon className='ml-6 w-6 h-6' /><p>Permisos</p></Link>
+              <Link href={Routes.CREATESALE} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><UserGroupIcon className='ml-6 w-6 h-6' /><p>Usuarios</p></Link>
             </CollapsibleContent>
           </Collapsible>
         </div>
