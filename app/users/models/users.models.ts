@@ -25,4 +25,9 @@ export interface PermissionRole{
   id_permission: string;
 }
 
-
+export interface createUser{
+    name : string;
+    email : string;
+    password : string;
+    id_role: string;
+}
