@@ -22,10 +22,10 @@ export interface ProductCreate {
 }
 
 export interface DetailCreate {
-    product_id: string
-    supply_id: string
-    amount_supply: number
-    unit_measure:string
+    product_id: string;
+    supply_id: string;
+    amount_supply: number;
+    unit_measure:string;
 }
 
 export interface ProductConfim {
@@ -33,3 +33,7 @@ export interface ProductConfim {
     sale_price: number
 }
 
+export interface DetailContextInterface {
+  DetailsContext:Array<DetailsRecipe>
+  AddDetail:(detail:DetailsRecipe) => void
+}

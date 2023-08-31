@@ -3,7 +3,6 @@ import { Supply } from "../models/supply.models";
 import { Product, ProductCreate, ProductConfim, DetailsRecipe, DetailCreate } from "../models/product.models"
 
 export const urlProducts = 'http://127.0.0.1:8000/products'
-export const urlSupply = 'http://127.0.0.1:8000/supplies'
 
 export interface responseCreate {
     id: string
@@ -20,15 +19,15 @@ export async function getProducts(url: string):Promise<Product[]>{
 }
 
 export async function getSupplies(): Promise<Supply[]>{
-    try {
-      const res = await axios.get(urlSupply)
-      return res.data.supplies
-    } catch (error) {
+  try{
+      const res = await axios.get(`${urlProducts}/supplies`)
+      return res.data
+  } catch(error){
       throw new Error(`Error: ${error}`);
-    }
+  }
 }
 
-export async function getDetailsByProductId(id: string){
+export async function getDetailsByProductId(id: string):Promise<DetailsRecipe[]>{
     try {
       const res = await axios.get(`${urlProducts}/${id}/details`)
       return res.data.details
@@ -55,9 +54,9 @@ export async function addDetail(detail:DetailCreate): Promise<DetailsRecipe[]>{
     }
 }
 
-export async function updateAmountDetail(id_detail: string, amount_supply: number, detail: DetailCreate) {
+export async function updateAmountDetail(id_detail: string, amount_supply: number) {
     try {
-      const res = await axios.put(`${urlProducts}/update-amount-detail?id_detail=${id_detail}&amount_supply=${amount_supply}&unit_measure=${detail.unit_measure}`)
+      const res = await axios.put(`${urlProducts}/update-amount-detail?id_detail=${id_detail}&amount_supply=${amount_supply}`)
       return res.data
     } catch (error) { 
       console.log(error)
@@ -66,7 +65,7 @@ export async function updateAmountDetail(id_detail: string, amount_supply: numbe
 
 export async function confirmProduct(id: string, product: ProductConfim) {
     try {
-      const res = await axios.put(`${urlProducts}/${id}/confirm-sale`, product)
+      const res = await axios.put(`${urlProducts}/${id}/confirm_product`, product)
       return res.data
     } catch (error) {
       throw new Error(`Error: ${error}`);
@@ -92,12 +91,12 @@ export async function deleteDetail(id_detail:string) {
     }
 }
 
-export async function changeStatus(id_product:string) {
-    try {
-        const res = await axios.delete(`${urlProducts}/change-status?id_product=${id_product}`)
-        return res.data
-    } catch (error) {
-        console.log(error)
+// export async function changeStatus(id_product:string) {
+//     try {
+//         const res = await axios.delete(`${urlProducts}/change-status?id_product=${id_product}`)
+//         return res.data
+//     } catch (error) {
+//         console.log(error)
         
-    }
-}
+//     }
+// }

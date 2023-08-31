@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -22,7 +23,7 @@ import { HeadTable } from '..'
 import useSWR from 'swr'
 
 export default function TableComponent() {
-    const {data: products, isLoading, isValidating, error} = useSWR(urlProducts, getProducts)
+    const {data: products, isLoading, error} = useSWR(urlProducts, getProducts)
     console.log(products)
     return (
         <div >
@@ -41,13 +42,13 @@ export default function TableComponent() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                    {Array.isArray(products) && products.map((product) => (
-                        <TableRow key={product.id}>
-                            <TableCell className="font-medium capitalize">{product.name}</TableCell>
-                            <TableCell>{product.price}</TableCell>
-                            <TableCell className='capitalize'>{product.sale_price}</TableCell>
-                            <TableCell className="text-right"><Badge>{product.status ? "Activo" : "Inactivo"}</Badge></TableCell>
-                        </TableRow>
+                        {Array.isArray(products) && products.map((product) => (
+                            <TableRow key={product.id}>
+                                <TableCell className="font-medium capitalize">{product.name}</TableCell>
+                                <TableCell>{product.price}</TableCell>
+                                <TableCell className='capitalize'>{product.sale_price}</TableCell>
+                                <TableCell className="text-right"><Badge>{product.status ? "Activo" : "Inactivo"}</Badge></TableCell>
+                            </TableRow>
                         ))}
                     </TableBody>
                 </Table>
