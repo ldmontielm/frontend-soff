@@ -18,7 +18,6 @@ import HeadTable from "../head-table/HeadTable";
 
 export default function TableComponent(){
     const {data: user, isLoading, isValidating, error} = useSWR(urlUser, getUsers)
-    console.log(user)
     return (
         <div>
             <div className="w-full flex flex-wrap md:flex-nowrap items-center justify-between md:space-x-2 space-y-2 md:space-y-0 mb-5">

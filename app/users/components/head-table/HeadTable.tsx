@@ -25,8 +25,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-import { toast } from "@/components/ui/use-toast"
-import React from "react"
+import toast from "react-hot-toast"
+import React, {useState} from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button";
@@ -35,7 +35,8 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Value } from "@radix-ui/react-select"
 import useSWR from 'swr'
-import { getRole, urlRole } from "../../services/users.services"
+import { getRole, urlRole, createUser } from "../../services/users.services"
+import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'El nombre debe de tener mas de dos caracteres' }),
@@ -46,6 +47,8 @@ const formSchema = z.object({
 })
 
 export default function HeadTable() {
+  const [open, setOpen]= useState(false)
+  const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -57,13 +60,20 @@ export default function HeadTable() {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>){
-    
+    console.log(values)
+    toast.promise(createUser(values),{
+      loading: "La informacion esta cargando",
+      success: "Usuario registrado correctamente",
+      error: "El usuario no se pudo registrar"
+    })
+    setOpen(false)
+    router.push('/users')
   }
   const {data: role, isLoading, isValidating, error} = useSWR(urlRole, getRole)
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive">Agregar Usuario</Button>
+        <Button variant="default">Agregar Usuario</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

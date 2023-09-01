@@ -1,6 +1,6 @@
 "use client"
  
-import { addDetail, getSupplies, urlSupply } from "@/app/products/services/products.services"
+import { addDetail, getSupplies} from "@/app/products/services/products.services"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -8,11 +8,13 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { redirect, useParams, useRouter } from 'next/navigation'
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import useSWR from 'swr'
 import * as z from 'zod'
+import { DetailContext } from "../../context/detail-context/DetailContext"
+import { DetailContextInterface } from "@/app/products/models/product.models"
 
 const formSchema = z.object({
   product_id: z.string().uuid(),
@@ -27,12 +29,12 @@ const formSchema = z.object({
 
 export default function HeadTable() {
   const params = useParams()
-  const router = useRouter()
   const [supply, setSupply] = useState(false)
   const [amountSuply, setAmountSupply] = useState<number>()
   const [value, setValue] = useState("")
-  const {data:supplies} = useSWR(urlSupply, getSupplies)
-
+  const router = useRouter()
+  const {data:supplies} = useSWR('/supplies', getSupplies)
+  const {AddDetail} = useContext(DetailContext) as DetailContextInterface
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,14 +45,29 @@ export default function HeadTable() {
     }
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>){
+  async function onSubmit(values: z.infer<typeof formSchema>){
+    console.log(values)
     values.product_id = params.id.toString()
-    toast.promise(addDetail(values), {
-      loading: 'Agregando detalle...',
-      success: 'Detalle agregado correctamente',
-      error: 'Error when fetching'
-    })
-    router.refresh()
+    const supply:any=Array.isArray(supplies) && supplies.find((item)=> item.id === values.supply_id)
+    if (supply != undefined && supply != false){
+      const newDetail = {
+        id: crypto.randomUUID(),
+        product_id: values.product_id,
+        supply_id: values.supply_id,
+        supply: supply.name,
+        amount_supply: values.amount_supply,
+        unit_measure: values.unit_measure,
+        subtotal: values.amount_supply * supply.price
+      }
+      AddDetail(newDetail)
+    }
+    // toast.promise(addDetail(values), {
+    //   loading: 'Agregando detalle...',
+    //   success: 'Detalle agregado correctamente',
+    //   error: 'Error when fetching'
+    // })
+    // router.refresh()
+    // console.log(values)
   }
 
   return (
@@ -65,14 +82,14 @@ export default function HeadTable() {
                 <FormLabel>Insumo</FormLabel>
                 <FormControl>
                   <div className="w-full xl:w-[200px]">
-                    <Select defaultValue={field.value} onValueChange={field.onChange}>
+                    <Select onValueChange={field.onChange}>
                       <SelectTrigger className="uppercase">
                         <SelectValue  placeholder='Insumo' />
                       </SelectTrigger>
                       <SelectContent >
                         {
-                          Array.isArray(supplies) && supplies.map((supplie) => (
-                            <SelectItem key={supplie.id} value={supplie.id} className="uppercase">{supplie.name}</SelectItem>
+                          Array.isArray(supplies) && supplies.map((supply) => (
+                            <SelectItem key={supply.id} value={supply.id} className="uppercase">{supply.name}</SelectItem>
                           ))
                         }
                       </SelectContent>
