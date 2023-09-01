@@ -3,11 +3,17 @@ import { Sale, Order, OrderCreate, Client, ClientCreate, SaleCreate, SaleConfirm
 import { Product } from "../models/product.models";
 
 
-export const urlSales = 'http://127.0.0.1:8000/sales'
+export const urlSales = 'http://localhost:8000/sales'
+export const urlProducts = 'http://localhost:8000/products'
 
 export interface responseCreate {
   id: string
   message: string
+}
+
+export interface SaleConfirmMethod {
+  sale: SaleConfirm
+  orders: OrderCreate[]
 }
 
 export async function getSales(url: string):Promise<Sale[]>{
@@ -19,10 +25,10 @@ export async function getSales(url: string):Promise<Sale[]>{
   }
 }
 
-export async function getProducts(): Promise<Product[]>{
+export async function getProducts(url: string): Promise<Product[]>{
   try {
-    const res = await axios.get(`${urlSales}/products`)
-    return res.data
+    const res = await axios.get(url)
+    return res.data.products
   } catch (error) {
     throw new Error(`Error: ${error}`);
   }
@@ -37,9 +43,9 @@ export async function createSala(): Promise<responseCreate | null>{
   }
 }
 
-export async function getOrdersBySaleId(id: string): Promise<Order[]>{
+export async function getOrdersBySaleId(url: string): Promise<Order[]>{
   try {
-    const res = await axios.get(`${urlSales}/${id}/orders`)
+    const res = await axios.get(url)
     return res.data.orders
   } catch (error) {
     throw new Error(`Error: ${error}`);
@@ -58,7 +64,7 @@ export async function addOrder(order:OrderCreate): Promise<Order[]>{
 
 export async function getGeneralClient(url: string): Promise<Client> {
   try {
-    const res = await axios.get(`${url}/client/general`)
+    const res = await axios.get(url)
     return res.data
   } catch (error) {
     throw new Error(`Error: ${error}`);
@@ -75,13 +81,17 @@ export async function createClient(client:ClientCreate): Promise<Client> {
   }
 }
 
-export async function confirmSale(id: string, sale: SaleConfirm) {
-  try {
-    const res = await axios.put(`${urlSales}/${id}/confirm-sale`, sale)
-    return res.data
-  } catch (error) {
-    throw new Error(`Error: ${error}`);
-  }
+export async function confirmSale(url: string, arg:SaleConfirmMethod) {
+    // return fetch(url, {
+    //   method: 'PUT',
+    //   body: JSON.stringify(arg)
+    // }).then(res => res.json()).catch((error) => console.log(error.message))
+    try {
+      const res = await axios.put(url, arg)
+      return res.data
+    } catch (error) {
+      console.log(error)
+    }
 }
 
 export async function updateAmountOrder(id_order: string, amount_product: number) {
@@ -102,3 +112,4 @@ export async function DeleteOrder(id_order: string){
     console.log(error)
   }
 }
+

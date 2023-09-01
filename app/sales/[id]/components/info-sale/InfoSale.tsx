@@ -1,5 +1,5 @@
 'use client'
-import { Client } from '@/app/sales/models/sale.models'
+import { Client, Order } from '@/app/sales/models/sale.models'
 import { confirmSale, getGeneralClient, urlSales } from '@/app/sales/services/sale.services'
 import { convertToCOP } from '@/app/sales/utils'
 import { Button } from '@/components/ui/button'
@@ -15,10 +15,15 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import useSWR from 'swr'
+import useSWRMutation from 'swr/mutation'
 import * as z from 'zod'
 import { CardClient } from '..'
 import { Input } from '@/components/ui/input'
 import { type } from 'os'
+import { useContext } from "react"
+import { OrderContext } from "../../context/orders-context/orderContext"
+import { OrderContextInterface } from "@/app/sales/models/sale.models"
+
 
 const formSaleSchema = z.object({
   payment_method: z.enum(['transferencia', 'efectivo']),
@@ -30,17 +35,24 @@ const formSaleSchema = z.object({
 })
 
 interface Props{
-  total: number,
   id: string
+}
+
+const clculateTotal = (orders: Array<Order>) => {
+  let total = 0
+  orders.map(order => {
+    total += order.total
+  })
+  return total
 }
 
 
 
-
-
-export default function InfoSale({total, id}:Props) {
+export default function InfoSale({id}:Props) {
   const [client, setClient] = useState(localStorage.getItem('client') || '{}')
+  const {OrdersContext} = useContext(OrderContext) as OrderContextInterface
   const {data:general} = useSWR(urlSales, getGeneralClient)
+  // const {data, trigger} = useSWRMutation(`${urlSales}/${id}/confirm-sale`, confirmSale)
   const router = useRouter()
 
   const formSale = useForm<z.infer<typeof formSaleSchema>>({
@@ -56,11 +68,6 @@ export default function InfoSale({total, id}:Props) {
   })
 
   async function onSubmitSale(values: z.infer<typeof formSaleSchema>){
-
-    // const emailValidator = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g
-    // const directionValidator = /^(Autopista|Avenida|Avenida Calle|Avenida Carrera|Avenida|Carrera|Calle|Carrera|Circunvalar|Diagonal|Kilometro|Transversal|AUTOP|AV|AC|AK|CL|KR|CCV|DG|KM|TV)(\s)?([a-zA-Z]{0,15}|[0-9]{1,3})(\s)?[a-zA-Z]?(\s)?(bis)?(\s)?(Este|Norte|Occidente|Oeste|Sur)?(\s)?(#(\s)?[0-9]{1,2}(\s)?[a-zA-Z]?(\s)?(bis)?(\s)?(Este|Norte|Occidente|Oeste|Sur)?(\s)?(-)?(\s)?[0-9]{1,3}(\s)?(Este|Norte|Occidente|Oeste|Sur)?)?((\s)?(Agrupación|Altillo|Apartamento|Apartamento Sótano|Barrio|Bloque|Bodega|Cabecera Municipal|Callejón|Camino|Carretera|Casa|Caserio|Célula|Centro|Centro Comercial|Centro Urbano|Circular|Condominio|Conjunto|Consultorio|Corregimiento|Deposito|Deposito |Sótano|Edificio|Entrada|Esquina|Etapa|Finca|Garaje|Garaje Sótano|Grada|Inferior|Inspección de Policia|Interior|Kilometro|Local|Local Mezzanine|Local Sótano|Lote|Manzana|Manzanita|Mejora|Mezzanine|Módulo|Municipio|Núcleo|Oficina|Oficina Sótano|Parcela|Parcelación|Pasaje|Penthouse|Piso|Porteria|Predio|Principal|Puente|Quebrada|Salon|Sector|Semisótano|Suite|Supermanzana|Terraza|Torre|Troncal|Unidad|Urbanización|Vereda|Via|Zona|AGN|AL|APTO|AS|BR|BL|BG|CM|CLJ|CN|CT|CA|CAS|CEL|CE|CECO|CEUR|CIR|CDM|CONJ|CS|CO|DP|DS|ED|EN|ESQ|ET|FCA|GJ|GS|GR|INF|IP|IN|KM|LC|LM|LS|LT|MZ|MZTA|MJ|MN|MD|MUN|NCO|OF|OS|PA|PCN|PSJ|PH|PI|PT|PD|PPAL|PN|QDA|SA|SEC|SS|SU|SMZ|TZ|TO|TRL|UN|URB|VDA|VIA|ZN)?(\s)?[1-9][0-9]{0,3})*$/i
-    // const phoneValidator = /^3\d{2}[-\s]?\d{3}[-\s]?\d{4}$/g
-
     const sale = {
       payment_method: values.payment_method,
       type_sale: values.type_sale,
@@ -71,29 +78,41 @@ export default function InfoSale({total, id}:Props) {
         email: values.email
       }
     }
+
+    const newOrders: { sale_id: string; product_id: string; amount_product: number }[] = []
+    OrdersContext.forEach((order) => {
+      let orderFormated = {
+        sale_id: order.sale_id,
+        product_id: order.product_id,
+        amount_product: order.amount_product
+      }
+      newOrders.push(orderFormated)
+    })
+
+    const confirmed = {
+      sale,
+      orders: newOrders
+    }
+    console.log(confirmed)
     if(values.type_sale === 'pedido' &&  (values.name === '' || values.direction === '' || values.email === '' || values.phone === '' )){
       toast.error('La información del cliente es necesaria.')
     }else{
       if (values.type_sale === 'fisico'){
-        toast.promise(confirmSale(id, sale), {
-          loading: 'Add order...',
-          success: 'Sale confirmed!',
-          error: 'Error when fetching'
+        toast.promise(confirmSale(`${urlSales}/${id}/confirm-sale`, confirmed), {
+          loading: "Estamos en proceso",
+          success: "Venta confirmada correctamente",
+          error: "No se pudo confirmar la venta"
         })
         router.push('/sales')
       }else{
-        toast.promise(confirmSale(id, sale), {
-          loading: 'Add order...',
-          success: 'Sale confirmed!',
-          error: 'Error when fetching'
+        toast.promise(confirmSale(`${urlSales}/${id}/confirm-sale`, confirmed), {
+          loading: "Estamos en proceso",
+          success: "Venta confirmada correctamente",
+          error: "No se pudo confirmar la venta"
         })
         router.push('/sales')
       }
     }
-
-   
-
-
   }
   
   return (
@@ -189,11 +208,9 @@ export default function InfoSale({total, id}:Props) {
               </div>
             ) : <></>
           }
-
-
           </div>
             <div className='my-3 w-full text-center'>
-              <p className='font-bold text-4xl'>${convertToCOP(total)}</p>
+              <p className='font-bold text-4xl'>${convertToCOP(clculateTotal(OrdersContext))}</p>
               <p className='text-sm text-gray-400'>Total</p>
             </div>
             <div>

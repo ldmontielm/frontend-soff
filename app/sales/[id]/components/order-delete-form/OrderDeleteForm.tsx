@@ -20,9 +20,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormField, Form, FormItem, FormControl } from "@/components/ui/form";
 import toast from "react-hot-toast";
-import { DeleteOrder } from "@/app/sales/services/sale.services";
+// import { DeleteOrder } from "@/app/sales/services/sale.services";
 import { useRouter } from "next/navigation";
-
+import { useContext } from "react"
+import { OrderContext } from "../../context/orders-context/orderContext"
+import { OrderContextInterface } from "@/app/sales/models/sale.models"
 
 const formSchema = z.object({
   id_order: z.string().optional(),
@@ -33,6 +35,7 @@ interface Props {
 
 export default function OrderDeleteForm({ order }: Props) {
   const router = useRouter()
+  const {DeleteOrder} = useContext(OrderContext) as OrderContextInterface
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -41,13 +44,7 @@ export default function OrderDeleteForm({ order }: Props) {
   });
 
   async function onSubmit() {
-    console.log(order.id)
-    toast.promise(DeleteOrder(order.id), {
-      loading: 'Delete order...',
-      success: 'Orden eliminada correctamente',
-      error: 'Error al eliminar'
-    })
-    router.refresh()
+    DeleteOrder(order.id)
   }
 
   return (
@@ -71,7 +68,7 @@ export default function OrderDeleteForm({ order }: Props) {
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction type="button" onClick={() => onSubmit()} className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90">
+        <AlertDialogAction type="button" onClick={() => DeleteOrder(order.id)} className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90">
           Continue
         </AlertDialogAction>
       </AlertDialogFooter>

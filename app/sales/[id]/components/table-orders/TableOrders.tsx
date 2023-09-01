@@ -9,13 +9,13 @@ import { TrashIcon } from "@heroicons/react/24/outline"
 import { HeadTable } from ".."
 import OrderUpdateForm from "../order-update-form/OrderUpdateForm"
 import OrderDeleteForm from "../order-delete-form/OrderDeleteForm"
+import { useContext } from "react"
+import { OrderContext } from "../../context/orders-context/orderContext"
+import { OrderContextInterface } from "@/app/sales/models/sale.models"
 
 
-interface Props {
-  orders: Order[]
-}
-
-export default function TableOrders({orders}:Props) {
+export default function TableOrders() {
+ const {OrdersContext} =  useContext(OrderContext) as OrderContextInterface
   return (
     <div>
       <HeadTable />
@@ -32,7 +32,7 @@ export default function TableOrders({orders}:Props) {
             </TableHeader>
             <TableBody>
               {
-                Array.isArray(orders) && orders.map((order) => (
+                Array.isArray(OrdersContext) && OrdersContext.map((order) => (
                   <TableRow key={order.product_id}>
                     <TableCell className="font-medium capitalize">{order.product}</TableCell>
                     <TableCell>${convertToCOP(order.price)}</TableCell>
