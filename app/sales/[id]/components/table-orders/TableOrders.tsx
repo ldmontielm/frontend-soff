@@ -9,13 +9,13 @@ import { TrashIcon } from "@heroicons/react/24/outline"
 import { HeadTable } from ".."
 import OrderUpdateForm from "../order-update-form/OrderUpdateForm"
 import OrderDeleteForm from "../order-delete-form/OrderDeleteForm"
-import { useContext } from "react"
-import { OrderContext } from "../../context/orders-context/orderContext"
-import { OrderContextInterface } from "@/app/sales/models/sale.models"
-
+import { urlSales, getOrdersBySaleId } from "@/app/sales/services/sale.services";
+import useSWR from "swr"
+import { useParams } from "next/navigation"
 
 export default function TableOrders() {
- const {OrdersContext} =  useContext(OrderContext) as OrderContextInterface
+ const params = useParams()
+ const {data:OrdersContext,} = useSWR(`${urlSales}/${params.id}/orders`, getOrdersBySaleId)
   return (
     <div>
       <HeadTable />

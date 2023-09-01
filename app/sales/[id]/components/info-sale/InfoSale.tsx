@@ -40,13 +40,13 @@ interface Props{
 
 const clculateTotal = (orders: Array<Order>) => {
   let total = 0
-  orders.map(order => {
-    total += order.total
-  })
+  if(orders !== undefined){
+    orders.map(order => {
+      total += order.total
+    })
+  }
   return total
 }
-
-
 
 export default function InfoSale({id}:Props) {
   const [client, setClient] = useState(localStorage.getItem('client') || '{}')
@@ -79,33 +79,19 @@ export default function InfoSale({id}:Props) {
       }
     }
 
-    const newOrders: { sale_id: string; product_id: string; amount_product: number }[] = []
-    OrdersContext.forEach((order) => {
-      let orderFormated = {
-        sale_id: order.sale_id,
-        product_id: order.product_id,
-        amount_product: order.amount_product
-      }
-      newOrders.push(orderFormated)
-    })
-
-    const confirmed = {
-      sale,
-      orders: newOrders
-    }
-    console.log(confirmed)
+  
     if(values.type_sale === 'pedido' &&  (values.name === '' || values.direction === '' || values.email === '' || values.phone === '' )){
       toast.error('La información del cliente es necesaria.')
     }else{
       if (values.type_sale === 'fisico'){
-        toast.promise(confirmSale(`${urlSales}/${id}/confirm-sale`, confirmed), {
+        toast.promise(confirmSale(`${urlSales}/${id}/confirm-sale`, sale), {
           loading: "Estamos en proceso",
           success: "Venta confirmada correctamente",
           error: "No se pudo confirmar la venta"
         })
         router.push('/sales')
       }else{
-        toast.promise(confirmSale(`${urlSales}/${id}/confirm-sale`, confirmed), {
+        toast.promise(confirmSale(`${urlSales}/${id}/confirm-sale`, sale), {
           loading: "Estamos en proceso",
           success: "Venta confirmada correctamente",
           error: "No se pudo confirmar la venta"

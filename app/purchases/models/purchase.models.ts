@@ -10,7 +10,7 @@ export interface Purchase {
 export interface Order {
   id_order: string;
   purchase_id: string;
-  supply_id: string;
+  supply: string;
   amount_supplies: number;
   price_supplies: number;
   subtotal: number;

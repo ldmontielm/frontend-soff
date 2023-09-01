@@ -7,6 +7,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { TrashIcon } from "@heroicons/react/24/outline"
 import { HeadTable } from ".."
+import { Supply } from "@/app/purchases/models/supply.models"
 import OrderUpdateForm from "../order-update-form/OrderUpdateForm"
 import OrderDeleteForm from "../order-delete-form/OrderDeleteForm"
 
@@ -16,6 +17,7 @@ interface Props {
 }
 
 export default function TableOrders({orders}:Props) {
+  console.log(orders)
   return (
     <div>
       <HeadTable />
@@ -33,8 +35,8 @@ export default function TableOrders({orders}:Props) {
             <TableBody>
               {
                 Array.isArray(orders) && orders.map((order) => (
-                  <TableRow key={order.supply_id}>
-                    <TableCell className="font-medium capitalize">{order.supply_id}</TableCell>
+                  <TableRow key={order.id_order}>
+                    <TableCell className="font-medium capitalize">{order.supply}</TableCell>
                     <TableCell>{order.amount_supplies}</TableCell>
                     <TableCell>${convertToCOP(order.price_supplies)}</TableCell>
                     <TableCell>${convertToCOP(order.subtotal)}</TableCell>

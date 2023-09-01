@@ -52,13 +52,14 @@ export async function getOrdersBySaleId(url: string): Promise<Order[]>{
   }
 }
 
-export async function addOrder(order:OrderCreate): Promise<Order[]>{
-  try {
-    const res = await axios.post(`${urlSales}/${order.sale_id}/add-order`, order)
-    return res.data
-  } catch (error) {
-    throw new Error(`Error: ${error}`);
-  }
+export async function addOrder(url: string, {arg}:{arg:OrderCreate}){
+  return fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(arg),
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  }).then(res => res.json())
 }
 
 
@@ -81,11 +82,7 @@ export async function createClient(client:ClientCreate): Promise<Client> {
   }
 }
 
-export async function confirmSale(url: string, arg:SaleConfirmMethod) {
-    // return fetch(url, {
-    //   method: 'PUT',
-    //   body: JSON.stringify(arg)
-    // }).then(res => res.json()).catch((error) => console.log(error.message))
+export async function confirmSale(url: string, arg:SaleConfirm) {
     try {
       const res = await axios.put(url, arg)
       return res.data
