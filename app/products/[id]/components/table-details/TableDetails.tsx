@@ -8,9 +8,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { TrashIcon } from "@heroicons/react/24/outline"
 import { HeadTable } from ".."
 import useSWR from 'swr'
-import { getDetailsByProductId, urlSupply } from "@/app/products/services/products.services"
-// import OrderUpdateForm from "../order-update-form/OrderUpdateForm"
-// import OrderDeleteForm from "../order-delete-form/OrderDeleteForm"
+import { getDetailsByProductId} from "@/app/products/services/products.services"
+import DetailUpdateForm from "../detail-update-form/DetailUpdateForm"
+import DetailDeleteForm from "../datails-delete-form/DetailsDeleteForm"
 
 
 interface Props {
@@ -36,14 +36,14 @@ export default function TableDetails({details}:Props) {
             <TableBody>
               {
                 Array.isArray(details) && details.map((detail) => (
-                  <TableRow key={detail.id}>
+                  <TableRow key={detail.supply_id}>
                     <TableCell className="font-medium capitalize">{detail.supply}</TableCell>
                     <TableCell>{detail.amount_supply}</TableCell>
                     <TableCell>{detail.unit_measure}</TableCell>
                     <TableCell>{detail.subtotal}</TableCell>
                     <TableCell className="flex items-center gap-2 justify-end">
-                      {/* <OrderUpdateForm order={order} />
-                      <OrderDeleteForm order={order} /> */}
+                      <DetailUpdateForm detail={detail} />
+                      <DetailDeleteForm detail={detail} /> 
                     </TableCell>
                   </TableRow>
                 ))
