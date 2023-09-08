@@ -82,9 +82,9 @@ export async function ConfirmPurchase(id:string, provider_id:string){
     }
 }
 
-export async function UpdateAmountOrder(id_order:string, amount_supply: number){
+export async function UpdateAmountOrder(id_order:string, amount_supplies: number){
     try {
-        const res = await axios.put(`${urlPurchases}/update-amount-order?id_order=${id_order}&amount_supply=${amount_supply}`)
+        const res = await axios.put(`${urlPurchases}/update-amount-order?id_order=${id_order}&amount_supplies=${amount_supplies}`)
         return res.data
     } catch (error) {
         console.log(error)

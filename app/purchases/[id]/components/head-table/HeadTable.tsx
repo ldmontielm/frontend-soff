@@ -47,8 +47,8 @@ export default function HeadTable() {
   async function onSubmit(values: z.infer<typeof formSchema>){
     values.purchase_id = params.id.toString()
     toast.promise(addOrder(values), {
-      loading: 'Add order...',
-      success: 'Orde agregada correctamente',
+      loading: 'Agregando orden...',
+      success: 'Orden agregada correctamente',
       error: 'Error when fetching'
     })
     router.refresh()

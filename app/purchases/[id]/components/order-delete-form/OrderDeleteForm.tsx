@@ -43,7 +43,7 @@ export default function OrderDeleteForm({ order }: Props) {
   async function onSubmit() {
     console.log(order.id_order)
     toast.promise(DeleteOrder(order.id_order), {
-      loading: 'Delete order...',
+      loading: 'Eliminando orden...',
       success: 'Orden eliminada correctamente',
       error: 'Error al eliminar'
     })
