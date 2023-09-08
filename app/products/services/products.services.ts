@@ -18,12 +18,21 @@ export async function getProducts(url: string):Promise<Product[]>{
     }
 }
 
-export async function getSupplies(): Promise<Supply[]>{
+export async function getSupplies(url:string): Promise<Supply[]>{
   try{
-      const res = await axios.get(`${urlProducts}/supplies`)
-      return res.data
+      const res = await axios.get(url)
+      return res.data.supplies
   } catch(error){
       throw new Error(`Error: ${error}`);
+  }
+}
+
+export async function getProductById(id: string):Promise<Product | null>{
+  try {
+    const res = await axios.get(`${urlProducts}/${id}`)
+    return res.data.product
+  } catch (error) {
+    throw new Error(`Error: ${error}`);
   }
 }
 
@@ -50,13 +59,14 @@ export async function addDetail(detail:DetailCreate): Promise<DetailsRecipe[]>{
       const res = await axios.post(`${urlProducts}/${detail.product_id}/add_detail`, detail)
       return res.data
     } catch (error) {
+      console.error('Error al agregar el detalle:', error);
       throw new Error(`Error: ${error}`);
     }
 }
 
 export async function updateAmountDetail(id_detail: string, amount_supply: number) {
     try {
-      const res = await axios.put(`${urlProducts}/update-amount-detail?id_detail=${id_detail}&amount_supply=${amount_supply}`)
+      const res = await axios.put(`${urlProducts}/update_detail?id_detail=${id_detail}&amount_supply=${amount_supply}`)
       return res.data
     } catch (error) { 
       console.log(error)
@@ -74,7 +84,7 @@ export async function confirmProduct(id: string, product: ProductConfim) {
 
 export async function updateProduct(id_product: string, product: ProductCreate) {
     try {
-      const res = await axios.put(`${urlProducts}/update-product?id_product=${id_product}&product=${product}`)
+      const res = await axios.put(`${urlProducts}/update_product?id_product=${id_product}&product=${product}`)
       return res.data
     } catch (error) { 
       console.log(error)
@@ -83,12 +93,22 @@ export async function updateProduct(id_product: string, product: ProductCreate) 
 
 export async function deleteDetail(id_detail:string) {
     try {
-        const res = await axios.delete(`${urlProducts}/delete-product?id_detail=${id_detail}`)
+        const res = await axios.delete(`${urlProducts}/${id_detail}/delete_detail`)
         return res.data
     } catch (error) {
         console.log(error)
         
     }
+}
+
+export async function deleteProduct(id_product:string) {
+  try {
+      const res = await axios.delete(`${urlProducts}/${id_product}/delete_product`)
+      return res.data
+  } catch (error) {
+      console.log(error)
+      
+  }
 }
 
 // export async function changeStatus(id_product:string) {

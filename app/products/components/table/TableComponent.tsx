@@ -9,18 +9,19 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-
+import Link from 'next/link'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 // import { convertToCOP, convertDate } from '../../utils'
-import Link from 'next/link'
+// import Link from 'next/link'
 import { Routes } from '@/models/routes.models'
 import { Product } from '../../models/product.models'
 import { createProduct } from '../../services/products.services'
 import { getProducts, urlProducts } from '../../services/products.services'
 import { HeadTable } from '..'
 import useSWR from 'swr'
+import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline'
 
 export default function TableComponent() {
     const {data: products, isLoading, error} = useSWR(urlProducts, getProducts)
@@ -38,7 +39,8 @@ export default function TableComponent() {
                         <TableHead>Nombre</TableHead>
                         <TableHead>Costo</TableHead>
                         <TableHead>Precio de venta</TableHead>
-                        <TableHead className="text-right">Estado</TableHead>
+                        <TableHead>Estado</TableHead>
+                        <TableHead className="text-right">Acciones</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -47,7 +49,10 @@ export default function TableComponent() {
                                 <TableCell className="font-medium capitalize">{product.name}</TableCell>
                                 <TableCell>{product.price}</TableCell>
                                 <TableCell className='capitalize'>{product.sale_price}</TableCell>
-                                <TableCell className="text-right"><Badge>{product.status ? "Activo" : "Inactivo"}</Badge></TableCell>
+                                <TableCell><Badge>{product.status ? "Activo" : "Inactivo"}</Badge></TableCell>
+                                <TableCell className="flex items-center gap-2 justify-end">
+                                    <Link href={`/products/${product.id}`}><PencilIcon className=" h-4 w-4" /></Link>
+                                </TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

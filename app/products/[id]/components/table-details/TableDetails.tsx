@@ -29,6 +29,7 @@ export default function TableDetails({details}:Props) {
                 <TableHead>Insumo</TableHead>
                 <TableHead>Cantidad</TableHead>
                 <TableHead>Unidad de medida</TableHead>
+                <TableHead>Precio</TableHead>
                 <TableHead>Subtotal</TableHead>
                 <TableHead className="text-right">Acciones</TableHead>
               </TableRow>
@@ -40,7 +41,8 @@ export default function TableDetails({details}:Props) {
                     <TableCell className="font-medium capitalize">{detail.supply}</TableCell>
                     <TableCell>{detail.amount_supply}</TableCell>
                     <TableCell>{detail.unit_measure}</TableCell>
-                    <TableCell>{detail.subtotal}</TableCell>
+                    <TableCell>${convertToCOP(detail.supply_price)}</TableCell>
+                    <TableCell>${convertToCOP(detail.subtotal)}</TableCell>
                     <TableCell className="flex items-center gap-2 justify-end">
                       <DetailUpdateForm detail={detail} />
                       <DetailDeleteForm detail={detail} /> 

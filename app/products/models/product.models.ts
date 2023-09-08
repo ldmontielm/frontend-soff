@@ -11,6 +11,7 @@ export interface DetailsRecipe {
   product_id: string;
   supply_id: string;
   supply: string;
+  supply_price: number;
   amount_supply: number;
   unit_measure: string;
   subtotal: number;

@@ -1,6 +1,5 @@
 'use client'
-import { Client } from '@/app/sales/models/sale.models'
-import { confirmProduct,urlProducts } from '@/app/products/services/products.services'
+import { confirmProduct,urlProducts, getProductById } from '@/app/products/services/products.services'
 import { convertToCOP } from '@/app/sales/utils'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
@@ -11,6 +10,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { BanknotesIcon, CreditCardIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/router'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
@@ -19,6 +19,7 @@ import * as z from 'zod'
 // import { CardClient } from '..'
 import { Input } from '@/components/ui/input'
 import { type } from 'os'
+import { NONAME } from 'dns'
 
 const formProductSchema = z.object({
     name: z.string().min(2, {message: 'El nombre debe tener más de 2 caracteres'}),
@@ -32,8 +33,9 @@ interface Props{
 
 export default function InfoProduct({subtotal, id}:Props) {
   const router = useRouter()
-  const {data} = useSWR(urlProducts)
+  const {data:product} = useSWR(`${id}`, getProductById)
 
+  console.log(product)
   const formProduct = useForm<z.infer<typeof formProductSchema>>({
     resolver: zodResolver(formProductSchema),
     defaultValues: {
@@ -41,6 +43,8 @@ export default function InfoProduct({subtotal, id}:Props) {
       sale_price: 0
     }
   })
+
+  
 
   async function onSubmitSale(values: z.infer<typeof formProductSchema>){
 
@@ -81,7 +85,7 @@ export default function InfoProduct({subtotal, id}:Props) {
                     <FormItem>
                       <FormLabel>Nombre</FormLabel>
                       <FormControl>
-                        <Input placeholder='Nombre' {...field} />
+                         <Input defaultValue={product?.name} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -94,7 +98,7 @@ export default function InfoProduct({subtotal, id}:Props) {
                     <FormItem>
                       <FormLabel>Precio</FormLabel>
                       <FormControl>
-                        <Input placeholder='Precio' {...field} />
+                        <Input placeholder='Precio' defaultValue={product?.sale_price} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -102,7 +106,7 @@ export default function InfoProduct({subtotal, id}:Props) {
                 />
           </div>
             <div className='my-3 w-full text-center'>
-              <p className='font-bold text-4xl'>{subtotal}</p>
+              <p className='font-bold text-4xl'>${convertToCOP(subtotal)}</p>
               <p className='text-sm text-gray-400'>Costo</p>
             </div>
           </div>
