@@ -8,15 +8,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
-
-
-
-
+import { UploadFile } from ".."
+import { SeeDetail } from "../see-detail"
+import {UserIcon, QueueListIcon } from "@heroicons/react/24/outline"
 export const columns: ColumnDef<Sale>[] = [
   {
     accessorKey: 'client',
@@ -101,7 +99,6 @@ export const columns: ColumnDef<Sale>[] = [
     id: "actions",
     cell: ({row}) => {
       const sale = row.original
-
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -109,16 +106,18 @@ export const columns: ColumnDef<Sale>[] = [
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="end" className="flex flex-col">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(sale.id)}
-            >
-              Marcar pagada
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            {
+              row.getValue("status") === "pending" ?
+                (
+                  <UploadFile id={sale.id} />
+                ): ""
+            }
+            <SeeDetail id={sale.id}/>
+            <Button variant='ghost'>
+              <UserIcon className="w-4 h-4 mr-2"/> <span>Ver cliente</span>
+            </Button>
           </DropdownMenuContent>
         </DropdownMenu>
       )

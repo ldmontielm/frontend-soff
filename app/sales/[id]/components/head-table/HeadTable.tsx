@@ -63,7 +63,7 @@ export default function HeadTable() {
                       <SelectContent >
                         {
                           Array.isArray(products) && products.map((product) => (
-                            <SelectItem key={product.id} value={product.id} className="uppercase">{product.name}</SelectItem>
+                            <SelectItem key={product.id} value={product.id} className="capitalize">{product.name}</SelectItem>
                           ))
                         }
                       </SelectContent>

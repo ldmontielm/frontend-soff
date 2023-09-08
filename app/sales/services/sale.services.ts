@@ -109,4 +109,3 @@ export async function DeleteOrder(id_order: string){
     console.log(error)
   }
 }
-
