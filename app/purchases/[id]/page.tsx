@@ -3,7 +3,7 @@ import React from 'react'
 import { InfoPurchase, TableOrders } from './components'
 import { HeaderModule } from '../components'
 import { Order } from '../models/purchase.models'
-import { getOrdersByPurchaseId } from '../services/purchase.services'
+import { getOrdersByPurchaseId, urlPurchases } from '../services/purchase.services'
 
 async function fetchOrderByPurchaseId(id: string) {
   return await getOrdersByPurchaseId(id)
@@ -18,7 +18,7 @@ function getTotalOrders(orders:Order[]) {
 }
 
 export default async function Page({params}:{params: {id: string}}) {
-  const orders = await fetchOrderByPurchaseId(params.id)
+  const orders = await fetchOrderByPurchaseId(`${urlPurchases}/${params.id}/orders`)
   return (
     <div className="mx-auto max-w-7xl p-4">
       <HeaderModule />
