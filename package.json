@@ -29,11 +29,7 @@
     "@radix-ui/react-switch": "^1.0.3",
     "@radix-ui/react-toast": "^1.1.4",
     "@tanstack/react-query": "^4.32.6",
-<<<<<<< HEAD
     "@tanstack/react-table": "^8.9.7",
-=======
-    "@tanstack/react-table": "^8.9.8",
->>>>>>> 05f14b9ed1ecd65a6fff2d5bd3ce43fe62761865
     "@types/node": "20.4.6",
     "@types/react": "18.2.18",
     "@types/react-dom": "18.2.7",
