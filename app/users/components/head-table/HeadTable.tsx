@@ -34,8 +34,10 @@ import * as z from 'zod'
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Value } from "@radix-ui/react-select"
-import useSWR from 'swr'
-import { getRole, urlRole, createUser } from "../../services/users.services"
+import useSWR, {useSWRConfig} from 'swr'
+import {  getRole} from "@/app/roles/services/roles.services"
+import { urlRoles } from "@/app/roles/services/roles.services"
+import {createUser, urlUser, getUsers } from "../../services/users.services"
 import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
@@ -49,6 +51,7 @@ const formSchema = z.object({
 export default function HeadTable() {
   const [open, setOpen]= useState(false)
   const router = useRouter()
+  const { data:user} = useSWR(`${urlUser}/get-users`, getUsers)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -58,18 +61,18 @@ export default function HeadTable() {
       id_role: ""
     }
   })
+  const { mutate } = useSWRConfig()
 
-  function onSubmit(values: z.infer<typeof formSchema>){
-    console.log(values)
+function onSubmit(values: z.infer<typeof formSchema>){
     toast.promise(createUser(values),{
       loading: "La informacion esta cargando",
       success: "Usuario registrado correctamente",
       error: "El usuario no se pudo registrar"
     })
     setOpen(false)
-    router.push('/users')
+    mutate(`${urlUser}/get-users`)
   }
-  const {data: role, isLoading, isValidating, error} = useSWR(urlRole, getRole)
+  const {data: role, isLoading, isValidating, error} = useSWR(urlRoles, getRole)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -136,7 +139,7 @@ export default function HeadTable() {
               <Select onValueChange={field.onChange}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
+                    <SelectValue placeholder="Seleciones un rol" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent placeholder="Seleciones un rol">
