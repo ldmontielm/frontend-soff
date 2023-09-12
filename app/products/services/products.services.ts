@@ -111,12 +111,12 @@ export async function deleteProduct(id_product:string) {
   }
 }
 
-// export async function changeStatus(id_product:string) {
-//     try {
-//         const res = await axios.delete(`${urlProducts}/change-status?id_product=${id_product}`)
-//         return res.data
-//     } catch (error) {
-//         console.log(error)
+export async function changeStatus(id_product:string) {
+    try {
+        const res = await axios.put(`${urlProducts}/${id_product}/change_status?id_product=${id_product}`)
+        return res.data.status
+    } catch (error) {
+        console.log(error)
         
-//     }
-// }
+    }
+}

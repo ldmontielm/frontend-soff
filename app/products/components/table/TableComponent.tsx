@@ -14,18 +14,40 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 // import { convertToCOP, convertDate } from '../../utils'
-// import Link from 'next/link'
 import { Routes } from '@/models/routes.models'
 import { Product } from '../../models/product.models'
 import { createProduct } from '../../services/products.services'
-import { getProducts, urlProducts } from '../../services/products.services'
+import { getProducts, urlProducts} from '../../services/products.services'
 import { HeadTable } from '..'
 import useSWR from 'swr'
-import { TrashIcon, PencilIcon } from '@heroicons/react/24/outline'
+import { EyeIcon, PencilIcon } from '@heroicons/react/24/outline'
+import { Switch } from "@/components/ui/switch"
+import { DisableProduct, ViewDetailsByProduct } from '../../[id]/components'
+import { useState } from 'react'
+import { useEffect } from 'react'
 
 export default function TableComponent() {
     const {data: products, isLoading, error} = useSWR(urlProducts, getProducts)
-    console.log(products)
+    const [localProducts, setLocalProducts] = useState<Product[]>([])
+    // console.log(products)
+
+    useEffect(()=>{
+        if(products){
+            console.log(products)
+            setLocalProducts(products)
+        }
+    }, [products]);
+
+    const updateProductStatus = (productId:string, newStatus:boolean) =>{
+        const updateProducts = localProducts?.map((product)=>{
+            if (product.id === productId){
+                return {...product, status: newStatus};
+            }
+            return product
+        });
+        setLocalProducts(updateProducts)
+    };
+
     return (
         <div >
             <div className="w-full flex flex-wrap md:flex-nowrap items-center justify-between md:space-x-2 space-y-2 md:space-y-0 mb-5">
@@ -44,14 +66,22 @@ export default function TableComponent() {
                         </TableRow>
                     </TableHeader>
                     <TableBody>
-                        {Array.isArray(products) && products.map((product) => (
+                        {Array.isArray(localProducts) && localProducts.map((product) => (
                             <TableRow key={product.id}>
                                 <TableCell className="font-medium capitalize">{product.name}</TableCell>
                                 <TableCell>{product.price}</TableCell>
                                 <TableCell className='capitalize'>{product.sale_price}</TableCell>
                                 <TableCell><Badge>{product.status ? "Activo" : "Inactivo"}</Badge></TableCell>
                                 <TableCell className="flex items-center gap-2 justify-end">
-                                    <Link href={`/products/${product.id}`}><PencilIcon className=" h-4 w-4" /></Link>
+                                    <Link href={`/products/${product.id}`}>
+                                        <Button variant='outline' size='icon'>
+                                            <PencilIcon className=" h-4 w-4" />
+                                        </Button>
+                                    </Link>
+                                    <ViewDetailsByProduct productId={product.id} />
+                                    <DisableProduct productId={product.id}
+                                        product={product}
+                                        onUpdateStatus={(productId,newStatus)=> updateProductStatus(productId, newStatus)}/>
                                 </TableCell>
                             </TableRow>
                         ))}

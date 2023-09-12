@@ -39,8 +39,8 @@ export default function InfoProduct({subtotal, id}:Props) {
   const formProduct = useForm<z.infer<typeof formProductSchema>>({
     resolver: zodResolver(formProductSchema),
     defaultValues: {
-      name: '',
-      sale_price: 0
+      name: product?.name,
+      sale_price: product?.sale_price
     }
   })
 
@@ -85,7 +85,7 @@ export default function InfoProduct({subtotal, id}:Props) {
                     <FormItem>
                       <FormLabel>Nombre</FormLabel>
                       <FormControl>
-                         <Input defaultValue={product?.name} {...field} />
+                         <Input placeholder='Nombre' defaultValue={product?.name} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

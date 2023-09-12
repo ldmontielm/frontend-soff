@@ -29,7 +29,7 @@ export default function TableDetails({details}:Props) {
                 <TableHead>Insumo</TableHead>
                 <TableHead>Cantidad</TableHead>
                 <TableHead>Unidad de medida</TableHead>
-                <TableHead>Precio</TableHead>
+                <TableHead>Precio Unitario</TableHead>
                 <TableHead>Subtotal</TableHead>
                 <TableHead className="text-right">Acciones</TableHead>
               </TableRow>
