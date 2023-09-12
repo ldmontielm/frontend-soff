@@ -46,9 +46,9 @@ export async function createPurchase():Promise<responseCreate | null>{
     }
 }
 
-export async function getOrdersByPurchaseId(id: string):Promise<Order[]>{
+export async function getOrdersByPurchaseId(url: string):Promise<Order[]>{
     try{
-        const res = await axios.get(`${urlPurchases}/${id}/orders`)
+        const res = await axios.get(url)
         return res.data.orders
     } catch (error){
         throw new Error(`Error: ${error}`)
@@ -82,9 +82,9 @@ export async function ConfirmPurchase(id:string, provider_id:string){
     }
 }
 
-export async function UpdateAmountOrder(id_order:string, amount_supply: number){
+export async function UpdateAmountOrder(id_order:string, amount_supplies: number){
     try {
-        const res = await axios.put(`${urlPurchases}/update-amount-order?id_order=${id_order}&amount_supply=${amount_supply}`)
+        const res = await axios.put(`${urlPurchases}/update-amount-order?id_order=${id_order}&amount_supplies=${amount_supplies}`)
         return res.data
     } catch (error) {
         console.log(error)
@@ -96,6 +96,15 @@ export async function DeleteOrder(id_order: string){
         const res = await axios.delete(`${urlPurchases}/${id_order}/delete`)
         return res.data
     } catch (error) {
+        console.log(error)
+    }
+}
+
+export async function DeletePurchase(id_purchase: string){
+    try{
+        const res = await axios.delete(`${urlPurchases}/${id_purchase}/deletepurchase`)
+        return res.data
+    } catch(error){
         console.log(error)
     }
 }

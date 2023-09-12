@@ -38,7 +38,7 @@ export default function OrderUpdateForm({order}: Props) {
   function onSubmit(values: z.infer<typeof formSchema>) {
     values.id_order = order.id_order
     toast.promise(UpdateAmountOrder(values.id_order, values.amount_supplies), {
-      loading: 'Updated order...',
+      loading: 'Actualizando ordenr...',
       success: 'Orden Actualizada correctamente',
       error: 'Error al actualizar'
     })
