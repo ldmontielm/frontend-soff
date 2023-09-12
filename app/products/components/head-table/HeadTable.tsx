@@ -22,13 +22,6 @@ export default function HeadTable() {
     const router = useRouter()
     return (
       <>
-      <div className="w-full space-y-2 md:space-y-0 space-x-0 md:space-x-2">
-        <Input
-          type="email"
-          placeholder="Buscar producto por campos..."
-          className="w-full"
-        />
-      </div>
       <Button
         type="submit"
         className="w-full md:w-[180px]"

@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from "@/components/ui/input"
-import { EyeIcon } from '@heroicons/react/24/outline'
+import { EyeIcon, QueueListIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -35,9 +35,9 @@ export default function ViewDetailsByProduct({productId}:{productId:string}) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>  
-        <Button variant='outline' size='icon' onClick={() => setOpen(true)}>
-          <EyeIcon className="h-4 w-4" />
-        </Button>
+      <Button variant='ghost' className="">
+        <QueueListIcon className="w-4 h-4 mr-2" onClick={() => setOpen(true)}/> <span>Ver detalle</span>
+      </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px]">
         <DialogHeader>

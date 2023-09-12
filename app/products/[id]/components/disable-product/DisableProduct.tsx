@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import toast from 'react-hot-toast'
-import { changeStatus, getProductById } from '@/app/products/services/products.services'
+import { changeStatus } from '@/app/products/services/products.services'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Switch } from '@/components/ui/switch'
@@ -41,13 +41,13 @@ export default function DisableProduct({productId, product, onUpdateStatus}: {pr
     }
 
     return (
-        <Button variant='outline' size='icon' onClick={onSubmit}>
-            <Switch id="airplane-mode"
+        <Button variant='ghost'onClick={onSubmit}>
+            <Switch id="airplane-mode" className='mr-2'
                 checked={state}
                 onCheckedChange={(newStatus)=>{
                     setState(newStatus);
                 }}
-            />
+            /><span>Cambiar estado</span>
         </Button>
     )
 }
