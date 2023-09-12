@@ -33,8 +33,8 @@ export default function TableOrders({orders}:Props) {
             <TableBody>
               {
                 Array.isArray(orders) && orders.map((order) => (
-                  <TableRow key={order.supply_id}>
-                    <TableCell className="font-medium capitalize">{order.supply_id}</TableCell>
+                  <TableRow key={order.id_order}>
+                    <TableCell className="font-medium capitalize">{order.supply}</TableCell>
                     <TableCell>{order.amount_supplies}</TableCell>
                     <TableCell>${convertToCOP(order.price_supplies)}</TableCell>
                     <TableCell>${convertToCOP(order.subtotal)}</TableCell>

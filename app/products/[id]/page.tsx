@@ -1,3 +1,4 @@
+
 import React from 'react'
 import { TableDetails, InfoProduct } from './components'
 import { HeaderModule} from '../components'
@@ -22,7 +23,7 @@ export default async function Page({params}:{params: {id: string}}) {
   const details = await fetchDetailsByProductId(params.id)
   console.log(details)
   return (
-    <DetailContextProvider>
+    // <DetailContextProvider>
       <div className="mx-auto max-w-7xl p-4">
         <HeaderModule />
         <div className='grid grid-cols-1 lg:grid-cols-12 gap-4'>
@@ -34,7 +35,7 @@ export default async function Page({params}:{params: {id: string}}) {
           </div>
         </div>
       </div>
-    </DetailContextProvider>
+    // </DetailContextProvider>
     
   )
 }

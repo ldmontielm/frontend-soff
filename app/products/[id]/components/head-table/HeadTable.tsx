@@ -1,5 +1,5 @@
 "use client"
- 
+
 import { addDetail, getSupplies} from "@/app/products/services/products.services"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -17,9 +17,10 @@ import { DetailContext } from "../../context/detail-context/DetailContext"
 import { DetailContextInterface } from "@/app/products/models/product.models"
 
 const formSchema = z.object({
-  product_id: z.string().uuid(),
-  supply_id: z.string().uuid({message: 'Seleccione un producto'}),
-  amount_supply: z.number().int().min(1, {message:'Mínimo debes ingresar un numero'}).nonnegative({message: 'No se aceptan valores negativos'}).transform(Number),
+  product_id: z.string(),
+  supply_id: z.string(),
+  // amount_supply: z.number().int().min(1, {message:'Mínimo debes ingresar un numero'}).nonnegative({message: 'No se aceptan valores negativos'}).transform(Number),
+  amount_supply: z.string().transform(Number),
   unit_measure: z.string().min(2, {message: 'La unidad debe tener más de 2 caracteres'})
 })
 
@@ -33,8 +34,9 @@ export default function HeadTable() {
   const [amountSuply, setAmountSupply] = useState<number>()
   const [value, setValue] = useState("")
   const router = useRouter()
-  const {data:supplies} = useSWR('/supplies', getSupplies)
-  const {AddDetail} = useContext(DetailContext) as DetailContextInterface
+  const {data:supplies} = useSWR('http://localhost:8000/supplies', getSupplies)
+  // const {AddDetail} = useContext(DetailContext) as DetailContextInterface
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -45,30 +47,37 @@ export default function HeadTable() {
     }
   })
 
+
   async function onSubmit(values: z.infer<typeof formSchema>){
-    console.log(values)
     values.product_id = params.id.toString()
-    const supply:any=Array.isArray(supplies) && supplies.find((item)=> item.id === values.supply_id)
-    if (supply != undefined && supply != false){
-      const newDetail = {
-        id: crypto.randomUUID(),
-        product_id: values.product_id,
-        supply_id: values.supply_id,
-        supply: supply.name,
-        amount_supply: values.amount_supply,
-        unit_measure: values.unit_measure,
-        subtotal: values.amount_supply * supply.price
-      }
-      AddDetail(newDetail)
-    }
-    // toast.promise(addDetail(values), {
-    //   loading: 'Agregando detalle...',
-    //   success: 'Detalle agregado correctamente',
-    //   error: 'Error when fetching'
-    // })
-    // router.refresh()
-    // console.log(values)
+    toast.promise(addDetail(values), {
+      loading: 'Agreagando detalle...',
+      success: 'Detalle agregado correctamente',
+      error: 'Error when fetching'
+    })
+    router.refresh()
   }
+
+  // async function onSubmit(values: z.infer<typeof formSchema>){
+  //   console.log(values)
+  //   values.product_id = params.id.toString()
+  //   const supply:any=Array.isArray(supplies) && supplies.find((item)=> item.id === values.supply_id)
+  //   if (supply != undefined && supply != false){
+  //     const newDetail = {
+  //       id: crypto.randomUUID(),
+  //       product_id: values.product_id,
+  //       supply_id: values.supply_id,
+  //       supply: supply.name,
+  //       supply_price:supply.price,
+  //       amount_supply: values.amount_supply,
+  //       unit_measure: values.unit_measure,
+  //       subtotal: values.amount_supply * supply.price
+  //     }
+  //     AddDetail(newDetail)
+  //   }else{
+  //     toast.error('El insumo no se pudo encontrar')
+  //   }
+  // }
 
   return (
     <Form {...form}>
@@ -82,7 +91,7 @@ export default function HeadTable() {
                 <FormLabel>Insumo</FormLabel>
                 <FormControl>
                   <div className="w-full xl:w-[200px]">
-                    <Select onValueChange={field.onChange}>
+                    <Select defaultValue={field.value} onValueChange={field.onChange}>
                       <SelectTrigger className="uppercase">
                         <SelectValue  placeholder='Insumo' />
                       </SelectTrigger>
@@ -108,7 +117,8 @@ export default function HeadTable() {
               <FormItem className="w-full md:w-[200px]">
                 <FormLabel>Cantidad</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Cantidad de insumo" {...form.register('amount_supply', {valueAsNumber: true})} className="lg:w-fit"/>
+                  {/* <Input type="number" placeholder="Cantidad de insumo" {...form.register('amount_supply', {valueAsNumber: true})} className="lg:w-fit"/> */}
+                  <Input type="number" placeholder="Cantidad de insumo" min="1" {...field} className="lg:w-fit"/>
                 </FormControl>
                 <FormMessage />
               </FormItem>

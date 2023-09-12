@@ -38,7 +38,7 @@ export default function DetailUpdateForm({detail}: Props) {
   function onSubmit(values: z.infer<typeof formSchema>) {
     values.id_detail = detail.id
     toast.promise(updateAmountDetail(values.id_detail, values.amount_supply), {
-      loading: 'Updated detail...',
+      loading: 'Actualizando detalle...',
       success: 'Detalle Actualizado correctamente',
       error: 'Error al actualizar'
     })

@@ -1,6 +1,6 @@
 'use client'
 import { Provider } from '@/app/purchases/models/provider.models'
-import { ConfirmPurchase, getGeneralProvider, urlPurchases, getProviders } from '@/app/purchases/services/purchase.services'
+import { ConfirmPurchase, getGeneralProvider, urlPurchases, getProviders, DeletePurchase } from '@/app/purchases/services/purchase.services'
 import { convertToCOP } from '@/app/purchases/utils'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
@@ -48,13 +48,21 @@ export default function InfoPurchase({total, id}:Props) {
     }
     
     toast.promise(ConfirmPurchase(id, values.provider),{
-      loading: 'Add order...',
-      success: 'Purchase confirmed!',
+      loading: 'Agregando compra...',
+      success: 'Compra confirmada',
       error: 'Error when fetching'
     })
     router.push('/purchases')
 
 }
+  async function cancelarCompra(){
+    toast.promise(DeletePurchase(id),{
+      loading: 'Eliminando compra...',
+      success: (data) => `Successfully saved ${data}`,
+      error: (err) => `This just happened: ${err.detail.toString()}`
+    })
+    router.push('/purchases')
+  }
   return (
     <div className='w-full'>
       <div className='w-full text-center mt-1 mb-1 p-4'>
@@ -109,7 +117,7 @@ export default function InfoPurchase({total, id}:Props) {
           </div>
 
           <div className='mt-4 space-y-2'>
-            <Button className="w-full" type='submit' variant='outline' >
+            <Button className="w-full" type='button' variant='outline' onClick={()=>cancelarCompra()}>
               Cancelar compra
             </Button>
           </div>

@@ -23,7 +23,6 @@ import { deleteDetail } from "@/app/products/services/products.services";
 import { useRouter } from "next/navigation";
 import { DetailsRecipe } from "@/app/products/models/product.models";
 
-
 const formSchema = z.object({
   id_detail: z.string().optional(),
 });
@@ -43,8 +42,8 @@ export default function DetailDeleteForm({ detail }: Props) {
   async function onSubmit() {
     console.log(detail.id)
     toast.promise(deleteDetail(detail.id), {
-      loading: 'Delete detail...',
-      success: 'Detail eliminada correctamente',
+      loading: 'Eliminando detalle...',
+      success: 'Detalle eliminado correctamente',
       error: 'Error al eliminar'
     })
     router.refresh()
