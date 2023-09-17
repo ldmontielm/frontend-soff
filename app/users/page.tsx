@@ -1,11 +1,29 @@
+'use client'
+import {columns } from "./payments/columns"
+import { DataTable } from "./payments/data-table"
+import { urlUser, getUsers } from "./services/users.services";
+import useSWR from "swr";
+import HeaderModule from "./components/header-module/Header";
 
-import {Header,Table} from "./components"
+export default  function DemoPage() {
+  const { data:user} = useSWR(`${urlUser}/get-users`, getUsers)
 
-export default async function Page(){
-    return(
-        <div className="mx-auto max-w-7xl p-4">
-            <Header/>
-            <Table/>
-        </div>
-    )
+  const data  = user
+    ? user.map((userItem) => ({
+        name: userItem.name,
+        email: userItem.email,
+        status: userItem.status,
+        role:userItem.role,
+        
+        
+      }))
+      : [];
+    console.log(user);
+
+  return (
+    <div className="container mx-auto py-10">
+      <HeaderModule/>
+      <DataTable columns={columns} data={data} />
+    </div>
+  );
 }

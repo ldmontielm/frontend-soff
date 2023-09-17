@@ -1,18 +1,11 @@
 export interface User {
-  id: string;
   name: string;
   email: string;
-  pasword: string;
   status: boolean;
-  id_role: string;
+  role: string;
 }
 
 
-export interface Role{
-  id: string;
-  name: string;
-  status: boolean;
-};
 
 
 export interface Permission{
@@ -20,10 +13,6 @@ export interface Permission{
   name: string;
 };
 
-export interface PermissionRole{
-  id_role: string;
-  id_permission: string;
-}
 
 export interface createUser{
     name : string;
