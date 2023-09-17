@@ -1,8 +1,8 @@
 'use client'
 
 import {ColumnDef} from "@tanstack/react-table"
-import { Product } from '../../models/product.models'
-import { getProducts, urlProducts } from "../../services/products.services"
+import { Product, DetailsRecipe } from '../../models/product.models'
+import { getProducts, urlProducts, getDetailsByProductId } from "../../services/products.services"
 import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
@@ -18,11 +18,27 @@ import {UserIcon, PencilIcon } from "@heroicons/react/24/outline"
 import Link from 'next/link'
 import { useState, useEffect } from "react"
 import useSWR from "swr"
+import { UpdateProduct } from "../../[id]/components/update-product"
+import { getSubtotalDetail} from "../../[id]/page"
+import { number } from "zod"
 
+// function getSubtotalDetail(details:DetailsRecipe[]) {
+//     let subtotal:number = 0
+//     details.forEach((detail) => {
+//       subtotal += detail.subtotal
+//     })
+//     return subtotal
+//   }
 
+// function getDetails(){
+    // export const {data: details} = useSWR(urlProducts, getDetailsByProductId)
+   
+// }
 export default function updateStatus() {
   const {data: products, isLoading, error} = useSWR(urlProducts, getProducts)
+  const {data: details} = useSWR(urlProducts, getDetailsByProductId)
   const [localProducts, setLocalProducts] = useState<Product[]>([])
+
 
   useEffect(()=>{
       if(products){
@@ -41,8 +57,9 @@ export default function updateStatus() {
       setLocalProducts(updateProducts)
   };
 }
+// export const details = getDetailsByProductId(products.id)
 
-export const columns: ColumnDef<Product>[] = [
+    export const columns: ColumnDef<Product>[] = [
     {
         accessorKey: 'name',
         header: "Nombre",
@@ -101,6 +118,7 @@ export const columns: ColumnDef<Product>[] = [
                             <PencilIcon className=" h-4 w-4 mr-2" /> <span>Editar</span>
                         </Button>
                     </Link>
+                    {/* <UpdateProduct id={product.id} subtotal={details? getSubtotalDetail(details) : 0}/> */}
                     <ViewDetailsByProduct productId={product.id}/>
                     <DisableProduct productId={product.id}
                         product={product}
@@ -131,5 +149,4 @@ export const columns: ColumnDef<Product>[] = [
         </div>
         }
     }
- 
 ]

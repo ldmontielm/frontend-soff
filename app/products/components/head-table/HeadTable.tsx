@@ -28,7 +28,7 @@ export default function HeadTable() {
         onClick={async () => {
           const response = await createProduct();
           if (response) {
-            toast.success(`Producto #${response.id}`)
+            toast.success(`Registrando producto`)
             router.push(`${Routes.CREATEPRODUCT}/${response.id}`)
           }
           if(response === null){
