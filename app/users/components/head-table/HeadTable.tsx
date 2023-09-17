@@ -35,13 +35,16 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Value } from "@radix-ui/react-select"
 import useSWR, {useSWRConfig} from 'swr'
-import {  getRole} from "@/app/roles/services/roles.services"
+import { getRole } from "@/app/roles/services/roles.services"
 import { urlRoles } from "@/app/roles/services/roles.services"
 import {createUser, urlUser, getUsers } from "../../services/users.services"
 import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'El nombre debe de tener mas de dos caracteres' }),
+  document_type: z.string().min(2, { message: 'El tipo de documento debe de tener mas de dos caracteres' }),
+  document: z.string().min(2, { message: 'El documento debe de tener mas de dos caracteres' }),
+  phone: z.string().min(2, { message: 'El numero de telefono debe de tener mas de dos caracteres' }),
   email: z.string().email({ message: 'El email no es valido' }),
   password: z.string(),
   // password: z.string().regex(/^(?=.[a-z])(?=.[A-Z])(?=.[0-9])(?=.[@$!%?&#])[A-Za-z0-9@$!%?&#]{8,}$/g, {message: 'Contraseña Invalida'}),
@@ -56,6 +59,9 @@ export default function HeadTable() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      document_type: "",
+      document: "",
+      phone: "",
       email: "",
       password: "",
       id_role: ""
@@ -72,7 +78,7 @@ function onSubmit(values: z.infer<typeof formSchema>){
     setOpen(false)
     mutate(`${urlUser}/get-users`)
   }
-  const {data: role, isLoading, isValidating, error} = useSWR(urlRoles, getRole)
+  const {data: role, isLoading, isValidating, error} = useSWR(`${urlRoles}/get-role`, getRole)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
@@ -96,6 +102,47 @@ function onSubmit(values: z.infer<typeof formSchema>){
               <FormLabel>Nombre</FormLabel>
               <FormControl>
                 <Input placeholder="Ingrese el nombre" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+            )}
+            />
+            <FormField
+            control={form.control}
+            name ="document_type"
+            render={({ field }) => (
+              <FormItem>
+              <FormLabel>Tipo de documento</FormLabel>
+              <FormControl>
+                <Input placeholder="Ingrese el tipo de documento" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+            )}
+            />
+
+            <FormField
+            control={form.control}
+            name ="document"
+            render={({ field }) => (
+              <FormItem>
+              <FormLabel>Numero de documento</FormLabel>
+              <FormControl>
+                <Input placeholder="Ingrese el numero de documento" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+            )}
+            />
+
+            <FormField
+            control={form.control}
+            name ="phone"
+            render={({ field }) => (
+              <FormItem>
+              <FormLabel>Numero de telefono</FormLabel>
+              <FormControl>
+                <Input placeholder="Ingrese el numero de telefono" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -156,7 +203,7 @@ function onSubmit(values: z.infer<typeof formSchema>){
         />
 
 
-          <Button type="submit">Registrar</Button>
+          <Button className="mt-4 w-full" type="submit">Registrar</Button>
           </form>
         </Form>
 
@@ -166,10 +213,3 @@ function onSubmit(values: z.infer<typeof formSchema>){
     </Dialog>
   )
 }
-
-{/* <div className="">
-<Label htmlFor="name" className="text-right">
-  Nombre
-</Label>
-<Input id="name" value="Pedro Duarte" className="col-span-3" />
-</div> */}

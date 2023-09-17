@@ -11,6 +11,9 @@ export default  function DemoPage() {
   const data  = user
     ? user.map((userItem) => ({
         name: userItem.name,
+        document_type:userItem.document_type,
+        document:userItem.document,
+        phone:userItem.phone,
         email: userItem.email,
         status: userItem.status,
         role:userItem.role,

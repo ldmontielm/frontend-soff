@@ -22,9 +22,9 @@ export async function createUser(user: createUser): Promise<User>{
     }
   }
 
-  export async function UpdateUser(user: createUser): Promise<User>{
+  export async function UpdateUser(id_user:string,user: createUser): Promise<User>{
     try {
-        const res = await axios.post(`${urlUser}/put_user`, user)
+        const res = await axios.put(`${urlUser}/${id_user}/put-user`,user)
         return res.data.user
     } catch (error) {
         throw new Error(`Error: ${error}`)

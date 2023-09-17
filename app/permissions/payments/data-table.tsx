@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import HeadTable from "../components/head-table/HeadTable"
+// import { HeadTable } from "../components"
 
 
 
@@ -70,7 +70,10 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-      <HeadTable/>
+      
+      {/* <HeadTable/> */}
+
+
       </div>
     <div className="rounded-md border">
       <div>

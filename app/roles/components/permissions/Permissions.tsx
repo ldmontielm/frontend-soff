@@ -31,16 +31,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Value } from "@radix-ui/react-select"
 import useSWR, {useSWRConfig} from 'swr'
 import { createRole, getRole } from "@/app/roles/services/roles.services"
-import { createPermissionRole } from "../../models/roles.models"
 import { urlRoles } from "@/app/roles/services/roles.services"
-import { getPermissions } from "@/app/roles/services/roles.services"
+import { urlPermission, getPermissions } from "@/app/permissions/services/permissions"
 import { useRouter } from "next/navigation"
+import { Checkbox } from "@/components/ui/checkbox"
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'El nombre debe de tener mas de dos caracteres' }),
 })
 
-export default function HeadTable() {
+export default function PermissionsTable() {
 
 
   const [open, setOpen]= useState(false)

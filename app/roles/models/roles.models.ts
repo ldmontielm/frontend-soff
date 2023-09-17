@@ -1,4 +1,5 @@
 export interface Role{
+ 
   id: string;
   name: string;
   status: boolean;
@@ -13,7 +14,7 @@ export interface PermissionRole{
   id_permission: string;
 }
   
-export interface createRole{
+export interface createPermissionRole{
   id_role: string;
   id_permission: string;
 }
