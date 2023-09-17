@@ -10,7 +10,7 @@ async function fetchDetailsByProductId(id: string) {
   return await getDetailsByProductId(id)
 }
 
-function getSubtotalDetail(details:DetailsRecipe[]) {
+export function getSubtotalDetail(details:DetailsRecipe[]) {
   let subtotal:number = 0
   details.forEach((detail) => {
     subtotal += detail.subtotal

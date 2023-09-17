@@ -13,6 +13,7 @@ import toast from 'react-hot-toast'
 import { updateAmountDetail } from '@/app/products/services/products.services'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import { DetailsDeleteForm } from '..'
 
 const formSchema = z.object({
   amount_supply: z.string().transform((val) => parseInt(val)),
@@ -30,8 +31,8 @@ export default function DetailUpdateForm({detail}: Props) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id_detail:"",
-      amount_supply: 0
+      id_detail:detail.id,
+      amount_supply: detail.amount_supply
     },
   })
 
@@ -58,7 +59,7 @@ export default function DetailUpdateForm({detail}: Props) {
         <DialogHeader>
           <DialogTitle>Editar cantidad</DialogTitle>
           <DialogDescription>
-            Puedes cambiar la cantidad del insumo <span className="capitalize font-semibold text-gray-600">{detail.supply_id}</span>
+            Puedes cambiar la cantidad del insumo <span className="capitalize font-semibold text-gray-600">{detail.supply}</span>
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -70,7 +71,7 @@ export default function DetailUpdateForm({detail}: Props) {
                 <FormItem>
                   <FormLabel>Cantidad</FormLabel>
                   <FormControl>
-                    <Input id="amount_supplies" type="number" placeholder="0" {...field} className="col-span-3" />
+                    <Input id="amount_supplies" type="number" placeholder="0" defaultValue={detail.amount_supply} {...field} className="col-span-3" />
                   </FormControl>
                   <FormDescription>
                     Digite la cantidad del insumo.

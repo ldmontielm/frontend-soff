@@ -35,8 +35,8 @@ export default function ViewDetailsByProduct({productId}:{productId:string}) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>  
-      <Button variant='ghost' className="">
-        <QueueListIcon className="w-4 h-4 mr-2" onClick={() => setOpen(true)}/> <span>Ver detalle</span>
+      <Button variant='ghost'>
+        <QueueListIcon className="w-4 h-4 mr-2 ml-0" onClick={() => setOpen(true)}/> <span>Ver detalle</span>
       </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[700px]">

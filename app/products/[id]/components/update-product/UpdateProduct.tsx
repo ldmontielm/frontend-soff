@@ -1,5 +1,5 @@
 'use client'
-import { confirmProduct,urlProducts, getProductById, deleteProduct } from '@/app/products/services/products.services'
+import { deleteProduct, updateProduct, urlProducts, getProductById } from '@/app/products/services/products.services'
 import { convertToCOP } from '@/app/sales/utils'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
@@ -40,31 +40,39 @@ export default function InfoProduct({subtotal, id}:Props) {
     resolver: zodResolver(formProductSchema),
     defaultValues: {
       name: product?.name,
-      sale_price: product?.price
+      sale_price: product?.sale_price
     }
   })
 
+  
+
   async function onSubmit(values: z.infer<typeof formProductSchema>){
-    if (values.name === '' || values.sale_price === 0){
-      toast.error('La información del producto es necesaria.')
-    }else{
-        toast.promise(confirmProduct(id, values), {
-          loading: 'Registrando producto...',
-          success: 'Producto registrado',
+
+    const product = {
+        name: values.name,
+        sale_price: values.sale_price
+      }
+    
+    // if (values.name === '' || values.sale_price === 0){
+    //   toast.error('La información del producto es necesaria.')
+    // }else{
+        toast.promise(updateProduct(id, product), {
+          loading: 'Actualizando producto...',
+          success: 'Producto actualizado',
           error: 'Error when fetching'
         })
         router.push('/products')
-      }
+      // }
     }
 
     async function cancelProduct(){
-      toast.promise(deleteProduct(id),{
-        loading: 'Cancelando...',
-        success: 'Cancelado',
-        error: (err) => `This just happened: ${err.detail.toString()}`
-      })
-      router.push('/products')
-    }
+        toast.promise(deleteProduct(id),{
+          loading: 'Cancelando registro...',
+          success: 'Registro cancelado',
+          error: (err) => `This just happened: ${err.detail.toString()}`
+        })
+        router.push('/products')
+      }
 
   return (
     <div className='w-full'>
@@ -85,7 +93,7 @@ export default function InfoProduct({subtotal, id}:Props) {
                   render ={({field}) => (
                     <FormItem>
                       <FormLabel>Nombre</FormLabel>
-                      <FormControl >
+                      <FormControl>
                          <Input placeholder='Nombre' defaultValue={product?.name} {...field} />
                       </FormControl>
                       <FormMessage />
@@ -99,7 +107,7 @@ export default function InfoProduct({subtotal, id}:Props) {
                     <FormItem>
                       <FormLabel>Precio</FormLabel>
                       <FormControl>
-                        <Input placeholder='Precio' defaultValue={product?.sale_price}{...field} />
+                        <Input placeholder='Precio' defaultValue={product?.sale_price} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -119,7 +127,7 @@ export default function InfoProduct({subtotal, id}:Props) {
           </div>
 
           <div className='mt-4 space-y-2'>
-            <Button className="w-full" variant='outline' onClick={()=>cancelProduct()}>
+            <Button className="w-full" type='submit' variant='outline' onClick={()=>cancelProduct()}>
               Cancelar
             </Button>
           </div>
