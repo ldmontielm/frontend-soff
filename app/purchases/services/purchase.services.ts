@@ -111,7 +111,7 @@ export async function DeletePurchase(id_purchase: string){
 
 export async function changeStatus(id_purchase:string) {
     try {
-        const res = await axios.put(`${urlPurchases}/change-status?id_purchase=${id_purchase}`)
+        const res = await axios.put(`${urlPurchases}/${id_purchase}/change_status`)
         return res.data.status
     } catch (error) {
         console.log(error)
