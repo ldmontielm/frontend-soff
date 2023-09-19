@@ -110,9 +110,9 @@ export default function SheetNavbar() {
                 </div>
               </CollapsibleTrigger>
             <CollapsibleContent className="space-y-2">
-              <Link href={Routes.CREATESALE} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><LockClosedIcon className='ml-6 w-6 h-6' /><p>Roles</p></Link>
+              <Link href={Routes.ROLES} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><LockClosedIcon className='ml-6 w-6 h-6' /><p>Roles</p></Link>
               <Link href={Routes.CREATESALE} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><Square3Stack3DIcon className='ml-6 w-6 h-6' /><p>Permisos</p></Link>
-              <Link href={Routes.CREATESALE} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><UserGroupIcon className='ml-6 w-6 h-6' /><p>Usuarios</p></Link>
+              <Link href={Routes.USERS} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><UserGroupIcon className='ml-6 w-6 h-6' /><p>Usuarios</p></Link>
             </CollapsibleContent>
           </Collapsible>
         </div>

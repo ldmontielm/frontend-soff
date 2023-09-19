@@ -17,5 +17,5 @@ export const convertDate = (date: string) => {
   const hours = newDate.getHours();
   const minutes = newDate.getMinutes();
   const seconds = newDate.getSeconds();
-  return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')} ${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
 } 

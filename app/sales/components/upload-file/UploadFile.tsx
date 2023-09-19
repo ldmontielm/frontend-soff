@@ -69,7 +69,8 @@ export default function UploadFile({id}: {id:string}) {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant='ghost' onClick={() => setOpen(true)}>
-          <ArrowTrendingUpIcon className="w-4 h-4 mr-2"/> <span>Marcar Pagada</span></Button>
+          <ArrowTrendingUpIcon className="w-4 h-4 mr-2"/> <span>Marcar Pagada</span>
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
       <DialogHeader>
