@@ -50,6 +50,7 @@ export default function AddRole() {
   const [rolename, setRolname] = useState("")
   const [assingPermissions, setAssingPermission] = useState<any[]>([])
   const {mutate} = useSWRConfig()
+  
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };

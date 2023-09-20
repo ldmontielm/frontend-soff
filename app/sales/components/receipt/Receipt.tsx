@@ -44,7 +44,7 @@ export default function Receipt({id}:Props) {
     // const total = data.reduce((sum, [, , , total]) => sum + total, 0);
 
     // Guardar o mostrar el PDF (puedes personalizar esta parte según tus necesidades)
-    doc.save('factura.pdf');
+    doc.save(`receipt-${id}.pdf`);
   }
 
   return (

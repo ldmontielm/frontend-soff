@@ -71,7 +71,8 @@ export const columns: ColumnDef<Sale>[] = [
       const total = parseFloat(row.getValue("total"))
       const formatted = new Intl.NumberFormat("en-US", {
         style: 'currency',
-        currency: "USD"
+        currency: "USD",
+        maximumFractionDigits: 0
       }).format(total)
 
       return <div className="text-right font-medium">{formatted}</div>
