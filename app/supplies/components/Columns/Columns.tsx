@@ -97,8 +97,8 @@ export const columns: ColumnDef<Supply>[] = [
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="flex flex-col">
                   <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                  <TableCell className="flex items-center gap-2 justify-end">
-                <SupplyUpdateForm supply={supply} id_supply={supply.id} />
+                  <TableCell className="flex items-center gap-2">
+                <SupplyUpdateForm supply={supply} id_supply={supply.id} /><span>Editar</span>
                 {/* <SupplyDeleteForm supply={supply} id_supply={supply.id}/> */}
                 </TableCell>
                   <SwitchDemo 

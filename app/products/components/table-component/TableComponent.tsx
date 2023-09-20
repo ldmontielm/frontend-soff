@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { DataTable } from '../table/DataTable'
-import { columns } from '..'
+import {columns} from '../columns/Columns'
 // import { columns } from '../columns/Columns'
 import useSWR from 'swr'
 import { getProducts, urlProducts } from '../../services/products.services'
