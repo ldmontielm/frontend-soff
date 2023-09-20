@@ -25,8 +25,8 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 
-import { toast } from "@/components/ui/use-toast"
-import React from "react"
+import toast from "react-hot-toast"
+import React, {useState} from "react"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Button } from "@/components/ui/button";
@@ -34,11 +34,17 @@ import * as z from 'zod'
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Value } from "@radix-ui/react-select"
-import useSWR from 'swr'
-import { getRole, urlRole } from "../../services/users.services"
+import useSWR, {useSWRConfig} from 'swr'
+import { getRole } from "@/app/roles/services/roles.services"
+import { urlRoles } from "@/app/roles/services/roles.services"
+import {createUser, urlUser, getUsers } from "../../services/users.services"
+import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'El nombre debe de tener mas de dos caracteres' }),
+  document_type: z.string().min(2, { message: 'El tipo de documento debe de tener mas de dos caracteres' }),
+  document: z.string().min(2, { message: 'El documento debe de tener mas de dos caracteres' }),
+  phone: z.string().min(2, { message: 'El numero de telefono debe de tener mas de dos caracteres' }),
   email: z.string().email({ message: 'El email no es valido' }),
   password: z.string(),
   // password: z.string().regex(/^(?=.[a-z])(?=.[A-Z])(?=.[0-9])(?=.[@$!%?&#])[A-Za-z0-9@$!%?&#]{8,}$/g, {message: 'Contraseña Invalida'}),
@@ -46,24 +52,37 @@ const formSchema = z.object({
 })
 
 export default function HeadTable() {
+  const [open, setOpen]= useState(false)
+  const router = useRouter()
+  const { data:user} = useSWR(`${urlUser}/get-users`, getUsers)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
+      document_type: "",
+      document: "",
+      phone: "",
       email: "",
       password: "",
       id_role: ""
     }
   })
+  const { mutate } = useSWRConfig()
 
-  function onSubmit(values: z.infer<typeof formSchema>){
-    
+function onSubmit(values: z.infer<typeof formSchema>){
+    toast.promise(createUser(values),{
+      loading: "La informacion esta cargando",
+      success: "Usuario registrado correctamente",
+      error: "El usuario no se pudo registrar"
+    })
+    setOpen(false)
+    mutate(`${urlUser}/get-users`)
   }
-  const {data: role, isLoading, isValidating, error} = useSWR(urlRole, getRole)
+  const {data: role, isLoading, isValidating, error} = useSWR(`${urlRoles}/get-role`, getRole)
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="destructive">Agregar Usuario</Button>
+        <Button variant="default">Agregar Usuario</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -83,6 +102,47 @@ export default function HeadTable() {
               <FormLabel>Nombre</FormLabel>
               <FormControl>
                 <Input placeholder="Ingrese el nombre" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+            )}
+            />
+            <FormField
+            control={form.control}
+            name ="document_type"
+            render={({ field }) => (
+              <FormItem>
+              <FormLabel>Tipo de documento</FormLabel>
+              <FormControl>
+                <Input placeholder="Ingrese el tipo de documento" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+            )}
+            />
+
+            <FormField
+            control={form.control}
+            name ="document"
+            render={({ field }) => (
+              <FormItem>
+              <FormLabel>Numero de documento</FormLabel>
+              <FormControl>
+                <Input placeholder="Ingrese el numero de documento" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+            )}
+            />
+
+            <FormField
+            control={form.control}
+            name ="phone"
+            render={({ field }) => (
+              <FormItem>
+              <FormLabel>Numero de telefono</FormLabel>
+              <FormControl>
+                <Input placeholder="Ingrese el numero de telefono" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -126,7 +186,7 @@ export default function HeadTable() {
               <Select onValueChange={field.onChange}>
                 <FormControl>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a verified email to display" />
+                    <SelectValue placeholder="Seleciones un rol" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent placeholder="Seleciones un rol">
@@ -143,7 +203,7 @@ export default function HeadTable() {
         />
 
 
-          <Button type="submit">Registrar</Button>
+          <Button className="mt-4 w-full" type="submit">Registrar</Button>
           </form>
         </Form>
 
@@ -153,10 +213,3 @@ export default function HeadTable() {
     </Dialog>
   )
 }
-
-{/* <div className="">
-<Label htmlFor="name" className="text-right">
-  Nombre
-</Label>
-<Input id="name" value="Pedro Duarte" className="col-span-3" />
-</div> */}
