@@ -1,30 +1,20 @@
 'use client'
-import { deleteProduct, updateProduct, urlProducts, getProductById } from '@/app/products/services/products.services'
+import { updateProduct,getProductById, deleteDetail} from '@/app/products/services/products.services'
 import { convertToCOP } from '@/app/sales/utils'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { BanknotesIcon, CreditCardIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-// import { useRouter } from 'next/router'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import useSWR from 'swr'
 import * as z from 'zod'
-// import { CardClient } from '..'
 import { Input } from '@/components/ui/input'
-import { type } from 'os'
-import { NONAME } from 'dns'
 
 const formProductSchema = z.object({
     name: z.string(),
     sale_price: z.string().transform(Number)
-})
+});
 
 interface Props{
   subtotal: number,
@@ -40,39 +30,26 @@ export default function InfoProduct({subtotal, id}:Props) {
     resolver: zodResolver(formProductSchema),
     defaultValues: {
       name: product?.name,
-      sale_price: product?.sale_price
+      sale_price: product?.price
     }
   })
 
-  
-
   async function onSubmit(values: z.infer<typeof formProductSchema>){
-
-    const product = {
-        name: values.name,
-        sale_price: values.sale_price
-      }
-    
-    // if (values.name === '' || values.sale_price === 0){
-    //   toast.error('La información del producto es necesaria.')
-    // }else{
-        toast.promise(updateProduct(id, product), {
+    if (values.name === '' || values.sale_price === 0){
+      toast.error('La información del producto es necesaria.')
+    }else{
+        toast.promise(updateProduct(id, values), {
           loading: 'Actualizando producto...',
           success: 'Producto actualizado',
           error: 'Error when fetching'
         })
         router.push('/products')
-      // }
+      }
     }
 
     async function cancelProduct(){
-        toast.promise(deleteProduct(id),{
-          loading: 'Cancelando registro...',
-          success: 'Registro cancelado',
-          error: (err) => `This just happened: ${err.detail.toString()}`
-        })
-        router.push('/products')
-      }
+      router.push('/products')
+    }
 
   return (
     <div className='w-full'>
@@ -93,7 +70,7 @@ export default function InfoProduct({subtotal, id}:Props) {
                   render ={({field}) => (
                     <FormItem>
                       <FormLabel>Nombre</FormLabel>
-                      <FormControl>
+                      <FormControl >
                          <Input placeholder='Nombre' defaultValue={product?.name} {...field} />
                       </FormControl>
                       <FormMessage />
@@ -107,7 +84,7 @@ export default function InfoProduct({subtotal, id}:Props) {
                     <FormItem>
                       <FormLabel>Precio</FormLabel>
                       <FormControl>
-                        <Input placeholder='Precio' defaultValue={product?.sale_price} {...field} />
+                        <Input placeholder='Precio' defaultValue={product?.sale_price}{...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -127,7 +104,7 @@ export default function InfoProduct({subtotal, id}:Props) {
           </div>
 
           <div className='mt-4 space-y-2'>
-            <Button className="w-full" type='submit' variant='outline' onClick={()=>cancelProduct()}>
+            <Button className="w-full" type='button' variant='outline' onClick={()=>cancelProduct()}>
               Cancelar
             </Button>
           </div>

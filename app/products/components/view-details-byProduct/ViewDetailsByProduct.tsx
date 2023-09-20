@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import toast from 'react-hot-toast'
-import { getDetailsByProductId, urlProducts } from '@/app/products/services/products.services'
+import { getDetailsByProductId, getProductById, urlProducts } from '@/app/products/services/products.services'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import useSWR from 'swr'
@@ -30,6 +30,7 @@ import {
 export default function ViewDetailsByProduct({productId}:{productId:string}) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
+  const {data:product}= useSWR(`${urlProducts}`,getProductById)
   const {data: details, isLoading, error} = useSWR(`${productId}`, getDetailsByProductId)
 
   return (
