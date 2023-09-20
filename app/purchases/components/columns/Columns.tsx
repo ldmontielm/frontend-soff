@@ -108,12 +108,14 @@ export const columns: ColumnDef<Purchase>[] = [
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="flex flex-col">
-                      <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                      <SeeDetail id={purchase.id}/>
-                      <Button variant='ghost'>
-                        <UserIcon className="w-4 h-4 mr-2"/> <span>Ver Proveedor</span>
-                      </Button>
-                      <DisablePurchase purchaseId={purchase.id} purchase={purchase} onUpdateStatus={()=>updateStatus()}/>
+                      <DropdownMenuLabel className="text-center">Acciones</DropdownMenuLabel>
+                      <div className="flex flex-col items-start">
+                        <SeeDetail id={purchase.id}/>
+                        <Button variant='ghost'>
+                          <UserIcon className="w-4 h-4 mr-2"/> <span>Ver Proveedor</span>
+                        </Button>
+                        <DisablePurchase purchaseId={purchase.id} purchase={purchase}/>
+                      </div>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </>
