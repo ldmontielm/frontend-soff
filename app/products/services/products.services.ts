@@ -84,7 +84,7 @@ export async function confirmProduct(id: string, product: ProductConfim) {
 
 export async function updateProduct(id_product: string, product: ProductCreate) {
     try {
-      const res = await axios.put(`${urlProducts}/update_product?id_product=${id_product}&product=${product}`)
+      const res = await axios.put(`${urlProducts}/${id_product}/update_product`, product)
       return res.data
     } catch (error) { 
       console.log(error)
