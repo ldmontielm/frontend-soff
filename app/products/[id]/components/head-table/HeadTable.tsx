@@ -1,6 +1,6 @@
 "use client"
- 
-import { addDetail, getSupplies, urlSupply } from "@/app/products/services/products.services"
+
+import { addDetail, getSupplies} from "@/app/products/services/products.services"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -8,16 +8,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { redirect, useParams, useRouter } from 'next/navigation'
-import { useState } from "react"
+import { useState, useContext } from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import useSWR from 'swr'
 import * as z from 'zod'
+import { DetailContext } from "../../context/detail-context/DetailContext"
+import { DetailContextInterface } from "@/app/products/models/product.models"
 
 const formSchema = z.object({
-  product_id: z.string().uuid(),
-  supply_id: z.string().uuid({message: 'Seleccione un producto'}),
-  amount_supply: z.number().int().min(1, {message:'Mínimo debes ingresar un numero'}).nonnegative({message: 'No se aceptan valores negativos'}).transform(Number),
+  product_id: z.string(),
+  supply_id: z.string(),
+  // amount_supply: z.number().int().min(1, {message:'Mínimo debes ingresar un numero'}).nonnegative({message: 'No se aceptan valores negativos'}).transform(Number),
+  amount_supply: z.string().transform(Number),
   unit_measure: z.string().min(2, {message: 'La unidad debe tener más de 2 caracteres'})
 })
 
@@ -27,12 +30,13 @@ const formSchema = z.object({
 
 export default function HeadTable() {
   const params = useParams()
-  const router = useRouter()
   const [supply, setSupply] = useState(false)
   const [amountSuply, setAmountSupply] = useState<number>()
   const [value, setValue] = useState("")
-  const {data:supplies} = useSWR(urlSupply, getSupplies)
-
+  const router = useRouter()
+  const {data:supplies} = useSWR('http://localhost:8000/supplies', getSupplies)
+  // const {AddDetail} = useContext(DetailContext) as DetailContextInterface
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,15 +47,37 @@ export default function HeadTable() {
     }
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>){
+
+  async function onSubmit(values: z.infer<typeof formSchema>){
     values.product_id = params.id.toString()
     toast.promise(addDetail(values), {
-      loading: 'Agregando detalle...',
+      loading: 'Agreagando detalle...',
       success: 'Detalle agregado correctamente',
       error: 'Error when fetching'
     })
     router.refresh()
   }
+
+  // async function onSubmit(values: z.infer<typeof formSchema>){
+  //   console.log(values)
+  //   values.product_id = params.id.toString()
+  //   const supply:any=Array.isArray(supplies) && supplies.find((item)=> item.id === values.supply_id)
+  //   if (supply != undefined && supply != false){
+  //     const newDetail = {
+  //       id: crypto.randomUUID(),
+  //       product_id: values.product_id,
+  //       supply_id: values.supply_id,
+  //       supply: supply.name,
+  //       supply_price:supply.price,
+  //       amount_supply: values.amount_supply,
+  //       unit_measure: values.unit_measure,
+  //       subtotal: values.amount_supply * supply.price
+  //     }
+  //     AddDetail(newDetail)
+  //   }else{
+  //     toast.error('El insumo no se pudo encontrar')
+  //   }
+  // }
 
   return (
     <Form {...form}>
@@ -71,8 +97,8 @@ export default function HeadTable() {
                       </SelectTrigger>
                       <SelectContent >
                         {
-                          Array.isArray(supplies) && supplies.map((supplie) => (
-                            <SelectItem key={supplie.id} value={supplie.id} className="uppercase">{supplie.name}</SelectItem>
+                          Array.isArray(supplies) && supplies.map((supply) => (
+                            <SelectItem key={supply.id} value={supply.id} className="uppercase">{supply.name}</SelectItem>
                           ))
                         }
                       </SelectContent>
@@ -91,7 +117,8 @@ export default function HeadTable() {
               <FormItem className="w-full md:w-[200px]">
                 <FormLabel>Cantidad</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Cantidad de insumo" {...form.register('amount_supply', {valueAsNumber: true})} className="lg:w-fit"/>
+                  {/* <Input type="number" placeholder="Cantidad de insumo" {...form.register('amount_supply', {valueAsNumber: true})} className="lg:w-fit"/> */}
+                  <Input type="number" placeholder="Cantidad de insumo" min="1" {...field} className="lg:w-fit"/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
