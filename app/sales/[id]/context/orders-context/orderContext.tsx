@@ -1,7 +1,7 @@
 'use client'
-import {createContext, useState} from "react";
+import {createContext, useEffect, useState} from "react";
 import { Order } from "@/app/sales/models/sale.models";
-
+import { useParams } from "next/navigation";
 export const OrderContext = createContext({});
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
 
 export function OrdersContextProvider({children}: Props) {
   const [OrdersContext, setOrdersContext] = useState<Array<Order>>([]);
+  const params = useParams()
 
   const calculateTotalForOrders = () => {
     let subtotal = 0 
@@ -19,14 +20,14 @@ export function OrdersContextProvider({children}: Props) {
     return subtotal
   }
 
-  const AddOrder = (order: Order) => {
-    let old_order = OrdersContext.find((value) => value.product_id == order.product_id)
-    if (old_order != undefined){
-      UpdateAmountOrders(old_order.id, order.amount_product, true)
-    }else{
-      setOrdersContext([...OrdersContext, order])
-    }
-  }
+  // const AddOrder = (order: Order) => {
+  //   let old_order = OrdersContext.find((value) => value.product_id == order.product_id)
+  //   if (old_order != undefined){
+  //     UpdateAmountOrders(old_order.id, order.amount_product, true)
+  //   }else{
+  //     setOrdersContext([...OrdersContext, order])
+  //   }
+  // }
 
   const UpdateAmountOrders = (id:string, amount_order: number, add: boolean = false) => {
     let orders = [...OrdersContext]
@@ -51,7 +52,7 @@ export function OrdersContextProvider({children}: Props) {
 
 
   return (
-    <OrderContext.Provider value={{OrdersContext, setOrdersContext, UpdateAmountOrders, DeleteOrder, AddOrder}}>
+    <OrderContext.Provider value={{OrdersContext, setOrdersContext, UpdateAmountOrders, DeleteOrder}}>
       {children}
     </OrderContext.Provider>
   )
