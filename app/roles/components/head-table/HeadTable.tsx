@@ -1,102 +1,132 @@
 'use client'
+import React, {useState} from 'react'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
-  DialogFooter,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-
-
-
-import toast from "react-hot-toast"
-import React, {useState} from "react"
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import StepContent from '@mui/material/StepContent';
+// import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Button } from "@/components/ui/button";
-import * as z from 'zod'
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Value } from "@radix-ui/react-select"
-import useSWR, {useSWRConfig} from 'swr'
-import { createRole, getRole } from "@/app/roles/services/roles.services"
-import { createPermissionRole } from "../../models/roles.models"
-import { urlRoles } from "@/app/roles/services/roles.services"
-import { getPermissions } from "@/app/roles/services/roles.services"
-import { useRouter } from "next/navigation"
+import { Switch } from '@/components/ui/switch';
+import useSWR, {useSWRConfig} from 'swr';
+import toast from 'react-hot-toast';
+import { getPermissions } from '../../services/roles.services';
+import { createRole, getRole, urlRoles} from '../../services/roles.services';
 
-const formSchema = z.object({
-  name: z.string().min(2, { message: 'El nombre debe de tener mas de dos caracteres' }),
-})
-
-export default function HeadTable() {
-
-
+export default function AddRole() {
+  const {data:permissions} = useSWR('http://localhost:8000/permission/get-permision', getPermissions)
+  const {data:roles} = useSWR('http://localhost:8000/role/get-role', getRole)
+  const [activeStep, setActiveStep] = useState(0);
   const [open, setOpen]= useState(false)
-  const router = useRouter()
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      name: "",
-    }
-  })
-  const { mutate } = useSWRConfig()
+  const [rolename, setRolname] = useState("")
+  const [assingPermissions, setAssingPermission] = useState<any[]>([])
+  const {mutate} = useSWRConfig()
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
 
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
 
-function onSubmit(values: z.infer<typeof formSchema>){
-    toast.promise(createRole(values),{
-      loading: "La informacion esta cargando",
-      success: "Usuario registrado correctamente",
-      error: "El usuario no se pudo registrar"
-    })
-    setOpen(false)
-    mutate(`${urlRoles}/get-role`)
-  }
+  const handleReset = () => {
+    setActiveStep(0);
+  };
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="default">Agregar Rol</Button>
-      </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle>Agregar Role</DialogTitle>
-          <DialogDescription>
-          Ahora puedes registrar a un Role, recuerda que todos los campos a continuación son requeridos.
-          </DialogDescription>
-        </DialogHeader>
+    <div>
+      <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+          <Button variant="default">Registrar rol</Button>
+        </DialogTrigger>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Registrar Rol</DialogTitle>
+          </DialogHeader>
+          <Box sx={{ maxWidth: 400 }}>
+      <Stepper activeStep={activeStep} orientation="vertical">
+        <Step>
+          <StepLabel>Crear Rol</StepLabel>
+          <StepContent>
+            <Input type="email" placeholder="Nombre " onChange={(e) => setRolname(e.target.value)}/>
+            <Box sx={{ mb: 2 }} className="mt-2">
+              <div>
+                <Button
+                  disabled={rolename === ""}
+                  variant='default'
+                  onClick={handleNext}
+                  size='sm'
+                >
+                  Siguiente
+                </Button>
+              </div>
+            </Box>
+          </StepContent>
+        </Step>
+        <Step>
+          <StepLabel>Asignar Permisos</StepLabel>
+          <StepContent>
+            <div>
+              {
+                Array.isArray(permissions) && permissions.map((permission) => (
+                  <div key={permission.id}>
+                    <Switch onCheckedChange={(e) => {
+                      if(e === true){
+                        setAssingPermission([...assingPermissions, {
+                          id_permission: permission.id
+                        }])
+                      }else{
+                        let listaNewPermissions = assingPermissions.filter((id) => id.id_permission !== permission.id)
+                        setAssingPermission(listaNewPermissions)
+                        // setAssingPermission()
+                      }
+                      // e ? setAssingPermission([...assingPermissions, permission.id]) : setAssingPermission([assingPermissions.filter(permission  => permission !== permission.id)])
+                      }} />
+                    <label htmlFor="">{permission.name}</label>
+                  </div>
+                ))
+              }
+            </div>
+          </StepContent>
+          <Box sx={{ mb: 2 }}>
+            <div>
+              <Button
+                disabled={assingPermissions.length === 0}
+                variant='default'
+                onClick={() => {
+                  toast.promise(createRole(rolename, assingPermissions), {
+                    success: "Rol agregado",
+                    error: "No se pudo agregar el rol",
+                    loading: "Agregando rol"
+                  })
+                  setOpen(false)
+                  setRolname("")
+                  setAssingPermission([])
+                  setActiveStep(0)
+                  mutate(`${urlRoles}/get-role`)
 
-        <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-            <FormField
-            control={form.control}
-            name ="name"
-            render={({ field }) => (
-              <FormItem>
-              <FormLabel>Nombre</FormLabel>
-              <FormControl>
-                <Input placeholder="Ingrese el nombre" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-            )}
-            />
-          <Button className="mt-4 w-full" type="submit">Registrar</Button>
-          </form>
-        </Form>
-        <DialogFooter>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+                }}
+                size='sm'
+              >
+                Finalizar
+              </Button>
+            </div>
+          </Box>
+        </Step>
+      </Stepper>
+    </Box>
+        </DialogContent>
+      </Dialog>
+    </div>
   )
 }

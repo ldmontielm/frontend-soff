@@ -1,5 +1,6 @@
 export interface Permission{
-    name: string;
+  id:string;
+    name: string
   };
   
   

@@ -10,12 +10,12 @@ export default  function DemoPage() {
 
   const data = role
   ? role.map((roleItem) => ({
-      id:roleItem.name,
+      id:roleItem.id,
       name: roleItem.name,
       status: Boolean(roleItem.status), // Convierte status a booleano
     }))
   : [];
-
+    
   return (
     <div className="container mx-auto py-10">
       <HeaderModule/>

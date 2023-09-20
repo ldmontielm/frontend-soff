@@ -3,7 +3,7 @@ import { columns } from "./payments/columns";
 import { DataTable } from "./payments/data-table"
 import { urlPermission, getPermissions } from "./services/permissions";
 import useSWR from "swr";
-// import HeaderModule from "./components/header-module/Header";
+import HeaderModule from "./components/header-module/Header";
 
 export default  function DemoPage() {
   const { data:permission} = useSWR(`${urlPermission}/get-permision`, getPermissions)
@@ -17,7 +17,7 @@ export default  function DemoPage() {
 
   return (
     <div className="container mx-auto py-10">
-      {/* <HeaderModule/> */}
+      <HeaderModule/>
       <DataTable columns={columns} data={data} />
     </div>
   );
