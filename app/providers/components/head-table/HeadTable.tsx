@@ -23,16 +23,17 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog"
 
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { createProvider } from "../../services/provider.services";
+import { createProvider, getProviders, urlProvider } from "../../services/provider.services";
 import { ProviderCreate } from "../../models/provider.models";
 import {useRouter} from "next/navigation"
 import { Routes } from "@/models/routes.models";
 import { ToastAction } from "@/components/ui/toast"
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
+import useSWR, { mutate, useSWRConfig } from "swr";
 
 
 
@@ -47,36 +48,52 @@ const fromSchema = z.object({
 
 
 export default function HeadTable() {
+  const [open, setOpen] = useState(false)
   const routes  = useRouter()
+  const {data:provider} = useSWR(`{urlProvider}`,getProviders)
   const form = useForm<z.infer<typeof fromSchema>> ({
     resolver: zodResolver(fromSchema),
-    defaultValues: {
-      name: '',
-      company: '',
-      address: '',
-      email: '',
-      phone: '',
-      city: ''
-    }
+    // defaultValues: {
+    //   name: '',
+    //   company: '',
+    //   address: '',
+    //   email: '',
+    //   phone: '',
+    //   city: ''
+    // }
 
   })
+  const {mutate } = useSWRConfig()
+
+  
 
     function onSubmit(values: z.infer<typeof fromSchema>){
       toast.promise(createProvider(values), {
         success: "Proveedor agregado",
         error: "Algo ocurrio",
-        loading: 'Cargando info...'
-      })
-      routes.refresh()
+        loading: 'Cargando información...'
+      }).then(() => {
+        form.setValue("name", "");
+        form.setValue("company", "");
+        form.setValue("address", "");
+        form.setValue("email", "");
+        form.setValue("phone", "");
+        form.setValue("city", "");
+
+      setOpen(false)
+      mutate(`${urlProvider}`)
+      });
     }
-
-
+      
+      
+    // const {data: proveedor} = useSWR(urlProvider, getProviders)
 return (
-  <Dialog>
+  
+  <Dialog open={open} onOpenChange={setOpen}>
     <DialogTrigger asChild>
-      <Button variant="destructive">Agregar Proveedor</Button>
+    <Button variant="default" className="px-4 py-2 m-2">Registrar proveedor</Button>
     </DialogTrigger>
-    <DialogContent className="sm:max-w-[425px]">
+    <DialogContent className="sm:min-w-[415px]">
       <DialogHeader>
         <DialogTitle>Agregar Nuevo Proveedor</DialogTitle>
       <DialogDescription>Añadir nuevo proveedor</DialogDescription>
