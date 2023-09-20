@@ -13,7 +13,6 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import useSWR from 'swr'
 import * as z from 'zod'
-import { DetailContext } from "../../context/detail-context/DetailContext"
 import { DetailContextInterface } from "@/app/products/models/product.models"
 
 const formSchema = z.object({

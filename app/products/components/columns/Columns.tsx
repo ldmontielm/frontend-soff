@@ -1,7 +1,7 @@
 'use client'
 
 import {ColumnDef} from "@tanstack/react-table"
-import { Product, DetailsRecipe } from '../../models/product.models'
+import { Product } from '../../models/product.models'
 import { getProducts, urlProducts, getDetailsByProductId } from "../../services/products.services"
 import { Badge } from "@/components/ui/badge"
 import {
@@ -13,58 +13,19 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
-import { ViewDetailsByProduct, DisableProduct } from "../../[id]/components"
-import {UserIcon, PencilIcon } from "@heroicons/react/24/outline"
+import { ViewDetailsByProduct } from ".."
+import { DisableProduct } from "../../[id]/components/disable-product"
+import {PencilIcon } from "@heroicons/react/24/outline"
 import Link from 'next/link'
 import { useState, useEffect } from "react"
 import useSWR from "swr"
-import { UpdateProduct } from "../../[id]/components/update-product"
-import { getSubtotalDetail} from "../../[id]/page"
-import { number } from "zod"
 
-// function getSubtotalDetail(details:DetailsRecipe[]) {
-//     let subtotal:number = 0
-//     details.forEach((detail) => {
-//       subtotal += detail.subtotal
-//     })
-//     return subtotal
-//   }
-
-// function getDetails(){
-    // export const {data: details} = useSWR(urlProducts, getDetailsByProductId)
-   
-// }
-export default function updateStatus() {
-  const {data: products, isLoading, error} = useSWR(urlProducts, getProducts)
-  const {data: details} = useSWR(urlProducts, getDetailsByProductId)
-  const [localProducts, setLocalProducts] = useState<Product[]>([])
-
-
-  useEffect(()=>{
-      if(products){
-          console.log(products)
-          setLocalProducts(products)
-      }
-  }, [products]);
-
-  const updateProductStatus = (productId:string, newStatus:boolean) =>{
-      const updateProducts = localProducts?.map((product)=>{
-          if (product.id === productId){
-              return {...product, status: newStatus};
-          }
-          return product
-      });
-      setLocalProducts(updateProducts)
-  };
-}
-// export const details = getDetailsByProductId(products.id)
-
-    export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<Product>[] = [
     {
         accessorKey: 'name',
         header: "Nombre",
         cell: ({row}) => {  
-            return <div className="font-medium ml-5">{row.getValue("name")}</div>
+            return <div className="font-medium">{row.getValue("name")}</div>
         }
     },   
     {
@@ -113,16 +74,14 @@ export default function updateStatus() {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="flex flex-col">
                     <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                    <Link href={`/products/${product.id}`}>
+                    <Link href={`/products/${product.id}/update_product`}>
                         <Button variant='ghost'>
                             <PencilIcon className=" h-4 w-4 mr-2" /> <span>Editar</span>
                         </Button>
                     </Link>
-                    {/* <UpdateProduct id={product.id} subtotal={details? getSubtotalDetail(details) : 0}/> */}
                     <ViewDetailsByProduct productId={product.id}/>
                     <DisableProduct productId={product.id}
-                        product={product}
-                        onUpdateStatus={()=> updateStatus()}/>
+                        product={product}/>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </>
@@ -139,8 +98,7 @@ export default function updateStatus() {
                     <DropdownMenuContent align="end" className="flex flex-col">
                     <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                     <DisableProduct productId={product.id}
-                        product={product}
-                        onUpdateStatus={()=> updateStatus()}/>
+                        product={product}/>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </>

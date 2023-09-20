@@ -39,8 +39,8 @@ export default function InfoProduct({subtotal, id}:Props) {
   const formProduct = useForm<z.infer<typeof formProductSchema>>({
     resolver: zodResolver(formProductSchema),
     defaultValues: {
-      name: product?.name,
-      sale_price: product?.price
+      name: '',
+      sale_price: 0
     }
   })
 
@@ -59,8 +59,8 @@ export default function InfoProduct({subtotal, id}:Props) {
 
     async function cancelProduct(){
       toast.promise(deleteProduct(id),{
-        loading: 'Cancelando...',
-        success: 'Cancelado',
+        loading: 'Cancelando Registro...',
+        success: 'Registro cancelado',
         error: (err) => `This just happened: ${err.detail.toString()}`
       })
       router.push('/products')
@@ -86,7 +86,7 @@ export default function InfoProduct({subtotal, id}:Props) {
                     <FormItem>
                       <FormLabel>Nombre</FormLabel>
                       <FormControl >
-                         <Input placeholder='Nombre' defaultValue={product?.name} {...field} />
+                         <Input placeholder='Nombre'{...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -99,7 +99,7 @@ export default function InfoProduct({subtotal, id}:Props) {
                     <FormItem>
                       <FormLabel>Precio</FormLabel>
                       <FormControl>
-                        <Input placeholder='Precio' defaultValue={product?.sale_price}{...field} />
+                        <Input placeholder='Precio'{...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -119,7 +119,7 @@ export default function InfoProduct({subtotal, id}:Props) {
           </div>
 
           <div className='mt-4 space-y-2'>
-            <Button className="w-full" variant='outline' onClick={()=>cancelProduct()}>
+            <Button className="w-full" type='button' variant='outline' onClick={()=>cancelProduct()}>
               Cancelar
             </Button>
           </div>
