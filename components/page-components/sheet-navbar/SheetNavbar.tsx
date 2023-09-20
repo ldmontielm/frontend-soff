@@ -53,19 +53,14 @@ const menuItems = [
     id: 5,
     name: "Insumos",
     icon: <SwatchIcon className='w-6 h-6' />,
-    url: Routes.CREATEPRODUCT
+    url: Routes.SUPPLIES
   },
   {
     id: 6,
     name: "Proveedores",
     icon: <BriefcaseIcon className='w-6 h-6' />,
     url: Routes.CREATEPROVIDER
-  },
-  // {
-  //   id: 7,
-  //   name: "Usuarios",
-  //   icon: <UserGroupIcon className='w-6 h-6' />,
-  // }
+  }
 ]
 
 

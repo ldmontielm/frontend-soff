@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-   "@emotion/react": "^11.11.1",
+    "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@heroicons/react": "^2.0.18",
     "@hookform/resolvers": "^3.1.1",
@@ -49,7 +49,7 @@
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.6.0",
     "lucide-react": "^0.271.0",
-    "next": "13.4.12",
+    "next": "13.5.1-canary.1",
     "postcss": "8.4.27",
     "react": "18.2.0",
     "react-dom": "18.2.0",

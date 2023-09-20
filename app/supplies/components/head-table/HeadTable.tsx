@@ -85,7 +85,7 @@ return (
   
   <Dialog open={open} onOpenChange={setOpen}>
     <DialogTrigger asChild>
-    <Button variant="default" className="px-4 py-2 m-2">Registrar Insumo</Button>
+    <Button variant="default" className="px-4 py-2 m-2">Agregar</Button>
     </DialogTrigger>
     <DialogContent className="sm:min-w-[415px]">
       <DialogHeader>

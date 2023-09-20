@@ -34,8 +34,8 @@ export default function TableOrders() {
                     <TableCell>{order.amount_product}</TableCell>
                     <TableCell>${convertToCOP(order.total)}</TableCell>
                     <TableCell className="flex items-center gap-2 justify-end">
-                      <OrderUpdateForm order={order} />
-                      <OrderDeleteForm order={order} />
+                      <OrderUpdateForm order={order} id_sale={params.id} />
+                      <OrderDeleteForm order={order} id_sale={params.id} />
                     </TableCell>
                   </TableRow>
                 ))

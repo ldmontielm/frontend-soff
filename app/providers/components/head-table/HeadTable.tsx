@@ -91,7 +91,7 @@ return (
   
   <Dialog open={open} onOpenChange={setOpen}>
     <DialogTrigger asChild>
-    <Button variant="default" className="px-4 py-2 m-2">Registrar proveedor</Button>
+    <Button variant="default" className="px-4 py-2 m-2">Registrar</Button>
     </DialogTrigger>
     <DialogContent className="sm:min-w-[415px]">
       <DialogHeader>

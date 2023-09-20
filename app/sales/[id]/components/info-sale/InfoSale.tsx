@@ -1,28 +1,22 @@
 'use client'
-import { Client, Order } from '@/app/sales/models/sale.models'
-import { confirmSale, getGeneralClient, urlSales } from '@/app/sales/services/sale.services'
+import { Order, OrderContextInterface } from '@/app/sales/models/sale.models'
+import { confirmSale, getGeneralClient, urlSales, getOrdersBySaleId } from '@/app/sales/services/sale.services'
 import { convertToCOP } from '@/app/sales/utils'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { BanknotesIcon, CreditCardIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import useSWR from 'swr'
-import useSWRMutation from 'swr/mutation'
 import * as z from 'zod'
-import { CardClient } from '..'
-import { Input } from '@/components/ui/input'
-import { type } from 'os'
-import { useContext } from "react"
 import { OrderContext } from "../../context/orders-context/orderContext"
-import { OrderContextInterface } from "@/app/sales/models/sale.models"
 
 
 const formSaleSchema = z.object({
@@ -50,9 +44,8 @@ const clculateTotal = (orders: Array<Order>) => {
 
 export default function InfoSale({id}:Props) {
   const [client, setClient] = useState(localStorage.getItem('client') || '{}')
-  const {OrdersContext} = useContext(OrderContext) as OrderContextInterface
+  const {data:orders} = useSWR(`${urlSales}/${id}/orders`, getOrdersBySaleId)
   const {data:general} = useSWR(urlSales, getGeneralClient)
-  // const {data, trigger} = useSWRMutation(`${urlSales}/${id}/confirm-sale`, confirmSale)
   const router = useRouter()
 
   const formSale = useForm<z.infer<typeof formSaleSchema>>({
@@ -196,7 +189,7 @@ export default function InfoSale({id}:Props) {
           }
           </div>
             <div className='my-3 w-full text-center'>
-              <p className='font-bold text-4xl'>${convertToCOP(clculateTotal(OrdersContext))}</p>
+              <p className='font-bold text-4xl'>${convertToCOP(clculateTotal(orders !== undefined ? orders : [] ))}</p>
               <p className='text-sm text-gray-400'>Total</p>
             </div>
             <div>

@@ -1,7 +1,7 @@
 'use client'
 
-import {ColumnDef} from "@tanstack/react-table"
-import { Client, Sale } from '../../models/sale.models'
+import { ColumnDef } from "@tanstack/react-table"
+import { Sale } from '../../models/sale.models'
 import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
@@ -15,22 +15,12 @@ import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
 import { Receipt, UploadFile } from ".."
 import { SeeDetail } from "../see-detail"
-import {UserIcon, DocumentChartBarIcon } from "@heroicons/react/24/outline"
 export const columns: ColumnDef<Sale>[] = [
   {
     accessorKey: 'client',
-    header: ({column}) => {
-      return (
-        <span
-          className="cursor-pointer"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}
-        >
-          Cliente
-        </span>
-      )
-    },
+    header: "Cliente",
     cell: ({row}) => { 
-      return <div className="capitalize">{row.getValue('client')}</div>
+      return <div className="capitalize">{row.original.client}</div>
     }
   },
   {
@@ -66,7 +56,7 @@ export const columns: ColumnDef<Sale>[] = [
   },
   {
     accessorKey: 'total',
-    header: () => <div className="text-right">Total</div>,
+    header: "Total",
     cell: ({row}) => {
       const total = parseFloat(row.getValue("total"))
       const formatted = new Intl.NumberFormat("en-US", {
@@ -80,7 +70,7 @@ export const columns: ColumnDef<Sale>[] = [
   },
   {
     accessorKey: 'status',
-    header: () => <div className="text-right">Estado</div>,
+    header: "Estado",
     cell: ({row}) => {
       return <div className="text-right">
       {

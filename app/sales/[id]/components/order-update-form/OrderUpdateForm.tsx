@@ -10,13 +10,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import toast from 'react-hot-toast'
-import { updateAmountOrder } from '@/app/sales/services/sale.services'
+import { updateAmountOrder, urlSales, getOrdersBySaleId } from '@/app/sales/services/sale.services'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { useContext } from "react"
-import { OrderContext } from "../../context/orders-context/orderContext"
-import { OrderContextInterface } from "@/app/sales/models/sale.models"
-
+import useSWR, {useSWRConfig} from 'swr'
 
 
 const formSchema = z.object({
@@ -25,14 +22,15 @@ const formSchema = z.object({
 })
 
 interface Props{
-  order: Order
+  order: Order,
+  id_sale: string | string[]
 }
 
 
-export default function OrderUpdateForm({order}: Props) {
+export default function OrderUpdateForm({order, id_sale}: Props) {
   const [open, setOpen] = useState(false)
-  const router = useRouter()
-  const {UpdateAmountOrders} = useContext(OrderContext) as OrderContextInterface
+  const {data} = useSWR(`${urlSales}/${id_sale}/orders`, getOrdersBySaleId)
+  const { mutate } = useSWRConfig()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -43,7 +41,12 @@ export default function OrderUpdateForm({order}: Props) {
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     values.id_order = order.id
-    UpdateAmountOrders(values.id_order, values.amount_product)
+    toast.promise(updateAmountOrder(order.id, values.amount_product), {
+      loading: "Cargando información",
+      success: "Cantidad Actualizada",
+      error: "No se pudo actualizar"
+    })
+    mutate(`${urlSales}/${id_sale}/orders`)
     setOpen(false)
   }
 
