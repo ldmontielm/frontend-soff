@@ -9,7 +9,7 @@ import { Switch } from '@/components/ui/switch'
 import { useEffect } from 'react'
 import { useSWRConfig } from 'swr'
 
-export default function DisablePurchase({purchaseId, purchase, onUpdateStatus}: {purchaseId:string, purchase: Purchase, onUpdateStatus:(purchaseId:string, newStatus:boolean)=>void}){
+export default function DisablePurchase({purchaseId, purchase}: {purchaseId:string, purchase: Purchase}){
     const [state, setState] = useState(true)
     const router = useRouter()
     const {mutate} = useSWRConfig()
@@ -25,7 +25,6 @@ export default function DisablePurchase({purchaseId, purchase, onUpdateStatus}: 
             const res = await changeStatus(purchaseId)
             if (res.status !== undefined){
                 setState(res.status)
-                onUpdateStatus(purchaseId, res.status)
             }
         } catch (error){
             console.log(error)
