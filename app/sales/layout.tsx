@@ -1,6 +1,5 @@
 import React from 'react'
-import { SalesSWRProvider } from './context'
-
+import { SalesSWRProvider } from './context/providers'
 interface Props {
   children: React.ReactNode
 }

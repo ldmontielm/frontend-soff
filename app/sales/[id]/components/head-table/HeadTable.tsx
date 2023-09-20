@@ -1,22 +1,15 @@
 "use client" 
-import { addOrder, getProducts, urlProducts } from "@/app/sales/services/sale.services"
+import { getProducts, urlProducts, urlSales, getOrdersBySaleId } from "@/app/sales/services/sale.services"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { redirect, useParams, useRouter } from 'next/navigation'
-import { useState } from "react"
+import { useParams } from 'next/navigation'
 import { useForm } from "react-hook-form"
-import toast from "react-hot-toast"
-import useSWR from 'swr'
+import useSWR, {useSWRConfig} from 'swr'
 import * as z from 'zod'
-import { useContext } from "react"
-import { OrderContext } from "../../context/orders-context/orderContext"
-import { OrderContextInterface } from "@/app/sales/models/sale.models"
-
-
 
 const formSchema = z.object({
   sale_id: z.string(),
@@ -26,11 +19,9 @@ const formSchema = z.object({
 
 export default function HeadTable() {
   const params = useParams()
-  const router = useRouter()
   const {data:products} = useSWR(urlProducts, getProducts)
-  const {AddOrder} = useContext(OrderContext) as OrderContextInterface
-
-
+  const {data:orders} = useSWR(`${urlSales}/${params.id}/orders`, getOrdersBySaleId)
+  const { mutate } = useSWRConfig()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,23 +31,16 @@ export default function HeadTable() {
     }
   })
 
-  async function onSubmit(values: z.infer<typeof formSchema>){
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     values.sale_id = params.id.toString()
-    const product: any = Array.isArray(products) && products.find((product) => product.id === values.product_id)
-    if(product != undefined && product != false){
-      const newOrder = {
-        id: crypto.randomUUID(),
-        sale_id: values.sale_id,
-        product_id: values.product_id,
-        product: product.name,
-        price: product.sale_price,
-        amount_product: values.amount_product,
-        total: values.amount_product * product.sale_price
+    await fetch(`${urlSales}/${params.id}/add-order`, {
+      method: 'POST',
+      body: JSON.stringify(values),
+      headers: {
+        'Content-Type': 'application/json'
       }
-      AddOrder(newOrder)
-    }else{
-      toast.error('El producto no se pudo encontrar')
-    }
+    })
+    mutate(`${urlSales}/${params.id}/orders`)
   }
 
 
@@ -79,7 +63,7 @@ export default function HeadTable() {
                       <SelectContent >
                         {
                           Array.isArray(products) && products.map((product) => (
-                            <SelectItem key={product.id} value={product.id} className="uppercase">{product.name}</SelectItem>
+                            <SelectItem key={product.id} value={product.id} className="capitalize">{product.name}</SelectItem>
                           ))
                         }
                       </SelectContent>
@@ -89,7 +73,6 @@ export default function HeadTable() {
                 <FormMessage />
               </FormItem>
             )}
-
           />
           <FormField
             control={form.control}

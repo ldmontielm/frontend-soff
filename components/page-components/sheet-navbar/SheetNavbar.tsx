@@ -29,31 +29,37 @@ const menuItems = [
     id: 1,
     name: "Dashboard",
     icon: <ChartPieIcon className='w-6 h-6' />,
+    url: '/'
   },
   {
     id: 2,
     name: "Ventas",
     icon: <BanknotesIcon className='w-6 h-6' />,
+    url: Routes.CREATESALE
   },
   {
     id: 3,
     name: "Compras",
     icon: <ShoppingBagIcon className='w-6 h-6' />,
+    url: Routes.CREATEPURCHASE
   },
   {
     id: 4,
     name: "Productos",
     icon: <CakeIcon className='w-6 h-6' />,
+    url: Routes.CREATEPRODUCT
   },
   {
     id: 5,
     name: "Insumos",
     icon: <SwatchIcon className='w-6 h-6' />,
+    url: Routes.CREATEPRODUCT
   },
   {
     id: 6,
     name: "Proveedores",
     icon: <BriefcaseIcon className='w-6 h-6' />,
+    url: Routes.CREATEPROVIDER
   },
   // {
   //   id: 7,
@@ -86,7 +92,7 @@ export default function SheetNavbar() {
         <div className='flex flex-col w-full'>
           {
             menuItems.map((item) => (
-              <Link key={item.id} href={Routes.CREATESALE} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'>{item.icon}<p>{item.name}</p></Link>
+              <Link key={item.id} href={item.url} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'>{item.icon}<p>{item.name}</p></Link>
             ))
           }
           <Collapsible
@@ -103,7 +109,7 @@ export default function SheetNavbar() {
                   <ChevronDownIcon className={`transition ease-in-out w-4 h-4 ${isOpen ?  'rotate-180': 'rotate-0'}`} />
                 </div>
               </CollapsibleTrigger>
-            <CollapsibleContent className="space-y-2 ">
+            <CollapsibleContent className="space-y-2">
               <Link href={Routes.CREATESALE} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><LockClosedIcon className='ml-6 w-6 h-6' /><p>Roles</p></Link>
               <Link href={Routes.CREATESALE} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><Square3Stack3DIcon className='ml-6 w-6 h-6' /><p>Permisos</p></Link>
               <Link href={Routes.CREATESALE} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><UserGroupIcon className='ml-6 w-6 h-6' /><p>Usuarios</p></Link>

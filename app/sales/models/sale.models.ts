@@ -6,8 +6,8 @@ export interface Sale {
   id_client: string;
   total: number;
   type_sale: string;
-  status: string;
-  client: Client;
+  status: "open" | "paid" | "cancel" | "pending";
+  client: string;
 }
 
 export interface Client {
