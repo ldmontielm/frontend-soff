@@ -10,18 +10,19 @@ export default  function DemoPage() {
 
   const data  = user
     ? user.map((userItem) => ({
+        id:userItem.id,
         name: userItem.name,
         document_type:userItem.document_type,
         document:userItem.document,
         phone:userItem.phone,
         email: userItem.email,
+        password: userItem.password,
         status: userItem.status,
         role:userItem.role,
         
         
       }))
       : [];
-    console.log(user);
 
   return (
     <div className="container mx-auto py-10">

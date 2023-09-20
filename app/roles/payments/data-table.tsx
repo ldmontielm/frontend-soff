@@ -23,7 +23,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import HeadTable from "../components/head-table/HeadTable"
-
+// import PermissionTable from "../components/permissions/PermissionsTable"
 
 
 interface DataTableProps<TData, TValue> {

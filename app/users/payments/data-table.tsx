@@ -23,6 +23,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { HeadTable } from "../components"
+import UpdateTable from "../components/update-table/UpdateTable"
 
 
 
@@ -107,8 +108,8 @@ export function DataTable<TData, TValue>({
                 ))}
               </TableRow>
             ))
-          ) : (
-            <TableRow>
+            ) : (
+              <TableRow>
               <TableCell colSpan={columns.length} className="h-24 text-center">
                 No results.
               </TableCell>

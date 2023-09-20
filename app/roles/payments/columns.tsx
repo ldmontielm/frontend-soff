@@ -6,8 +6,14 @@ import { ArrowUpDown, MoreHorizontal } from "lucide-react"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Trash, Pencil } from "lucide-react"
 import { Button } from "@/components/ui/button"
-// import SwitchDemo from "../components/switch/SwitchButton"
-import { Switch } from "@radix-ui/react-switch"
+import { urlRoles, getRole } from "../services/roles.services"
+import SwitchDemo from "../components/swicht/SwichtDemo"
+import { useState } from "react"
+import useSWR from "swr"
+import { useEffect } from "react"
+import { useRouter } from "next/router"
+import UpdateTable from "@/app/users/components/update-table/UpdateTable"
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,8 +25,31 @@ import {
 import { Badge } from "@/components/ui/badge"
 
 
+
+export default function statusnew(){
+  const {data: roles, isLoading, error} = useSWR(urlRoles, getRole)
+  const [localRoles, setLocalRoles] = useState<Role[]>([])
+
+  useEffect(()=>{
+    if(roles){
+        setLocalRoles(roles)
+    }
+}, [roles]);
+
+const updateProductStatus = (id_role:string, newStatus:boolean) =>{
+    const updateRole = localRoles?.map((role)=>{
+        if (role.id === id_role){
+            return {...role, status: newStatus};
+        }
+        return role
+    });
+    setLocalRoles(updateRole)
+};
+
+}
+
+
 export const columns: ColumnDef<Role>[] = [
-  
     {
       accessorKey: "name", 
       header: "Nombre",
@@ -30,35 +59,51 @@ export const columns: ColumnDef<Role>[] = [
       accessorKey: "status",
       header: "Estado",
       cell: ({ row }) => {
-        return <Badge>{row.getValue("status") ? "Activo": "Inactivo"}</Badge>
-      }
-    },
-    {
-      header: "Acciones",
-      id: "actions",
-      cell: ({ row }) => {
-        const payment = row.original
-   
-        return (
-          <div className="flex ">
-            <Switch/>
-            <Button className="ml-2" variant='outline' size='icon'><Pencil className="w-4 h-4"/></Button>
-          </div>
-          )
-        //   <DropdownMenu>
-        //     <DropdownMenuTrigger asChild>
-        //       <Button variant="ghost" className="h-8 w-8 p-0">
-        //         <span className="sr-only">Open menu</span>
-        //         <MoreHorizontal className="h-4 w-4" />
-        //       </Button>
-        //     </DropdownMenuTrigger>
-        //     <DropdownMenuContent align="end">
-        //       <DropdownMenuLabel>Actions</DropdownMenuLabel>
-        //       <DropdownMenuItem><Switch/></DropdownMenuItem>
-        //       <DropdownMenuItem><Button><Pencil></Pencil></Button></DropdownMenuItem>
-        //     </DropdownMenuContent>
-        //   </DropdownMenu>
-
+        const role = row.original
+        return <div className="text-center">
+        { 
+            row.getValue("status") ? (
+            <>
+              <Badge className="bg-green-500">Activo</Badge>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                    <Button variant='ghost' size='icon' className="ml-4">
+                        <MoreHorizontal className="h-4 w-4 " />
+                    </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="flex flex-col">
+                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                    {/* <UpdateTable id_role={role.id}/> */}
+                    <SwitchDemo 
+                      id_role={role.id}
+                      role={role}
+                      onUpdateStatus={()=> statusnew()}/>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </>
+            )
+            : (
+            <>
+             <Badge className="bg-red-500">Inactivo</Badge>
+                <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                    <Button variant='ghost' size='icon' className="ml-2">
+                        <MoreHorizontal className="h-4 w-4" />
+                    </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="flex flex-col">
+                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                    <SwitchDemo 
+                        id_role={role.id}
+                        role={role}
+                        onUpdateStatus={()=> statusnew()}/>
+                    </DropdownMenuContent>
+                </DropdownMenu>
+            </>
+            ) 
+        }
+        </div>
+      
       },
     },
     

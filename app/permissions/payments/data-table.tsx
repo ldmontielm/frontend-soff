@@ -22,7 +22,7 @@ import {
 } from "@/components/ui/table"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-// import { HeadTable } from "../components"
+import HeadTable from "../components/head-table/HeadTable"
 
 
 
@@ -71,7 +71,7 @@ export function DataTable<TData, TValue>({
           className="max-w-sm"
         />
       
-      {/* <HeadTable/> */}
+      <HeadTable/>
 
 
       </div>

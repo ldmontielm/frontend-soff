@@ -5,34 +5,35 @@ import { Switch } from "@/components/ui/switch"
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import { User } from '../../models/users.models'
-import { UpdateStatus,urlUser } from '../../services/users.services'
+import { Role } from '../../models/roles.models'
+import { UpdateStatusRole, urlRoles } from '../../services/roles.services'
 import { buffer } from 'stream/consumers'
 import { Button } from '@/components/ui/button'
 import { useSWRConfig } from 'swr'
 
-export default function SwitchDemo({id_user, user, onUpdateStatus}: {id_user:string, user: User, onUpdateStatus: (id_user:string, newStatus:boolean)=>void}) {
+export default function SwitchDemo({id_role, role, onUpdateStatus}: {id_role:string, role: Role, onUpdateStatus: (id_role:string, newStatus:boolean)=>void}) {
   const [state, setState] = useState(true)
   const router = useRouter()
   const { mutate } = useSWRConfig()
+  console.log(id_role)
 
   useEffect(()=>{
-    if(user){
-        setState(user.status)
+    if(role){
+        setState(role.status)
     }
-}, [user]);
+}, [role]);
 
   async function onSubmit() {
     try{
-      const res = await UpdateStatus(id_user)
+      const res = await UpdateStatusRole(id_role)
       if (res.status !== undefined){
         setState(res.status)
-        onUpdateStatus(id_user, res.status)
+        onUpdateStatus(id_role, res.status)
       }
   }catch(error){
       console.log(error)
   }
-  mutate(`${urlUser}/get-users`)
+  mutate(`${urlRoles}/get-role`)
 }
 
   return (
