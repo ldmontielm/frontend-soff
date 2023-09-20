@@ -1,22 +1,15 @@
 'use client'
 import React, {ChangeEvent, useState} from 'react'
 import { urlSales, getSales } from '../../services/sale.services'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ArrowTrendingUpIcon, DocumentPlusIcon } from "@heroicons/react/24/outline"
-import { Button } from '@/components/ui/button'
+import { ArrowTrendingUpIcon, DocumentPlusIcon, DocumentIcon,XMarkIcon } from "@heroicons/react/24/outline"
 import { supabase } from '../../services/supabase.services'
 import { useParams } from 'next/navigation'
 import useSWR, {useSWRConfig} from 'swr'
+import { Progress } from "@/components/ui/progress"
+import { Button } from '@/components/ui/button'
 
 export default function UploadFile({id}: {id:string}) {
   const [filename, setFilename] = useState("No seleccionó achivo")
@@ -25,16 +18,23 @@ export default function UploadFile({id}: {id:string}) {
   const {data: sales} = useSWR(urlSales, getSales)
   const { mutate } = useSWRConfig()
   const [open, setOpen] = useState(false)
+  const [file, setFile] = useState<File>()
+
+  const uploadFile = (e: ChangeEvent<HTMLInputElement>) => {
+    if(e.target.files !== null) {
+      const objectFile = e.target.files[0] 
+      setFile(objectFile)
+      setFilename(objectFile.name)
+    }
+  }
 
 
 
-  const handleUpload = async (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files)  {
-      let file = e.target.files[0]
-      setFilename(file?.name)
+  const handleUpload = async () => {
+    if (file !== undefined)  {
       const { data, error } = await supabase.storage
         .from("soff-vouchers")
-        .upload(`vouchers/${file?.name}`, file as File);
+        .upload(`vouchers/${file.name}`, file as File);
         if (data) {
           const { data:imageurl } = supabase
             .storage
@@ -68,35 +68,64 @@ export default function UploadFile({id}: {id:string}) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant='ghost' onClick={() => setOpen(true)}>
-          <ArrowTrendingUpIcon className="w-4 h-4 mr-2"/> <span>Marcar Pagada</span></Button>
+        <div className='flex items-center px-2 cursor-default rounded hover:bg-neutral-100 select-none text-sm py-1.5 transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50' onClick={() => setOpen(true)}>
+          <ArrowTrendingUpIcon className="w-4 h-4 mr-2"/> Confirmar pedido
+        </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>Subir comprobante</DialogTitle>
+        <DialogTitle>Confirmar pedido</DialogTitle>
         <DialogDescription>
-          Por favor, para marcar como pedido necesitas subir el comprobante del pedido.
+          Por favor, para marcar el pedido necesitas subir el comprobante de pago.
         </DialogDescription>
       </DialogHeader>
-      <div className="grid gap-4 py-4">
-        <Label htmlFor="vurchase">Comprobante de pago</Label>
-        <div 
-          className="flex flex-col w-full max-w-sm items-center gap-1.5 border border-2 border-dashed rounded cursor-pointer p-4 hover:border-blue-500"
-          onClick={() => document.getElementById("vurchase")?.click()}>
-          <DocumentPlusIcon className="h-10 w-10 stroke-1" />
-          <Input 
-            id="vurchase" 
-            onChange={(e) => {
-              handleUpload(e); // 👈 this will trigger when user selects the file.
-            }}
-            className="border-none hidden shadow-none" 
-            type="file"/>
-          <Label>Subir comprobante</Label>
-          <p className='text-sm'>{filename}</p>
+      {
+        file === undefined ? (
+        <div className="grid gap-4 py-4">
+              <div 
+              className="flex flex-col w-full max-w-sm items-center gap-1.5 border border-2 border-dashed rounded cursor-pointer p-4 hover:border-blue-500 hover:bg-blue-100/50 group"
+              onClick={() => document.getElementById("vurchase")?.click()}>
+                <DocumentPlusIcon className="h-10 w-10 stroke-1 group-hover:text-blue-500" />
+                <Input 
+                  id="vurchase" 
+                  onChange={(e) => {
+                    uploadFile(e); // 👈 this will trigger when user selects the file.
+                  }}
+                  className="border-none hidden shadow-none" 
+                  type="file"
+                  accept=".pdf, image/*"
+                  />
+                <Label className='group-hover:text-blue-500'>Subir comprobante</Label>
+              </div>
         </div>
-        <p className={`p-2 border rounded border-green-500 bg-green-100/50 text-green-500 ${filename === "No seleccionó achivo" ? "hidden": ''}`}>{filename !== "No seleccionó achivo" ? "✅ Archivo Cargado": ""}</p>
-        <p className={`p-2 border rounded border-green-500 bg-green-100/50 text-green-500 ${urlImage === "" ? "hidden": ''}`}>{urlImage !== "" ? "✅ Imagen subida": ""}</p>
-      </div>
+        ) : <></>
+      }
+      {file !== undefined ? (
+        <div>
+          <div className='w-full flex items-center  justify-between gap-2 p-3'>
+            <div className='flex items-center gap-2'>
+              {
+                file.type === 'application/pdf' ? (
+                  <div className='w-10 h-10 rounded-full flex items-center justify-center bg-red-500'>
+                    <DocumentIcon className='w-4 h-4 text-white' />
+                  </div>
+                ) : ""
+              }
+              <div className='flex flex-col'>
+                <p className='text-[12px] font-semibold text-gray-700'>{file.name}</p>
+                <p className='text-[12px] font-medium text-gray-400'>Tamaño {((file.size / 1024) / 1024).toFixed(3)} MB</p>
+              </div>
+            </div>
+            <Button size='icon' variant='ghost' onClick={() => {
+              setFile(undefined)
+              setFilename("")
+            }}>
+              <XMarkIcon className='w-4 h-4' />
+            </Button>
+          </div>
+        </div>
+      ): <></> }
+      <Button disabled={file === undefined } onClick={() => handleUpload()}>Subir recibo</Button>
       </DialogContent>
     </Dialog>
   )

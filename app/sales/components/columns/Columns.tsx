@@ -8,13 +8,14 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
-import { UploadFile } from ".."
+import { Receipt, UploadFile } from ".."
 import { SeeDetail } from "../see-detail"
-import {UserIcon, QueueListIcon } from "@heroicons/react/24/outline"
+import {UserIcon, DocumentChartBarIcon } from "@heroicons/react/24/outline"
 export const columns: ColumnDef<Sale>[] = [
   {
     accessorKey: 'client',
@@ -70,7 +71,8 @@ export const columns: ColumnDef<Sale>[] = [
       const total = parseFloat(row.getValue("total"))
       const formatted = new Intl.NumberFormat("en-US", {
         style: 'currency',
-        currency: "USD"
+        currency: "USD",
+        maximumFractionDigits: 0
       }).format(total)
 
       return <div className="text-right font-medium">{formatted}</div>
@@ -115,9 +117,11 @@ export const columns: ColumnDef<Sale>[] = [
                 ): ""
             }
             <SeeDetail id={sale.id}/>
-            <Button variant='ghost'>
-              <UserIcon className="w-4 h-4 mr-2"/> <span>Ver cliente</span>
-            </Button>
+            <Receipt id={sale.id} />
+            
+            {/* <DropdownMenuItem onClick={() => {console.log("Hola Mundo")}}>
+              <DocumentChartBarIcon className="w-4 h-4 mr-2"/> <span>Descargar factura</span>
+            </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       )

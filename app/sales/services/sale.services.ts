@@ -24,6 +24,14 @@ export async function getSales(url: string):Promise<Sale[]>{
     throw new Error(`Error: ${error}`);
   }
 }
+export async function getSalesById(url: string):Promise<Sale>{
+  try {
+    const res = await axios.get(url)
+    return res.data
+  } catch (error) {
+    throw new Error(`Error: ${error}`);
+  }
+}
 
 export async function getProducts(url: string): Promise<Product[]>{
   try {
@@ -33,10 +41,35 @@ export async function getProducts(url: string): Promise<Product[]>{
     throw new Error(`Error: ${error}`);
   }
 }
+export async function getPermissions(url: string){
+  try {
+    const res = await axios.get(url)
+    return res.data.Permissions
+  } catch (error) {
+    throw new Error(`Error: ${error}`);
+  }
+}
+export async function getRoles(url: string){
+  try {
+    const res = await axios.get(url)
+    return res.data.role
+  } catch (error) {
+    throw new Error(`Error: ${error}`);
+  }
+}
 
 export async function createSala(): Promise<responseCreate | null>{
   try {
     const res = await axios.post(urlSales)
+    return res.data
+  } catch (error) {
+    return null;
+  }
+}
+
+export async function createRole(nombre_role: string, assingPermissions: any[]){
+  try {
+    const res = await axios.post(`http://localhost:8000/role/post-permissions/${nombre_role}`, assingPermissions)
     return res.data
   } catch (error) {
     return null;

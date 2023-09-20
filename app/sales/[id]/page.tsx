@@ -8,17 +8,17 @@ import useSWR from 'swr'
 import { OrdersContextProvider } from './context/orders-context/orderContext'
 
 
-async function fetchOrderBySaleId(id: string) {
-  return await getOrdersBySaleId(id)
-}
+// async function fetchOrderBySaleId(id: string) {
+//   return await getOrdersBySaleId(id)
+// }
 
-function getTotalOrders(orders:Order[] | undefined) {
-  let total:number = 0
-  Array.isArray(orders) && orders.forEach((order) => {
-    total += order.total
-  })
-  return total
-}
+// function getTotalOrders(orders:Order[] | undefined) {
+//   let total:number = 0
+//   Array.isArray(orders) && orders.forEach((order) => {
+//     total += order.total
+//   })
+//   return total
+// }
 
 export default function Page({params}:{params: {id: string}}) {
 

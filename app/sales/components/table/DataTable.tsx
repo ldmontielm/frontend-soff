@@ -47,7 +47,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 
-
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -107,7 +106,17 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                         column.toggleVisibility(!!value)
                       }
                     >
-                      {column.id}
+                      {
+                        column.id  === 'client' ? 'Cliente' : 
+                        column.id === 'sale_date' ? 'Fecha' :
+                        column.id === 'amount_order' ? 'Ordenes' :
+                        column.id === 'payment_method' ? 'Método' :
+                        column.id === 'type_sale' ? 'Tipo' :
+                        column.id === 'total' ? 'Total' :
+                        column.id === 'status' ? 'Estado' : 
+                        column.id === 'actions' ? 'Operaciones' : column.id
+
+                      }
                     </DropdownMenuCheckboxItem>
                   )
                 })}
@@ -191,19 +200,19 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
           <span>Próxima</span>
           <ChevronRightIcon className='w-4 h-4' />
         </Button>
-        <select
-          className='w-fit flex h-9 items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 '
-          value={table.getState().pagination.pageSize}
-          onChange={e => {
-            table.setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Mostrar {pageSize}
-            </option>
-          ))}
-        </select>
+        <Select 
+          defaultValue={table.getState().pagination.pageSize.toString()}
+          onValueChange={(e) => table.setPageSize(Number(e))}
+          >
+          <SelectTrigger className="w-fit">
+            <SelectValue placeholder="Select a fruit" />
+          </SelectTrigger>
+          <SelectContent>
+            {[10, 20, 30, 40, 50].map(pageSize => (
+              <SelectItem key={pageSize} value={pageSize.toString()}>Mostrar {pageSize}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <p>Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}</p>
       </div>
     </div>

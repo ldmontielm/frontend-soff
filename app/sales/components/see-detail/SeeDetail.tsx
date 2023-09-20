@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React,{useState} from 'react'
 import {
   Dialog,
   DialogContent,
@@ -15,6 +15,7 @@ import useSWR from 'swr'
 import { urlSales, getOrdersBySaleId } from '../../services/sale.services'
 import { convertToCOP } from '../../utils'
 import { ScrollArea } from '@/components/ui/scroll-area'
+import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
 
 
 interface Props {
@@ -23,10 +24,14 @@ interface Props {
 
 export default function SeeDetail({id}: Props) {
   const {data:orders} = useSWR(`${urlSales}/${id}/orders`, getOrdersBySaleId)
+  const [open, setOpen] = useState(false)
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant='ghost' className=""><QueueListIcon className="w-4 h-4 mr-2"/> <span>Ver detalle</span></Button>
+          <div className='flex items-center px-2 cursor-default rounded hover:bg-neutral-100 select-none text-sm py-1.5 transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50' onClick={() => setOpen(true)}>
+            <QueueListIcon className="w-4 h-4 mr-2"/> Ver detalle
+          </div>
+        {/* <div className="flex items-center gap-2 p-2"><QueueListIcon className="w-4 h-4 mr-2"/> <span>Ver detalle</span></div> */}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -35,7 +40,7 @@ export default function SeeDetail({id}: Props) {
             Adelante un detalle de todos los productos vendidos en esta venta.
           </DialogDescription>
         </DialogHeader>
-        <ScrollArea className="h-[200px] w-[350px] rounded-md border p-2">
+        <ScrollArea className="h-[200px] w-full">
           <div className="grid gap-4">
             {
               Array.isArray(orders) && orders.map((order) => (
@@ -50,9 +55,6 @@ export default function SeeDetail({id}: Props) {
             }
           </div>
         </ScrollArea>
-        <DialogFooter>
-          <Button type="submit">Save infor</Button>
-        </DialogFooter>
       </DialogContent>
     </Dialog>
   )
