@@ -29,7 +29,6 @@ interface Props{
 }
 
 export default function InfoPurchase({total, id}:Props) {
-  const [provider, setProvider] = useState(localStorage.getItem('provider') || '{}')
   const {data:general} = useSWR(urlPurchases, getGeneralProvider)
   const {data:providers} = useSWR('http://localhost:8000/providers', getProviders)
   const router = useRouter()

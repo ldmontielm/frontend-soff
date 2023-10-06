@@ -54,3 +54,79 @@ export default function SeeDetail({id}: Props) {
     </Dialog>
   )
 }
+
+// 'use client'
+
+// import { Order} from '@/app/purchases/models/purchase.models'
+// import { Button } from '@/components/ui/button'
+// import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+// import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+// import { Input } from "@/components/ui/input"
+// import { EyeIcon, QueueListIcon } from '@heroicons/react/24/outline'
+// import { zodResolver } from "@hookform/resolvers/zod"
+// import { useForm } from "react-hook-form"
+// import * as z from "zod"
+// import toast from 'react-hot-toast'
+// import { getOrdersByPurchaseId, getPurchaseById, urlPurchases } from '@/app/purchases/services/purchase.services'
+// import { useRouter } from 'next/navigation'
+// import { useState } from 'react'
+// import useSWR from 'swr'
+// import { convertToCOP } from '@/app/products/utils'
+
+// import {
+//     Table,
+//     TableBody,
+//     TableCaption,
+//     TableCell,
+//     TableHead,
+//     TableHeader,
+//     TableRow,
+//   } from "@/components/ui/table"
+
+
+// export default function SeeDetail({purchaseId}:{purchaseId:string}) {
+//   const [open, setOpen] = useState(false)
+//   const router = useRouter()
+//   const {data:purchase}= useSWR(`${urlPurchases}`,getPurchaseById)
+//   const {data: orders, isLoading, error} = useSWR(`${purchaseId}`, getOrdersByPurchaseId)
+
+//   return (
+//     <Dialog open={open} onOpenChange={setOpen}>
+//       <DialogTrigger asChild>  
+//       <Button variant='ghost'>
+//         <QueueListIcon className="w-4 h-4 mr-2 ml-0" onClick={() => setOpen(true)}/> <span>Ver detalle</span>
+//       </Button>
+//       </DialogTrigger>
+//       <DialogContent className="sm:max-w-[700px]">
+//         <DialogHeader>
+//           <DialogTitle>Detalles de la compra</DialogTitle>
+//           <DialogDescription>
+//             Aquí puedes ver cada detalle de tu compra <span className="capitalize font-semibold text-gray-600">   </span>
+//           </DialogDescription>
+//         </DialogHeader>
+//         <Table className="border rounded">
+//             <TableHeader>
+//               <TableRow>
+//                 <TableHead>Insumo</TableHead>
+//                 <TableHead>Cantidad</TableHead>
+//                 <TableHead>Precio</TableHead>
+//                 <TableHead>Subtotal</TableHead>
+//               </TableRow>
+//             </TableHeader>
+//             <TableBody>
+//               {
+//                 Array.isArray(orders) && orders.map((order) => (
+//                   <TableRow key={order.supply_id}>
+//                     <TableCell className="font-medium capitalize">{order.supply}</TableCell>
+//                     <TableCell>{order.amount_supplies}</TableCell>
+//                     <TableCell>${order.price_supplies}</TableCell>
+//                     <TableCell>${order.subtotal}</TableCell>
+//                   </TableRow>
+//                 ))
+//               }
+//             </TableBody>
+//           </Table>
+//       </DialogContent>
+//     </Dialog>
+//   )
+// }
