@@ -29,12 +29,16 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import {HeadTable as HeadTableSupply} from "@/app/supplies/components"
+// import {HeadTable} from "@/app/supplies/components"
 
 const formSchema = z.object({
   product_id: z.string(),
-  supply_id: z.string(),
-  amount_supply: z.number().min(1, {message:'Mínimo debes ingresar un numero'}).nonnegative({message: 'No se aceptan valores negativos'}),
-  // amount_supply: z.string().transform(Number),
+  supply_id: z.string({
+    required_error: "Please select a supply.",
+  }),
+  // amount_supply: z.number().min(1, {message:'Mínimo debes ingresar un numero'}).nonnegative({message: 'No se aceptan valores negativos'}),
+  amount_supply: z.string().transform(Number),
   unit_measure: z.string().min(2, {message: 'La unidad debe tener más de 2 caracteres'})
 })
 
@@ -78,23 +82,26 @@ export default function HeadTable() {
             control={form.control}
             name="supply_id"
             render = {({field}) => (
-              <FormItem className="w-full md:w-[200px]">
-                <FormLabel>Insumo</FormLabel>
-                <FormControl>
-                  <div className="w-full xl:w-[200px]">
-                  <Popover open={open} onOpenChange={setOpen}>
-                    <PopoverTrigger asChild>
+            <FormItem className="w-full md:w-[200px]">
+              <FormLabel>Insumo</FormLabel>
+              <div className="w-full xl:w-[200px]">
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <FormControl>
                       <Button
                         variant="outline"
                         role="combobox"
-                        aria-expanded={open}
-                        className="w-[200px] justify-between"
+                        className={cn(
+                          "w-[200px] justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
                       >
-                        {value
-                          ? Array.isArray(supplies) && supplies.map((supply) => supply.id === value)
-                          : "Insumo"}
+                        {field.value
+                          ? supplies?.find((supply)=>supply.id === field.value)?.name
+                          : "Seleccione insumo"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
+                    </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-[200px] p-0">
                       <Command>
@@ -103,16 +110,16 @@ export default function HeadTable() {
                         <CommandGroup>
                           {Array.isArray(supplies) && supplies.map((supply) => (
                             <CommandItem
+                              value={supply.name}
                               key={supply.id}
-                              onSelect={(currentValue) => {
-                                setValue(currentValue === value ? "" : currentValue)
-                                setOpen(false)
+                              onSelect={() => {
+                                form.setValue("supply_id", supply.id)
                               }}
                             >
                               <Check
                                 className={cn(
                                   "mr-2 h-4 w-4",
-                                  value === supply.id ? "opacity-100" : "opacity-0"
+                                  supply.id === field.value ? "opacity-100" : "opacity-0"
                                 )}
                               />
                               {supply.name}
@@ -123,7 +130,6 @@ export default function HeadTable() {
                     </PopoverContent>
                   </Popover>
                   </div>
-                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

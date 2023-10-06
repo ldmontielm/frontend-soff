@@ -72,7 +72,7 @@ export const columns: ColumnDef<Product>[] = [
                         <MoreHorizontal className="h-4 w-4 " />
                     </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="flex flex-col">
+                    <DropdownMenuContent align="end" className="flex flex-col items-start">
                     <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                     <Link href={`/products/${product.id}/update_product`}>
                         <Button variant='ghost'>
