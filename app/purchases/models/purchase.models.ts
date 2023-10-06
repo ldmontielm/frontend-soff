@@ -5,7 +5,7 @@ export interface Purchase {
   provider_id: string;
   provider: string;
   total: number;
-  status: boolean;
+  // status: boolean;
 }
 
 export interface Order {
@@ -28,7 +28,6 @@ export interface OrderCreate {
 export interface PurchaseCreate{
     provider_id: string
 }
-
 
 
 export interface PurchaseConfirm {

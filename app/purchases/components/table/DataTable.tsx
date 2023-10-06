@@ -111,7 +111,7 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                         column.id === 'amount_order' ? 'Ordenes' :
                         column.id === 'provider' ? 'Proveedor' :
                         column.id === 'total' ? 'Total' :
-                        column.id === 'status' ? 'Estado' : column.id
+                        column.id === 'actions' ? 'Operaciones' : column.id
 
                       }
                     </DropdownMenuCheckboxItem>
