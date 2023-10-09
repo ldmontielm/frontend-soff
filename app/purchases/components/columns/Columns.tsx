@@ -14,12 +14,12 @@ import {
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal, PencilIcon } from "lucide-react"
 import { SeeDetail } from "../see-detail"
+import { SeeProvider} from "../see-provider"
 import {UserIcon, QueueListIcon } from "@heroicons/react/24/outline"
 import { getPurchases, urlPurchases } from "../../services/purchase.services"
 import useSWR from "swr"
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { ViewDetailsByProduct } from "@/app/products/[id]/components"
 import DisablePurchase from "../../[id]/components/Disable-Purchase/DisablePurchase"
 
 export default function updateStatus(){
@@ -32,15 +32,15 @@ export default function updateStatus(){
     }
   }, [purchases]);
 
-  const updatePurchaseStatus = (purchaseId:string, newStatus:boolean) =>{
-    const updatePurchases = localPurchases?.map((purchase)=>{
-      if(purchase.id === purchaseId){
-        return {...purchase, status: newStatus};
-      }
-      return purchase
-    });
-    setLocalPurchases(updatePurchases)
-  };
+  // const updatePurchaseStatus = (purchaseId:string, newStatus:boolean) =>{
+  //   const updatePurchases = localPurchases?.map((purchase)=>{
+  //     if(purchase.id === purchaseId){
+  //       return {...purchase, status: newStatus};
+  //     }
+  //     return purchase
+  //   });
+  //   setLocalPurchases(updatePurchases)
+  // };
 }
 
 export const columns: ColumnDef<Purchase>[] = [
@@ -61,22 +61,22 @@ export const columns: ColumnDef<Purchase>[] = [
         return <div>{row.getValue('amount_order')}</div>
       }
     },
-  {
-    accessorKey: 'provider',
-    header: ({column}) => {
-      return (
-        <span
-          className="cursor-pointer"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}
-        >
-          Proveedor
-        </span>
-      )
+    {
+      accessorKey: 'provider',
+      header: ({column}) => {
+        return (
+          <span
+            className="cursor-pointer"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}
+          >
+            Proveedor
+          </span>
+        )
+      },
+      cell: ({row}) => { 
+        return <div className="capitalize">{row.getValue('provider')}</div>
+      }
     },
-    cell: ({row}) => { 
-      return <div className="capitalize">{row.getValue('provider')}</div>
-    }
-  },
   {
     accessorKey: 'total',
     header: () => <div className="text-right">Total</div>,
@@ -92,54 +92,23 @@ export const columns: ColumnDef<Purchase>[] = [
     }
   },
   {
-    accessorKey: 'status',
-    header: () => <div className="text-center mr-[45px]">Estado</div>,
+    id: "actions",
     cell: ({row}) => {
       const purchase = row.original
-      return <div className="text-center">
-        {
-          row.getValue("status") ? (
-            <>
-              <Badge className="bg-green-500">Activo</Badge>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant='ghost' size='icon' className="ml-4">
-                          <MoreHorizontal className="h-4 w-4"/>
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="flex flex-col">
-                      <DropdownMenuLabel className="text-center">Acciones</DropdownMenuLabel>
-                      <div className="flex flex-col items-start">
-                        <SeeDetail id={purchase.id}/>
-                        <Button variant='ghost'>
-                          <UserIcon className="w-4 h-4 mr-2"/> <span>Ver Proveedor</span>
-                        </Button>
-                        <DisablePurchase purchaseId={purchase.id} purchase={purchase}/>
-                      </div>
-                    </DropdownMenuContent>
-                </DropdownMenu>
-            </>
-          ):(
-            <>
-              <Badge className="bg-red-500">Cancelada</Badge>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant='ghost' size='icon' className="ml-2">
-                      <MoreHorizontal className="h-4 w-4"/>
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="flex flex-col">
-                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                    <SeeDetail id={purchase.id}/>
-                      <Button variant='ghost'>
-                        <UserIcon className="w-4 h-4 mr-2"/> <span>Ver Proveedor</span>
-                      </Button>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-            </>
-          )
-        }
-      </div>
-    }
+      return(
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant='ghost' size='icon'>
+              <MoreHorizontal className="h-4 w-4"/>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="flex flex-col items-start">
+            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+              <SeeDetail id={purchase.id}/>
+              <SeeProvider id={purchase.provider_id}/>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      )
+    }      
   }
 ]
