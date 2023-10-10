@@ -12,6 +12,7 @@ export default  function DemoPage() {
   ? role.map((roleItem) => ({
       id:roleItem.id,
       name: roleItem.name,
+      Permissions:roleItem.Permissions,
       status: Boolean(roleItem.status), // Convierte status a booleano
     }))
   : [];
