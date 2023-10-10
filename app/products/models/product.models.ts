@@ -3,6 +3,7 @@ export interface Product {
     name: string;
     price: number;
     sale_price: number;
+    register_date: string;
     status: boolean;
   }
 
@@ -26,7 +27,7 @@ export interface DetailCreate {
     product_id: string;
     supply_id: string;
     amount_supply: number;
-    unit_measure:string;
+    // unit_measure:string;
 }
 
 export interface ProductConfim {
