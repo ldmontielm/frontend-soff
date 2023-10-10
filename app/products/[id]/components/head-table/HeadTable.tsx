@@ -7,35 +7,51 @@ import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { redirect, useParams, useRouter } from 'next/navigation'
-import { useState, useContext } from "react"
+import { useParams, useRouter } from 'next/navigation'
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import useSWR from 'swr'
 import * as z from 'zod'
-import { DetailContext } from "../../context/detail-context/DetailContext"
-import { DetailContextInterface } from "@/app/products/models/product.models"
+import { Check, ChevronsUpDown } from "lucide-react"
+import * as React from "react"
+ 
+import { cn } from "@/lib/utils"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import {HeadTable as HeadTableSupply} from "@/app/supplies/components"
+// import {HeadTable} from "@/app/supplies/components"
 
 const formSchema = z.object({
   product_id: z.string(),
-  supply_id: z.string(),
-  // amount_supply: z.number().int().min(1, {message:'Mínimo debes ingresar un numero'}).nonnegative({message: 'No se aceptan valores negativos'}).transform(Number),
+  supply_id: z.string({
+    required_error: "Please select a supply.",
+  }),
+  // amount_supply: z.number().min(1, {message:'Mínimo debes ingresar un numero'}).nonnegative({message: 'No se aceptan valores negativos'}),
   amount_supply: z.string().transform(Number),
   unit_measure: z.string().min(2, {message: 'La unidad debe tener más de 2 caracteres'})
 })
-
-// async function fetchGetAllSuplies(){
-//   return await getSupplies()
-// }
 
 export default function HeadTable() {
   const params = useParams()
   const [supply, setSupply] = useState(false)
   const [amountSuply, setAmountSupply] = useState<number>()
-  const [value, setValue] = useState("")
+  // const [value, setValue] = useState("")
   const router = useRouter()
   const {data:supplies} = useSWR('http://localhost:8000/supplies', getSupplies)
-  // const {AddDetail} = useContext(DetailContext) as DetailContextInterface
+  
+  const [open, setOpen] = React.useState(false)
+  const [value, setValue] = React.useState("")
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -58,27 +74,6 @@ export default function HeadTable() {
     router.refresh()
   }
 
-  // async function onSubmit(values: z.infer<typeof formSchema>){
-  //   console.log(values)
-  //   values.product_id = params.id.toString()
-  //   const supply:any=Array.isArray(supplies) && supplies.find((item)=> item.id === values.supply_id)
-  //   if (supply != undefined && supply != false){
-  //     const newDetail = {
-  //       id: crypto.randomUUID(),
-  //       product_id: values.product_id,
-  //       supply_id: values.supply_id,
-  //       supply: supply.name,
-  //       supply_price:supply.price,
-  //       amount_supply: values.amount_supply,
-  //       unit_measure: values.unit_measure,
-  //       subtotal: values.amount_supply * supply.price
-  //     }
-  //     AddDetail(newDetail)
-  //   }else{
-  //     toast.error('El insumo no se pudo encontrar')
-  //   }
-  // }
-
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-wrap lg:flex-nowrap items-end  justify-between gap-2">
@@ -87,24 +82,54 @@ export default function HeadTable() {
             control={form.control}
             name="supply_id"
             render = {({field}) => (
-              <FormItem className="w-full md:w-[200px]">
-                <FormLabel>Insumo</FormLabel>
-                <FormControl>
-                  <div className="w-full xl:w-[200px]">
-                    <Select defaultValue={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="uppercase">
-                        <SelectValue  placeholder='Insumo' />
-                      </SelectTrigger>
-                      <SelectContent >
-                        {
-                          Array.isArray(supplies) && supplies.map((supply) => (
-                            <SelectItem key={supply.id} value={supply.id} className="uppercase">{supply.name}</SelectItem>
-                          ))
-                        }
-                      </SelectContent>
-                    </Select>
+            <FormItem className="w-full md:w-[200px]">
+              <FormLabel>Insumo</FormLabel>
+              <div className="w-full xl:w-[200px]">
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-[200px] justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? supplies?.find((supply)=>supply.id === field.value)?.name
+                          : "Seleccione insumo"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0">
+                      <Command>
+                        <CommandInput placeholder="Buscar insumo..." />
+                        <CommandEmpty>Sin resultados.</CommandEmpty>
+                        <CommandGroup>
+                          {Array.isArray(supplies) && supplies.map((supply) => (
+                            <CommandItem
+                              value={supply.name}
+                              key={supply.id}
+                              onSelect={() => {
+                                form.setValue("supply_id", supply.id)
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  supply.id === field.value ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                              {supply.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   </div>
-                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

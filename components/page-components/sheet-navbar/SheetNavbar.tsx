@@ -74,20 +74,20 @@ export default function SheetNavbar() {
         </Button>
       </SheetTrigger>
       <SheetContent side='left'>
-        <SheetHeader className='flex flex-row items-end gap-4'>
+        <SheetHeader className='flex flex-row items-end gap-4 text-white'>
           <div>
             <Image src={SoffLogo} alt='logo soff' />
           </div>
           <div className='flex flex-col sm:items-start'>
             <p className='text-2xl font-bold'>SOFF</p>
-            <p className='text-sm font-semibold'>System Optimized Fast Food</p>
+            <p className='text-sm font-semibold'>Systematization Of Fast Food</p>
           </div>
         </SheetHeader>
         <Separator className="my-4" />
-        <div className='flex flex-col w-full'>
+        <div className='flex flex-col w-full text-white'>
           {
             menuItems.map((item) => (
-              <Link key={item.id} href={item.url} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'>{item.icon}<p>{item.name}</p></Link>
+              <Link key={item.id} href={item.url} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'>{item.icon}<p>{item.name}</p></Link>
             ))
           }
           <Collapsible
@@ -96,7 +96,7 @@ export default function SheetNavbar() {
             className="w-full space-y-2 "
           >
             <CollapsibleTrigger asChild>
-                <div className='w-full cursor-pointer flex items-center justify-between gap-4 p-3 rounded hover:bg-gray-100'>
+                <div className='w-full cursor-pointer flex items-center justify-between gap-4 p-3 rounded hover:bg-blue-800'>
                   <div className='flex items-center gap-4'>
                     <Cog6ToothIcon className='w-6 h-6' />
                     <p>Configuración</p>
@@ -105,9 +105,8 @@ export default function SheetNavbar() {
                 </div>
               </CollapsibleTrigger>
             <CollapsibleContent className="space-y-2">
-              <Link href={Routes.ROLES} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><LockClosedIcon className='ml-6 w-6 h-6' /><p>Roles</p></Link>
-              <Link href={Routes.CREATESALE} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><Square3Stack3DIcon className='ml-6 w-6 h-6' /><p>Permisos</p></Link>
-              <Link href={Routes.USERS} className='flex items-center gap-4 p-3 rounded hover:bg-gray-100'><UserGroupIcon className='ml-6 w-6 h-6' /><p>Usuarios</p></Link>
+              <Link href={Routes.ROLES} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'><LockClosedIcon className='ml-6 w-6 h-6' /><p>Roles</p></Link>
+              <Link href={Routes.USERS} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'><UserGroupIcon className='ml-6 w-6 h-6' /><p>Usuarios</p></Link>
             </CollapsibleContent>
           </Collapsible>
         </div>

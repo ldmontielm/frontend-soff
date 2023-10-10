@@ -2,6 +2,7 @@ import axios from "axios"
 import {Purchase, Order, OrderCreate, PurchaseCreate, PurchaseConfirm} from "../models/purchase.models";
 import {Supply} from "../models/supply.models";
 import {Provider} from "../models/provider.models";
+import {urlProvider} from "../../providers/services/provider.services"
 
 
 export const urlPurchases = 'http://127.0.0.1:8000/purchases'
@@ -46,6 +47,15 @@ export async function createPurchase():Promise<responseCreate | null>{
     }
 }
 
+export async function getPurchaseById(url: string) {
+    try{
+        const res = await axios.get(url)
+        return res.data
+    } catch (error) {
+        throw new Error(`Error: ${error}`);
+    }
+}
+
 export async function getOrdersByPurchaseId(url: string):Promise<Order[]>{
     try{
         const res = await axios.get(url)
@@ -70,6 +80,15 @@ export async function getGeneralProvider(url: string):Promise<Provider>{
         return res.data
     } catch (error){
         throw new Error (`Error: ${error}`);
+    }
+}
+
+export async function getProviderById(url: string){
+    try{
+        const res = await axios.get(url)
+        return res.data
+    } catch (error) {
+        throw new Error(`Error: ${error}`);
     }
 }
 
@@ -109,12 +128,11 @@ export async function DeletePurchase(id_purchase: string){
     }
 }
 
-export async function changeStatus(id_purchase:string) {
-    try {
-        const res = await axios.put(`${urlPurchases}/${id_purchase}/change_status`)
-        return res.data.status
-    } catch (error) {
-        console.log(error)
-        
-    }
-}
+// export async function changeStatus(id_purchase:string) {
+//     try {
+//         const res = await axios.put(`${urlPurchases}/${id_purchase}/change_status`)
+//         return res.data.status
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }

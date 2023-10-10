@@ -100,14 +100,20 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                   .map((column) => {
                     return (
                       <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
+                        key={column.id}
+                        className="capitalize"
+                        checked={column.getIsVisible()}
+                        onCheckedChange={(value) =>
+                          column.toggleVisibility(!!value)
+                        }>
+                      {
+                        column.id === 'purchase_date' ? 'Fecha' :
+                        column.id === 'amount_order' ? 'Ordenes' :
+                        column.id === 'provider' ? 'Proveedor' :
+                        column.id === 'total' ? 'Total' :
+                        column.id === 'actions' ? 'Operaciones' : column.id
+
                       }
-                    >
-                      {column.id}
                     </DropdownMenuCheckboxItem>
                   )
                 })}

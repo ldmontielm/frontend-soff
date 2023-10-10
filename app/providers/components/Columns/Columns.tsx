@@ -124,8 +124,8 @@ export const columns: ColumnDef<Provider>[] = [
                   <DropdownMenuContent align="end" className="flex flex-col">
                   <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                   <TableCell className="flex items-center gap-2 justify-end">
-                <ProviderUpdateForm provider={provider} id_provider={provider.id} />
-                <ProviderDeleteForm provider={provider} id_provider={provider.id}/>
+                <ProviderUpdateForm provider={provider} id_provider={provider.id} /><span>Editar</span>
+                <ProviderDeleteForm provider={provider} id_provider={provider.id}/><span>Eliminar</span>
                 </TableCell>
                   <SwitchDemo 
                     id_provider={provider.id}
