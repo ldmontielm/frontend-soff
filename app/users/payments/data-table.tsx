@@ -6,11 +6,18 @@ import {
   flexRender,
   SortingState,
   getCoreRowModel,
+  VisibilityState,
   getSortedRowModel,
   getFilteredRowModel,
   useReactTable,
   getPaginationRowModel,
 } from "@tanstack/react-table"
+import {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 // import { Chevron-right } from "@/components/ui/chevron-right"
 import {
   Table,
@@ -43,6 +50,8 @@ export function DataTable<TData, TValue>({
     []
   )
 
+  const [columnVisibility, setColumnVisibility] =
+  React.useState<VisibilityState>({}) 
 
   const table = useReactTable({
     data,
@@ -53,9 +62,11 @@ export function DataTable<TData, TValue>({
     getSortedRowModel: getSortedRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
+    onColumnVisibilityChange: setColumnVisibility,
     state: {
       sorting,
       columnFilters,
+      columnVisibility,
     },
     
   })
@@ -71,6 +82,37 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+
+<DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="ml-auto mr-[10px]">
+              Columnas
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            {table
+              .getAllColumns()
+              .filter(
+                (column) => column.getCanHide()
+              )
+              .map((column) => {
+                return (
+                  <DropdownMenuCheckboxItem
+                    key={column.id}
+                    className="capitalize"
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) =>
+                      column.toggleVisibility(!!value)
+                    }
+                  >
+                    {column.id}
+                  </DropdownMenuCheckboxItem>
+                )
+              })}
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+
       <HeadTable/>
       </div>
     <div className="rounded-md border">

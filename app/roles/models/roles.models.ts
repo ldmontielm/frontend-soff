@@ -1,6 +1,7 @@
 export interface Role{
   id: string;
   name: string;
+  Permissions: string;
   status: boolean;
 };
 

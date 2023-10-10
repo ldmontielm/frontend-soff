@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input"
 import { Switch } from '@/components/ui/switch';
 import useSWR, {useSWRConfig} from 'swr';
 import toast from 'react-hot-toast';
-import { getPermissions } from '../../services/roles.services';
+import { getPermissions } from '@/app/permissions/services/permissions';
 import { createRole, getRole, urlRoles} from '../../services/roles.services';
 
 export default function AddRole() {
@@ -50,13 +50,14 @@ export default function AddRole() {
           <Button variant="default">Registrar rol</Button>
         </DialogTrigger>
         <DialogContent>
+          
           <DialogHeader>
             <DialogTitle>Registrar Rol</DialogTitle>
           </DialogHeader>
           <Box sx={{ maxWidth: 400 }}>
       <Stepper activeStep={activeStep} orientation="vertical">
         <Step>
-          <StepLabel>Crear Rol</StepLabel>
+          <StepLabel>Nombre rol</StepLabel>
           <StepContent>
             <Input type="email" placeholder="Nombre " onChange={(e) => setRolname(e.target.value)}/>
             <Box sx={{ mb: 2 }} className="mt-2">
@@ -99,8 +100,9 @@ export default function AddRole() {
             </div>
           </StepContent>
           <Box sx={{ mb: 2 }}>
-            <div>
+            <div className='flex justify-center items-center w-full'>
               <Button
+              className=' w-[80%]'
                 disabled={assingPermissions.length === 0}
                 variant='default'
                 onClick={() => {
