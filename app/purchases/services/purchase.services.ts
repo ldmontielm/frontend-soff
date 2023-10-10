@@ -47,10 +47,10 @@ export async function createPurchase():Promise<responseCreate | null>{
     }
 }
 
-export async function getPurchaseById(url: string) {
+export async function getPurchaseById(url: string):Promise<Purchase | null> {
     try{
         const res = await axios.get(url)
-        return res.data
+        return res.data.purchase
     } catch (error) {
         throw new Error(`Error: ${error}`);
     }
