@@ -4,6 +4,7 @@ import {ColumnDef} from "@tanstack/react-table"
 import { Purchase } from '../../models/purchase.models'
 import { Provider } from '../../models/provider.models'
 import { Badge } from "@/components/ui/badge"
+import { Receipt } from "../receipt"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +21,6 @@ import { getPurchases, urlPurchases } from "../../services/purchase.services"
 import useSWR from "swr"
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import DisablePurchase from "../../[id]/components/Disable-Purchase/DisablePurchase"
 
 export default function updateStatus(){
   const{data: purchases, isLoading, error} = useSWR(urlPurchases, getPurchases)
@@ -31,16 +31,6 @@ export default function updateStatus(){
       setLocalPurchases(purchases)
     }
   }, [purchases]);
-
-  // const updatePurchaseStatus = (purchaseId:string, newStatus:boolean) =>{
-  //   const updatePurchases = localPurchases?.map((purchase)=>{
-  //     if(purchase.id === purchaseId){
-  //       return {...purchase, status: newStatus};
-  //     }
-  //     return purchase
-  //   });
-  //   setLocalPurchases(updatePurchases)
-  // };
 }
 
 export const columns: ColumnDef<Purchase>[] = [
@@ -104,8 +94,8 @@ export const columns: ColumnDef<Purchase>[] = [
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="flex flex-col items-start">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <SeeDetail id={purchase.id}/>
-              <SeeProvider id={purchase.provider_id}/>
+              <SeeDetail purchase={purchase} purchaseId={purchase.id}/>
+              <Receipt purchase={purchase} purchaseId={purchase.id} />
           </DropdownMenuContent>
         </DropdownMenu>
       )

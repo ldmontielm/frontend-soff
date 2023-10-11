@@ -13,17 +13,32 @@ import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import useSWR from 'swr'
 import * as z from 'zod'
+import { Check, ChevronsUpDown } from "lucide-react"
+import * as React from "react"
+import { cn } from "@/lib/utils"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import {HeadTable as HeadTableSupply} from "@/app/supplies/components"
 
 const formSchema = z.object({
   purchase_id: z.string(),
-  supply_id: z.string(),
+  supply_id: z.string({
+    required_error: "Please select a supply.",
+  }),
   amount_supplies: z.string().transform(Number),
   price_supplies: z.string().transform(Number)
 })
 
-// async function fetchGetAllSupplies(){
-//   return await getSupplies(url)
-// }
 
 export default function HeadTable() {
   const params = useParams()
@@ -33,6 +48,7 @@ export default function HeadTable() {
   const router = useRouter()
   const {data:supplies} = useSWR('http://localhost:8000/supplies', getSupplies)
 
+  const [open, setOpen] = React.useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -64,23 +80,53 @@ export default function HeadTable() {
             name="supply_id"
             render = {({field}) => (
               <FormItem className="w-full md:w-[200px]">
-                <FormLabel>Insumo</FormLabel>
-                <FormControl>
-                  <div className="w-full xl:w-[200px]">
-                    <Select defaultValue={field.value} onValueChange={field.onChange}>
-                      <SelectTrigger className="uppercase">
-                        <SelectValue  placeholder='Insumo' />
-                      </SelectTrigger>
-                      <SelectContent >
-                        {
-                          Array.isArray(supplies) && supplies.map((supply) => (
-                            <SelectItem key={supply.id} value={supply.id} className="uppercase">{supply.name}</SelectItem>
-                          ))
-                        }
-                      </SelectContent>
-                    </Select>
+              <FormLabel>Insumo</FormLabel>
+              <div className="w-full xl:w-[200px]">
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-[200px] justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? supplies?.find((supply)=>supply.id === field.value)?.name
+                          : "Seleccione insumo"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0">
+                      <Command>
+                        <CommandInput placeholder="Buscar insumo..." />
+                        <CommandEmpty>Sin resultados.</CommandEmpty>
+                        <CommandGroup>
+                          {Array.isArray(supplies) && supplies.map((supply) => (
+                            <CommandItem
+                              value={supply.name}
+                              key={supply.id}
+                              onSelect={() => {
+                                form.setValue("supply_id", supply.id)
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  supply.id === field.value ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                              {supply.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   </div>
-                </FormControl>
                 <FormMessage />
               </FormItem>
             )}
