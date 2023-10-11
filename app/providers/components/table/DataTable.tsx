@@ -109,18 +109,27 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                         checked={column.getIsVisible()}
                         onCheckedChange={(value) =>
                         column.toggleVisibility(!!value)
-                        }
-                    >
-                        {column.id}
+                        }>
+                        { 
+                        column.id === 'name' ? 'Nombre' :
+                        column.id === 'company' ? 'Empresa' :
+                        column.id === 'address' ? 'Dirección' :
+                        column.id === 'date_registration' ? 'Fecha' :
+                        column.id === 'email' ? 'Correo' :
+                        column.id === 'phone' ? 'Teléfono' :
+                        column.id === 'city' ? 'Ciudad' :
+                        column.id === 'status' ? 'Estado' :                    
+                        column.id
+                    }
                     </DropdownMenuCheckboxItem>
                     )
                 })}
             </DropdownMenuContent>
             </DropdownMenu>
-            <Button variant='outline' className="flex items-center w-full md:w-fit gap-2">
+            {/* <Button variant='outline' className="flex items-center w-full md:w-fit gap-2">
                 <DocumentChartBarIcon className="w-4 h-4" />
                 <span>Reporte</span>
-            </Button>
+            </Button> */}
                     </div>
             <HeadTable/>
                 </div>
@@ -177,40 +186,40 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                 </Table>
             </div>
 
-            <div className="flex items-center justify-end space-x-2 py-4">
-                <Button 
-                variant='outline'
-                onClick={() => table.previousPage()}
-                className="flex items-center gap-2"
-                disabled={!table.getCanPreviousPage()}>
-                    <ChevronLeftIcon className="w-4 h-4"/>
-                    <span>Anterior</span>
-                </Button>
-                <Button
-                variant={"outline"}
-                onClick={() => table.nextPage()}
-                disabled={!table.getCanNextPage()}
-                className="flex items-center gap-2"
-                >
-                    <span>Próxima</span>
-                    <ChevronRightIcon className="w-4 h-4"/>
-                
-                </Button>
-                <select
-                className="w-fit flex h-9 items-center justify-between rounded-md border-input bg-transparent px-3 py-2 text-sm"
-                value={table.getState().pagination.pageSize}
-                onChange={e =>{
-                    table.setPageSize(Number(e.target.value))
-                }}>
-                {[10, 20,30,40,50].map(pageSize => (
-                    <option key={pageSize} value={pageSize}>
-                        Mostrar {pageSize}
-                    </option>
-                ))}
-                </select>
-                <p>Página {table.getState().pagination.pageIndex +1 } de {table.getPageCount()} </p>
-
-            </div>
+            <div className='flex items-center jusitfy-end space-x-2 py-4'>
+        <Button 
+          variant='outline'
+          onClick={() => table.previousPage()}
+          className='flex items-center gap-2'
+          disabled={!table.getCanPreviousPage()}
+          >
+          <ChevronLeftIcon className='w-4 h-4' />
+          <span>Anterior</span>
+          </Button>
+        <Button
+          variant="outline"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+          className='flex items-center gap-2'
+        >
+          <span>Próxima</span>
+          <ChevronRightIcon className='w-4 h-4' />
+        </Button>
+        <select
+          className='w-fit flex h-9 items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 '
+          value={table.getState().pagination.pageSize}
+          onChange={e => {
+            table.setPageSize(Number(e.target.value))
+          }}
+        >
+          {[10, 20, 30, 40, 50].map(pageSize => (
+            <option key={pageSize} value={pageSize}>
+              Mostrar {pageSize}
+            </option>
+          ))}
+        </select>
+        <p>Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}</p>
+      </div>
 
         </div>
     )
