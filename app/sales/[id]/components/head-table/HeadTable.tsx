@@ -1,5 +1,5 @@
 "use client" 
-import { getProducts, urlProducts, urlSales, getOrdersBySaleId } from "@/app/sales/services/sale.services"
+import { getProducts, urlProducts, urlSales, getOrdersBySaleId, fetcherPost } from "@/app/sales/services/sale.services"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -8,8 +8,12 @@ import { PlusIcon } from "@heroicons/react/24/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useParams } from 'next/navigation'
 import { useForm } from "react-hook-form"
-import useSWR, {useSWRConfig} from 'swr'
+import useSWR, { mutate} from 'swr'
 import * as z from 'zod'
+import useSWRMutation from 'swr/mutation'
+import { useToast } from "@/components/ui/use-toast"
+import { OrderCreate } from "@/app/sales/models/sale.models"
+
 
 const formSchema = z.object({
   sale_id: z.string(),
@@ -17,11 +21,16 @@ const formSchema = z.object({
   amount_product: z.number().min(1, 'Como mínimo debe vender un producto').transform(Number)
 })
 
+
+const AddOrderFetch = async (url: string, body: OrderCreate) => {
+  return await fetcherPost<OrderCreate>(url, body)
+}
+
 export default function HeadTable() {
   const params = useParams()
   const {data:products} = useSWR(urlProducts, getProducts)
-  const {data:orders} = useSWR(`${urlSales}/${params.id}/orders`, getOrdersBySaleId)
-  const { mutate } = useSWRConfig()
+  const {data} = useSWR(`${urlSales}/${params.id}/orders`)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,13 +42,7 @@ export default function HeadTable() {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     values.sale_id = params.id.toString()
-    await fetch(`${urlSales}/${params.id}/add-order`, {
-      method: 'POST',
-      body: JSON.stringify(values),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
+    const data = await AddOrderFetch(`${urlSales}/${params.id}/add-order`, values)
     mutate(`${urlSales}/${params.id}/orders`)
   }
 

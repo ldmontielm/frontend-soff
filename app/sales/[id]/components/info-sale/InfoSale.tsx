@@ -17,6 +17,7 @@ import toast from 'react-hot-toast'
 import useSWR from 'swr'
 import * as z from 'zod'
 import { OrderContext } from "../../context/orders-context/orderContext"
+import { InfoSaleHeader } from '..'
 
 
 const formSaleSchema = z.object({
@@ -43,9 +44,7 @@ const clculateTotal = (orders: Array<Order>) => {
 }
 
 export default function InfoSale({id}:Props) {
-  const [client, setClient] = useState(localStorage.getItem('client') || '{}')
-  const {data:orders} = useSWR(`${urlSales}/${id}/orders`, getOrdersBySaleId)
-  const {data:general} = useSWR(urlSales, getGeneralClient)
+  const {data:orders} = useSWR(`${urlSales}/${id}/orders`)
   const router = useRouter()
 
   const formSale = useForm<z.infer<typeof formSaleSchema>>({
@@ -96,12 +95,7 @@ export default function InfoSale({id}:Props) {
   
   return (
     <div className='w-full'>
-      <div className='w-full text-center mt-1 mb-1 p-4'>
-        <h3 className='font-bold'>MANDISA</h3>
-        <p className='text-sm text-gray-400'>NIT 71227771-4</p>
-        <p className='text-sm text-gray-400'>Navarra/Bello</p>
-        <p className='text-sm text-gray-400'>(+57) 3146486791</p>
-      </div>
+      <InfoSaleHeader />
       <hr />
       <Form {...formSale}>
         <form onSubmit={formSale.handleSubmit(onSubmitSale)} className='p-4 h-full flex flex-col justify-between'>
@@ -130,7 +124,7 @@ export default function InfoSale({id}:Props) {
             )}
           />
           {
-            (formSale.getValues().type_sale === 'pedido' && client === '{}') ? ( 
+            (formSale.getValues().type_sale === 'pedido' && formSale.getValues().name === "") ? ( 
               <div>
                 <FormField 
                   control={formSale.control}
