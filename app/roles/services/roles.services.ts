@@ -19,9 +19,9 @@ export  async function getRole(url: string):Promise<Role[]>{
         throw new Error(`Error: ${error}`)
     }
 }
-export  async function getPermissionRole(id_role:string):Promise<PermissionRole[]>{
+export  async function getPermissionRole(url:string):Promise<PermissionRole[]>{
     try{
-        const res = await axios.get(`${urlPermissionRole}/${id_role}`)
+        const res = await axios.get(url)
         return res.data.Permission_Role
     } catch(error){
         throw new Error(`Error: ${error}`)
@@ -40,6 +40,14 @@ export async function createPermissionRole(permissionrole : createPermissionRole
   export async function createRole(nombre_role: string, assingPermissions: any[]){
     try {
       const res = await axios.post(`http://localhost:8000/role/post-permissions/${nombre_role}`, assingPermissions)
+      return res.data
+    } catch (error) {
+      return null;
+    }
+}
+  export async function deleteRole(id_role: string){
+    try {
+      const res = await axios.delete(`${urlRoles}/${id_role}/delete-role`)
       return res.data
     } catch (error) {
       return null;
@@ -67,9 +75,9 @@ export async function updateUser(role : createRole): Promise<Role>{
 
 
 //   ----------------------------------Permissions------------------------------------
-export  async function getPermissions(url: string):Promise<Role[]>{
+export  async function getPermissionsRole(url: string, id_role:string):Promise<PermissionRole[]>{
     try{
-        const res = await axios.get(url)
+        const res = await axios.get(`${urlRoles}/${id_role}/permissionrole-get`)
         return res.data.Permissions
     } catch(error){
         throw new Error(`Error: ${error}`)

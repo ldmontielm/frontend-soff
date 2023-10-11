@@ -89,6 +89,7 @@ export const columns: ColumnDef<Sale>[] = [
   },
   {
     id: "actions",
+    header: "Acciones",
     cell: ({row}) => {
       const sale = row.original
       return (
