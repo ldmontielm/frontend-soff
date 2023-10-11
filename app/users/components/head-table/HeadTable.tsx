@@ -42,12 +42,11 @@ import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
   name: z.string().min(2, { message: 'El nombre debe de tener mas de dos caracteres' }),
-  document_type: z.string().min(2, { message: 'El tipo de documento debe de tener mas de dos caracteres' }),
-  document: z.string().min(2, { message: 'El documento debe de tener mas de dos caracteres' }),
-  phone: z.string().min(2, { message: 'El numero de telefono debe de tener mas de dos caracteres' }),
+  document_type: z.string(),
+  document: z.string().min(8,{message:'El numero de documento debe contener minimo 8 caracteres'}).refine((value) => /^\d+$/.test(value), {message: 'El número de identificación debe contener solo números.',}),
+  phone:z.string().refine((value) => /^\d+$/.test(value), {message: 'El campo debe contener solo números.',}),
   email: z.string().email({ message: 'El email no es valido' }),
-  password: z.string(),
-  // password: z.string().regex(/^(?=.[a-z])(?=.[A-Z])(?=.[0-9])(?=.[@$!%?&#])[A-Za-z0-9@$!%?&#]{8,}$/g, {message: 'Contraseña Invalida'}),
+  password: z.string().min(8,{message:'La contraseña debe ser minimo de 8 caracteres'}),
   id_role : z.string().uuid()
 })
 
@@ -114,7 +113,16 @@ function onSubmit(values: z.infer<typeof formSchema>){
               <FormItem>
               <FormLabel>Tipo de documento</FormLabel>
               <FormControl>
-                <Input placeholder="Ingrese el tipo de documento" {...field} />
+              <Select  onValueChange={field.onChange}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Tipo de documento" />
+                  </SelectTrigger>
+                  <SelectContent >
+                    <SelectItem value="CC" >CC</SelectItem>
+                    <SelectItem value="TI">TI</SelectItem>
+                    <SelectItem value="CE">CE</SelectItem>
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -140,7 +148,7 @@ function onSubmit(values: z.infer<typeof formSchema>){
             name ="phone"
             render={({ field }) => (
               <FormItem>
-              <FormLabel>Numero de telefono</FormLabel>
+              <FormLabel>Numero de teléfono</FormLabel>
               <FormControl>
                 <Input placeholder="Ingrese el numero de telefono" {...field} />
               </FormControl>
@@ -156,7 +164,7 @@ function onSubmit(values: z.infer<typeof formSchema>){
               <FormItem>
               <FormLabel>Correo</FormLabel>
               <FormControl>
-                <Input placeholder="Ingrese la contraseña" {...field} />
+                <Input placeholder="Ingrese el correo" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -170,7 +178,7 @@ function onSubmit(values: z.infer<typeof formSchema>){
               <FormItem>
               <FormLabel>Contraseña</FormLabel>
               <FormControl>
-                <Input placeholder="Ingrese el correo" {...field} />
+                <Input type="password" placeholder="Ingrese el contraseña" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>

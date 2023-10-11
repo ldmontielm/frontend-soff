@@ -2,28 +2,20 @@
 
 import React from 'react'
 import { SWRConfig } from 'swr'
+import axios from 'axios'
+import { swrMiddleware } from '../../middleware'
+import { AxiosInterceptors } from '@/app/sales/interceptors/axios.interceptors'
 
 interface Props {
   children: React.ReactNode
 }
 
-function localStorageProvider() {
-  // When initializing, we restore the data from `localStorage` into a map.
-  const map = new Map<any, any>(JSON.parse(localStorage.getItem('sales-cache') || '[]'))
- 
-  // Before unloading the app, we write back all the data into `localStorage`.
-  window.addEventListener('beforeunload', () => {
-    const appCache = JSON.stringify(Array.from(map.entries()))
-    localStorage.setItem('app-cache', appCache)
-  })
- 
-  // We still use the map for write & read for performance.
-  return map
-}
-
 export default function SalesSWRProvider({children}: Props) {
+  AxiosInterceptors()
   return (
-    <SWRConfig value={{provider: localStorageProvider}}>
+    <SWRConfig value={{
+      fetcher: (url: string) => axios.get(url).then(res => res.data)
+    }}> 
       {children}
     </SWRConfig>
   )

@@ -1,14 +1,6 @@
 'use client'
 import React, { useState } from 'react'
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -19,40 +11,18 @@ import { Sale } from '../../models/sale.models'
 import { createSala } from '../../services/sale.services'
 import { HeadTable } from '..'
 import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-
-import {
-  ColumnDef,
-  flexRender,
-  ColumnFiltersState,
-  getFilteredRowModel,
-  VisibilityState,
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-  SortingState
-} from "@tanstack/react-table"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { ColumnDef, flexRender, ColumnFiltersState, getFilteredRowModel, VisibilityState, getCoreRowModel, getPaginationRowModel, useReactTable, SortingState } from "@tanstack/react-table"
+import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  isLoading: boolean
+  error: any
 }
 
-export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, TValue>){
+export function DataTable<TData, TValue>({columns, data, isLoading, error}: DataTableProps<TData, TValue>){
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -155,7 +125,13 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
           </TableHeader>
           <TableBody>
             {
-              table.getRowModel().rows?.length ? (
+              data.length === 0 ? (
+                  <TableRow>
+                      <TableCell colSpan={columns.length} className='h-24 text-center' text-center>
+                      No se encontraron resultados.
+                    </TableCell>
+                  </TableRow>
+              ) : table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                     {
@@ -177,6 +153,7 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                 </TableRow>
               )
             }
+          
           </TableBody>
         </Table>
       </div>

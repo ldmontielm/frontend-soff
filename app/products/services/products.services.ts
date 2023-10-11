@@ -27,9 +27,18 @@ export async function getSupplies(url:string): Promise<Supply[]>{
   }
 }
 
-export async function getProductById(id: string):Promise<Product | null>{
+export async function getSupplyById(url: string):Promise<Supply | null>{
   try {
-    const res = await axios.get(`${urlProducts}/${id}`)
+    const res = await axios.get(url)
+    return res.data.supply
+  } catch (error) {
+    throw new Error(`Error: ${error}`);
+  }
+}
+
+export async function getProductById(url: string):Promise<Product | null>{
+  try {
+    const res = await axios.get(url)
     return res.data.product
   } catch (error) {
     throw new Error(`Error: ${error}`);

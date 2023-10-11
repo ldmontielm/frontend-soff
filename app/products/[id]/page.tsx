@@ -1,10 +1,11 @@
 
 import React from 'react'
 import { TableDetails, InfoProduct } from './components'
-import { HeaderModule} from '../components'
+import { HeaderModuleDetail } from '../components/header-module/HeaderModule'
 import { DetailsRecipe } from '../models/product.models'
 import { getDetailsByProductId } from '../services/products.services'
 import { DetailContextProvider } from './context/detail-context/DetailContext'
+// import { HeadTable } from '@/app/supplies/components'
 
 async function fetchDetailsByProductId(id: string) {
   return await getDetailsByProductId(id)
@@ -23,10 +24,14 @@ export default async function Page({params}:{params: {id: string}}) {
   const details = await fetchDetailsByProductId(params.id)
   console.log(details)
   return (
-    // <DetailContextProvider>
+    <DetailContextProvider>
       <div className="mx-auto max-w-7xl p-4">
-        <HeaderModule />
+        <HeaderModuleDetail />
+        {/* <div>
+          <HeadTable/>
+        </div> */}
         <div className='grid grid-cols-1 lg:grid-cols-12 gap-4'>
+          
           <div className='w-full bg-white col-span-12 md:col-span-9'>
             <TableDetails details={details}/>
           </div>
@@ -35,7 +40,7 @@ export default async function Page({params}:{params: {id: string}}) {
           </div>
         </div>
       </div>
-    // </DetailContextProvider>
+    </DetailContextProvider>
     
   )
 }

@@ -11,7 +11,7 @@ import useSWR from 'swr'
 import { getDetailsByProductId} from "@/app/products/services/products.services"
 import DetailUpdateForm from "../detail-update-form/DetailUpdateForm"
 import DetailDeleteForm from "../datails-delete-form/DetailsDeleteForm"
-
+import { HeadTable as HeadTableSupply} from "@/app/supplies/components"
 
 interface Props {
   details: DetailsRecipe[]
@@ -22,6 +22,7 @@ export default function TableDetails({details}:Props) {
   return (
     <div>
       <HeadTable />
+      {/* <HeadTableSupply/> */}
       <div className="mt-2">
       <Table className="border rounded">
             <TableHeader>

@@ -1,65 +1,3 @@
-// 'use client'
-// import React from 'react'
-// import {
-//   Table,
-//   TableBody,
-//   TableCaption,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from "@/components/ui/table"
-
-// import { Badge } from '@/components/ui/badge'
-// import { Button } from '@/components/ui/button'
-// import { Input } from '@/components/ui/input'
-// import { convertToCOP, convertDate } from '../../utils'
-// import Link from 'next/link'
-// import { Routes } from '@/models/routes.models'
-// import { Purchase } from '../../models/purchase.models'
-// import { Provider } from '../../models/provider.models'
-// import { createPurchase } from '../../services/purchase.services'
-// import { getPurchases, urlPurchases } from '../../services/purchase.services'
-// import { HeadTable } from '..'
-// import useSWR from 'swr'
-
-
-// export default function TableComponent() {
-//   const {data: purchases, isLoading, error} = useSWR(urlPurchases, getPurchases)
-//   return (
-//     <div >
-//       <div className="w-full flex flex-wrap md:flex-nowrap items-center justify-between md:space-x-2 space-y-2 md:space-y-0 mb-5">
-//         <HeadTable />
-//       </div>
-//       {isLoading ? "Cargando información...": <></>}
-//       <div className='border rounded'>
-//         <Table>
-//           <TableHeader>
-//             <TableRow>
-//               <TableHead>Fecha</TableHead>
-//               <TableHead>Ordenes</TableHead>
-//               <TableHead>Proveedor</TableHead>
-//               <TableHead>Total</TableHead>
-//               <TableHead className="text-right">Estado</TableHead>
-//             </TableRow>
-//           </TableHeader>
-//           <TableBody>
-//             {Array.isArray(purchases) && purchases.map((purchase) =>(
-//               <TableRow key={purchase.id}>
-//               <TableCell>{convertDate(purchase.purchase_date)}</TableCell>
-//               <TableCell>{purchase.amount_order}</TableCell>
-//               <TableCell className='text-left'>{purchase.provider}</TableCell>
-//               <TableCell>${convertToCOP(purchase.total)}</TableCell>
-//               <TableCell className='text-right'><Badge>{purchase.status ? "Activo": "Inactivo"}</Badge></TableCell>
-//               </TableRow>
-//             ))}
-//           </TableBody>
-//         </Table>
-//       </div>
-//     </div>
-//   )}
-
-
 'use client'
 import React, { useState } from 'react'
 import {
@@ -113,9 +51,11 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  isLoading: boolean
+  error: any
 }
 
-export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, TValue>){
+export function DataTable<TData, TValue>({columns, data, isLoading, error}: DataTableProps<TData, TValue>){
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -172,16 +112,17 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                         column.toggleVisibility(!!value)
                       }
                     >
-                      {column.id}
+                      { 
+                        column.id === 'name' ? 'Nombre' :
+                        column.id === 'price' ? 'Costo' :
+                        column.id === 'sale_price' ? 'Precio de venta' :
+                        column.id === 'status' ? 'Estado' : column.id
+                      }
                     </DropdownMenuCheckboxItem>
                   )
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant='outline' className='flex items-center w-full md:w-fit gap-2'>
-            <DocumentChartBarIcon className='w-4 h-4' />
-            <span>Reporte</span>
-          </Button>
         </div>
         <HeadTable />
       </div>
@@ -212,6 +153,13 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
           </TableHeader>
           <TableBody>
             {
+              data.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className='h-24 text-center' text-center>
+                    No se encontraron resultados
+                  </TableCell>
+                </TableRow>
+              ):
               table.getRowModel().rows?.length ? (
                 table.getRowModel().rows.map((row) => (
                   <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>

@@ -1,49 +1,25 @@
 "use client";
 
 import React from "react";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { Order } from "@/app/sales/models/sale.models";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormField, Form, FormItem, FormControl } from "@/components/ui/form";
-import toast from "react-hot-toast";
-import { DeleteOrder, urlSales, getOrdersBySaleId } from "@/app/sales/services/sale.services";
-import { useRouter } from "next/navigation";
-import { useContext } from "react"
-import { OrderContext } from "../../context/orders-context/orderContext"
-import { OrderContextInterface } from "@/app/sales/models/sale.models"
-import useSWR, {useSWRConfig} from 'swr'
-const formSchema = z.object({
-  id_order: z.string().optional(),
-});
+import { DeleteOrder, urlSales } from "@/app/sales/services/sale.services";
+import useSWR, {mutate} from 'swr'
+
+
+const DeleteOrderFetch = async (url: string) => {
+  return await DeleteOrder(url)
+}
+
 interface Props {
   order: Order;
-  id_sale: string | string[]
+  id_sale: string
 }
 
 export default function OrderDeleteForm({ order, id_sale }: Props) {
-  const router = useRouter()
-  const {data} = useSWR(`${urlSales}/${id_sale}/orders`, getOrdersBySaleId)
-  const { mutate } = useSWRConfig()
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      id_order: "",
-    },
-  });
+  const {data} = useSWR(`${urlSales}/${id_sale}/orders`)
 
   return (
     <AlertDialog>
@@ -60,17 +36,17 @@ export default function OrderDeleteForm({ order, id_sale }: Props) {
       <AlertDialogHeader>
         <AlertDialogTitle>¿Está completamente seguro?</AlertDialogTitle>
         <AlertDialogDescription>
-          Esta acción no se puede deshacer. Esto eliminará permanentemente los
-          datos de la orden de nuestros servidores.
+          Esta acción eliminará el producto <span className="font-bold">{order.product}</span> de las ordenes en cola permanentemente.
         </AlertDialogDescription>
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction type="button" onClick={() => {
-            DeleteOrder(order.id)
+        <AlertDialogAction type="button" onClick={async () => {
+            const res = await DeleteOrderFetch(`${urlSales}/${order.id}/delete`)
             mutate(`${urlSales}/${id_sale}/orders`)
-          }} className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90">
-          Continue
+          }} 
+          className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90">
+          Eliminar
         </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>

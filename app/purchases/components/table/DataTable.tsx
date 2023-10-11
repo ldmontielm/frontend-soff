@@ -51,14 +51,16 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  isLoading: boolean
+  error: any
 }
 
-export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, TValue>){
+export function DataTable<TData, TValue>({columns, data, isLoading, error}: DataTableProps<TData, TValue>){
 
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-
+  console.log(data)
   const table = useReactTable({
     data, columns, getCoreRowModel: getCoreRowModel(), getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
@@ -111,7 +113,7 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                         column.id === 'amount_order' ? 'Ordenes' :
                         column.id === 'provider' ? 'Proveedor' :
                         column.id === 'total' ? 'Total' :
-                        column.id === 'status' ? 'Estado' : column.id
+                        column.id === 'actions' ? 'Operaciones' : column.id
 
                       }
                     </DropdownMenuCheckboxItem>
@@ -153,20 +155,26 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
           </TableHeader>
           <TableBody>
             {
-              table.getRowModel().rows?.length ? (
-                table.getRowModel().rows.map((row) => (
-                  <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
-                    {
-                      row.getVisibleCells().map((cell) => (
-                        <TableCell key={cell.id}>
-                          {
-                            flexRender(cell.column.columnDef.cell, cell.getContext())
-                          }
-                        </TableCell>
-                      ))
-                    }
-                  </TableRow>
-                ))
+              data.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={columns.length} className='h-24 text-center' text-center>
+                    No se encontraron resultados
+                  </TableCell>
+                </TableRow>
+              ): table.getRowModel().rows?.length ? (
+                  table.getRowModel().rows.map((row) => (
+                    <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
+                      {
+                        row.getVisibleCells().map((cell) => (
+                          <TableCell key={cell.id}>
+                            {
+                              flexRender(cell.column.columnDef.cell, cell.getContext())
+                            }
+                          </TableCell>
+                        ))
+                      }
+                    </TableRow>
+                  ))
                 ) : (
                   <TableRow>
                   <TableCell colSpan={columns.length} className='h-24 text-center' text-center>
