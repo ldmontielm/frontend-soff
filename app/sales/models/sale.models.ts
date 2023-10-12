@@ -2,6 +2,7 @@ export interface Sale {
   id: string;
   sale_date: string;
   amount_order: number;
+  invoice_number: string;
   payment_method: string;
   id_client: string;
   total: number;

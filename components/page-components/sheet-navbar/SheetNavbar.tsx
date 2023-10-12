@@ -83,8 +83,8 @@ export default function SheetNavbar() {
             <p className='text-sm font-semibold'>Systematization Of Fast Food</p>
           </div>
         </SheetHeader>
-        <Separator className="my-4" />
-        <div className='flex flex-col w-full text-white'>
+        {/* <Separator className="my-4" /> */}
+        <div className='flex flex-col w-full text-white mt-5'>
           {
             menuItems.map((item) => (
               <Link key={item.id} href={item.url} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'>{item.icon}<p>{item.name}</p></Link>
@@ -93,7 +93,7 @@ export default function SheetNavbar() {
           <Collapsible
             open={isOpen}
             onOpenChange={setIsOpen}
-            className="w-full space-y-2 "
+            className="w-full space-y-2"
           >
             <CollapsibleTrigger asChild>
                 <div className='w-full cursor-pointer flex items-center justify-between gap-4 p-3 rounded hover:bg-blue-800'>

@@ -5,6 +5,8 @@ import { Provider } from "../../models/provider.models"
 import { Badge } from "@/components/ui/badge"
 import ProviderDeleteForm from '../provider-delete-form/ProviderDeleteForm'
 import ProviderUpdateForm from '../provider-update-form/ProviderUpdateForm'
+
+import { ArrowUpDown} from "lucide-react"
 import {
   Table,
   TableBody,
@@ -55,28 +57,72 @@ const updateProviderStatus = (id_provider:string, newStatus:boolean) =>{
 export const columns: ColumnDef<Provider>[] = [
   {
     accessorKey: 'name',
-    header: 'Nombre',
+    header: ({ column }) => {
+      return (
+        <Button
+        className="w-fit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Nombre
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       return <div>{row.getValue('name')}</div>
     }
   },
   {
     accessorKey: 'company',
-    header: 'Empresa',
+    header: ({ column }) => {
+      return (
+        <Button
+        className="w-fit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Empresa
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       return <div>{row.getValue('company')}</div>
     }
   },
   {
     accessorKey: 'address',
-    header: 'Dirección',
+    header: ({ column }) => {
+      return (
+        <Button
+        className="w-fit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Dirección
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       return <div>{row.getValue('address')}</div>
     }
   },
   {
     accessorKey: 'date_registration',
-    header: "Fecha",
+    header: ({ column }) => {
+      return (
+        <Button
+        className="w-fit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Fecha
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       const date = new Date(row.getValue("date_registration"))
       const formatted = new Intl.DateTimeFormat(['ban', 'id']).format(date)
@@ -86,28 +132,72 @@ export const columns: ColumnDef<Provider>[] = [
   },
   {
     accessorKey: 'email',
-    header: 'Correo',
+    header: ({ column }) => {
+      return (
+        <Button
+        className="w-fit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Correo
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       return <div>{row.getValue('email')}</div>
     }
   },
   {
     accessorKey: 'phone',
-    header: 'Telefono',
+    header: ({ column }) => {
+      return (
+        <Button
+        className="w-fit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Teléfono
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       return <div>{row.getValue('phone')}</div>
     }
   },
   {
     accessorKey: 'city',
-    header: 'Ciudad',
+    header: ({ column }) => {
+      return (
+        <Button
+        className="w-fit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Ciudad
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       return <div>{row.getValue('city')}</div>
     }
   },
   {
     accessorKey: "status",
-    header: "Estado",
+    header: ({ column }) => {
+      return (
+        <Button
+        className="w-fit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Estado
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({ row }) => {
       const provider = row.original
       return <div>

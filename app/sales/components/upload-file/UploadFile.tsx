@@ -1,6 +1,6 @@
 'use client'
 import React, {ChangeEvent, useState} from 'react'
-import { urlSales, getSales } from '../../services/sale.services'
+import { urlSales } from '../../services/sale.services'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -15,7 +15,7 @@ export default function UploadFile({id}: {id:string}) {
   const [filename, setFilename] = useState("No seleccionó achivo")
   const [urlImage, setUrlImage] = useState("")
   const params = useParams()
-  const {data: sales} = useSWR(urlSales, getSales)
+  const {data: sales} = useSWR(urlSales)
   const { mutate } = useSWRConfig()
   const [open, setOpen] = useState(false)
   const [file, setFile] = useState<File>()

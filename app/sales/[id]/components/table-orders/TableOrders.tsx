@@ -1,16 +1,19 @@
 'use client'
-import { getOrdersBySaleId, urlSales } from "@/app/sales/services/sale.services"
+import { urlSales } from "@/app/sales/services/sale.services"
 import { convertToCOP } from "@/app/sales/utils"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { useParams } from "next/navigation"
 import useSWR from "swr"
 import { HeadTable } from ".."
 import OrderDeleteForm from "../order-delete-form/OrderDeleteForm"
 import OrderUpdateForm from "../order-update-form/OrderUpdateForm"
 
-export default function TableOrders() {
- const params = useParams()
- const {data:OrdersContext,} = useSWR(`${urlSales}/${params.id}/orders`, getOrdersBySaleId)
+
+interface Props {
+  id: string
+}
+
+export default function TableOrders({id}: Props) {
+ const {data:OrdersContext} = useSWR(`${urlSales}/${id}/orders`)
   return (
     <div>
       <HeadTable />
@@ -34,8 +37,8 @@ export default function TableOrders() {
                     <TableCell>{order.amount_product}</TableCell>
                     <TableCell>${convertToCOP(order.total)}</TableCell>
                     <TableCell className="flex items-center gap-2 justify-end">
-                      <OrderUpdateForm order={order} id_sale={params.id} />
-                      <OrderDeleteForm order={order} id_sale={params.id} />
+                      <OrderUpdateForm order={order} id_sale={id} />
+                      <OrderDeleteForm order={order} id_sale={id} />
                     </TableCell>
                   </TableRow>
                 ))

@@ -39,7 +39,7 @@ const formSchema = z.object({
   }),
   // amount_supply: z.number().min(1, {message:'Mínimo debes ingresar un numero'}).nonnegative({message: 'No se aceptan valores negativos'}),
   amount_supply: z.string().transform(Number),
-  unit_measure: z.string().min(2, {message: 'La unidad debe tener más de 2 caracteres'})
+  // unit_measure: z.string().min(2, {message: 'La unidad debe tener más de 2 caracteres'})
 })
 
 export default function HeadTable() {
@@ -59,7 +59,7 @@ export default function HeadTable() {
       product_id: "",
       supply_id: "",
       amount_supply: 0,
-      unit_measure: ""
+      // unit_measure: ""
     }
   })
 
@@ -150,7 +150,7 @@ export default function HeadTable() {
             )
           }
           />
-           <FormField
+           {/* <FormField
             control={form.control}
             name="unit_measure"
             render={({ field }) => (
@@ -160,10 +160,10 @@ export default function HeadTable() {
                   <Input placeholder="Unidad de medida" {...field} className="ml-6 lg:w-fit"/>
                 </FormControl>
                 <FormMessage />
-              </FormItem>
-            )
-          }
-          />
+              </FormItem> */}
+            {/* ) */}
+          {/* } */}
+          {/* /> */}
 
         </div>
         <Button type="submit" className="w-full md:w-fit">

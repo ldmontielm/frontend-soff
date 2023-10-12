@@ -8,14 +8,9 @@ import { getPurchases, urlPurchases } from '../../services/purchase.services'
 
 export default function TableComponent() {
   const {data: purchases, isLoading, isValidating, error} = useSWR(urlPurchases, getPurchases)
-
   return (
     <div>
-      {
-        Array.isArray(purchases) && (
-          <DataTable columns={columns}  data={purchases}/>
-        )
-      }
+      <DataTable columns={columns}  data={purchases || []} isLoading={isLoading} error={error}/>
     </div>
   )
 }
