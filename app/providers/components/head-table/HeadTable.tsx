@@ -38,12 +38,13 @@ import useSWR, { mutate, useSWRConfig } from "swr";
 
 
 const fromSchema = z.object({
-  name: z.string().min(2, {message: 'El nombre debe tener más de dos caracteres'}),
-  company: z.string().min(2, {message: 'Debe tener mas de dos caracteres'}),
-  address: z.string().min(2, {message: 'Debe tener mas de dos caracteres'}),
-  email: z.string().email({message: "Correo no valido"}),
-  phone: z.string().min(2, {message: 'Debe tener mas de dos caracteres'}),
-  city: z.string().min(2, {message: 'Debe tener mas de dos caracteres'}),
+  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del proveedor'}),
+  company: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre de la empresa'}),
+  address: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese una dirección'}),
+  email: z.string({required_error: "El campo es requerido"}).email({message: "Correo no valido"}),
+  phone: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese un teléfono'}),
+  city: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese una ciudad'}),
+
 })
 
 
@@ -88,104 +89,106 @@ export default function HeadTable() {
       
     // const {data: proveedor} = useSWR(urlProvider, getProviders)
 return (
-  
-  <Dialog open={open} onOpenChange={setOpen}>
-    <DialogTrigger asChild>
-    <Button variant="default" className="px-4 py-2 m-2">Registrar</Button>
-    </DialogTrigger>
-    <DialogContent className="sm:min-w-[415px]">
-      <DialogHeader>
-        <DialogTitle>Agregar Nuevo Proveedor</DialogTitle>
-      <DialogDescription>Añadir nuevo proveedor</DialogDescription>
-      </DialogHeader>
+  <div>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogTrigger asChild>
+      <Button variant="default"className="w-full md:w-[180px]">Registrar Proveedor</Button>
+      </DialogTrigger>
+      <DialogContent >
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-            control={form.control}
-            name ="name"
-            render={({ field }) => (
-              <FormItem>
-              <FormLabel>Nombre </FormLabel>
-              <FormControl>
-                <Input placeholder="Ingrese el Nombre" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-            )}
-            />
+        <DialogHeader>
+          <DialogTitle>Agregar Nuevo Proveedor</DialogTitle>
+        <DialogDescription>Añadir nuevo proveedor</DialogDescription>
+        </DialogHeader>
+
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
           <FormField
-            control={form.control}
-            name ="company"
-            render={({ field }) => (
-              <FormItem>
-              <FormLabel>Empresa </FormLabel>
-              <FormControl>
-                <Input placeholder="Ingrese la empresa" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-            )}
-            />
-          <FormField
-            control={form.control}
-            name ="address"
-            render={({ field }) => (
-              <FormItem>
-              <FormLabel>Direccion</FormLabel>
-              <FormControl>
-                <Input placeholder="Ingrese la direccion" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-            )}
-            />
-          <FormField
-            control={form.control}
-            name ="email"
-            render={({ field }) => (
-              <FormItem>
-              <FormLabel>Correo </FormLabel>
-              <FormControl>
-                <Input placeholder="Ingrese el correo" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-            )}
-            />
-          <FormField
-            control={form.control}
-            name ="phone"
-            render={({ field }) => (
-              <FormItem>
-              <FormLabel>Telefono </FormLabel>
-              <FormControl>
-                <Input placeholder="Ingrese el telefono" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-            )}
-            />
-          <FormField
-            control={form.control}
-            name ="city"
-            render={({ field }) => (
-              <FormItem>
-              <FormLabel>Ciudad </FormLabel>
-              <FormControl>
-                <Input placeholder="Ingrese la ciudad" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-            )}
-            />
-          <DialogFooter>
-            <Button type="submit">Guardar cambios</Button>
-          </DialogFooter>
-        </form>
-      </Form>
-    </DialogContent>
-  </Dialog>
+              control={form.control}
+              name ="name"
+              render={({ field }) => (
+                <FormItem>
+                <FormLabel>Nombre </FormLabel>
+                <FormControl>
+                  <Input placeholder="Ingrese el Nombre" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+              )}
+              />
+            <FormField
+              control={form.control}
+              name ="company"
+              render={({ field }) => (
+                <FormItem>
+                <FormLabel>Empresa </FormLabel>
+                <FormControl>
+                  <Input placeholder="Ingrese la empresa" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+              )}
+              />
+            <FormField
+              control={form.control}
+              name ="address"
+              render={({ field }) => (
+                <FormItem>
+                <FormLabel>Dirección</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ingrese la direccion" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+              )}
+              />
+            <FormField
+              control={form.control}
+              name ="email"
+              render={({ field }) => (
+                <FormItem>
+                <FormLabel>Correo </FormLabel>
+                <FormControl>
+                  <Input placeholder="Ingrese el correo" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+              )}
+              />
+            <FormField
+              control={form.control}
+              name ="phone"
+              render={({ field }) => (
+                <FormItem>
+                <FormLabel>Teléfono </FormLabel>
+                <FormControl>
+                  <Input placeholder="Ingrese el telefono" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+              )}
+              />
+            <FormField
+              control={form.control}
+              name ="city"
+              render={({ field }) => (
+                <FormItem>
+                <FormLabel>Ciudad</FormLabel>
+                <FormControl>
+                  <Input placeholder="Ingrese la ciudad" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+              )}
+              />
+            <DialogFooter>
+              <Button type="submit" className="w-full mt-2" >Guardar Proveedor</Button>
+            </DialogFooter>
+          </form>
+        </Form>
+      </DialogContent>
+    </Dialog>
+  </div>
 )
 
 
