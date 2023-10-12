@@ -13,6 +13,21 @@ import * as z from 'zod'
 import useSWRMutation from 'swr/mutation'
 import { useToast } from "@/components/ui/use-toast"
 import { OrderCreate } from "@/app/sales/models/sale.models"
+import { useState } from "react"
+import { cn } from "@/lib/utils"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+import { Check, ChevronsUpDown } from "lucide-react"
 
 
 const formSchema = z.object({
@@ -30,6 +45,8 @@ export default function HeadTable() {
   const params = useParams()
   const {data:products} = useSWR(urlProducts, getProducts)
   const {data} = useSWR(`${urlSales}/${params.id}/orders`)
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState("")
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -57,22 +74,52 @@ export default function HeadTable() {
             render = {({field}) => (
               <FormItem className="w-full md:w-[200px]">
                 <FormLabel>Producto</FormLabel>
-                <FormControl>
-                  <div className="w-full xl:w-[200px]">
-                    <Select onValueChange={field.onChange}>
-                      <SelectTrigger className="uppercase">
-                        <SelectValue  placeholder='Producto' />
-                      </SelectTrigger>
-                      <SelectContent >
-                        {
-                          Array.isArray(products) && products.map((product) => (
-                            <SelectItem key={product.id} value={product.id} className="capitalize">{product.name}</SelectItem>
-                          ))
-                        }
-                      </SelectContent>
-                    </Select>
+                <div className="w-full xl:w-[200px]">
+                <Popover open={open} onOpenChange={setOpen}>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant="outline"
+                        role="combobox"
+                        className={cn(
+                          "w-[200px] justify-between",
+                          !field.value && "text-muted-foreground"
+                        )}
+                      >
+                        {field.value
+                          ? products?.find((product)=>product.id === field.value)?.name
+                          : "Seleccione producto"}
+                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      </Button>
+                    </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-[200px] p-0">
+                      <Command>
+                        <CommandInput placeholder="Buscar insumo..." />
+                        <CommandEmpty>Sin resultados.</CommandEmpty>
+                        <CommandGroup>
+                          {Array.isArray(products) && products.map((product) => (
+                            <CommandItem
+                              value={product.name}
+                              key={product.id}
+                              onSelect={() => {
+                                form.setValue("product_id", product.id)
+                              }}
+                            >
+                              <Check
+                                className={cn(
+                                  "mr-2 h-4 w-4",
+                                  product.id === field.value ? "opacity-100" : "opacity-0"
+                                )}
+                              />
+                              {product.name}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
                   </div>
-                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

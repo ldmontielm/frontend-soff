@@ -2,9 +2,6 @@
 import React from 'react'
 import { InfoSale, TableOrders } from './components'
 import { HeaderModule } from '../components'
-import { Order } from '../models/sale.models'
-import { getOrdersBySaleId, urlSales } from '../services/sale.services'
-import useSWR from 'swr'
 
 export default function Page({params}:{params: {id: string}}) {
 

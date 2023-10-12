@@ -71,7 +71,7 @@ export default function OrderUpdateForm({order, id_sale}: Props) {
                 <FormItem >
                   <FormLabel>Cantidad</FormLabel>
                   <FormControl>
-                    <Input id="amount_product" type="number" {...form.register("amount_product", {valueAsNumber: true})} className="col-span-3" defaultValue={order.amount_product} placeholder={order.amount_product.toString()}/>
+                    <Input id="amount_product" type="number" {...form.register("amount_product", {valueAsNumber: true})} className="col-span-3" onChange={field.onChange} defaultValue={order.amount_product} placeholder={order.amount_product.toString()}/>
                   </FormControl>
                   <FormDescription>
                     Digite la cantidad del producto.
@@ -86,7 +86,7 @@ export default function OrderUpdateForm({order, id_sale}: Props) {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input id="amount_product" type="number" placeholder="0" {...field} className="col-span-3 hidden" value={order.id} defaultValue={order.id} />
+                    <Input id="id_order" type="text" placeholder="0" {...field} className="col-span-3 hidden" value={order.id} defaultValue={order.id} />
                   </FormControl>
                   <FormMessage />
               </FormItem>

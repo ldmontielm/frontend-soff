@@ -90,15 +90,6 @@ export async function createClient(client:ClientCreate): Promise<Client> {
   }
 }
 
-export async function confirmSale(url: string, arg:SaleConfirm) {
-    try {
-      const res = await axios.put(url, arg)
-      return res.data
-    } catch (error) {
-      console.log(error)
-    }
-}
-
 // Services modified
 export async function fetcherPost<TData>(url: string, arg:TData){
   return axios.post(url, arg, {
@@ -116,6 +107,6 @@ export async function fetcherPut<TData>(url: string, arg: TData | undefined) {
   })
 }
 
-export async function DeleteOrder(url: string){
+export async function fetcherDelete(url: string){
   return axios.delete(url)
 }

@@ -5,12 +5,12 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { Order } from "@/app/sales/models/sale.models";
-import { DeleteOrder, urlSales } from "@/app/sales/services/sale.services";
+import { fetcherDelete, urlSales } from "@/app/sales/services/sale.services";
 import useSWR, {mutate} from 'swr'
 
 
 const DeleteOrderFetch = async (url: string) => {
-  return await DeleteOrder(url)
+  return await fetcherDelete(url)
 }
 
 interface Props {

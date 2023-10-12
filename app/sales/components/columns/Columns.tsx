@@ -18,6 +18,10 @@ import { Receipt, UploadFile } from ".."
 import { SeeDetail } from "../see-detail"
 export const columns: ColumnDef<Sale>[] = [
   {
+    accessorKey: "invoice_number",
+    header: "# Factura"
+  },
+  {
     accessorKey: 'client',
     header: ({column}) => {
       return (
@@ -36,7 +40,17 @@ export const columns: ColumnDef<Sale>[] = [
   },
   {
     accessorKey: 'sale_date',
-    header: "Fecha",
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Fecha
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       const date = new Date(row.getValue("sale_date"))
       const formatted = new Intl.DateTimeFormat(['ban', 'id']).format(date)
@@ -46,7 +60,17 @@ export const columns: ColumnDef<Sale>[] = [
   },
   {
     accessorKey: 'amount_order',
-    header: 'Ordenes',
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Ordenes
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       return <div>{row.getValue('amount_order')}</div>
     }
@@ -70,14 +94,34 @@ export const columns: ColumnDef<Sale>[] = [
   },
   {
     accessorKey: 'type_sale',
-    header: 'Tipo',
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Tipo
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       return <div className="capitalize">{row.getValue('type_sale') !== "" ?  row.getValue('type_sale') : "🔒 N/A" }</div>
     }
   },
   {
     accessorKey: 'total',
-    header: "Total",
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Total
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       const total = parseFloat(row.getValue("total"))
       const formatted = new Intl.NumberFormat("en-US", {
@@ -91,7 +135,17 @@ export const columns: ColumnDef<Sale>[] = [
   },
   {
     accessorKey: 'status',
-    header: "Estado",
+    header: ({column}) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Estado
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       return <div className="text-left">
       {

@@ -7,7 +7,9 @@ import useSWR from 'swr'
 import { urlSales } from '../../services/sale.services'
 
 export default function TableComponent() {
-  const {data: sales, isLoading, isValidating, error } = useSWR(urlSales)
+  const {data: sales, isLoading, error } = useSWR(urlSales)
+
+  
   return (
     <div> 
       <DataTable columns={columns}  data={sales || []} isLoading={isLoading} error={error}/>  
