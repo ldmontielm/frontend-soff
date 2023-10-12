@@ -14,7 +14,6 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import StepContent from '@mui/material/StepContent';
-// import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Input } from "@/components/ui/input"
@@ -22,17 +21,22 @@ import { Switch } from '@/components/ui/switch';
 import useSWR, {useSWRConfig} from 'swr';
 import toast from 'react-hot-toast';
 import { getPermissions } from '@/app/permissions/services/permissions';
-import { createRoles, getRole, urlRoles} from '../../services/roles.services';
-// import { mutate } from 'swr';
+import { getRole, urlRoles,UpdateRoles} from '../../services/roles.services';
+import { createRole } from '../../models/roles.models';
 
-export default function AddRole() {
+interface Props{
+  role:createRole
+  id_role: string
+}
+
+export default function UpdateTable({role, id_role}: Props) {
   
   const {data:permissions} = useSWR('http://localhost:8000/permission/get-permision', getPermissions)
   const {data:roles} = useSWR('http://localhost:8000/role/get-role', getRole)
   const [activeStep, setActiveStep] = useState(0);
   const [open, setOpen]= useState(false)
   const { mutate } = useSWRConfig()
-  const [rolename, setRolname] = useState("")
+  const [rolename, setRolname] = useState(id_role)
   const [assingPermissions, setAssingPermission] = useState<any[]>([])
   const [rolenameInput, setRolenameInput] = useState("");
 
@@ -97,9 +101,7 @@ export default function AddRole() {
                       }else{
                         let listaNewPermissions = assingPermissions.filter((id) => id.id_permission !== permission.id)
                         setAssingPermission(listaNewPermissions)
-                        // setAssingPermission()
                       }
-                      // e ? setAssingPermission([...assingPermissions, permission.id]) : setAssingPermission([assingPermissions.filter(permission  => permission !== permission.id)])
                       }} />
                     <label htmlFor="">{permission.name}</label>
                   </div>
@@ -113,7 +115,7 @@ export default function AddRole() {
                 disabled={assingPermissions.length === 0}
                 variant='default'
                 onClick={() => {
-                  toast.promise(createRoles(rolename, assingPermissions), {
+                  toast.promise(UpdateRoles(rolename, assingPermissions), {
                     success: "Rol agregado",
                     error: "No se pudo agregar el rol",
                     loading: "Agregando rol"
@@ -132,10 +134,8 @@ export default function AddRole() {
               </Button>
 
                   <Button
-                    // disabled={assingPermissions.length === 0}
                     onClick={handleBack}
                     className='m-2'
-                    // sx={{ mt: 1, mr: 1 }}
                   >
                     Volver
                   </Button>

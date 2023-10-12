@@ -130,12 +130,18 @@ export const columns: ColumnDef<Role>[] = [
                  role={role}
                  onUpdateStatus={() => statusnew()}
                />
-
-               <Delete id_role={role.id}/>
+              {
+                role.status === true ?(
+                  
+                  <Delete id_role={role.id}/>
+                  
+                ): null
+              }
 
              </div>
 
-           ) : null}
+           ) : null
+           }
 
          </DropdownMenuContent>
        </DropdownMenu>
