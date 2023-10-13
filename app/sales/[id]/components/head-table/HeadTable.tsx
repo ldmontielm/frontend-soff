@@ -1,5 +1,5 @@
 "use client" 
-import { getProducts, urlProducts, urlSales, getOrdersBySaleId, fetcherPost } from "@/app/sales/services/sale.services"
+import { urlProducts, urlSales, fetcherPost } from "@/app/sales/services/sale.services"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -28,6 +28,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Check, ChevronsUpDown } from "lucide-react"
+import { Product } from "@/app/products/models/product.models"
 
 
 const formSchema = z.object({
@@ -43,10 +44,12 @@ const AddOrderFetch = async (url: string, body: OrderCreate) => {
 
 export default function HeadTable() {
   const params = useParams()
-  const {data:products} = useSWR(urlProducts, getProducts)
+  const {data:products} = useSWR(urlProducts)
   const {data} = useSWR(`${urlSales}/${params.id}/orders`)
   const [open, setOpen] = useState(false)
   const [value, setValue] = useState("")
+  
+  console.log(products)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -87,7 +90,7 @@ export default function HeadTable() {
                         )}
                       >
                         {field.value
-                          ? products?.find((product)=>product.id === field.value)?.name
+                          ? products.find((product:Product)=>product.id === field.value)?.name
                           : "Seleccione producto"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>

@@ -2,7 +2,7 @@
 
 import axios from "axios"
 import { useToast } from "@/components/ui/use-toast"
-import { getValidationErrors } from "../utils/get-validation-error"
+import { getValidationErrors } from "@/utilities"
 
 export const AxiosInterceptors = () => {
     const { toast } = useToast()
