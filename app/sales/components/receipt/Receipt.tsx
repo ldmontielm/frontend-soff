@@ -2,13 +2,16 @@
 import React from 'react'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
-import { urlSales, getOrdersBySaleId, getSalesById } from '../../services/sale.services'
+import { urlSales } from '../../services/sale.services'
 import useSWR from 'swr'
 import { convertDate } from '../../utils'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
+import { Order } from '../../models/sale.models'
+
 interface Props {
   id: string
 }
+
 interface OrderInvoice {
   product: string
   amount: number
@@ -16,8 +19,11 @@ interface OrderInvoice {
   total: number
 }
 export default function Receipt({id}:Props) {
-  const {data:orders} = useSWR(`${urlSales}/${id}/orders`, getOrdersBySaleId)
-  const {data:sale} = useSWR(`${urlSales}/${id}`, getSalesById)
+  const {data:orders} = useSWR<Order[]>(`${urlSales}/${id}/orders`)
+  const {data:sale} = useSWR(`${urlSales}/${id}`)
+
+
+
   const generateReceipt = () => {
     const doc = new jsPDF()
     doc.text('Factura de Venta', 15, 20);
@@ -43,14 +49,11 @@ export default function Receipt({id}:Props) {
     // Calcular el total
     // const total = data.reduce((sum, [, , , total]) => sum + total, 0);
 
-    // Guardar o mostrar el PDF (puedes personalizar esta parte según tus necesidades)
     doc.save(`receipt-${id}.pdf`);
   }
 
   return (
     <div>
-      
-      {/* <button onClick={() => generateReceipt()}>Descargar pdf</button> */}
       <div onClick={() => generateReceipt()} className='flex items-center px-2 cursor-default rounded hover:bg-neutral-100 select-none text-sm py-1.5 transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50'>
           <ArrowDownOnSquareIcon className="w-4 h-4 mr-2"/> Descargar factura
       </div>

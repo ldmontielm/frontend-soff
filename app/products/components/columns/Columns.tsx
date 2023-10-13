@@ -2,6 +2,7 @@
 
 import {ColumnDef} from "@tanstack/react-table"
 import { Product } from '../../models/product.models'
+import { ArrowUpDown } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
@@ -20,14 +21,38 @@ import Link from 'next/link'
 export const columns: ColumnDef<Product>[] = [
     {
         accessorKey: 'name',
-        header: "Nombre",
+        header: ({ column }) => {
+            return (
+              <Button
+              className="items-start"
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              >
+                Nombre
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            )
+        },
         cell: ({row}) => {  
             return <div className="font-medium">{row.getValue("name")}</div>
         }
     },   
     {
         accessorKey: 'price',
-        header: () => <div className="text-left">Costo</div>,
+        header: ({ column }) => {
+            return (
+              <Button
+                className="items-start"
+                variant="ghost"
+                onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+              >
+                Costo
+                <ArrowUpDown className="ml-2 h-4 w-4" />
+              </Button>
+            )
+        },
+
+        // header: () => <div className="text-left">Costo</div>,
         cell: ({row}) => {
         const costo = parseFloat(row.getValue("price"))
         const formatted = new Intl.NumberFormat("en-US", {
@@ -53,6 +78,16 @@ export const columns: ColumnDef<Product>[] = [
         return <div className="text-left font-medium">{formatted}</div>
         }
     },
+    {
+        accessorKey: 'register_date',
+        header: "Fecha de registro",
+        cell: ({row}) => {
+          const date = new Date(row.getValue("register_date"))
+          const formatted = new Intl.DateTimeFormat(['ban', 'id']).format(date)
+    
+          return <div className="font-medium">{formatted}</div>
+        }
+      },
     { 
         accessorKey: 'status',
         header: () => <div className="text-right">Estado</div>,

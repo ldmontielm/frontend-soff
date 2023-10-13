@@ -81,7 +81,7 @@ function onSubmit(values: z.infer<typeof formSchema>){
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="default">Agregar Usuario</Button>
+        <Button variant="default">Registrar Usuario</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

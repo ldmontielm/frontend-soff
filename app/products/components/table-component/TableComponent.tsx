@@ -12,11 +12,7 @@ export default function TableComponent() {
 
   return (
     <div>
-      {
-        Array.isArray(products) && (
-          <DataTable columns={columns}  data={products}/>
-        )
-      }
+      <DataTable columns={columns}  data={products || []} isLoading={isLoading} error={error}/>
     </div>
   )
 }

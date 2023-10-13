@@ -108,7 +108,7 @@ router.refresh()
           <DialogTitle className="flex justify-center pb-2">Editar usuario</DialogTitle>
           <DialogDescription>
           Ya puedes actualizar la información del usuario, <span className="capitalize font-semibold text-gray-600 pr-2 pl-2" >{user.name}</span>
-           recuerda que todos los campos a continuación son requeridos.
+          recuerda que todos los campos a continuación son requeridos.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -126,7 +126,7 @@ router.refresh()
               </FormItem>
               )}
             />
-           <FormField
+          <FormField
             control={form.control}
             name ="document_type"
             render={({ field }) => (
@@ -189,7 +189,7 @@ router.refresh()
               </FormItem>
               )}
             />
-           
+
             <FormField 
               control={form.control}
               name="password"
@@ -203,9 +203,9 @@ router.refresh()
               </FormItem>
               )}
             />
-           
+          
             
-         <FormField
+        <FormField
           control={form.control}
           name="id_role"
           render={({ field }) => (

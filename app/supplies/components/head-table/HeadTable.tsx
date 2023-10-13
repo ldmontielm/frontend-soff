@@ -14,6 +14,14 @@ import {
 } from "@/components/ui/form"
 
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -38,10 +46,10 @@ import useSWR, { mutate, useSWRConfig } from "swr";
 
 
 const fromSchema = z.object({
-  name: z.string().min(2, {message: 'El nombre debe tener más de dos caracteres'}),
-  price: z.number().min(2, {message: 'Debe tener mas de dos caracteres'}),
-  quantity_stock: z.number().min(2, {message: 'Debe tener mas de dos caracteres'}),
-  unit_measure: z.string().min(2, {message: 'El nombre debe tener más de dos caracteres'}),
+  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}),
+  price: z.string({required_error: "El campo es requerido"}).transform(Number),
+  quantity_stock: z.string({required_error: "El campo es requerido"}).transform(Number),
+  unit_measure: z.string({required_error: "Seleccioné una unidad de medida"}),
 })
 
 
@@ -82,10 +90,10 @@ export default function HeadTable() {
 
 
 return (
-  
+  <div>
   <Dialog open={open} onOpenChange={setOpen}>
     <DialogTrigger asChild>
-    <Button variant="default" className="px-4 py-2 m-2">Agregar</Button>
+    <Button variant="default" className="w-full md:w-[180px]">Registrar insumo</Button>
     </DialogTrigger>
     <DialogContent className="sm:min-w-[415px]">
       <DialogHeader>
@@ -115,7 +123,7 @@ return (
               <FormItem>
               <FormLabel>Precio </FormLabel>
               <FormControl>
-                <Input placeholder="Ingrese el precio" {...form.register("price", {valueAsNumber: true})} />
+                <Input placeholder="Ingrese el precio" type="number" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -128,32 +136,42 @@ return (
               <FormItem>
               <FormLabel>Cantidad en stock </FormLabel>
               <FormControl>
-              <Input placeholder="Ingrese la cantidad en stock" {...form.register("quantity_stock", {valueAsNumber: true})} />
+              <Input placeholder="Ingrese la cantidad en stock" type="number" {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
             )}
             />
           <FormField
-            control={form.control}
-            name ="unit_measure"
-            render={({ field }) => (
-              <FormItem>
-              <FormLabel>Unidad de medida </FormLabel>
-              <FormControl>
-                <Input placeholder="Ingrese la Unidad de medida" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-            )}
-            />
+          control={form.control}
+          name="unit_measure"
+          render={({ field }) => (
+          <FormItem>
+            <FormLabel>Unidad de medida</FormLabel>
+          <FormControl>
+        <Select onValueChange={field.onChange}>
+          <SelectTrigger className="w-default">
+            <SelectValue placeholder="Seleccioné" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="Kilosgramos">Kilogramos</SelectItem>
+            <SelectItem value="Gramos">Gramos</SelectItem>
+            <SelectItem value="Unidades">Unidades</SelectItem>
+          </SelectContent>
+        </Select>
+        </FormControl>
+        <FormMessage />
+      </FormItem>
+  )}
+/>
           <DialogFooter>
-            <Button type="submit">Guardar cambios</Button>
+            <Button type="submit" className="w-full mt-2">Registrar Insumo</Button>
           </DialogFooter>
         </form>
       </Form>
     </DialogContent>
   </Dialog>
+  </div>
 )
 
 
