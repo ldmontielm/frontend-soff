@@ -37,7 +37,8 @@ import {
 import {HeadTable as HeadTableSupply} from "@/app/supplies/components"
 
 const formPurchaseSchema = z.object({
-  provider: z.string()
+  provider: z.string(),
+  invoice_number: z.string()
 })
 
 interface Props{
@@ -54,20 +55,22 @@ export default function InfoPurchase({total, id}:Props) {
   const formPurchase = useForm<z.infer<typeof formPurchaseSchema>>({
     resolver: zodResolver(formPurchaseSchema),
     defaultValues: {
-      provider: ''
+      provider: '',
+      invoice_number: ''
     }
   })
 
   async function onSubmitPurchase(values: z.infer<typeof formPurchaseSchema>){
 
     const purchase = {
-      provider: values.provider
+      provider: values.provider,
+      invoice_number: values.invoice_number
     }
     
-    toast.promise(ConfirmPurchase(id, values.provider),{
+    toast.promise(ConfirmPurchase(id, values.provider, values.invoice_number),{
       loading: 'Agregando compra...',
       success: 'Compra confirmada',
-      error: 'Error when fetching'
+      error: 'No se puedo consolidar la compra'
     })
     router.push('/purchases')
 
@@ -94,6 +97,19 @@ export default function InfoPurchase({total, id}:Props) {
         <form onSubmit={formPurchase.handleSubmit(onSubmitPurchase)} className='p-4 h-full flex flex-col justify-between'>
           <div>
           <div className='mb-5'>
+          <FormField 
+            control={formPurchase.control}
+            name="invoice_number"
+            render ={({field}) => (
+              <FormItem>
+                <FormLabel>Número de Factura:</FormLabel>
+                <FormControl >
+                    <Input placeholder='Número de factura'{...field} required/>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
           <FormField
             control={formPurchase.control}
             name="provider"
