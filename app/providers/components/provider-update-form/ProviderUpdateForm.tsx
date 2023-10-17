@@ -18,16 +18,16 @@ import { urlProvider } from '../../services/provider.services'
 import { OrderContextInterface } from "@/app/sales/models/sale.models"
 import useSWR, { mutate, useSWRConfig } from "swr";
 
-
-
 const formSchema = z.object({
-  name: z.string().min(2, {message: 'El nombre debe tener más de dos caracteres'}),
-  company: z.string().min(2, {message: 'Debe tener mas de dos caracteres'}),
-  address: z.string().min(2, {message: 'Debe tener mas de dos caracteres'}),
-  email: z.string().email({message: "Correo no valido"}),
-  phone: z.string().min(2, {message: 'Debe tener mas de dos caracteres'}),
-  city: z.string().min(2, {message: 'Debe tener mas de dos caracteres'}),
+  nit: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nit del proveedor'}),
+  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del proveedor'}),
+  company: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre de la empresa'}),
+  address: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese una dirección'}),
+  // email: z.string({required_error: "El campo es requerido"}).email({message: "Correo no valido"}),
+  phone: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese un teléfono'}),
+  city: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese una ciudad'}),
   id_provider:z.string().optional(),
+
 })
 
 interface Props{
@@ -44,10 +44,11 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
     resolver: zodResolver(formSchema),
     defaultValues: {
       id_provider:provider.id,
+      nit: provider.nit,
       name: provider.name,
       company: provider.company,
       address: provider.address,
-      email: provider.email,
+      // email: provider.email,
       phone: provider.phone,
       city: provider.city,
     },
@@ -79,13 +80,29 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Editar proveedor</DialogTitle>
+          <DialogTitle>Editar Proveedor</DialogTitle>
           <DialogDescription>
-            Puedes cambiar la informacion del proveedor <span className="capitalize font-semibold text-gray-600">{provider.name}</span>
+            Puedes cambiar la información del proveedor <span className="capitalize font-semibold text-gray-600">{provider.name}</span>
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}> 
+          <FormField 
+              control={form.control}
+              name="nit"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>NIT</FormLabel>
+                  <FormControl>
+                    <Input id="nit" type="string" placeholder="" {...field} className="col-span-3" />
+                  </FormControl>
+                  {/* <FormDescription>
+                    Digite el NIT de la empresa.
+                  </FormDescription> */}
+                  <FormMessage />
+              </FormItem>
+              )}
+            />
             <FormField 
               control={form.control}
               name="name"
@@ -95,9 +112,9 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
                   <FormControl>
                     <Input id="name" type="string" placeholder="" {...field} className="col-span-3" />
                   </FormControl>
-                  <FormDescription>
+                  {/* <FormDescription>
                     Digite el nombre del proveedor.
-                  </FormDescription>
+                  </FormDescription> */}
                   <FormMessage />
               </FormItem>
               )}
@@ -111,9 +128,9 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
                   <FormControl>
                     <Input id="company" type="string" placeholder="" {...field} className="col-span-3" />
                   </FormControl>
-                  <FormDescription>
-                    Digite la empresa del proveedor.
-                  </FormDescription>
+                  {/* <FormDescription>
+                    Digite el nombre de la empresa.
+                  </FormDescription> */}
                   <FormMessage />
               </FormItem>
               )}
@@ -127,14 +144,14 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
                   <FormControl>
                     <Input id="address" type="string" placeholder="" {...field} className="col-span-3" />
                   </FormControl>
-                  <FormDescription>
+                  {/* <FormDescription>
                     Digite la dirección del proveedor.
-                  </FormDescription>
+                  </FormDescription> */}
                   <FormMessage />
               </FormItem>
               )}
             />
-            <FormField 
+            {/* <FormField 
               control={form.control}
               name="email"
               render={({ field }) => (
@@ -149,7 +166,7 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
                   <FormMessage />
               </FormItem>
               )}
-            />
+            /> */}
             <FormField 
               control={form.control}
               name="phone"
@@ -159,9 +176,9 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
                   <FormControl>
                     <Input id="phone" type="string" placeholder="" {...field} className="col-span-3" />
                   </FormControl>
-                  <FormDescription>
+                  {/* <FormDescription>
                     Digite el telefono del proveedor.
-                  </FormDescription>
+                  </FormDescription> */}
                   <FormMessage />
               </FormItem>
               )}
@@ -175,9 +192,9 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
                   <FormControl>
                     <Input id="city" type="string" placeholder="" {...field} className="col-span-3" />
                   </FormControl>
-                  <FormDescription>
+                  {/* <FormDescription>
                     Digite la ciudad del proveedor.
-                  </FormDescription>
+                  </FormDescription> */}
                   <FormMessage />
               </FormItem>
               )}
