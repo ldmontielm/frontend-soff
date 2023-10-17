@@ -1,6 +1,6 @@
 'use client'
-import { Order, OrderContextInterface } from '@/app/sales/models/sale.models'
-import { confirmSale, getGeneralClient, urlSales, getOrdersBySaleId } from '@/app/sales/services/sale.services'
+import { Order, Sale, SaleConfirm } from '@/app/sales/models/sale.models'
+import { urlSales, fetcherPut, fetcherDelete } from '@/app/sales/services/sale.services'
 import { convertToCOP } from '@/app/sales/utils'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -8,7 +8,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { BanknotesIcon, CreditCardIcon } from '@heroicons/react/24/outline'
+import { BanknotesIcon, CreditCardIcon, HashtagIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useContext, useState } from 'react'
@@ -16,9 +16,9 @@ import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import useSWR from 'swr'
 import * as z from 'zod'
-import { OrderContext } from "../../context/orders-context/orderContext"
 import { InfoSaleHeader } from '..'
-
+import { useToast } from "@/components/ui/use-toast"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 const formSaleSchema = z.object({
   payment_method: z.enum(['transferencia', 'efectivo']),
@@ -43,9 +43,19 @@ const clculateTotal = (orders: Array<Order>) => {
   return total
 }
 
+const ConfirmSaleFetch = async (url: string, arg: SaleConfirm) => {
+  return await fetcherPut(url, arg)
+}
+
+const CancelSaleFetch = async (url: string) => {
+  return await fetcherDelete(url)
+}
+
 export default function InfoSale({id}:Props) {
   const {data:orders} = useSWR(`${urlSales}/${id}/orders`)
+  const {data: sale} = useSWR<Sale>(`${urlSales}/${id}`)
   const router = useRouter()
+  const { toast } = useToast()
 
   const formSale = useForm<z.infer<typeof formSaleSchema>>({
     resolver: zodResolver(formSaleSchema),
@@ -73,23 +83,11 @@ export default function InfoSale({id}:Props) {
 
   
     if(values.type_sale === 'pedido' &&  (values.name === '' || values.direction === '' || values.email === '' || values.phone === '' )){
-      toast.error('La información del cliente es necesaria.')
+      toast({variant: 'destructive', title: "Campos del cliente requeridos", description: "Todos los campos de cliente son necesarios para realizar el pedido."})
     }else{
-      if (values.type_sale === 'fisico'){
-        toast.promise(confirmSale(`${urlSales}/${id}/confirm-sale`, sale), {
-          loading: "Estamos en proceso",
-          success: "Venta confirmada correctamente",
-          error: "No se pudo confirmar la venta"
-        })
-        router.push('/sales')
-      }else{
-        toast.promise(confirmSale(`${urlSales}/${id}/confirm-sale`, sale), {
-          loading: "Estamos en proceso",
-          success: "Venta confirmada correctamente",
-          error: "No se pudo confirmar la venta"
-        })
-        router.push('/sales')
-      }
+      const res = await ConfirmSaleFetch(`${urlSales}/${id}/confirm-sale`, sale)
+      toast({variant: 'default', title: "Venta confirmada correctamente", description: "Se ha confirmado con exito la venta, mira el historial en la sección de ventas."})
+      router.push('/sales')
     }
   }
   
@@ -97,6 +95,15 @@ export default function InfoSale({id}:Props) {
     <div className='w-full'>
       <InfoSaleHeader />
       <hr />
+      <div className='p-4'>
+        <Alert>
+          <HashtagIcon className="h-4 w-4" />
+          <AlertTitle>Factura</AlertTitle>
+          <AlertDescription>
+            {sale?.invoice_number}
+          </AlertDescription>
+        </Alert>
+      </div>
       <Form {...formSale}>
         <form onSubmit={formSale.handleSubmit(onSubmitSale)} className='p-4 h-full flex flex-col justify-between'>
           <div>
@@ -124,7 +131,9 @@ export default function InfoSale({id}:Props) {
             )}
           />
           {
-            (formSale.getValues().type_sale === 'pedido' && formSale.getValues().name === "") ? ( 
+            (formSale.getValues().type_sale === 'pedido' && (formSale.getValues().name === "" || formSale.getValues().email === ""
+            || formSale.getValues().phone === "" || formSale.getValues().direction === "")
+            ) ? ( 
               <div>
                 <FormField 
                   control={formSale.control}
@@ -225,13 +234,17 @@ export default function InfoSale({id}:Props) {
             </Button>
           </div>
 
-          <div className='mt-4 space-y-2'>
-            <Button className="w-full" type='submit' variant='outline' >
-              Cancelar venta
-            </Button>
-          </div>
         </form>
       </Form>
+      <div className='space-y-2 px-4 pb-4'>
+        <Button className="w-full" variant='outline' onClick={async () => {
+          const res = await CancelSaleFetch(`${urlSales}/${id}/cancel-sale`)
+          toast({variant: 'default', title: "Venta eliminada correctamente", description: "Se ha eliminado la venta con éxito."})
+          router.push("/sales")
+        }}>
+          Cancelar venta
+        </Button>
+      </div>
 
     </div>
   )

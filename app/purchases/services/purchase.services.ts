@@ -92,9 +92,9 @@ export async function getProviderById(url: string){
     }
 }
 
-export async function ConfirmPurchase(id:string, provider_id:string){
+export async function ConfirmPurchase(id:string, provider_id:string, ninvoice:string ){
     try{
-        const res = await axios.put(`${urlPurchases}/${id}/confirm-purchase?provider_id=${provider_id}`)
+        const res = await axios.put(`${urlPurchases}/${id}/confirm-purchase?provider_id=${provider_id}&ninvoice=${ninvoice}`)
         return res.data
     } catch (error) {
         throw new Error(`Error: ${error}`);
@@ -128,11 +128,3 @@ export async function DeletePurchase(id_purchase: string){
     }
 }
 
-// export async function changeStatus(id_purchase:string) {
-//     try {
-//         const res = await axios.put(`${urlPurchases}/${id_purchase}/change_status`)
-//         return res.data.status
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }

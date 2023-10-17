@@ -109,6 +109,7 @@ export default function SeeDetail({purchaseId, purchase}:Props) {
               <div className='w-full text-center mb-1 p-2'>
                 <p className='font-bold'>Detalles de la compra</p>
                 <p className='text-sm'>Aquí puedes ver el detalle de cada compra</p>
+                <p className='text-sm'>{purchase.invoice_number}</p>
               </div>
               <hr />
               <div>
@@ -124,9 +125,8 @@ export default function SeeDetail({purchaseId, purchase}:Props) {
                   
                 </div>
                 <div className='my-3 w-full text-center'>
-                <p className='font-bold text-sm'>Fecha</p>
+                  <p className='font-bold text-sm'>Fecha</p>
                   <p className=' text-sm text-gray-400'>{purchase.purchase_date}</p>
-                  
                 </div>
                 </div>
               </div>

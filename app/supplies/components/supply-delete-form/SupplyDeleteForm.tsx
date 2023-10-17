@@ -38,7 +38,7 @@ interface Props {
   id_supply: string
 }
 
-export default function SupplyDeleteForm({ supply, id_supply }: Props) {
+export default function SupplyByIdDeleteForm({ supply, id_supply }: Props) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({

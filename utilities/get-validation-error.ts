@@ -1,9 +1,9 @@
-import { TypeWithKey } from "../models/type-with-key";
-
 interface ErrorCode {
     title: string
     message: string
 }
+
+export type TypeWithKey<T> = {[key: string]: T}
 
 export const getValidationErrors = (errorCode: string) => {
     const codeMatcher:TypeWithKey<ErrorCode> = {

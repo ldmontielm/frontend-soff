@@ -22,7 +22,7 @@ export default function Receipt({purchaseId, purchase}:Props) {
   const {data:orders} = useSWR(`${urlPurchases}/${purchaseId}/orders`, getOrdersByPurchaseId)
   const generateReceipt = () => {
     const doc = new jsPDF()
-    doc.text('Factura de Compra', 15, 20);
+    doc.text(`N° Factura: ${purchase !== undefined ? purchase?.invoice_number : "No hay factura"}`, 15, 20);
 
     // Datos del cliente y fecha
     doc.text(`Proveedor: ${purchase !== undefined ? purchase?.provider : "No hay Proveedor"}`, 150, 20);

@@ -3,14 +3,14 @@
 import axios, { AxiosRequestConfig } from 'axios'
 import React from 'react'
 import { SWRConfig } from 'swr'
-
-
+import { AxiosInterceptors } from '@/interceptors/axios.interceptors'
 
 interface Props {
   children: React.ReactNode
 }
 
 export default function SwrContextProvider({children}: Props) {
+  AxiosInterceptors()
   return (
     <SWRConfig value={{
       refreshInterval: 3000,

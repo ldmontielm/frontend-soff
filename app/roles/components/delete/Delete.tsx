@@ -19,18 +19,23 @@ import { getPermissionRole } from '../../services/roles.services'
 import { useState } from 'react'
 import { deleteRole } from '../../services/roles.services'
 import toast from 'react-hot-toast'
+// import { mutate } from 'swr'
 import { Trash } from 'lucide-react'
-import { mutate } from 'swr'
 import { describe } from 'node:test'
+import { useSWRConfig } from 'swr'
 interface Props {
     id_role: string
 }
 
 
 export default function Delete({ id_role }: Props) {
-    console.log(id_role)
+    const [open, setOpen]= useState(false)
+    const { mutate } = useSWRConfig()
+
+
+
     return (
-        <AlertDialog >
+        <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger asChild>
                 <Button variant="outline">
                     <Trash /><span>Eliminar</span>
@@ -54,6 +59,7 @@ export default function Delete({ id_role }: Props) {
                                 error: "No se pudo eliminar el rol",
                                 loading: "Eliminando rol"
                             })
+                            setOpen(false)
                             mutate(`${urlRoles}/get-role`)
                         }}>
                             <span>Eliminar</span>

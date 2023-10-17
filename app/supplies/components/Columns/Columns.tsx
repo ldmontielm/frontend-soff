@@ -1,14 +1,27 @@
 'use client'
-
 import {ColumnDef} from "@tanstack/react-table"
 import { Supply } from "../../models/supply.models"
 import { Badge } from "@/components/ui/badge"
-import SupplyUpdateForm from "../supply-update-form/SupplyUpdateForm"
-// import { SupplyDeleteForm } from ".."
+import SupplyUpdateForm from "../supply-update-form/SupplyUpdateForm" 
+import SupplyByIdDeleteForm from "../supply-delete-form/SupplyDeleteForm"
 import useSWR from "swr"
 import { useState } from "react"
 import { useEffect } from "react"
 import SwitchDemo from "../switcht/SwichtDemo"
+import {
+  ColumnFiltersState,
+  SortingState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  
+} from "@tanstack/react-table"
+
+import { ArrowUpDown} from "lucide-react"
+
 import {
   Table,
   TableBody,
@@ -17,6 +30,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
+  
 } from "@/components/ui/table"
 import {
   DropdownMenu,
@@ -28,6 +42,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
 import { getSupplies, urlSupply } from "../../services/supply.services"
+import { Column } from "jspdf-autotable"
 
 export default function Statusnew(){
   const {data: supplies, isLoading, error} = useSWR(urlSupply, getSupplies)
@@ -50,38 +65,94 @@ const updateSupplyStatus = (id_supply:string, newStatus:boolean) =>{
 }
 }
 
+
 export const columns: ColumnDef<Supply>[] = [
+  
+  
   {
     accessorKey: 'name',
-    header: 'Nombre',
+    header: ({ column }) => {
+      return (
+        <Button
+        className="w-fit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Nombre
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       return <div>{row.getValue('name')}</div>
     }
   },
   {
     accessorKey: 'price',
-    header: 'Precio',
+    header: ({ column }) => {
+      return (
+        <Button className="w-fit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          precio
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       return <div>{row.getValue('price')}</div>
     }
   },
   {
     accessorKey: 'quantity_stock',
-    header: 'Cantidad_Stock',
+    header: ({ column }) => {
+      return (
+        <Button className="w-fit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Cantidad
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       return <div>{row.getValue('quantity_stock')}</div>
     }
   },
   {
     accessorKey: 'unit_measure',
-    header: 'Unidad_Medida',
+    header: ({ column }) => {
+      return (
+        <Button className="w-fit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Unidad de medida
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({row}) => {
       return <div>{row.getValue('unit_measure')}</div>
+      
+      
     }
   },
   {
     accessorKey: "status",
-    header: "Estado",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Estado
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
     cell: ({ row }) => {
       const supply = row.original
       return <div>
@@ -99,7 +170,7 @@ export const columns: ColumnDef<Supply>[] = [
                   <DropdownMenuLabel>Acciones</DropdownMenuLabel>
                   <TableCell className="flex items-center gap-2">
                 <SupplyUpdateForm supply={supply} id_supply={supply.id} /><span>Editar</span>
-                {/* <SupplyDeleteForm supply={supply} id_supply={supply.id}/> */}
+                <SupplyByIdDeleteForm supply={supply} id_supply={supply.id}/><span>Eliminar</span>
                 </TableCell>
                   <SwitchDemo 
                     id_supply={supply.id}

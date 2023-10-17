@@ -1,5 +1,5 @@
 import axios from "axios";
-import { PermissionRole, Role, createPermissionRole, createRole } from "../models/roles.models";
+import { PermissionRole, Role, createPermissionRole, createRole} from "../models/roles.models";
 
 export const urlRoles= 'http://localhost:8000/role'
 export const urlPermissionRole= 'http://localhost:8000/role'
@@ -35,24 +35,35 @@ export async function createPermissionRole(permissionrole : createPermissionRole
     } catch (error) {
         throw new Error(`Error: ${error}`)
     }
-  }
-  
-  export async function createRole(nombre_role: string, assingPermissions: any[]){
+}
+
+export async function createRoles(nombre_role: string, assingPermissions: any[]){
     try {
-      const res = await axios.post(`http://localhost:8000/role/post-permissions/${nombre_role}`, assingPermissions)
-      return res.data
+        const res = await axios.post(`http://localhost:8000/role/post-permissions/${nombre_role}`, assingPermissions)
+        return res.data
     } catch (error) {
-      return null;
+        return null;
     }
 }
-  export async function deleteRole(id_role: string){
+export async function deleteRole(id_role: string){
     try {
-      const res = await axios.delete(`${urlRoles}/${id_role}/delete-role`)
-      return res.data
+        const res = await axios.delete(`${urlRoles}/${id_role}/delete-role`)
+        return res.data
     } catch (error) {
-      return null;
+        return null;
     }
 }
+
+// ---------------UPDATE ROL-------------------------------------------
+export async function UpdateRoles(id_role:string, user:createRole): Promise<createRole[]>{
+    try {
+        const res = await axios.put(`${urlRoles}/update-role/${id_role}`,user)
+        return res.data
+    } catch (error) {
+        throw new Error(`Error: ${error}`)
+    }
+}
+// ----------------------------------------------------------------
 
 export async function updateUser(role : createRole): Promise<Role>{
     try {
@@ -61,9 +72,9 @@ export async function updateUser(role : createRole): Promise<Role>{
     } catch (error) {
         throw new Error(`Error: ${error}`)
     }
-  }
+}
 
-  export async function UpdateStatusRole(id_role:string){
+export async function UpdateStatusRole(id_role:string){
     try {
         const res = await axios.put(`${urlRoles}/${id_role}/status-update-role`)
         return res.data 
@@ -71,7 +82,7 @@ export async function updateUser(role : createRole): Promise<Role>{
         console.log(error)
     }
 
-  }
+}
 
 
 //   ----------------------------------Permissions------------------------------------

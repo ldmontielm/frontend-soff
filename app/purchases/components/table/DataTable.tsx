@@ -74,13 +74,18 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
     }
   })
 
+
+
+
+
+
   return (
     <div>
       <div className='w-full flex flex-col md:flex-row items-center py-4 gap-3 justify-between'>
         <div className='w-full flex flex-col md:flex-row items-center gap-3'>
           <Input
             placeholder="Filtrar por proveedor..."
-            value={(table.getColumn("provider")?.getFilterValue() as string)  ?? ""}
+            value={(table.getColumn("provider")?.getFilterValue() as string)  ?? "" }
             onChange={(event) =>
               table.getColumn("provider")?.setFilterValue(event.target.value)
             }
@@ -109,6 +114,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                           column.toggleVisibility(!!value)
                         }>
                       {
+                        column.id === 'invoice_number' ? 'Factura':
                         column.id === 'purchase_date' ? 'Fecha' :
                         column.id === 'amount_order' ? 'Ordenes' :
                         column.id === 'provider' ? 'Proveedor' :

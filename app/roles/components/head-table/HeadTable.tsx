@@ -22,16 +22,20 @@ import { Switch } from '@/components/ui/switch';
 import useSWR, {useSWRConfig} from 'swr';
 import toast from 'react-hot-toast';
 import { getPermissions } from '@/app/permissions/services/permissions';
-import { createRole, getRole, urlRoles} from '../../services/roles.services';
+import { createRoles, getRole, urlRoles} from '../../services/roles.services';
+// import { mutate } from 'swr';
 
 export default function AddRole() {
+  
   const {data:permissions} = useSWR('http://localhost:8000/permission/get-permision', getPermissions)
   const {data:roles} = useSWR('http://localhost:8000/role/get-role', getRole)
   const [activeStep, setActiveStep] = useState(0);
   const [open, setOpen]= useState(false)
+  const { mutate } = useSWRConfig()
   const [rolename, setRolname] = useState("")
   const [assingPermissions, setAssingPermission] = useState<any[]>([])
-  const {mutate} = useSWRConfig()
+  const [rolenameInput, setRolenameInput] = useState("");
+
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
@@ -43,6 +47,7 @@ export default function AddRole() {
   const handleReset = () => {
     setActiveStep(0);
   };
+
   return (
     <div>
       <Dialog open={open} onOpenChange={setOpen}>
@@ -59,14 +64,17 @@ export default function AddRole() {
         <Step>
           <StepLabel>Nombre rol</StepLabel>
           <StepContent>
-            <Input type="email" placeholder="Nombre " onChange={(e) => setRolname(e.target.value)}/>
+            <Input placeholder="Nombre " value={rolenameInput} onChange={(e) => setRolenameInput(e.target.value)}/>
             <Box sx={{ mb: 2 }} className="mt-2">
               <div>
                 <Button
-                  disabled={rolename === ""}
-                  variant='default'
-                  onClick={handleNext}
-                  size='sm'
+                  disabled={rolenameInput === ""}
+                  variant="default"
+                  onClick={() => {
+                    setRolname(rolenameInput);
+                    handleNext();
+                  }}
+                  size="sm"
                 >
                   Siguiente
                 </Button>
@@ -98,15 +106,14 @@ export default function AddRole() {
                 ))
               }
             </div>
-          </StepContent>
           <Box sx={{ mb: 2 }}>
-            <div className='flex justify-center items-center w-full'>
+            <div className='flex justify-center items-center w-full mt-4'>
               <Button
-              className=' w-[80%]'
+              className='w-full m-2'
                 disabled={assingPermissions.length === 0}
                 variant='default'
                 onClick={() => {
-                  toast.promise(createRole(rolename, assingPermissions), {
+                  toast.promise(createRoles(rolename, assingPermissions), {
                     success: "Rol agregado",
                     error: "No se pudo agregar el rol",
                     loading: "Agregando rol"
@@ -115,6 +122,7 @@ export default function AddRole() {
                   setRolname("")
                   setAssingPermission([])
                   setActiveStep(0)
+                  setRolenameInput("")
                   mutate(`${urlRoles}/get-role`)
 
                 }}
@@ -122,12 +130,25 @@ export default function AddRole() {
               >
                 Finalizar
               </Button>
+
+                  <Button
+                    // disabled={assingPermissions.length === 0}
+                    onClick={handleBack}
+                    className='m-2'
+                    // sx={{ mt: 1, mr: 1 }}
+                  >
+                    Volver
+                  </Button>
             </div>
           </Box>
+          </StepContent>
         </Step>
       </Stepper>
     </Box>
         </DialogContent>
+        {
+          open === false ? "" : ""
+        }
       </Dialog>
     </div>
   )

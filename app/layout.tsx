@@ -4,6 +4,7 @@ import { Inter } from 'next/font/google'
 import { Navbar } from '@/components/page-components'
 const inter = Inter({ subsets: ['latin'] })
 import {Toasters, Footer} from '@/components/page-components'
+import { SwrContextProvider } from '@/context'
 
 export const metadata: Metadata = {
   title: 'SOFF',
@@ -18,10 +19,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} flex min-h-screen flex-col`}>
-        <Navbar />
-        {children}
-        <Toasters />
-        <Footer />
+        <SwrContextProvider>
+          <Navbar />  
+          {children}  
+          <Toasters />  
+          <Footer />  
+        </SwrContextProvider>
       </body>
     </html>
   )
