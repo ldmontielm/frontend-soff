@@ -67,3 +67,10 @@ export interface SaleConfirm {
     email: string | undefined
   }
 }
+
+
+export interface VoucherConfirm {
+    filename: string,
+    link: string,
+    sale_id: string
+}

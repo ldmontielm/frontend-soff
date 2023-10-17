@@ -35,6 +35,13 @@ export default function updateStatus(){
 
 export const columns: ColumnDef<Purchase>[] = [
     {
+      accessorKey: 'invoice_number',
+      header: 'Factura',
+      cell: ({row}) => {
+        return <div>{row.getValue('invoice_number')}</div>
+      }
+    },
+    {
       accessorKey: 'purchase_date',
       header: "Fecha",
       cell: ({row}) => {

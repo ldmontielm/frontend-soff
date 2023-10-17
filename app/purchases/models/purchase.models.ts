@@ -1,11 +1,11 @@
 export interface Purchase {
   id: string;
   purchase_date: string;
+  invoice_number: string;
   amount_order: number;
   provider_id: string;
   provider: string;
   total: number;
-  // status: boolean;
 }
 
 export interface Order {
@@ -27,12 +27,14 @@ export interface OrderCreate {
 
 export interface PurchaseCreate{
     provider_id: string
+    invoice_number: string
 }
 
 
 export interface PurchaseConfirm {
   id_purchase: string;
   provider_id: string;
+  invoice_number: string;
 }
 
 
