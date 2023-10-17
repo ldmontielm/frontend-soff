@@ -34,14 +34,16 @@ import * as z from 'zod'
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Value } from "@radix-ui/react-select"
-import useSWR, {useSWRConfig} from 'swr'
+import useSWR, {mutate} from 'swr'
 import { getRole } from "@/app/roles/services/roles.services"
 import { urlRoles } from "@/app/roles/services/roles.services"
 import {createUser, urlUser, getUsers } from "../../services/users.services"
 import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: 'El nombre debe de tener mas de dos caracteres' }),
+  // name: z.string().min(2, { message: 'El nombre debe de tener mas de dos caracteres' }),
+  // name: z.string().refine((value) => /^[a-zA-Z]+$/.test(value), {message: 'El nombre debe contener solo letras.'}),
+  name: z.string().refine(value => /^[a-zA-Z\s]+$/.test(value), {message: 'El nombre debe contener solo letras y espacios y tener al menos dos caracteres.'}),
   document_type: z.string(),
   document: z.string().min(8,{message:'El numero de documento debe contener minimo 8 caracteres'}).refine((value) => /^\d+$/.test(value), {message: 'El número de identificación debe contener solo números.',}),
   phone:z.string().refine((value) => /^\d+$/.test(value), {message: 'El campo debe contener solo números.',}),
@@ -66,7 +68,6 @@ export default function HeadTable() {
       id_role: ""
     }
   })
-  const { mutate } = useSWRConfig()
 
 function onSubmit(values: z.infer<typeof formSchema>){
     toast.promise(createUser(values),{
@@ -74,6 +75,7 @@ function onSubmit(values: z.infer<typeof formSchema>){
       success: "Usuario registrado correctamente",
       error: "El usuario no se pudo registrar"
     })
+    form.reset()
     setOpen(false)
     mutate(`${urlUser}/get-users`)
   }

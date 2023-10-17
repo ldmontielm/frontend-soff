@@ -15,6 +15,7 @@ import { useRouter } from "next/router"
 import PermissionModal from "../components/permission-modal/PermissionModal"
 import toast from 'react-hot-toast';
 import Delete from "../components/delete/Delete"
+import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
 
 
 import {
@@ -67,7 +68,7 @@ export const columns: ColumnDef<Role>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Nombre
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
         </Button>
       )
     },
@@ -93,7 +94,7 @@ export const columns: ColumnDef<Role>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Estado
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
         </Button>
       )
     },

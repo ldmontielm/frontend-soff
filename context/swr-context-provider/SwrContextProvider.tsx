@@ -13,7 +13,6 @@ export default function SwrContextProvider({children}: Props) {
   AxiosInterceptors()
   return (
     <SWRConfig value={{
-      refreshInterval: 3000,
       fetcher: (url: string) => axios.get(url).then(res => res.data)
     }}> 
       {children}
