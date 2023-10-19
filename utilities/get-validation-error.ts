@@ -71,6 +71,41 @@ export const getValidationErrors = (errorCode: string) => {
             message: "No se puede confirmar una compra con el número de factura repetido."
         },
 
+        // EXCEPTIONS PRODUCTS
+
+        PRODUCT_NOT_FOUND: {
+            title: "Producto no encontrado",
+            message: "Lo sentimos, el producto no pudo ser encontrado."
+        },
+        PRODUCTS_NOT_FOUND: {
+            title: "Productos no encontrados",
+            message: "Lo sentimos, los productos no se encontraron."
+        },
+        ID_PRODUCT_REQUIRED: {
+            title: "Producto necesario",
+            message: "Es necesario"
+        },
+        CANNOT_UPDATE_INACTIVE_PRODUCT:{
+            title: "Producto inactivo",
+            message: "Lo sentimos, el producto no puede ser editado, si su estado es inactivo."
+        },
+        DETAILS_REQUIRED_FOR_CONFIRM_PRODUCT:{
+            title: "Detalles requeridos",
+            message: "Es necesario agregar al menos 1 insumo, para guardar el producto."
+        },
+        NAME_AND_SALE_PRICE_REQUIRED: {
+            title: "Información requerida",
+            message: "El nombre y el precio del producto son requeridos."
+        },
+        NAME_ALREADY_EXISTS:{
+            title: "Nombre existente",
+            message:"El nombre del producto ya está registrado."
+        },
+        DETAIL_NOT_FOUND:{
+            title: "Detalle no encontrado",
+            message:"Lo sentimos, el detalle no pudo ser encontrado."
+        }
+
     }
 
     return codeMatcher[errorCode]
