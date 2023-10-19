@@ -1,24 +1,23 @@
 'use client'
 import React, {ChangeEvent, useState} from 'react'
-import { fetcherPost, urlSales } from '../../services/sale.services'
+import { fetcherPost } from '@/context/swr-context-provider/SwrContextProvider'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { ArrowTrendingUpIcon, DocumentPlusIcon, DocumentIcon,XMarkIcon } from "@heroicons/react/24/outline"
 import { supabase } from '../../services/supabase.services'
-import { useParams } from 'next/navigation'
 import useSWR, {mutate} from 'swr'
-import { Progress } from "@/components/ui/progress"
 import { Button } from '@/components/ui/button'
 import { VoucherConfirm } from '../../models/sale.models'
 import { getValidationErrors } from '@/utilities'
 import { useToast } from "@/components/ui/use-toast"
 
-
+import { RoutesApi } from '@/models/routes.models'
 
 export default function UploadFile({id}: {id:string}) {
   const [filename, setFilename] = useState("No seleccionó achivo")
-  const {data: sales} = useSWR(urlSales)
+  const {data: sales} = useSWR(RoutesApi.SALES)
+  const [isLoading, setIsLoading] = useState(false)
   const [open, setOpen] = useState(false)
   const [file, setFile] = useState<File>()
   const { toast } = useToast()
@@ -41,9 +40,20 @@ export default function UploadFile({id}: {id:string}) {
     if (file !== undefined)  {
       const { data, error } = await supabase.storage.from("soff-vouchers").upload(`vouchers/${file.name}`, file as File);
       
+      setIsLoading(true)
+      console.log(isLoading)
+      if(isLoading){
+        toast({variant: "destructive", title: "Subiendo comprobante...", description: "Estamos subiendo el comprobante"})
+      }
+        
+
       if(error){
+        setIsLoading(false)
+        console.log(isLoading)
         toast({variant: "destructive", title: getValidationErrors("Duplicate").title, description: getValidationErrors("Duplicate").message})
       }else {
+        setIsLoading(false)
+        console.log(isLoading)
         const { data:imageurl } = supabase.storage.from('soff-vouchers').getPublicUrl(`vouchers/${file?.name}`)
         if(!imageurl){
           toast({variant: "destructive", title: "No se obtuvo un link", description: "No pudimos obtener el link del comprobante de pago."})
@@ -53,12 +63,12 @@ export default function UploadFile({id}: {id:string}) {
                   link: imageurl.publicUrl,
                   sale_id: id
           }
-          const res = await ConfirmSaleFetch(`${urlSales}/${id}/confirm-pending`, voucherConfirm)
+          const res = await ConfirmSaleFetch(`${RoutesApi.SALES}/${id}/confirm-pending`, voucherConfirm)
           toast({variant: "default", title: "Venta confirmada", description: "Ya hemos confirmado la venta correctamente."})
 
 
           setOpen(false)
-          mutate(urlSales)
+          mutate(RoutesApi.SALES)
         }
       }
     }

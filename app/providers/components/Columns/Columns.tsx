@@ -56,6 +56,24 @@ const updateProviderStatus = (id_provider:string, newStatus:boolean) =>{
 
 export const columns: ColumnDef<Provider>[] = [
   {
+    accessorKey: 'nit',
+    header: ({ column }) => {
+      return (
+        <Button
+        className="w-fit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          NIT
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      )
+    },
+    cell: ({row}) => {
+      return <div>{row.getValue('nit')}</div>
+    }
+  },
+  {
     accessorKey: 'name',
     header: ({ column }) => {
       return (
@@ -130,24 +148,24 @@ export const columns: ColumnDef<Provider>[] = [
       return <div className="font-medium">{formatted}</div>
     }
   },
-  {
-    accessorKey: 'email',
-    header: ({ column }) => {
-      return (
-        <Button
-        className="w-fit"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Correo
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({row}) => {
-      return <div>{row.getValue('email')}</div>
-    }
-  },
+  // {
+  //   accessorKey: 'email',
+  //   header: ({ column }) => {
+  //     return (
+  //       <Button
+  //       className="w-fit"
+  //         variant="ghost"
+  //         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+  //       >
+  //         Correo
+  //         <ArrowUpDown className="ml-2 h-4 w-4" />
+  //       </Button>
+  //     )
+  //   },
+  //   cell: ({row}) => {
+  //     return <div>{row.getValue('email')}</div>
+  //   }
+  // },
   {
     accessorKey: 'phone',
     header: ({ column }) => {

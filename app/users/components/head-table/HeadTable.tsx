@@ -34,21 +34,26 @@ import * as z from 'zod'
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Value } from "@radix-ui/react-select"
-import useSWR, {useSWRConfig} from 'swr'
+import useSWR, {mutate} from 'swr'
 import { getRole } from "@/app/roles/services/roles.services"
 import { urlRoles } from "@/app/roles/services/roles.services"
 import {createUser, urlUser, getUsers } from "../../services/users.services"
 import { useRouter } from "next/navigation"
 
 const formSchema = z.object({
-  name: z.string().min(2, { message: 'El nombre debe de tener mas de dos caracteres' }),
-  document_type: z.string(),
-  document: z.string().min(8,{message:'El numero de documento debe contener minimo 8 caracteres'}).refine((value) => /^\d+$/.test(value), {message: 'El número de identificación debe contener solo números.',}),
-  phone:z.string().refine((value) => /^\d+$/.test(value), {message: 'El campo debe contener solo números.',}),
-  email: z.string().email({ message: 'El email no es valido' }),
-  password: z.string().min(8,{message:'La contraseña debe ser minimo de 8 caracteres'}),
-  id_role : z.string().uuid()
-})
+  name: z.string({required_error: 'El nombre es requerido'}).min(5, {message: 'El nombre debe tener al menos 5 caracteres'}).max(35, {message: 'El nombre debe tener un máximo de 35 caracteres'}).refine(value => /^[a-zA-Z\s]+$/.test(value), {message: 'El nombre debe contener solo letras y espacios, y tener al menos dos caracteres.'}),
+  document_type: z.string({required_error: 'El tipo de documento es requerido', invalid_type_error: 'El tipo de documento debe contener letras'}).min(2, {message: 'El tipo de documento debe contener al menos 2 caracteres'}).max(6,{message:'No puede contener mas de 6 caracteres'}),
+  document: z.string({required_error: 'El documento es requerido'}).min(8, {message: 'El número de documento debe contener al menos 8 caracteres'}).max(15,{message:'No puede contener mas de 6 caracteres'}).refine(value => /^\d+$/.test(value), {message: 'El número de identificación debe contener solo números.'}),
+  phone: z.string({required_error: 'El teléfono es requerido'}).min(6,{message:'El Numero de telefono debe de tener minimo 8 caracteres'}).max(15,{message:'No puede contener mas de 10 caracteres'}).refine(value => /^\d+$/.test(value), {message: 'El campo debe contener solo números.'}),
+  email: z.string({required_error: 'El correo es requerido'}).email({ message: 'El correo electrónico no es válido' }).min(6,{message:'El Numero de correo debe de tener minimo 6 caracteres'}).max(15,{message:'No puede contener mas de 60 caracteres'}),
+  password: z.string({required_error: 'La contraseña es requerida'}).min(8, {message: 'La contraseña debe tener al menos 8 caracteres'}).max(20,{message:'No puede contener mas de 20 caracteres'}),
+  confirmPassword: z.string().min(8, {message: 'La contraseña debe tener al menos 8 caracteres'}).max(20,{message:'No puede contener mas de 20 caracteres'}),
+  id_role: z.string({required_error: 'El rol es requerido'}).uuid()
+}).refine(data => data.password === data.confirmPassword, {
+  message: 'Las contraseñas no coinciden',
+  path: ['confirmPassword'], // Indicamos que el error se aplique al campo 'confirmPassword'
+});
+
 
 export default function HeadTable() {
   const [open, setOpen]= useState(false)
@@ -66,7 +71,6 @@ export default function HeadTable() {
       id_role: ""
     }
   })
-  const { mutate } = useSWRConfig()
 
 function onSubmit(values: z.infer<typeof formSchema>){
     toast.promise(createUser(values),{
@@ -74,6 +78,7 @@ function onSubmit(values: z.infer<typeof formSchema>){
       success: "Usuario registrado correctamente",
       error: "El usuario no se pudo registrar"
     })
+    form.reset()
     setOpen(false)
     mutate(`${urlUser}/get-users`)
   }
@@ -184,6 +189,21 @@ function onSubmit(values: z.infer<typeof formSchema>){
             </FormItem>
             )}
             />
+
+          <FormField
+            control={form.control}
+            name ="confirmPassword"
+            render={({ field }) => (
+              <FormItem>
+              <FormLabel>Validación</FormLabel>
+              <FormControl>
+                <Input type="password" placeholder="Vuelva a escribir la contraseña" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+            )}
+            />
+
 
           <FormField
           control={form.control}

@@ -16,7 +16,11 @@ export const AxiosInterceptors = () => {
             return response
         },
         (error) => {
-            toast({variant: "destructive", title: getValidationErrors(error.response.data.detail).title, description: getValidationErrors(error.response.data.detail).message})
+            if(error.response === undefined){
+                toast({variant: "destructive", title: getValidationErrors(error.code).title, description: getValidationErrors(error.code).message})
+            }else {
+                toast({variant: "destructive", title: getValidationErrors(error.response.data.detail).title, description: getValidationErrors(error.response.data.detail).message})
+            }
             return Promise.reject(error)
         }
     )

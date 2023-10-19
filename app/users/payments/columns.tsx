@@ -12,6 +12,7 @@ import { useState } from "react"
 import { getUser, getUsers, urlUser } from "../services/users.services"
 import { urlRoles, getRole } from "@/app/roles/services/roles.services"
 import UpdateTable from "../components/update-table/UpdateTable"
+import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
 import { useEffect } from "react"
 import {
   DropdownMenu,
@@ -58,7 +59,7 @@ export const columns: ColumnDef<User>[] = [
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Nombre
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ChevronUpDownIcon className="ml-2 h-4 w-4" />
           </Button>
         )
       },
@@ -74,7 +75,7 @@ export const columns: ColumnDef<User>[] = [
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Tipo
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ChevronUpDownIcon className="ml-2 h-4 w-4" />
           </Button>
         )
       },
@@ -89,7 +90,7 @@ export const columns: ColumnDef<User>[] = [
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Documento
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ChevronUpDownIcon className="ml-2 h-4 w-4" />
           </Button>
         )
       },
@@ -104,7 +105,7 @@ export const columns: ColumnDef<User>[] = [
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Telefono
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ChevronUpDownIcon className="ml-2 h-4 w-4" />
           </Button>
         )
       },
@@ -118,7 +119,7 @@ export const columns: ColumnDef<User>[] = [
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Correo
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+            <ChevronUpDownIcon className="ml-2 h-4 w-4" />
           </Button>
         )
       },
@@ -132,7 +133,7 @@ export const columns: ColumnDef<User>[] = [
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Rol
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
           </Button>
         )
       },
@@ -146,7 +147,7 @@ export const columns: ColumnDef<User>[] = [
             onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
           >
             Estado
-            <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
           </Button>
         )
       },
