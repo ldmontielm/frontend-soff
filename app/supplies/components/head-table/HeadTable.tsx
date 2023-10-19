@@ -47,9 +47,9 @@ import useSWR, { mutate, useSWRConfig } from "swr";
 
 const fromSchema = z.object({
   name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}),
-  price: z.string({required_error: "El campo es requerido"}).transform(Number),
-  quantity_stock: z.string({required_error: "El campo es requerido"}).transform(Number),
-  unit_measure: z.string({required_error: "Seleccioné una unidad de medida"}),
+  price: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese el precio del insumo'}).transform(Number),
+  quantity_stock: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).transform(Number),
+  unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccioné una opción'})
 })
 
 

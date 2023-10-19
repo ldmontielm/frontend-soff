@@ -38,10 +38,11 @@ import useSWR, { mutate, useSWRConfig } from "swr";
 
 
 const fromSchema = z.object({
+  nit: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nit de la empresa'}),
   name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del proveedor'}),
   company: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre de la empresa'}),
   address: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese una dirección'}),
-  email: z.string({required_error: "El campo es requerido"}).email({message: "Correo no valido"}),
+  // email: z.string({required_error: "El campo es requerido"}).email({message: "Correo no valido"}),
   phone: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese un teléfono'}),
   city: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese una ciudad'}),
 
@@ -74,10 +75,11 @@ export default function HeadTable() {
         error: "Algo ocurrio",
         loading: 'Cargando información...'
       }).then(() => {
+        form.setValue("nit", "");
         form.setValue("name", "");
         form.setValue("company", "");
         form.setValue("address", "");
-        form.setValue("email", "");
+        // form.setValue("email", "");
         form.setValue("phone", "");
         form.setValue("city", "");
 
@@ -103,6 +105,19 @@ return (
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+              control={form.control}
+              name ="nit"
+              render={({ field }) => (
+                <FormItem>
+                <FormLabel>NIT </FormLabel>
+                <FormControl>
+                  <Input placeholder="Ingrese el nit" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+              )}
+              />
           <FormField
               control={form.control}
               name ="name"
@@ -142,7 +157,7 @@ return (
               </FormItem>
               )}
               />
-            <FormField
+            {/* <FormField
               control={form.control}
               name ="email"
               render={({ field }) => (
@@ -154,7 +169,7 @@ return (
                 <FormMessage />
               </FormItem>
               )}
-              />
+              /> */}
             <FormField
               control={form.control}
               name ="phone"

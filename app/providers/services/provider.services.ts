@@ -17,9 +17,9 @@ export async function getProviders(url: string):Promise<Provider[]> {
 export async function createProvider(provider:ProviderCreate): Promise<Provider> {
     try {
       const res = await axios.post(`${urlProvider}/create_provider`, provider)
-      return res.data
+      return res.data;
     } catch (error) {
-      throw new Error(`Error: ${error}`);
+      throw new Error(`Error: ${error}`)
     }
   }
 

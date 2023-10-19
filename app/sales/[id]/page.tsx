@@ -1,4 +1,3 @@
-'use client'
 import React from 'react'
 import { InfoSale, TableOrders } from './components'
 import { HeaderModule } from '../components'

@@ -2,11 +2,11 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { fetcherPost, urlSales } from "../../services/sale.services";
+import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider";
 import {useRouter} from "next/navigation"
 import { Routes } from "@/models/routes.models";
 import { useToast } from "@/components/ui/use-toast"
-
+import { RoutesApi } from "@/models/routes.models";
 
 const CreateSaleFetch = async (url: string) => {
   return await fetcherPost(url, undefined)
@@ -22,9 +22,9 @@ export default function HeadTable() {
         type="submit"
         className="w-full md:w-[180px]"
         onClick={async () => {
-          const res = await CreateSaleFetch(urlSales)
+          const res = await CreateSaleFetch(RoutesApi.SALES)
           toast({variant: "default", title: "Venta abierta", description: "Ya hemos abierto una nueva venta."})
-          router.push(`${Routes.CREATESALE}/${res.data.id}`)
+          router.push(`${Routes.CREATESALE}/${res.id}`)
 
         }}
       >

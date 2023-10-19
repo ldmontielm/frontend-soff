@@ -1,24 +1,21 @@
 'use client'
 import { Order, Sale, SaleConfirm } from '@/app/sales/models/sale.models'
-import { urlSales, fetcherPut, fetcherDelete } from '@/app/sales/services/sale.services'
+import { fetcherPut, fetcherDelete } from '@/context/swr-context-provider/SwrContextProvider'
+import { RoutesApi } from '@/models/routes.models'
 import { convertToCOP } from '@/app/sales/utils'
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { BanknotesIcon, CreditCardIcon, HashtagIcon } from '@heroicons/react/24/outline'
+import { useToast } from "@/components/ui/use-toast"
+import { HashtagIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-import { useContext, useState } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import useSWR from 'swr'
 import * as z from 'zod'
 import { InfoSaleHeader } from '..'
-import { useToast } from "@/components/ui/use-toast"
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 const formSaleSchema = z.object({
   payment_method: z.enum(['transferencia', 'efectivo']),
@@ -52,8 +49,8 @@ const CancelSaleFetch = async (url: string) => {
 }
 
 export default function InfoSale({id}:Props) {
-  const {data:orders} = useSWR(`${urlSales}/${id}/orders`)
-  const {data: sale} = useSWR<Sale>(`${urlSales}/${id}`)
+  const {data:orders} = useSWR(`${RoutesApi.SALES}/${id}/orders`)
+  const {data: sale} = useSWR<Sale>(`${RoutesApi.SALES}/${id}`)
   const router = useRouter()
   const { toast } = useToast()
 
@@ -85,7 +82,7 @@ export default function InfoSale({id}:Props) {
     if(values.type_sale === 'pedido' &&  (values.name === '' || values.direction === '' || values.email === '' || values.phone === '' )){
       toast({variant: 'destructive', title: "Campos del cliente requeridos", description: "Todos los campos de cliente son necesarios para realizar el pedido."})
     }else{
-      const res = await ConfirmSaleFetch(`${urlSales}/${id}/confirm-sale`, sale)
+      const res = await ConfirmSaleFetch(`${RoutesApi.SALES}/${id}/confirm-sale`, sale)
       toast({variant: 'default', title: "Venta confirmada correctamente", description: "Se ha confirmado con exito la venta, mira el historial en la sección de ventas."})
       router.push('/sales')
     }
@@ -131,8 +128,7 @@ export default function InfoSale({id}:Props) {
             )}
           />
           {
-            (formSale.getValues().type_sale === 'pedido' && (formSale.getValues().name === "" || formSale.getValues().email === ""
-            || formSale.getValues().phone === "" || formSale.getValues().direction === "")
+            (formSale.getValues().type_sale === 'pedido'
             ) ? ( 
               <div>
                 <FormField 
@@ -203,22 +199,15 @@ export default function InfoSale({id}:Props) {
                 <FormItem>
                   <FormLabel>Método de pago</FormLabel>
                   <FormControl>
-                    <RadioGroup defaultValue={field.value} onValueChange={field.onChange} className='grid grid-cols-6 gap-2'>
-                      <Label className='border rounded w-full col-span-3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-black' htmlFor='fisico'>
-                        <RadioGroupItem value='transferencia' id='fisico' className='hidden'/>
-                        <div className='flex flex-col items-center space-y-2'>
-                          <CreditCardIcon className='h-6 w-6' />
-                          <Label>Transferencia</Label>
-                        </div>
-                      </Label>
-                      <Label className='border rounded w-full col-span-3 text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground [&:has([data-state=checked])]:border-black' htmlFor='trans'>
-                        <RadioGroupItem value='efectivo' id='trans' className='hidden' />
-                        <div className='flex flex-col items-center space-y-2'>
-                          <BanknotesIcon className='h-6 w-6 ' />
-                          <Label>Efectivo</Label>
-                        </div>
-                      </Label>
-                    </RadioGroup>
+                  <Select defaultValue={field.value} onValueChange={field.onChange}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Tipo de venta" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="efectivo">Efectivo</SelectItem>
+                      <SelectItem value="transferencia">Transferencia</SelectItem>
+                    </SelectContent>
+                  </Select>
                   </FormControl>
                   <FormDescription>Elige el método de pago.</FormDescription>
                   <FormMessage />
@@ -238,7 +227,7 @@ export default function InfoSale({id}:Props) {
       </Form>
       <div className='space-y-2 px-4 pb-4'>
         <Button className="w-full" variant='outline' onClick={async () => {
-          const res = await CancelSaleFetch(`${urlSales}/${id}/cancel-sale`)
+          const res = await CancelSaleFetch(`${RoutesApi.SALES}/${id}/cancel-sale`)
           toast({variant: 'default', title: "Venta eliminada correctamente", description: "Se ha eliminado la venta con éxito."})
           router.push("/sales")
         }}>

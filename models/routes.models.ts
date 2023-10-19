@@ -7,3 +7,14 @@ export enum Routes{
   ROLES='/roles',
   SUPPLIES='/supplies'
 }
+
+export enum RoutesApi {
+  SALES = 'http://localhost:8000/sales',
+  PURCHASES = 'http://localhost:8000/purchases',
+  PRODUCTS = 'http://localhost:8000/products',
+  PROVIDERS= 'http://localhost:8000/providers',
+  ROLES = 'http://localhost:8000/roles',
+  SUPPLIES = 'http://localhost:8000/supplies',
+  USERS = 'http://localhost:8000/users',
+  PERMISSIONS = 'http://localhost:8000/permissions'
+}

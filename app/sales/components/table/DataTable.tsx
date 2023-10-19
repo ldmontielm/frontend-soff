@@ -1,14 +1,8 @@
 'use client'
 import React, { useState } from 'react'
-import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { Badge } from '@/components/ui/badge'
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { convertToCOP, convertDate } from '../../utils'
-import Link from 'next/link'
-import { Routes } from '@/models/routes.models'
-import { Sale } from '../../models/sale.models'
-import { createSala } from '../../services/sale.services'
 import { HeadTable } from '..'
 import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
