@@ -9,13 +9,13 @@ import { PencilIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import { fetcherPut, urlSales } from '@/app/sales/services/sale.services'
+import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
 import { useState } from 'react'
 import useSWR, { mutate} from 'swr'
-
+import { RoutesApi } from '@/models/routes.models'
 
 const formSchema = z.object({
-  amount_product: z.number({invalid_type_error: "Debes ingresar un número", required_error: "El campo es requerido"}).min(1, {message: "El valor de la cantidad debe ser diferente de 0"}),
+  amount_product: z.number({invalid_type_error: "Debes ingresar un número, no un texto", required_error: "El campo es requerido"}).min(1, {message: "El valor de la cantidad debe ser diferente de 0"}),
   id_order:z.string().optional(),
 })
 
@@ -30,20 +30,20 @@ const UpdateAmountOrderFetch = async (url: string) => {
 
 export default function OrderUpdateForm({order, id_sale}: Props) {
   const [open, setOpen] = useState(false)
-  const {data} = useSWR(`${urlSales}/${id_sale}/orders`)
+  const {data} = useSWR(`${RoutesApi.SALES}/${id_sale}/orders`)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       id_order:"",
-      amount_product: 0
+      amount_product: order.amount_product
     },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     values.id_order = order.id
-    const data = await UpdateAmountOrderFetch(`${urlSales}/update-amount-order?id_order=${values.id_order}&amount_product=${values.amount_product}`)
-    mutate(`${urlSales}/${id_sale}/orders`)
+    const data = await UpdateAmountOrderFetch(`${RoutesApi.SALES}/update-amount-order?id_order=${values.id_order}&amount_product=${values.amount_product}`)
+    mutate(`${RoutesApi.SALES}/${id_sale}/orders`)
     setOpen(false)
   }
 

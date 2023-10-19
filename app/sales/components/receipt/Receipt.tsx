@@ -2,12 +2,11 @@
 import React from 'react'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
-import { urlSales } from '../../services/sale.services'
 import useSWR from 'swr'
 import { convertDate } from '../../utils'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
 import { Order } from '../../models/sale.models'
-
+import { RoutesApi } from '@/models/routes.models'
 interface Props {
   id: string
 }
@@ -19,10 +18,8 @@ interface OrderInvoice {
   total: number
 }
 export default function Receipt({id}:Props) {
-  const {data:orders} = useSWR<Order[]>(`${urlSales}/${id}/orders`)
-  const {data:sale} = useSWR(`${urlSales}/${id}`)
-
-
+  const {data:orders} = useSWR<Order[]>(`${RoutesApi.SALES}/${id}/orders`)
+  const {data:sale} = useSWR(`${RoutesApi.SALES}/${id}`)
 
   const generateReceipt = () => {
     const doc = new jsPDF()
