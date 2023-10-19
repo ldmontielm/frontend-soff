@@ -15,7 +15,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal, PencilIcon } from "lucide-react"
 import { SeeDetail } from "../see-detail"
-import { SeeProvider} from "../see-provider"
+import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
 import {UserIcon, QueueListIcon } from "@heroicons/react/24/outline"
 import { getPurchases, urlPurchases } from "../../services/purchase.services"
 import useSWR from "swr"
@@ -43,7 +43,17 @@ export const columns: ColumnDef<Purchase>[] = [
     },
     {
       accessorKey: 'purchase_date',
-      header: "Fecha",
+      header: ({column})=>{
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+          Fecha
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+        </Button>
+        )
+      },
       cell: ({row}) => {
         const date = new Date(row.getValue("purchase_date"))
         const formatted = new Intl.DateTimeFormat(['ban', 'id']).format(date)
@@ -53,7 +63,17 @@ export const columns: ColumnDef<Purchase>[] = [
     },
     {
       accessorKey: 'amount_order',
-      header: 'Ordenes',
+      header: ({column})=>{
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Ordenes
+            <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
       cell: ({row}) => {
         return <div>{row.getValue('amount_order')}</div>
       }
@@ -62,50 +82,67 @@ export const columns: ColumnDef<Purchase>[] = [
       accessorKey: 'provider',
       header: ({column}) => {
         return (
-          <span
-            className="cursor-pointer"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}
-          >
-            Proveedor
-          </span>
+          // <span
+          //   className="cursor-pointer"
+          //   onClick={() => column.toggleSorting(column.getIsSorted() === "desc")}
+          // >
+          //   Proveedor
+          // </span>
+          <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Proveedor
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+        </Button>
         )
       },
       cell: ({row}) => { 
-        return <div className="capitalize">{row.getValue('provider')}</div>
+        return <div className="capitalize">{row.original.provider}</div>
       }
     },
-  {
-    accessorKey: 'total',
-    header: () => <div className="text-right">Total</div>,
-    cell: ({row}) => {
-      const total = parseFloat(row.getValue("total"))
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: 'currency',
-        currency: "USD",
-        maximumFractionDigits: 0
-      }).format(total)
+    {
+      accessorKey: 'total',
+      header: ({column}) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Total
+            <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+          </Button>
+        )
+      },
+      cell: ({row}) => {
+        const total = parseFloat(row.getValue("total"))
+        const formatted = new Intl.NumberFormat("en-US", {
+          style: 'currency',
+          currency: "USD",
+          maximumFractionDigits: 0
+        }).format(total)
 
-      return <div className="text-right font-medium">{formatted}</div>
+        return <div className="text-right font-medium">{formatted}</div>
+      }
+    },
+    {
+      id: "actions",
+      cell: ({row}) => {
+        const purchase = row.original
+        return(
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant='ghost' size='icon'>
+                <MoreHorizontal className="h-4 w-4"/>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="flex flex-col items-start">
+              <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                <SeeDetail purchase={purchase} purchaseId={purchase.id}/>
+                <Receipt purchase={purchase} purchaseId={purchase.id} />
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )
+      }      
     }
-  },
-  {
-    id: "actions",
-    cell: ({row}) => {
-      const purchase = row.original
-      return(
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant='ghost' size='icon'>
-              <MoreHorizontal className="h-4 w-4"/>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="flex flex-col items-start">
-            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-              <SeeDetail purchase={purchase} purchaseId={purchase.id}/>
-              <Receipt purchase={purchase} purchaseId={purchase.id} />
-          </DropdownMenuContent>
-        </DropdownMenu>
-      )
-    }      
-  }
 ]

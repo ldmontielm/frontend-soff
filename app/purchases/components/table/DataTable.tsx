@@ -74,11 +74,6 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
     }
   })
 
-
-
-
-
-
   return (
     <div>
       <div className='w-full flex flex-col md:flex-row items-center py-4 gap-3 justify-between'>
