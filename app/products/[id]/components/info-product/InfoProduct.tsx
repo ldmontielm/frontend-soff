@@ -1,5 +1,5 @@
 'use client'
-import { confirmProduct,urlProducts, getProductById, deleteProduct } from '@/app/products/services/products.services'
+import { confirmProduct,urlProducts, deleteProduct } from '@/app/products/services/products.services'
 import { convertToCOP } from '@/app/sales/utils'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
@@ -33,7 +33,7 @@ interface Props{
 
 export default function InfoProduct({subtotal, id}:Props) {
   const router = useRouter()
-  const {data:product} = useSWR(`${id}`, getProductById)
+  const {data:product} = useSWR(urlProducts)
 
   console.log(product)
   const formProduct = useForm<z.infer<typeof formProductSchema>>({

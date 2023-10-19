@@ -16,7 +16,7 @@ import { convertToCOP} from '../../utils'
 import Link from 'next/link'
 import { Routes } from '@/models/routes.models'
 import { Product } from '../../models/product.models'
-import { createProduct } from '../../services/products.services'
+// import { createProduct } from '../../services/products.services'
 import { HeadTable } from '..'
 import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import {

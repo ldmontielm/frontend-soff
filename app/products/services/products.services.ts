@@ -9,41 +9,41 @@ export interface responseCreate {
     message: string
 }
 
-export async function getProducts(url: string):Promise<Product[]>{
-    try {
-      const res = await axios.get(url)
-      return res.data.products
-    } catch (error) {
-      throw new Error(`Error: ${error}`);
-    }
-}
+// export async function getProducts(url: string):Promise<Product[]>{
+//     try {
+//       const res = await axios.get(url)
+//       return res.data.products
+//     } catch (error) {
+//       throw new Error(`Error: ${error}`);
+//     }
+// }
 
-export async function getSupplies(url:string): Promise<Supply[]>{
-  try{
-      const res = await axios.get(url)
-      return res.data.supplies
-  } catch(error){
-      throw new Error(`Error: ${error}`);
-  }
-}
+// export async function getSupplies(url:string): Promise<Supply[]>{
+//   try{
+//       const res = await axios.get(url)
+//       return res.data.supplies
+//   } catch(error){
+//       throw new Error(`Error: ${error}`);
+//   }
+// }
 
-export async function getSupplyById(url: string):Promise<Supply | null>{
-  try {
-    const res = await axios.get(url)
-    return res.data.supply
-  } catch (error) {
-    throw new Error(`Error: ${error}`);
-  }
-}
+// export async function getSupplyById(url: string):Promise<Supply | null>{
+//   try {
+//     const res = await axios.get(url)
+//     return res.data.supply
+//   } catch (error) {
+//     throw new Error(`Error: ${error}`);
+//   }
+// }
 
-export async function getProductById(url: string):Promise<Product | null>{
-  try {
-    const res = await axios.get(url)
-    return res.data.product
-  } catch (error) {
-    throw new Error(`Error: ${error}`);
-  }
-}
+// export async function getProductById(url: string):Promise<Product | null>{
+//   try {
+//     const res = await axios.get(url)
+//     return res.data.product
+//   } catch (error) {
+//     throw new Error(`Error: ${error}`);
+//   }
+// }
 
 export async function getDetailsByProductId(id: string):Promise<DetailsRecipe[]>{
     try {
@@ -54,14 +54,22 @@ export async function getDetailsByProductId(id: string):Promise<DetailsRecipe[]>
     }
 }
 
-export async function createProduct(): Promise<responseCreate | null>{
-    try {
-      const res = await axios.post(`${urlProducts}/add_products`)
-      return res.data
-    } catch (error) {
-      return null;
+// export async function createProduct(): Promise<responseCreate | null>{
+//     try {
+//       const res = await axios.post(`${urlProducts}/add_products`)
+//       return res.data
+//     } catch (error) {
+//       return null;
+//     }
+//   }
+
+export async function fetcherPost<TData>(url: string, arg:TData){
+  return axios.post(url, arg, {
+    headers: {
+      'Content-Type': 'application/json'
     }
-  }
+  })
+}
 
 export async function addDetail(detail:DetailCreate): Promise<DetailsRecipe[]>{
     try {

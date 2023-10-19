@@ -1,6 +1,8 @@
 "use client"
 
-import { addDetail, getSupplies} from "@/app/products/services/products.services"
+import { addDetail, fetcherPost, urlProducts} from "@/app/products/services/products.services"
+import { urlSupply } from "@/app/supplies/services/supply.services"
+import { Supply } from "@/app/supplies/models/supply.models"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -11,7 +13,7 @@ import { useParams, useRouter } from 'next/navigation'
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import toast from "react-hot-toast"
-import useSWR from 'swr'
+import useSWR, {mutate} from 'swr'
 import * as z from 'zod'
 import { Check, ChevronsUpDown } from "lucide-react"
 import * as React from "react"
@@ -30,28 +32,44 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import {HeadTable as HeadTableSupply} from "@/app/supplies/components"
+import { DetailCreate } from "@/app/products/models/product.models"
 // import {HeadTable} from "@/app/supplies/components"
+
+// const formSchema = z.object({
+//   product_id: z.string(),
+//   supply_id: z.string({
+//     required_error: "Please select a supply.",
+//   }),
+//   // amount_supply: z.number().min(1, {message:'Mínimo debes ingresar un numero'}).nonnegative({message: 'No se aceptan valores negativos'}),
+//   amount_supply: z.string().transform(Number),
+//   // unit_measure: z.string().min(2, {message: 'La unidad debe tener más de 2 caracteres'})
+// })
 
 const formSchema = z.object({
   product_id: z.string(),
-  supply_id: z.string({
-    required_error: "Please select a supply.",
-  }),
-  // amount_supply: z.number().min(1, {message:'Mínimo debes ingresar un numero'}).nonnegative({message: 'No se aceptan valores negativos'}),
-  amount_supply: z.string().transform(Number),
-  // unit_measure: z.string().min(2, {message: 'La unidad debe tener más de 2 caracteres'})
+  supply_id: z.string().uuid({message: 'Debe seleccionar un insumo'}),
+  amount_supply: z.number().min(1, {message:'Como mínimo debe ingresar un número'}).transform(Number)
 })
+
+const AddDetailFetch = async (url: string, body: DetailCreate) => {
+  return await fetcherPost<DetailCreate>(url, body)
+}
 
 export default function HeadTable() {
   const params = useParams()
-  const [supply, setSupply] = useState(false)
-  const [amountSuply, setAmountSupply] = useState<number>()
+  const {data:supplies} = useSWR(urlSupply)
+  const {data} = useSWR(`${urlProducts}/${params.id}/details`)
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useState("")
+
+  // const [supply, setSupply] = useState(false)
+  // const [amountSuply, setAmountSupply] = useState<number>()
   // const [value, setValue] = useState("")
-  const router = useRouter()
-  const {data:supplies} = useSWR('http://localhost:8000/supplies', getSupplies)
+  // const router = useRouter()
   
-  const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
+  
+  // const [open, setOpen] = React.useState(false)
+  // const [value, setValue] = React.useState("")
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -59,19 +77,24 @@ export default function HeadTable() {
       product_id: "",
       supply_id: "",
       amount_supply: 0,
-      // unit_measure: ""
     }
   })
 
 
-  async function onSubmit(values: z.infer<typeof formSchema>){
+  // async function onSubmit(values: z.infer<typeof formSchema>){
+  //   values.product_id = params.id.toString()
+  //   toast.promise(addDetail(values), {
+  //     loading: 'Agreagando detalle...',
+  //     success: 'Detalle agregado correctamente',
+  //     error: 'Error when fetching'
+  //   })
+  //   router.refresh()
+  // }
+
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     values.product_id = params.id.toString()
-    toast.promise(addDetail(values), {
-      loading: 'Agreagando detalle...',
-      success: 'Detalle agregado correctamente',
-      error: 'Error when fetching'
-    })
-    router.refresh()
+    const data = await AddDetailFetch(`${urlProducts}/${params.id}/add_detail`, values)
+    // mutate(`${urlProducts}/${params.id}/details`)
   }
 
   return (
@@ -97,7 +120,7 @@ export default function HeadTable() {
                         )}
                       >
                         {field.value
-                          ? supplies?.find((supply)=>supply.id === field.value)?.name
+                          ? supplies?.find((supply:Supply)=>supply.id === field.value)?.name
                           : "Seleccione insumo"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
@@ -142,8 +165,8 @@ export default function HeadTable() {
               <FormItem className="w-full md:w-[200px]">
                 <FormLabel>Cantidad</FormLabel>
                 <FormControl>
-                  {/* <Input type="number" placeholder="Cantidad de insumo" {...form.register('amount_supply', {valueAsNumber: true})} className="lg:w-fit"/> */}
-                  <Input type="number" placeholder="Cantidad de insumo" min="1" {...field} className="lg:w-fit"/>
+                  <Input type="number" placeholder="Cantidad de insumo" min="1" max="4" {...form.register('amount_supply', {valueAsNumber: true})} className="lg:w-fit"/>
+                  {/* <Input type="number" placeholder="Cantidad de insumo" min="1" max="4" {...field} className="lg:w-fit"/> */}
                 </FormControl>
                 <FormMessage />
               </FormItem>

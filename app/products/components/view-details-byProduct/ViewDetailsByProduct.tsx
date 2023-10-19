@@ -10,7 +10,7 @@ import {
   DialogTitle, 
   DialogTrigger } from "@/components/ui/dialog"
 import { EyeIcon, QueueListIcon } from '@heroicons/react/24/outline'
-import { getDetailsByProductId, getProductById, urlProducts } from '@/app/products/services/products.services'
+import { getDetailsByProductId, urlProducts } from '@/app/products/services/products.services'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import useSWR from 'swr'
@@ -28,7 +28,7 @@ import {
 export default function ViewDetailsByProduct({productId}:{productId:string}) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
-  const {data:products}= useSWR(`${urlProducts}/${productId}`,getProductById)
+  const {data:products}= useSWR(urlProducts)
   const {data: details} = useSWR(`${productId}`, getDetailsByProductId)
   const cost = products?.price || 0
   const sale_price = products?.sale_price || 0
