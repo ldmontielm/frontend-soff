@@ -8,11 +8,7 @@ export default function TableComponent() {
     const {data: providers, isLoading, isValidating,error} = useSWR(urlProvider, getProviders)
     return (
       <div>
-        {
-          Array.isArray(providers) && (
-            <DataTable columns={columns} data={providers}/>
-          )
-        }
+            <DataTable columns={columns} data={providers || []} isLoading={isLoading} error={error}/>
       </div>
   )
 }

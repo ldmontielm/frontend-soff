@@ -19,13 +19,13 @@ import { OrderContextInterface } from "@/app/sales/models/sale.models"
 import useSWR, { mutate, useSWRConfig } from "swr";
 
 const formSchema = z.object({
-  nit: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nit del proveedor'}),
-  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del proveedor'}),
-  company: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre de la empresa'}),
-  address: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese una dirección'}),
-  // email: z.string({required_error: "El campo es requerido"}).email({message: "Correo no valido"}),
-  phone: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese un teléfono'}),
-  city: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese una ciudad'}),
+  nit: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nit de la empresa'}).max(15, {message: 'El nit es demasiado largo'}),
+  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del proveedor'}).max(50, {message: 'El nombre es demasiado largo'}),
+  company: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre de la empresa'}).max(50, {message: 'El nombre de la empresa es demasiado largo'}),
+  address: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese una dirección'}).max(80, {message: 'La dirección es demasiado larga'}),
+  // email: z.string({required_error: "El campo es requerido"}).email({message: "Correo no válido"}),
+  phone: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese un teléfono'}).max(15, {message: 'El teléfono es demasiado largo'}),
+  city: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese una ciudad'}).max(50, {message: 'La ciudad es demasiado larga'}),
   id_provider:z.string().optional(),
 
 })

@@ -53,9 +53,11 @@ import { number } from "zod"
 interface DataTableProps<TData, TValue>{
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    isLoading: boolean
+    error: any
 }
 
-export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, TValue>){
+export function DataTable<TData, TValue>({columns, data, isLoading, error}: DataTableProps<TData, TValue>){
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] =React.useState<VisibilityState>({})
@@ -160,6 +162,13 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                     </TableHeader>
                     <TableBody>
                         {
+                            data.length === 0 ? (
+                            <TableRow>
+                                <TableCell colSpan={columns.length} className='h-24 text-center' text-center>
+                                No se encontraron resultados
+                                </TableCell>
+                            </TableRow>
+                            ):
                             table.getRowModel().rows?.length ? (
                                 table.getRowModel().rows.map((row) => (
                                     <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
@@ -177,7 +186,7 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                             ) : (
                                 <TableRow>
                                     <TableCell colSpan={columns.length} className="h-24" text-center>
-                                        No resultados
+                                        No se encontraron resultados.
                                     </TableCell>
                                 </TableRow>
                             )

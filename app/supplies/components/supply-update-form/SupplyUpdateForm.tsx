@@ -37,10 +37,10 @@ import useSWR, { mutate, useSWRConfig } from "swr";
 // })
 
 const formSchema = z.object({
-  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}),
-  price: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese el precio del insumo'}).transform(Number),
-  quantity_stock: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).transform(Number),
-  unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccioné una opción'}),
+  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}).max(255, {message: 'El nombre es demasiado largo'}),
+  price: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese el precio del insumo'}).max(10, {message: 'El precio es demasiado largo'}).transform(Number),
+  quantity_stock: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).max(10, {message: 'La cantidad es demasiado larga'}).transform(Number),
+  unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccione una opción'}),
   id_supply:z.string().optional(),
 })
 
