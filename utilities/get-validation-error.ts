@@ -22,6 +22,10 @@ export const getValidationErrors = (errorCode: string) => {
         Duplicate: {
             title: "Comprobante duplicado",
             message: "El comprobante ya existe en la base de datos."
+        },
+        ERR_NETWORK: {
+            title: "Se ha rompido la red",
+            message: "Ah ocurrido un error del lado del servidor, si el error persiste, comuniquese con el equipo de desarrollo."
         }
     }
 

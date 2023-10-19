@@ -1,29 +1,18 @@
 'use client'
 import React,{useState} from 'react'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
-import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { QueueListIcon } from '@heroicons/react/24/outline'
 import useSWR from 'swr'
-import { urlSales, getOrdersBySaleId } from '../../services/sale.services'
 import { convertToCOP } from '../../utils'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { DropdownMenuItem } from '@/components/ui/dropdown-menu'
-
+import { RoutesApi } from '@/models/routes.models'
 
 interface Props {
   id: string
 }
 
 export default function SeeDetail({id}: Props) {
-  const {data:orders} = useSWR(`${urlSales}/${id}/orders`, getOrdersBySaleId)
+  const {data:orders} = useSWR(`${RoutesApi.SALES}/${id}/orders`)
   const [open, setOpen] = useState(false)
   return (
     <Dialog open={open} onOpenChange={setOpen}>

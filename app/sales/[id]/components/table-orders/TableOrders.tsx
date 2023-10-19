@@ -1,5 +1,5 @@
 'use client'
-import { urlSales } from "@/app/sales/services/sale.services"
+import { RoutesApi } from "@/models/routes.models"
 import { convertToCOP } from "@/app/sales/utils"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import useSWR from "swr"
@@ -13,10 +13,11 @@ interface Props {
 }
 
 export default function TableOrders({id}: Props) {
- const {data:OrdersContext} = useSWR(`${urlSales}/${id}/orders`)
+ const {data:OrdersContext} = useSWR(`${RoutesApi.SALES}/${id}/orders`)
+
   return (
     <div>
-      <HeadTable />
+      <HeadTable id={id}/>
       <div className="mt-2">
       <Table className="border rounded">
             <TableHeader>

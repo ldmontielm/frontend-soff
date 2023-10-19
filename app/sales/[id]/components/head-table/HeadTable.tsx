@@ -1,40 +1,28 @@
 "use client" 
-import { urlProducts, urlSales, fetcherPost } from "@/app/sales/services/sale.services"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useParams } from 'next/navigation'
 import { useForm } from "react-hook-form"
 import useSWR, { mutate} from 'swr'
 import * as z from 'zod'
-import useSWRMutation from 'swr/mutation'
-import { useToast } from "@/components/ui/use-toast"
 import { OrderCreate } from "@/app/sales/models/sale.models"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Check, ChevronsUpDown } from "lucide-react"
 import { Product } from "@/app/products/models/product.models"
+import { RoutesApi } from "@/models/routes.models"
+import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider"
 
 
 const formSchema = z.object({
   sale_id: z.string(),
   product_id: z.string().uuid({message: 'Debe seleccionar un producto'}),
-  amount_product: z.number().min(1, 'Como mínimo debe vender un producto').transform(Number)
+  amount_product: z.number({required_error: "Este campo es requerido", invalid_type_error: "Se espera un número"}).min(1, {message: "Como mínimo debe vender un producto"}).max(99, {message: "Como máximo solo puedes vender 10 de cada producto"})
 })
 
 
@@ -42,14 +30,14 @@ const AddOrderFetch = async (url: string, body: OrderCreate) => {
   return await fetcherPost<OrderCreate>(url, body)
 }
 
-export default function HeadTable() {
-  const params = useParams()
-  const {data:products} = useSWR(urlProducts)
-  const {data} = useSWR(`${urlSales}/${params.id}/orders`)
+interface Props {
+  id: string
+}
+
+export default function HeadTable({id}: Props) {
+  const {data:products} = useSWR(RoutesApi.PRODUCTS)
+  const {data} = useSWR(`${RoutesApi.SALES}/${id}/orders`)
   const [open, setOpen] = useState(false)
-  const [value, setValue] = useState("")
-  
-  console.log(products)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,9 +49,9 @@ export default function HeadTable() {
   })
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    values.sale_id = params.id.toString()
-    const data = await AddOrderFetch(`${urlSales}/${params.id}/add-order`, values)
-    mutate(`${urlSales}/${params.id}/orders`)
+    values.sale_id = id
+    const data = await AddOrderFetch(`${RoutesApi.SALES}/${id}/add-order`, values)
+    mutate(`${RoutesApi.SALES}/${id}/orders`)
   }
 
 
