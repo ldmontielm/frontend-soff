@@ -1,5 +1,5 @@
 'use client'
-import { updateProduct,getProductById, deleteDetail} from '@/app/products/services/products.services'
+import { updateProduct,getProductById, deleteDetail, urlProducts, deleteProduct} from '@/app/products/services/products.services'
 import { convertToCOP } from '@/app/sales/utils'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -23,7 +23,7 @@ interface Props{
 
 export default function InfoProduct({subtotal, id}:Props) {
   const router = useRouter()
-  const {data:product} = useSWR(`${id}`, getProductById)
+  const {data:product}= useSWR(`${urlProducts}/${id}`,getProductById)
 
   console.log(product)
   const formProduct = useForm<z.infer<typeof formProductSchema>>({
@@ -37,7 +37,8 @@ export default function InfoProduct({subtotal, id}:Props) {
   async function onSubmit(values: z.infer<typeof formProductSchema>){
     if (values.name === '' || values.sale_price === 0){
       toast.error('La información del producto es necesaria.')
-    }else{
+    }
+    else{
         toast.promise(updateProduct(id, values), {
           loading: 'Actualizando producto...',
           success: 'Producto actualizado',
@@ -71,7 +72,7 @@ export default function InfoProduct({subtotal, id}:Props) {
                     <FormItem>
                       <FormLabel>Nombre</FormLabel>
                       <FormControl >
-                         <Input placeholder='Nombre' defaultValue={product?.name} {...field} />
+                         <Input placeholder='Nombre' defaultValue={product?.name || ""} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -84,7 +85,7 @@ export default function InfoProduct({subtotal, id}:Props) {
                     <FormItem>
                       <FormLabel>Precio</FormLabel>
                       <FormControl>
-                        <Input placeholder='Precio' defaultValue={product?.sale_price}{...field} />
+                        <Input placeholder='Precio' defaultValue={product?.sale_price || 0}{...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

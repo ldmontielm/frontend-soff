@@ -19,7 +19,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Input } from "@/components/ui/input"
 import { Switch } from '@/components/ui/switch';
-import useSWR, {useSWRConfig} from 'swr';
+import useSWR, {mutate} from 'swr';
 import toast from 'react-hot-toast';
 import { getPermissions } from '@/app/permissions/services/permissions';
 import { createRoles, getRole, urlRoles} from '../../services/roles.services';
@@ -31,7 +31,6 @@ export default function AddRole() {
   const {data:roles} = useSWR('http://localhost:8000/role/get-role', getRole)
   const [activeStep, setActiveStep] = useState(0);
   const [open, setOpen]= useState(false)
-  const { mutate } = useSWRConfig()
   const [rolename, setRolname] = useState("")
   const [assingPermissions, setAssingPermission] = useState<any[]>([])
   const [rolenameInput, setRolenameInput] = useState("");
@@ -123,8 +122,7 @@ export default function AddRole() {
                   setAssingPermission([])
                   setActiveStep(0)
                   setRolenameInput("")
-                  mutate(`${urlRoles}/get-role`)
-
+                  mutate(`${urlRoles}`)
                 }}
                 size='sm'
               >

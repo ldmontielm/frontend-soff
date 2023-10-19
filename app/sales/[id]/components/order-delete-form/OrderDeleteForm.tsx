@@ -5,9 +5,9 @@ import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, 
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { Order } from "@/app/sales/models/sale.models";
-import { fetcherDelete, urlSales } from "@/app/sales/services/sale.services";
+import { fetcherDelete } from "@/context/swr-context-provider/SwrContextProvider";
 import useSWR, {mutate} from 'swr'
-
+import { RoutesApi } from "@/models/routes.models";
 
 const DeleteOrderFetch = async (url: string) => {
   return await fetcherDelete(url)
@@ -19,7 +19,7 @@ interface Props {
 }
 
 export default function OrderDeleteForm({ order, id_sale }: Props) {
-  const {data} = useSWR(`${urlSales}/${id_sale}/orders`)
+  const {data} = useSWR(`${RoutesApi.SALES}/${id_sale}/orders`)
 
   return (
     <AlertDialog>
@@ -42,8 +42,8 @@ export default function OrderDeleteForm({ order, id_sale }: Props) {
       <AlertDialogFooter>
         <AlertDialogCancel>Cancel</AlertDialogCancel>
         <AlertDialogAction type="button" onClick={async () => {
-            const res = await DeleteOrderFetch(`${urlSales}/${order.id}/delete`)
-            mutate(`${urlSales}/${id_sale}/orders`)
+            const res = await DeleteOrderFetch(`${RoutesApi.SALES}/${order.id}/delete`)
+            mutate(`${RoutesApi.SALES}/${id_sale}/orders`)
           }} 
           className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90">
           Eliminar

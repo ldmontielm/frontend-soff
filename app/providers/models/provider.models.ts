@@ -1,10 +1,10 @@
 export interface Provider {
   id: string;
+  nit: string;
   name: string;
   company: string;
   address: string;
-  date_registration: string;
-  email: string;
+  // email: string;
   phone: string;
   city: string;
   status: boolean;
@@ -12,10 +12,11 @@ export interface Provider {
 
 
 export interface ProviderCreate{
+  nit: string;
   name: string;
   company: string;
   address: string;
-  email: string;
+  // email: string;
   phone: string;
   city: string;
 }
