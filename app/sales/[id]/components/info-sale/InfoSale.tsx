@@ -16,6 +16,10 @@ import { useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import * as z from 'zod'
 import { InfoSaleHeader } from '..'
+import { getValidationErrors } from '@/utilities'
+
+
+
 
 const formSaleSchema = z.object({
   payment_method: z.enum(['transferencia', 'efectivo']),
@@ -53,6 +57,7 @@ export default function InfoSale({id}:Props) {
   const {data: sale} = useSWR<Sale>(`${RoutesApi.SALES}/${id}`)
   const router = useRouter()
   const { toast } = useToast()
+  console.log(orders)
 
   const formSale = useForm<z.infer<typeof formSaleSchema>>({
     resolver: zodResolver(formSaleSchema),
@@ -78,13 +83,18 @@ export default function InfoSale({id}:Props) {
       }
     }
 
-  
-    if(values.type_sale === 'pedido' &&  (values.name === '' || values.direction === '' || values.email === '' || values.phone === '' )){
-      toast({variant: 'destructive', title: "Campos del cliente requeridos", description: "Todos los campos de cliente son necesarios para realizar el pedido."})
-    }else{
-      const res = await ConfirmSaleFetch(`${RoutesApi.SALES}/${id}/confirm-sale`, sale)
-      toast({variant: 'default', title: "Venta confirmada correctamente", description: "Se ha confirmado con exito la venta, mira el historial en la sección de ventas."})
-      router.push('/sales')
+    if(Array.isArray(orders) && orders.length <= 0) {
+      toast({variant: 'destructive', title: getValidationErrors("SALE_NOT_CONTENT").title, description: getValidationErrors("SALE_NOT_CONTENT").message})
+    }else {
+      if(values.type_sale === 'pedido' &&  (values.name === '' || values.direction === '' || values.email === '' || values.phone === '' )){
+        toast({variant: 'destructive', title: "Campos del cliente requeridos", description: "Todos los campos de cliente son necesarios para realizar el pedido."})
+      }else{
+    
+        const res = await ConfirmSaleFetch(`${RoutesApi.SALES}/${id}/confirm-sale`, sale)
+        toast({variant: 'default', title: "Venta confirmada correctamente", description: "Se ha confirmado con exito la venta, mira el historial en la sección de ventas."})
+        router.push('/sales') 
+      
+      }
     }
   }
   
