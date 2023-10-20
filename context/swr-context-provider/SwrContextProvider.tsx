@@ -4,6 +4,7 @@ import axios, { AxiosRequestConfig } from 'axios'
 import React from 'react'
 import { SWRConfig } from 'swr'
 import { AxiosInterceptors } from '@/interceptors/axios.interceptors'
+import { SaleConfirm } from '@/app/sales/models/sale.models'
 
 interface Props {
   children: React.ReactNode
@@ -11,7 +12,7 @@ interface Props {
 // El "fetcher" es una función que devuelve una Promise que recupera los datos
 const fetcher = (url: string) => axios.get(url).then(res => res.data)
 
-export async function fetcherPost<TData>(url: string, arg:TData, options?: AxiosRequestConfig){
+export async function fetcherPost<TData>(url: string, arg?:TData, options?: AxiosRequestConfig){
   return axios.post(url, arg, options).then(res => res.data)
 }
 

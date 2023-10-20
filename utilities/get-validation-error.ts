@@ -26,6 +26,10 @@ export const getValidationErrors = (errorCode: string) => {
         ERR_NETWORK: {
             title: "Se ha rompido la red",
             message: "Ah ocurrido un error del lado del servidor, si el error persiste, comuniquese con el equipo de desarrollo."
+        },
+        SALE_NOT_CONTENT:{
+            title: "Venta sin contenido",
+            message: "No podemos confirmar una venta si no hay ordenes."
         }
     }
 
