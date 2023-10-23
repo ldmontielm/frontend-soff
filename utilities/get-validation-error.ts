@@ -27,7 +27,10 @@ export const getValidationErrors = (errorCode: string) => {
             title: "Se ha rompido la red",
             message: "Ah ocurrido un error del lado del servidor, si el error persiste, comuniquese con el equipo de desarrollo."
         },
-
+        SALE_NOT_CONTENT:{
+            title: "Venta sin contenido",
+            message: "No podemos confirmar una venta si no hay ordenes."
+        },
         // EXCEPTIONS PURCHASES
 
         PROVIDER_NOT_FOUND: {
@@ -105,7 +108,6 @@ export const getValidationErrors = (errorCode: string) => {
             title: "Detalle no encontrado",
             message:"Lo sentimos, el detalle no pudo ser encontrado."
         }
-
     }
 
     return codeMatcher[errorCode]
