@@ -2,19 +2,26 @@
 
 import { Product } from '@/app/products/models/product.models'
 import { Button } from '@/components/ui/button'
-import { changeStatus, urlProducts } from '@/app/products/services/products.services'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { Switch } from '@/components/ui/switch'
 import { useEffect } from 'react'
-import { useSWRConfig } from 'swr'
 import { RoutesApi } from '@/models/routes.models'
 import useSWR, { mutate} from 'swr'
+import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
 
-export default function DisableProduct({productId, product}: {productId:string, product: Product}) {
+const DisableProductFetch = async (url: string, arg: Product) => {
+    return await fetcherPut(url, arg)
+  }
+
+interface Props {
+    id: string
+    product: Product
+  }
+
+export default function DisableProduct({id, product}: Props) {
     const [state, setState] = useState(true)
     const router = useRouter()
-    // const {mutate} = useSWRConfig()
 
     useEffect(()=>{
         if(product){
@@ -23,13 +30,9 @@ export default function DisableProduct({productId, product}: {productId:string, 
     }, [product]);
 
     async function onSubmit() {
-        try{
-            const res = await changeStatus(productId)
-            if (res.status !== undefined){
-                setState(res.status)
-            }
-        }catch(error){
-            console.log(error)
+        const res = await DisableProductFetch(`${RoutesApi.PRODUCTS}/${id}/change_status`, product)
+        if (res.status !== undefined){
+            setState(res.status === 1)
         }
         mutate (RoutesApi.PRODUCTS)
     }

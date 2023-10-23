@@ -131,8 +131,7 @@ export const columns: ColumnDef<Product>[] = [
                                         </Button>
                                     </Link>
                                     <ViewDetailsByProduct product={product} id={product.id}/>
-                                    <DisableProduct productId={product.id}
-                                        product={product}/>
+                                    <DisableProduct id={product.id} product={product}/>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </>
@@ -147,8 +146,7 @@ export const columns: ColumnDef<Product>[] = [
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="flex flex-col">
                                     <DropdownMenuLabel>Acción</DropdownMenuLabel>
-                                    <DisableProduct productId={product.id}
-                                        product={product}/>
+                                    <DisableProduct id={product.id} product={product}/>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </>
