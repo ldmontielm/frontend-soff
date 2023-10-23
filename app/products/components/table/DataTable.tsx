@@ -9,14 +9,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { convertToCOP} from '../../utils'
-import Link from 'next/link'
-import { Routes } from '@/models/routes.models'
-import { Product } from '../../models/product.models'
-// import { createProduct } from '../../services/products.services'
 import { HeadTable } from '..'
 import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import {
@@ -38,7 +32,8 @@ import {
   getCoreRowModel,
   getPaginationRowModel,
   useReactTable,
-  SortingState
+  SortingState,
+  getSortedRowModel
 } from "@tanstack/react-table"
 import {
   DropdownMenu,
@@ -46,7 +41,6 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -61,12 +55,14 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
   const [value, SetValue] = useState("")
+ 
   const table = useReactTable({
     data, columns, getCoreRowModel: getCoreRowModel(), getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
       columnFilters,
@@ -100,7 +96,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
             {table
                 .getAllColumns()
                 .filter(
-                  (column) => column.getCanHide()
+                  (column) => typeof column.accessorFn !== "undefined" && column.getCanHide()
                   )
                   .map((column) => {
                     return (
@@ -116,6 +112,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                         column.id === 'name' ? 'Nombre' :
                         column.id === 'price' ? 'Costo' :
                         column.id === 'sale_price' ? 'Precio de venta' :
+                        column.id === 'register_date' ? 'fecha registro' : 
                         column.id === 'status' ? 'Estado' : column.id
                       }
                     </DropdownMenuCheckboxItem>
@@ -204,19 +201,19 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
           <span>Próxima</span>
           <ChevronRightIcon className='w-4 h-4' />
         </Button>
-        <select
-          className='w-fit flex h-9 items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 '
-          value={table.getState().pagination.pageSize}
-          onChange={e => {
-            table.setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Mostrar {pageSize}
-            </option>
-          ))}
-        </select>
+        <Select 
+          defaultValue={table.getState().pagination.pageSize.toString()}
+          onValueChange={(e) => table.setPageSize(Number(e))}
+          >
+          <SelectTrigger className="w-fit">
+            <SelectValue placeholder="Select a fruit" />
+          </SelectTrigger>
+          <SelectContent>
+            {[10, 20, 30, 40, 50].map(pageSize => (
+              <SelectItem key={pageSize} value={pageSize.toString()}>Mostrar {pageSize}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <p>Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}</p>
       </div>
     </div>

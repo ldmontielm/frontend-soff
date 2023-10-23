@@ -8,11 +8,13 @@ import { useState } from 'react'
 import { Switch } from '@/components/ui/switch'
 import { useEffect } from 'react'
 import { useSWRConfig } from 'swr'
+import { RoutesApi } from '@/models/routes.models'
+import useSWR, { mutate} from 'swr'
 
 export default function DisableProduct({productId, product}: {productId:string, product: Product}) {
     const [state, setState] = useState(true)
     const router = useRouter()
-    const {mutate} = useSWRConfig()
+    // const {mutate} = useSWRConfig()
 
     useEffect(()=>{
         if(product){
@@ -29,7 +31,7 @@ export default function DisableProduct({productId, product}: {productId:string, 
         }catch(error){
             console.log(error)
         }
-        mutate (`${urlProducts}`)
+        mutate (RoutesApi.PRODUCTS)
     }
 
     return (

@@ -17,6 +17,8 @@ import { ViewDetailsByProduct } from ".."
 import { DisableProduct } from "../../[id]/components/disable-product"
 import {PencilIcon } from "@heroicons/react/24/outline"
 import Link from 'next/link'
+import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
+import { Routes } from "@/models/routes.models"
 
 export const columns: ColumnDef<Product>[] = [
     {
@@ -24,17 +26,16 @@ export const columns: ColumnDef<Product>[] = [
         header: ({ column }) => {
             return (
               <Button
-              className="items-start"
                 variant="ghost"
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
               >
                 Nombre
-                <ArrowUpDown className="ml-2 h-4 w-4" />
+                <ChevronUpDownIcon className="ml-2 h-4 w-4" />
               </Button>
             )
         },
         cell: ({row}) => {  
-            return <div className="font-medium">{row.getValue("name")}</div>
+            return <div className="capitalize">{row.original.name}</div>
         }
     },   
     {
@@ -42,12 +43,11 @@ export const columns: ColumnDef<Product>[] = [
         header: ({ column }) => {
             return (
               <Button
-                className="items-start"
                 variant="ghost"
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
               >
                 Costo
-                <ArrowUpDown className="ml-2 h-4 w-4" />
+                <ChevronUpDownIcon className="ml-2 h-4 w-4" />
               </Button>
             )
         },
@@ -125,12 +125,12 @@ export const columns: ColumnDef<Product>[] = [
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="flex flex-col items-start">
                                     <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                                    <Link href={`/products/${product.id}/update_product`}>
+                                    <Link href={`${Routes.CREATEPRODUCT}/${product.id}/update_product`}>
                                         <Button variant='ghost'>
                                             <PencilIcon className=" h-4 w-4 mr-2" /> <span>Editar</span>
                                         </Button>
                                     </Link>
-                                    <ViewDetailsByProduct productId={product.id}/>
+                                    <ViewDetailsByProduct product={product} id={product.id}/>
                                     <DisableProduct productId={product.id}
                                         product={product}/>
                                     </DropdownMenuContent>

@@ -1,18 +1,17 @@
 "use client"
 
-import { addDetail, fetcherPost, urlProducts} from "@/app/products/services/products.services"
+import { RoutesApi } from "@/models/routes.models"
+import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider"
 import { urlSupply } from "@/app/supplies/services/supply.services"
 import { Supply } from "@/app/supplies/models/supply.models"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import toast from "react-hot-toast"
 import useSWR, {mutate} from 'swr'
 import * as z from 'zod'
 import { Check, ChevronsUpDown } from "lucide-react"
@@ -48,19 +47,23 @@ import { DetailCreate } from "@/app/products/models/product.models"
 const formSchema = z.object({
   product_id: z.string(),
   supply_id: z.string().uuid({message: 'Debe seleccionar un insumo'}),
-  amount_supply: z.number().min(1, {message:'Como mínimo debe ingresar un número'}).transform(Number)
+  amount_supply: z.number({required_error: "Este campo es requerido", invalid_type_error: "Se espera un número"}).min(1, {message: "Como mínimo debe usar un insumo"}).max(999, {message: "Como máximo solo puedes usar 900 de cada insumo"})
 })
 
 const AddDetailFetch = async (url: string, body: DetailCreate) => {
   return await fetcherPost<DetailCreate>(url, body)
 }
 
-export default function HeadTable() {
-  const params = useParams()
-  const {data:supplies} = useSWR(urlSupply)
-  const {data} = useSWR(`${urlProducts}/${params.id}/details`)
-  const [open, setOpen] = useState(false)
-  const [value, setValue] = useState("")
+interface Props {
+  id: string
+}
+
+export default function HeadTable({id}:Props) {
+  // const params = useParams()
+  // const {data:supplies} = useSWR(urlSupply)
+  // const {data} = useSWR(`${urlProducts}/${params.id}/details`)
+  // const [open, setOpen] = useState(false)
+  // const [value, setValue] = useState("")
 
   // const [supply, setSupply] = useState(false)
   // const [amountSuply, setAmountSupply] = useState<number>()
@@ -70,6 +73,10 @@ export default function HeadTable() {
   
   // const [open, setOpen] = React.useState(false)
   // const [value, setValue] = React.useState("")
+
+  const {data:supplies} = useSWR(RoutesApi.SUPPLIES)
+  const {data} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
+  const [open, setOpen] = useState(false)
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -92,9 +99,9 @@ export default function HeadTable() {
   // }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    values.product_id = params.id.toString()
-    const data = await AddDetailFetch(`${urlProducts}/${params.id}/add_detail`, values)
-    // mutate(`${urlProducts}/${params.id}/details`)
+    values.product_id = id
+    const data = await AddDetailFetch(`${RoutesApi.PRODUCTS}/${id}/add_detail`, values)
+    mutate(`${RoutesApi.PRODUCTS}/${id}/details`)
   }
 
   return (
@@ -165,7 +172,7 @@ export default function HeadTable() {
               <FormItem className="w-full md:w-[200px]">
                 <FormLabel>Cantidad</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Cantidad de insumo" min="1" max="4" {...form.register('amount_supply', {valueAsNumber: true})} className="lg:w-fit"/>
+                  <Input type="number" placeholder="Cantidad de insumo" min="1" {...form.register('amount_supply', {valueAsNumber: true})} className="lg:w-fit"/>
                   {/* <Input type="number" placeholder="Cantidad de insumo" min="1" max="4" {...field} className="lg:w-fit"/> */}
                 </FormControl>
                 <FormMessage />
