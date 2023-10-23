@@ -28,14 +28,6 @@ import {
 } from "@/components/ui/popover"
 import { Supply } from "@/app/supplies/models/supply.models"
 
-// const formSchema = z.object({
-//   product_id: z.string(),
-//   supply_id: z.string().uuid({message: 'Debe seleccionar un insumo'}),
-//   // amount_supply: z.number().int().min(1, {message:'Mínimo debes ingresar un numero'}).nonnegative({message: 'No se aceptan valores negativos'}).transform(Number),
-//   amount_supply: z.number().int().min(1, 'Como mínimo debe usar un insumo').nonnegative({message: 'No se aceptan valores negativos'}),
-//   // unit_measure: z.string().min(2, {message: 'La unidad debe tener más de 2 caracteres'})
-// })
-
 const formSchema = z.object({
   product_id: z.string(),
   supply_id: z.string().uuid({message: 'Debe seleccionar un insumo'}),
@@ -50,22 +42,7 @@ interface Props {
   id: string
 }
 
-// async function fetchGetAllSuplies(){
-//   return await getSupplies()
-// }
-
 export default function HeadTable({id}: Props) {
-  // const params = useParams()
-  // const [supply, setSupply] = useState(false)
-  // const [amountSuply, setAmountSupply] = useState<number>()
-  // // const [value, setValue] = useState("")
-  // const router = useRouter()
-  // const {data:supplies} = useSWR('http://localhost:8000/supplies', getSupplies)
-  // // const {AddDetail} = useContext(DetailContext) as DetailContextInterface
-  
-  // const [open, setOpen] = React.useState(false)
-  // const [value, setValue] = React.useState("")
-
   const {data:supplies} = useSWR(RoutesApi.SUPPLIES)
   const {data:details} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
   const [open, setOpen] = useState(false)
@@ -87,36 +64,7 @@ export default function HeadTable({id}: Props) {
     values.product_id = id
     const data = await AddDetailFetch(`${RoutesApi.PRODUCTS}/${id}/add_detail`, values)
     mutate(`${RoutesApi.PRODUCTS}/${id}/details`)
-    
-    // values.product_id = params.id.toString()
-    // toast.promise(addDetail(values), {
-    //   loading: 'Agreagando detalle...',
-    //   success: 'Detalle agregado correctamente',
-    //   error: 'Error when fetching'
-    // })
-    // router.refresh()
   }
-
-  // async function onSubmit(values: z.infer<typeof formSchema>){
-  //   console.log(values)
-  //   values.product_id = params.id.toString()
-  //   const supply:any=Array.isArray(supplies) && supplies.find((item)=> item.id === values.supply_id)
-  //   if (supply != undefined && supply != false){
-  //     const newDetail = {
-  //       id: crypto.randomUUID(),
-  //       product_id: values.product_id,
-  //       supply_id: values.supply_id,
-  //       supply: supply.name,
-  //       supply_price:supply.price,
-  //       amount_supply: values.amount_supply,
-  //       unit_measure: values.unit_measure,
-  //       subtotal: values.amount_supply * supply.price
-  //     }
-  //     AddDetail(newDetail)
-  //   }else{
-  //     toast.error('El insumo no se pudo encontrar')
-  //   }
-  // }
 
   return (
     <Form {...form}>

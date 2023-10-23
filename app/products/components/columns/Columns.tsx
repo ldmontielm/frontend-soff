@@ -51,8 +51,6 @@ export const columns: ColumnDef<Product>[] = [
               </Button>
             )
         },
-
-        // header: () => <div className="text-left">Costo</div>,
         cell: ({row}) => {
         const costo = parseFloat(row.getValue("price"))
         const formatted = new Intl.NumberFormat("en-US", {
@@ -66,7 +64,17 @@ export const columns: ColumnDef<Product>[] = [
     },
     {
         accessorKey: 'sale_price',
-        header: () => <div className="text-left">Precio de venta</div>,
+        header: ({column}) => {
+            return (
+                <Button
+                  variant="ghost"
+                  onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                  Precio de venta
+                  <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        }, 
         cell: ({row}) => {
         const sale_price = parseFloat(row.getValue("sale_price"))
         const formatted = new Intl.NumberFormat("en-US", {
@@ -80,7 +88,17 @@ export const columns: ColumnDef<Product>[] = [
     },
     {
         accessorKey: 'register_date',
-        header: "Fecha de registro",
+        header: ({column}) => {
+            return (
+                <Button
+                  variant="ghost"
+                  onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                  Fecha de registro
+                  <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        }, 
         cell: ({row}) => {
           const date = new Date(row.getValue("register_date"))
           const formatted = new Intl.DateTimeFormat(['ban', 'id']).format(date)
@@ -90,7 +108,17 @@ export const columns: ColumnDef<Product>[] = [
       },
     { 
         accessorKey: 'status',
-        header: () => <div className="text-right">Estado</div>,
+        header: ({column}) => {
+            return (
+                <Button
+                  variant="ghost"
+                  onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                  Estado
+                  <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        }, 
         cell: ({row}) => {
         return <div className="text-right">
         { 

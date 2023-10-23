@@ -16,7 +16,6 @@ import useSWR, { mutate} from 'swr'
 
 const formSchema = z.object({
   amount_supply: z.number({invalid_type_error: "Debes ingresar un número, no un texto", required_error: "El campo es requerido"}).min(1, {message: "El valor de la cantidad debe ser diferente de 0"}),
-  // amount_supply: z.string().transform((val) => parseInt(val)),
   id_detail:z.string().optional(),
 })
 
@@ -31,9 +30,8 @@ const UpdateAmountDetailFetch = async (url: string) => {
 
 export default function DetailUpdateForm({detail, id_product}: Props) {
   const [open, setOpen] = useState(false)
-  const {data} = useSWR(`${RoutesApi.SALES}/${id_product}/details`)
+  const {data} = useSWR(`${RoutesApi.PRODUCTS}/${id_product}/details`)
 
-  // const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -47,12 +45,6 @@ export default function DetailUpdateForm({detail, id_product}: Props) {
     const data = await UpdateAmountDetailFetch(`${RoutesApi.PRODUCTS}/update_detail?id_detail=${values.id_detail}&amount_supply=${values.amount_supply}`)
     mutate(`${RoutesApi.PRODUCTS}/${id_product}/details`)
     setOpen(false)
-    // toast.promise(updateAmountDetail(values.id_detail, values.amount_supply), {
-    //   loading: 'Actualizando detalle...',
-    //   success: 'Detalle Actualizado correctamente',
-    //   error: 'Error al actualizar'
-    // })
-    // router.refresh()
   }
 
 

@@ -2,27 +2,24 @@
 
 import { RoutesApi } from '@/models/routes.models'
 import { fetcherPut, fetcherDelete } from '@/context/swr-context-provider/SwrContextProvider'
-// import { updateProduct, deleteDetail, urlProducts, deleteProduct} from '@/app/products/services/products.services'
 import { convertToCOP } from '@/app/sales/utils'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import useSWR from 'swr'
 import * as z from 'zod'
 import { Input } from '@/components/ui/input'
-import { DetailsRecipe, Product, ProductConfim } from '@/app/products/models/product.models'
+import { DetailsRecipe, Product, ProductCreate } from '@/app/products/models/product.models'
 import { useToast } from "@/components/ui/use-toast"
 
 const formProductSchema = z.object({
     name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Producto'}),
-    sale_price: z.number({invalid_type_error: "Debes ingresar un número, no un texto", required_error: "El campo es requerido"}).min(1, {message: "El valor de la cantidad debe ser diferente de 0"})
+    sale_price: z.number({required_error: "El campo es requerido", invalid_type_error: "Se espera un número"}).min(1, {message: "El valor del precio debe ser diferente de 0"})
 });
 
 interface Props{
-  // subtotal: number,
   id: string
 }
 
@@ -36,13 +33,9 @@ const calculateSubtotal = (details: Array<DetailsRecipe>) => {
   return subtotal
 }
 
-const ConfirmProductFetch = async (url: string, arg: ProductConfim) => {
+const ConfirmProductFetch = async (url: string, arg: ProductCreate) => {
   return await fetcherPut(url, arg)
 }
-
-// const CancelProductFetch = async (url: string) => {
-//   return await fetcherDelete(url)
-// }
 
 export default function InfoProduct({id}:Props) {
   const {data:details} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
@@ -66,16 +59,10 @@ export default function InfoProduct({id}:Props) {
     }
     
     if (product.name === '' || product.sale_price === 0){
-      // toast.error('La información del producto es necesaria.')
       toast({variant: 'destructive', title: "Campos del producto requeridos", description: "Todos los campos del producto son necesarios para editar el producto."})
     }
     else{
-        // toast.promise(updateProduct(id, values), {
-        //   loading: 'Actualizando producto...',
-        //   success: 'Producto actualizado',
-        //   error: 'Error when fetching'
-        // })
-        const res = await ConfirmProductFetch(`${RoutesApi.PRODUCTS}/${id}/confirm_product`, product)
+        const res = await ConfirmProductFetch(`${RoutesApi.PRODUCTS}/${id}/update_product`, product)
         toast({variant: 'default', title: "Registro guardado correctamente", description: "Se ha guardado con exito el producto, mira el historial en la sección de productos."})
         router.push('/products')
       }
@@ -105,7 +92,7 @@ export default function InfoProduct({id}:Props) {
                     <FormItem>
                       <FormLabel>Nombre</FormLabel>
                       <FormControl >
-                         <Input placeholder={product?.name.toString()} defaultValue={product?.name} {...field} />
+                         <Input defaultValue={product?.name} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -118,7 +105,7 @@ export default function InfoProduct({id}:Props) {
                     <FormItem>
                       <FormLabel>Precio</FormLabel>
                       <FormControl>
-                        <Input placeholder={product?.sale_price.toString()} defaultValue={product?.sale_price} {...formProduct.register("sale_price", {valueAsNumber: true})} onChange={field.onChange} />
+                        <Input type='number' defaultValue={product?.sale_price} {...formProduct.register("sale_price", {valueAsNumber: true})}/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

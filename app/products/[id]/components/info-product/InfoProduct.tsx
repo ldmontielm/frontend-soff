@@ -2,30 +2,25 @@
 
 import { RoutesApi } from '@/models/routes.models'
 import { fetcherPut, fetcherDelete } from '@/context/swr-context-provider/SwrContextProvider'
-// import { confirmProduct,urlProducts, deleteProduct } from '@/app/products/services/products.services'
 import { convertToCOP } from '@/app/sales/utils'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-// import { useRouter } from 'next/router'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import useSWR from 'swr'
 import * as z from 'zod'
-// import { CardClient } from '..'
 import { Input } from '@/components/ui/input'
 import { DetailsRecipe, Product, ProductConfim } from '@/app/products/models/product.models'
 import { useToast } from "@/components/ui/use-toast"
 
 
 const formProductSchema = z.object({
-    name: z.string(),
-    sale_price: z.string().transform(Number)
+  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Producto'}),
+  sale_price: z.number({invalid_type_error: "Debes ingresar un número, no un texto", required_error: "El campo es requerido"}).min(1, {message: "El valor del precio debe ser diferente de 0"})
 })
 
 interface Props{
-  // subtotal: number,
   id: string
 }
 
@@ -52,10 +47,6 @@ export default function InfoProduct({id}:Props) {
   const {data: product} = useSWR<Product>(`${RoutesApi.PRODUCTS}/${id}`)
   const router = useRouter()
   const { toast } = useToast()
-  // const router = useRouter()
-  // const {data:product} = useSWR(urlProducts)
-
-  console.log(product)
 
   const formProduct = useForm<z.infer<typeof formProductSchema>>({
     resolver: zodResolver(formProductSchema),
@@ -79,27 +70,6 @@ export default function InfoProduct({id}:Props) {
         router.push('/products')
       }
     }
-    
-    // if (values.name === '' || values.sale_price === 0){
-    //   toast.error('La información del producto es necesaria.')
-    // }else{
-    //     toast.promise(confirmProduct(id, values), {
-    //       loading: 'Registrando producto...',
-    //       success: 'Producto registrado',
-    //       error: 'Error when fetching'
-    //     })
-    //     router.push('/products')
-    //   }
-    // }
-
-    // async function cancelProduct(){
-    //   toast.promise(deleteProduct(id),{
-    //     loading: 'Cancelando Registro...',
-    //     success: 'Registro cancelado',
-    //     error: (err) => `This just happened: ${err.detail.toString()}`
-    //   })
-    //   router.push('/products')
-    // }
 
   return (
     <div className='w-full'>
@@ -134,7 +104,7 @@ export default function InfoProduct({id}:Props) {
                     <FormItem>
                       <FormLabel>Precio</FormLabel>
                       <FormControl>
-                        <Input placeholder='Precio'{...field} />
+                        <Input type='number' placeholder='Precio'{...formProduct.register("sale_price", {valueAsNumber: true})}/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -163,9 +133,6 @@ export default function InfoProduct({id}:Props) {
               Cancelar
             </Button>
           </div>
-       
-      
-
     </div>
   )
 }
