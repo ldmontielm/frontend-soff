@@ -1,6 +1,6 @@
 'use client'
 
-import { Provider } from '../../models/provider.models'
+import { Provider, ProviderCreate } from '../../models/provider.models'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -10,25 +10,34 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
 import toast from 'react-hot-toast'
-import { updateProvider } from '../../services/provider.services'
+// import { updateProvider } from '../../services/provider.services'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useContext } from "react"
-import { urlProvider } from '../../services/provider.services'
+// import { urlProvider } from '../../services/provider.services'
 import { OrderContextInterface } from "@/app/sales/models/sale.models"
 import useSWR, { mutate, useSWRConfig } from "swr";
+import { fetcherPut } from "@/context/swr-context-provider/SwrContextProvider";
+import { Routes, RoutesApi } from "@/models/routes.models";
+import { useToast } from "@/components/ui/use-toast"
+
+
+
 
 const formSchema = z.object({
-  nit: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nit del proveedor'}),
-  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del proveedor'}),
-  company: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre de la empresa'}),
-  address: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese una dirección'}),
-  // email: z.string({required_error: "El campo es requerido"}).email({message: "Correo no valido"}),
-  phone: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese un teléfono'}),
-  city: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese una ciudad'}),
   id_provider:z.string().optional(),
+  nit: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nit de la empresa'}).max(20, {message: 'El nit es demasiado largo'}),
+  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del proveedor'}).max(255, {message: 'El nombre del proveedor es demasiado largo'}),
+  company: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre de la empresa'}).max(255, {message: 'El nombre de la empresa es demasiado largo'}),
+  address: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese una dirección'}).max(255, {message: 'La dirección es demasiado larga'}),
+  // email: z.string({required_error: "El campo es requerido"}).email({message: "Correo no válido"}),
+  phone: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese un teléfono'}).max(20, {message: 'El teléfono es demasiado largo'}),
+  city: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese una ciudad'}).max(50, {message: 'La ciudad es demasiado larga'}),
+});
 
-})
+const UpdateProviderFetch = async (url: string, body: ProviderCreate) => {
+  return await fetcherPut<ProviderCreate>(url, body)
+}
 
 interface Props{
   provider: Provider
@@ -39,7 +48,8 @@ interface Props{
 export default function ProviderUpdateForm({provider, id_provider}: Props) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
-  const {} = useSWR(`{urlProvider}`)
+  const { toast } = useToast()
+  const {} = useSWR(`{RoutesApi.PROVIDERS}`)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -56,18 +66,28 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
   const {mutate } = useSWRConfig()
 
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     values.id_provider = provider.id
-
-    toast.promise(updateProvider(id_provider, values), {
-      loading: 'Updated detail...',
-      success: 'Insumo Actualizado correctamente',
-      error: 'Error al actualizar'
-    })
-    router.refresh()
+    const data = await UpdateProviderFetch(`${RoutesApi.PROVIDERS}/update_provider/${provider.id}`, values )
+    toast({variant: 'default', title: "Proveedor actualizado correctamente", description: "Se ha actualizado correctamente el proveedor."})
+    mutate(`${RoutesApi.PROVIDERS}`)
+    form.reset()
     setOpen(false)
-    mutate(`${urlProvider}`)
   }
+
+
+  // function onSubmit(values: z.infer<typeof formSchema>) {
+  //   values.id_provider = provider.id
+
+  //   toast.promise(updateProvider(id_provider, values), {
+  //     loading: 'Updated detail...',
+  //     success: 'Insumo Actualizado correctamente',
+  //     error: 'Error al actualizar'
+  //   })
+  //   router.refresh()
+  //   setOpen(false)
+  //   mutate(`${RoutesApi.PROVIDERS}`)
+  // }
 
 
 
