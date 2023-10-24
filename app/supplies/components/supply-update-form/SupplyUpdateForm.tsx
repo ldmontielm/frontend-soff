@@ -1,6 +1,8 @@
 'use client'
 
-import { Supply } from '../../models/supply.models'
+import { Routes, RoutesApi } from "@/models/routes.models";
+import { fetcherPut } from "@/context/swr-context-provider/SwrContextProvider";
+import { Supply, SupplyCreate } from '../../models/supply.models'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -17,32 +19,28 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import toast from 'react-hot-toast'
-// import { updateAmountOrder } from '@/app/sales/services/sale.services'
-// import { updateProvider } from '../../services/provider.services'
 import { updatedSupply, getSupplies, urlSupply } from '../../services/supply.services'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useContext } from "react"
 import { OrderContextInterface } from "@/app/sales/models/sale.models"
 import useSWR, { mutate, useSWRConfig } from "swr";
+import { useToast } from "@/components/ui/use-toast"
 
 
 
-// const formSchema = z.object({
-//   name: z.string().min(2, {message: 'El nombre debe tener más de dos caracteres'}),
-//   price: z.number().min(2, {message: 'Debe tener mas de dos caracteres'}),
-//   quantity_stock: z.number().min(2, {message: 'Debe tener mas de dos caracteres'}),
-//   unit_measure: z.string().min(2, {message: 'El nombre debe tener más de dos caracteres'}),
-//   id_supply:z.string().optional(),
-// })
+const UpdateSupplyFetch = async (url: string, body: SupplyCreate) => {
+  return await fetcherPut<SupplyCreate>(url, body)
+}
 
 const formSchema = z.object({
-  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}),
-  price: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese el precio del insumo'}).transform(Number),
-  quantity_stock: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).transform(Number),
-  unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccioné una opción'}),
   id_supply:z.string().optional(),
-})
+  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}).max(255, {message: 'El nombre del insumo es demasiado largo'}),
+  price: z.number({required_error: "El campo es requerido"}).min(3, {message: 'Ingrese el precio del insumo'}).max(999999, {message: 'El precio es demasiado alto'}),
+  quantity_stock: z.number({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).max(999999, {message: 'La cantidad es demasiado alta'}),
+  unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccioné una opción'}).max(50, {message: 'La unidad de medida es demasiado larga'}),
+});
+
 
 interface Props{
   supply: Supply
@@ -53,6 +51,7 @@ interface Props{
 export default function SupplyUpdateForm({supply, id_supply}: Props) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
+  const { toast } = useToast()
   const {} = useSWR(`{urlSupply}`,getSupplies)
   // const {updateProvider} = useContext(OrderContext) as OrderContextInterface
   const form = useForm<z.infer<typeof formSchema>>({
@@ -71,25 +70,13 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
   //   setOpen(false)
   // }
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     values.id_supply = supply.id
-    
-    // const providers = {
-    //     name: values.name,
-    //     company: values.company,
-    //     address: values.address,
-    //     email: values.email,
-    //     phone: values.phone,
-    //     city: values.city
-    //   }
-    toast.promise(updatedSupply(id_supply, values), {
-      loading: 'Updated detail...',
-      success: 'Insumo Actualizado correctamente',
-      error: 'Error al actualizar'
-    })
-    router.refresh()
+    const data = await UpdateSupplyFetch(`${RoutesApi.SUPPLIES}/update_supply/${supply.id}`, values)
+    toast({variant: 'default', title: "Insumo actualizado correctamente", description: "Se ha actualizado correctamente el Insumo."})
+    mutate(`${RoutesApi.SUPPLIES}`)
+    form.reset()
     setOpen(false)
-    mutate(`${urlSupply}`)
   }
 
   return (
@@ -131,7 +118,7 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
                 <FormItem>
                   <FormLabel>Precio</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ingrese el precio" type="number" {...field} />
+                    <Input placeholder="Ingrese el precio" type="number" {...form.register("price", {valueAsNumber: true})} />
                   </FormControl>
                   {/* <FormDescription>
                     Digite El precio del insumo.
@@ -147,7 +134,7 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
                 <FormItem>
                   <FormLabel>Cantidad en stock</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ingrese la cantidad en stock" type="number" {...field} />
+                    <Input placeholder="Ingrese la cantidad en stock" type="number" {...form.register("quantity_stock", {valueAsNumber: true})} />
                   </FormControl>
                   {/* <FormDescription>
                     Digite la cantidad en stock
@@ -165,7 +152,7 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
                   <FormControl>
                   <Select onValueChange={field.onChange} >
                     <SelectTrigger className="w-default">
-                      <SelectValue placeholder="Seleccioné" id="unit_measure" {...field} />
+                      <SelectValue id="unit_measure" {...field} />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="Kilosgramos">Kilogramos</SelectItem>

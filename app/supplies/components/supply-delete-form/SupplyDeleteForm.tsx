@@ -20,52 +20,51 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormField, Form, FormItem, FormControl } from "@/components/ui/form";
 import toast from "react-hot-toast";
-// import { deleteProvider } from "../../services/provider.services";
-import { deleteSupply } from "../../services/supply.services";
-// import { DeleteOrder } from "@/app/sales/services/sale.services";
+import { useToast } from "@/components/ui/use-toast"
+import { Routes, RoutesApi } from "@/models/routes.models";
+// import { deleteSupply } from "../../services/supply.services";
 import { useRouter } from "next/navigation";
 import { useContext } from "react"
 import { useState } from 'react'
-// import { OrderContext } from "../../context/orders-context/orderContext"
 import { urlSupply } from "../../services/supply.services";
 import useSWR, { mutate, useSWRConfig } from "swr";
+import { fetcherDelete } from "@/context/swr-context-provider/SwrContextProvider";
 
-const formSchema = z.object({
-  id_supply: z.string().optional(),
-});
+
+
+const DeleteSupplyFetch = async (url: string) => {
+  return await fetcherDelete(url)
+}
+
+// const formSchema = z.object({
+//   id_supply: z.string().optional(),
+// });
 interface Props {
   supply: Supply;
   id_supply: string
 }
 
-export default function SupplyByIdDeleteForm({ supply, id_supply }: Props) {
-  const [open, setOpen] = useState(false);
-  const router = useRouter();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-    id_supply: "",
-    },
-  });
-  const { mutate } = useSWRConfig();
+export default function ProviderDeleteForm({ supply, id_supply }: Props) {
+  const {data} = useSWR(`${RoutesApi.SUPPLIES}/${id_supply}`)
 
-  // Manejar la eliminación del proveedor
-  const handleDeleteSupply = async () => {
-    try {
-      // Lógica para eliminar el proveedor (llama a deleteProvider correctamente)
-      await deleteSupply(supply.id);
 
-      // Actualizar la lista de proveedores después de eliminar con éxito
-      mutate(urlSupply);
+  // // Manejar la eliminación del proveedor
+  // const handleDeleteSupply = async () => {
+  //   try {
+  //     // Lógica para eliminar el proveedor (llama a deleteProvider correctamente)
+  //     await deleteSupply(supply.id);
 
-      toast.success("Insumo eliminado correctamente");
-      // Cerrar el diálogo de alerta después de eliminar
-      setOpen(false);
-    } catch (error) {
-      // Manejar errores en caso de fallo en la eliminación
-      toast.error("Error al eliminar el Insumo.");
-    }
-  };
+  //     // Actualizar la lista de proveedores después de eliminar con éxito
+  //     mutate(urlSupply);
+
+  //     toast.success("Insumo eliminado correctamente");
+  //     // Cerrar el diálogo de alerta después de eliminar
+  //     setOpen(false);
+  //   } catch (error) {
+  //     // Manejar errores en caso de fallo en la eliminación
+  //     toast.error("Error al eliminar el Insumo.");
+  //   }
+  // };
 
   return (
     <AlertDialog>
@@ -74,7 +73,6 @@ export default function SupplyByIdDeleteForm({ supply, id_supply }: Props) {
           variant="outline"
           size="icon"
           className="group hover:bg-red-500"
-          onClick={() => setOpen(true)} // Abrir el diálogo de alerta al hacer clic en el botón
         >
           <TrashIcon className="w-4 h-4 group-hover:text-white" />
         </Button>
@@ -84,18 +82,18 @@ export default function SupplyByIdDeleteForm({ supply, id_supply }: Props) {
           <AlertDialogTitle>¿Está completamente seguro?</AlertDialogTitle>
           <AlertDialogDescription>
             Esta acción no se puede deshacer. Esto eliminará permanentemente los
-            datos del insumo de nuestros servidores.
+            datos del insumo <span className="font-bold">{supply.name}</span> de nuestros servidores.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel onClick={() => setOpen(false)}>Cancelar</AlertDialogCancel> {/* Cerrar el diálogo de alerta */}
-          <AlertDialogAction
-            type="button"
-            onClick={handleDeleteSupply} // Llamar a la función de eliminación
-            className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90"
-          >
-            Continuar
-          </AlertDialogAction>
+          <AlertDialogCancel>Cancelar</AlertDialogCancel> {/* Cerrar el diálogo de alerta */}
+          <AlertDialogAction type="button" onClick={async () => {
+            await DeleteSupplyFetch(`${RoutesApi.SUPPLIES}/delete_supply/${supply.id}`)
+            mutate(`${RoutesApi.SUPPLIES}`)
+          }} 
+          className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90">
+          Eliminar
+        </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
