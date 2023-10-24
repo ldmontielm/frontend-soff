@@ -1,41 +1,53 @@
 'use client'
-import { confirmProduct,urlProducts, getProductById, deleteProduct } from '@/app/products/services/products.services'
+
+import { RoutesApi } from '@/models/routes.models'
+import { fetcherPut, fetcherDelete } from '@/context/swr-context-provider/SwrContextProvider'
 import { convertToCOP } from '@/app/sales/utils'
 import { Button } from '@/components/ui/button'
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
-import { Label } from '@/components/ui/label'
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { BanknotesIcon, CreditCardIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
-// import { useRouter } from 'next/router'
-import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import toast from 'react-hot-toast'
 import useSWR from 'swr'
 import * as z from 'zod'
-// import { CardClient } from '..'
 import { Input } from '@/components/ui/input'
-import { type } from 'os'
-import { NONAME } from 'dns'
+import { DetailsRecipe, Product, ProductConfim } from '@/app/products/models/product.models'
+import { useToast } from "@/components/ui/use-toast"
+
 
 const formProductSchema = z.object({
-    name: z.string(),
-    sale_price: z.string().transform(Number)
+  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Producto'}),
+  sale_price: z.number({invalid_type_error: "Debes ingresar un número, no un texto", required_error: "El campo es requerido"}).min(1, {message: "El valor del precio debe ser diferente de 0"})
 })
 
 interface Props{
-  subtotal: number,
   id: string
 }
 
-export default function InfoProduct({subtotal, id}:Props) {
-  const router = useRouter()
-  const {data:product} = useSWR(`${id}`, getProductById)
+const calculateSubtotal = (details: Array<DetailsRecipe>) => {
+  let subtotal = 0
+  if(details !== undefined){
+    details.map(detail => {
+      subtotal += detail.subtotal
+    })
+  }
+  return subtotal
+}
 
-  console.log(product)
+const ConfirmProductFetch = async (url: string, arg: ProductConfim) => {
+  return await fetcherPut(url, arg)
+}
+
+const CancelProductFetch = async (url: string) => {
+  return await fetcherDelete(url)
+}
+
+export default function InfoProduct({id}:Props) {
+  const {data:details} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
+  const {data: product} = useSWR<Product>(`${RoutesApi.PRODUCTS}/${id}`)
+  const router = useRouter()
+  const { toast } = useToast()
+
   const formProduct = useForm<z.infer<typeof formProductSchema>>({
     resolver: zodResolver(formProductSchema),
     defaultValues: {
@@ -45,25 +57,18 @@ export default function InfoProduct({subtotal, id}:Props) {
   })
 
   async function onSubmit(values: z.infer<typeof formProductSchema>){
-    if (values.name === '' || values.sale_price === 0){
-      toast.error('La información del producto es necesaria.')
-    }else{
-        toast.promise(confirmProduct(id, values), {
-          loading: 'Registrando producto...',
-          success: 'Producto registrado',
-          error: 'Error when fetching'
-        })
+    const product = {
+        name: values.name,
+        sale_price: values.sale_price
+      }
+
+      if(values.name === '' || values.sale_price === 0){
+        toast({variant: 'destructive', title: "Campos del producto requeridos", description: "Todos los campos del producto son necesarios para crear el producto."})
+      }else{
+        const res = await ConfirmProductFetch(`${RoutesApi.PRODUCTS}/${id}/confirm_product`, product)
+        toast({variant: 'default', title: "Registro guardado correctamente", description: "Se ha guardado con exito el producto, mira el historial en la sección de productos."})
         router.push('/products')
       }
-    }
-
-    async function cancelProduct(){
-      toast.promise(deleteProduct(id),{
-        loading: 'Cancelando Registro...',
-        success: 'Registro cancelado',
-        error: (err) => `This just happened: ${err.detail.toString()}`
-      })
-      router.push('/products')
     }
 
   return (
@@ -99,7 +104,7 @@ export default function InfoProduct({subtotal, id}:Props) {
                     <FormItem>
                       <FormLabel>Precio</FormLabel>
                       <FormControl>
-                        <Input placeholder='Precio'{...field} />
+                        <Input type='number' placeholder='Precio'{...formProduct.register("sale_price", {valueAsNumber: true})}/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -107,7 +112,7 @@ export default function InfoProduct({subtotal, id}:Props) {
                 />
           </div>
             <div className='my-3 w-full text-center'>
-              <p className='font-bold text-4xl'>${convertToCOP(subtotal)}</p>
+              <p className='font-bold text-4xl'>${convertToCOP(calculateSubtotal(details !== undefined ? details : []))}</p>
               <p className='text-sm text-gray-400'>Costo</p>
             </div>
           </div>
@@ -117,15 +122,17 @@ export default function InfoProduct({subtotal, id}:Props) {
               Guardar producto
             </Button>
           </div>
-
+          </form>
+          </Form>
           <div className='mt-4 space-y-2'>
-            <Button className="w-full" type='button' variant='outline' onClick={()=>cancelProduct()}>
+            <Button className="w-full" type='button' variant='outline' onClick={async()=>{
+              const res = await CancelProductFetch(`${RoutesApi.PRODUCTS}/${id}/delete_product`)
+              toast({variant: 'default', title: "Producto Cancelado correctamente", description: "Se ha cancelado el producto con éxito."})
+              router.push("/products")
+            }}>
               Cancelar
             </Button>
           </div>
-        </form>
-      </Form>
-
     </div>
   )
 }

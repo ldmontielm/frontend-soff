@@ -4,15 +4,15 @@ import { fetcherPost } from '@/context/swr-context-provider/SwrContextProvider'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ArrowTrendingUpIcon, DocumentPlusIcon, DocumentIcon,XMarkIcon } from "@heroicons/react/24/outline"
+import { ArrowTrendingUpIcon, DocumentPlusIcon, DocumentIcon, PhotoIcon, XMarkIcon } from "@heroicons/react/24/outline"
 import { supabase } from '../../services/supabase.services'
 import useSWR, {mutate} from 'swr'
 import { Button } from '@/components/ui/button'
 import { VoucherConfirm } from '../../models/sale.models'
 import { getValidationErrors } from '@/utilities'
 import { useToast } from "@/components/ui/use-toast"
-
 import { RoutesApi } from '@/models/routes.models'
+
 
 export default function UploadFile({id}: {id:string}) {
   const [filename, setFilename] = useState("No seleccionó achivo")
@@ -29,15 +29,19 @@ export default function UploadFile({id}: {id:string}) {
   const uploadFile = (e: ChangeEvent<HTMLInputElement>) => {
     if(e.target.files !== null) {
       const objectFile = e.target.files[0] 
-      setFile(objectFile)
-      setFilename(objectFile.name)
+
+      if(objectFile.type.includes("image/jpeg") || objectFile.type.includes("application/pdf")){
+        setFile(objectFile)
+        setFilename(objectFile.name)
+      }else{
+        toast({variant: 'destructive', title: "No se permite este tipo de archivos", description: "Como comprobante de venta no aceptamos este tipo de archivo. Solo se permiten .pdf, .jpeg y .jpg"})
+      }
     }
   }
 
-
-
   const handleUpload = async () => {
     if (file !== undefined)  {
+
       const { data, error } = await supabase.storage.from("soff-vouchers").upload(`vouchers/${file.name}`, file as File);
       
       setIsLoading(true)
@@ -92,49 +96,49 @@ export default function UploadFile({id}: {id:string}) {
       {
         file === undefined ? (
         <div className="grid gap-4 py-4">
-              <div 
-              className="flex flex-col w-full max-w-sm items-center gap-1.5 border border-2 border-dashed rounded cursor-pointer p-4 hover:border-blue-500 hover:bg-blue-100/50 group"
-              onClick={() => document.getElementById("vurchase")?.click()}>
-                <DocumentPlusIcon className="h-10 w-10 stroke-1 group-hover:text-blue-500" />
-                <Input 
-                  id="vurchase" 
-                  onChange={(e) => {
-                    uploadFile(e); // 👈 this will trigger when user selects the file.
-                  }}
-                  className="border-none hidden shadow-none" 
-                  type="file"
-                  accept=".pdf, image/*"
-                  />
-                <Label className='group-hover:text-blue-500'>Subir comprobante</Label>
+              <div className="flex flex-col w-full max-w-sm items-center gap-1.5 border border-2 border-dashed rounded cursor-pointer p-4 hover:border-blue-500 hover:bg-blue-100/50 group" onClick={() => document.getElementById("vurchase")?.click()}>
+                  <DocumentPlusIcon className="h-10 w-10 stroke-1 group-hover:text-blue-500" />
+                  <Input id="vurchase" 
+                    onChange={(e) => {
+                      uploadFile(e); // 👈 this will trigger when user selects the file.
+                    }}
+                    className="border-none hidden shadow-none" 
+                    type="file"
+                    accept=".pdf, image/*"
+                    />
+                  <Label className='group-hover:text-blue-500'>Subir comprobante</Label>
               </div>
         </div>
-        ) : <></>
-      }
-      {file !== undefined ? (
-        <div>
-          <div className='w-full flex items-center  justify-between gap-2 p-3'>
-            <div className='flex items-center gap-2'>
-              {
-                file.type === 'application/pdf' ? (
-                  <div className='w-10 h-10 rounded-full flex items-center justify-center bg-red-500'>
-                    <DocumentIcon className='w-4 h-4 text-white' />
-                  </div>
-                ) : ""
-              }
-              <div className='flex flex-col'>
-                <p className='text-[12px] font-semibold text-gray-700'>{file.name}</p>
-                <p className='text-[12px] font-medium text-gray-400'>Tamaño {((file.size / 1024) / 1024).toFixed(3)} MB</p>
+        ) : (
+          <div>
+            <div className='w-full flex items-center  justify-between gap-2 p-3'>
+              <div className='flex items-center gap-2'>
+                {
+                  file.type === 'application/pdf' ? (
+                    <div className='w-10 h-10 rounded-full flex items-center justify-center bg-red-500'>
+                      <DocumentIcon className='w-4 h-4 text-white' />
+                    </div>
+                  ) : (
+                    <div className='w-10 h-10 rounded-full flex items-center justify-center bg-blue-500'>
+                      <PhotoIcon className='w-4 h-4 text-white' />
+                    </div>
+                  )
+                }
+                <div className='flex flex-col'>
+                  <p className='text-[12px] font-semibold text-gray-700'>{file.name}</p>
+                  <p className='text-[12px] font-medium text-gray-400'>Tamaño {((file.size / 1024) / 1024).toFixed(3)} MB</p>
+                </div>
               </div>
+              <Button size='icon' variant='ghost' onClick={() => {
+                setFile(undefined)
+                setFilename("")
+              }}>
+                <XMarkIcon className='w-4 h-4' />
+              </Button>
             </div>
-            <Button size='icon' variant='ghost' onClick={() => {
-              setFile(undefined)
-              setFilename("")
-            }}>
-              <XMarkIcon className='w-4 h-4' />
-            </Button>
           </div>
-        </div>
-      ): <></> }
+        )
+      }
       <Button disabled={file === undefined } onClick={() => handleUpload()}>Subir recibo</Button>
       </DialogContent>
     </Dialog>

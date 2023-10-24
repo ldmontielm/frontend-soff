@@ -10,7 +10,6 @@ import {
   DialogTitle, 
   DialogTrigger } from "@/components/ui/dialog"
 import { EyeIcon, QueueListIcon } from '@heroicons/react/24/outline'
-import { getDetailsByProductId, getProductById, urlProducts } from '@/app/products/services/products.services'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import useSWR from 'swr'
@@ -24,14 +23,25 @@ import {
     TableHeader,
     TableRow,
   } from "@/components/ui/table"
+import { RoutesApi } from '@/models/routes.models'
+import { Product } from '../../models/product.models'
 
-export default function ViewDetailsByProduct({productId}:{productId:string}) {
+  interface Props {
+    id: string
+    product: Product
+  }
+
+export default function ViewDetailsByProduct(
+  // {productId}:{productId:string}
+  {id, product}: Props
+
+  ) {
   const [open, setOpen] = useState(false)
-  const router = useRouter()
-  const {data:products}= useSWR(`${urlProducts}/${productId}`,getProductById)
-  const {data: details} = useSWR(`${productId}`, getDetailsByProductId)
-  const cost = products?.price || 0
-  const sale_price = products?.sale_price || 0
+  // const router = useRouter()
+  // const {data:products}= useSWR(`${RoutesApi.PRODUCTS}/${id}`)
+  const {data: details} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
+  // const cost = products?.price || 0
+  // const sale_price = products?.sale_price || 0
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -51,15 +61,15 @@ export default function ViewDetailsByProduct({productId}:{productId:string}) {
             <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mt-2'>
               <div className='my-3 w-full text-center'>
                 <p className='font-bold text-sm '>Nombre</p>
-                <p className='text-sm text-gray-400'>{products?.name}</p>  
+                <p className='text-sm text-gray-400'>{product.name}</p>  
               </div>
               <div className='my-3 w-full text-center'>
                 <p className='font-bold text-sm'>Costo</p>
-                <p className=' text-sm text-gray-400'>${convertToCOP(cost)}</p>
+                <p className=' text-sm text-gray-400'>${convertToCOP(product.price)}</p>
               </div>
               <div className='my-3 w-full text-center'>
                 <p className='font-bold text-sm'>Precio de venta</p>
-                <p className=' text-sm text-gray-400'>${convertToCOP(sale_price)}</p>
+                <p className=' text-sm text-gray-400'>${convertToCOP(product.sale_price)}</p>
               </div>
             </div>
           </div>

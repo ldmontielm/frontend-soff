@@ -17,6 +17,8 @@ import { ViewDetailsByProduct } from ".."
 import { DisableProduct } from "../../[id]/components/disable-product"
 import {PencilIcon } from "@heroicons/react/24/outline"
 import Link from 'next/link'
+import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
+import { Routes } from "@/models/routes.models"
 
 export const columns: ColumnDef<Product>[] = [
     {
@@ -24,17 +26,16 @@ export const columns: ColumnDef<Product>[] = [
         header: ({ column }) => {
             return (
               <Button
-              className="items-start"
                 variant="ghost"
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
               >
                 Nombre
-                <ArrowUpDown className="ml-2 h-4 w-4" />
+                <ChevronUpDownIcon className="ml-2 h-4 w-4" />
               </Button>
             )
         },
         cell: ({row}) => {  
-            return <div className="font-medium">{row.getValue("name")}</div>
+            return <div className="capitalize">{row.original.name}</div>
         }
     },   
     {
@@ -42,17 +43,14 @@ export const columns: ColumnDef<Product>[] = [
         header: ({ column }) => {
             return (
               <Button
-                className="items-start"
                 variant="ghost"
                 onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
               >
                 Costo
-                <ArrowUpDown className="ml-2 h-4 w-4" />
+                <ChevronUpDownIcon className="ml-2 h-4 w-4" />
               </Button>
             )
         },
-
-        // header: () => <div className="text-left">Costo</div>,
         cell: ({row}) => {
         const costo = parseFloat(row.getValue("price"))
         const formatted = new Intl.NumberFormat("en-US", {
@@ -66,7 +64,17 @@ export const columns: ColumnDef<Product>[] = [
     },
     {
         accessorKey: 'sale_price',
-        header: () => <div className="text-left">Precio de venta</div>,
+        header: ({column}) => {
+            return (
+                <Button
+                  variant="ghost"
+                  onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                  Precio de venta
+                  <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        }, 
         cell: ({row}) => {
         const sale_price = parseFloat(row.getValue("sale_price"))
         const formatted = new Intl.NumberFormat("en-US", {
@@ -80,7 +88,17 @@ export const columns: ColumnDef<Product>[] = [
     },
     {
         accessorKey: 'register_date',
-        header: "Fecha de registro",
+        header: ({column}) => {
+            return (
+                <Button
+                  variant="ghost"
+                  onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                  Fecha de registro
+                  <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        }, 
         cell: ({row}) => {
           const date = new Date(row.getValue("register_date"))
           const formatted = new Intl.DateTimeFormat(['ban', 'id']).format(date)
@@ -90,7 +108,17 @@ export const columns: ColumnDef<Product>[] = [
       },
     { 
         accessorKey: 'status',
-        header: () => <div className="text-right">Estado</div>,
+        header: ({column}) => {
+            return (
+                <Button
+                  variant="ghost"
+                  onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+                >
+                  Estado
+                  <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+                </Button>
+            )
+        }, 
         cell: ({row}) => {
         return <div className="text-right">
         { 
@@ -125,14 +153,13 @@ export const columns: ColumnDef<Product>[] = [
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="flex flex-col items-start">
                                     <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                                    <Link href={`/products/${product.id}/update_product`}>
+                                    <Link href={`${Routes.CREATEPRODUCT}/${product.id}/update_product`}>
                                         <Button variant='ghost'>
                                             <PencilIcon className=" h-4 w-4 mr-2" /> <span>Editar</span>
                                         </Button>
                                     </Link>
-                                    <ViewDetailsByProduct productId={product.id}/>
-                                    <DisableProduct productId={product.id}
-                                        product={product}/>
+                                    <ViewDetailsByProduct product={product} id={product.id}/>
+                                    <DisableProduct id={product.id} product={product}/>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </>
@@ -147,8 +174,7 @@ export const columns: ColumnDef<Product>[] = [
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="flex flex-col">
                                     <DropdownMenuLabel>Acción</DropdownMenuLabel>
-                                    <DisableProduct productId={product.id}
-                                        product={product}/>
+                                    <DisableProduct id={product.id} product={product}/>
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </>

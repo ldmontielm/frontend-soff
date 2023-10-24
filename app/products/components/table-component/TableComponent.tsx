@@ -3,12 +3,11 @@
 import React from 'react'
 import { DataTable } from '../table/DataTable'
 import {columns} from '../columns/Columns'
-// import { columns } from '../columns/Columns'
 import useSWR from 'swr'
-import { getProducts, urlProducts } from '../../services/products.services'
+import { RoutesApi } from '@/models/routes.models'
 
 export default function TableComponent() {
-  const {data: products, isLoading, isValidating, error} = useSWR(urlProducts, getProducts)
+  const {data: products, isLoading, error} = useSWR(RoutesApi.PRODUCTS)
 
   return (
     <div>

@@ -9,25 +9,29 @@ import { PencilIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import toast from 'react-hot-toast'
-import { updateAmountDetail } from '@/app/products/services/products.services'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { DetailsDeleteForm } from '..'
+import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
+import { RoutesApi } from '@/models/routes.models'
+import useSWR, { mutate} from 'swr'
 
 const formSchema = z.object({
-  amount_supply: z.string().transform((val) => parseInt(val)),
+  amount_supply: z.number({invalid_type_error: "Debes ingresar un número, no un texto", required_error: "El campo es requerido"}).min(1, {message: "El valor de la cantidad debe ser diferente de 0"}),
   id_detail:z.string().optional(),
 })
 
 interface Props{
   detail: DetailsRecipe
+  id_product: string | string[]
 }
 
+const UpdateAmountDetailFetch = async (url: string) => {
+  return await fetcherPut(url, undefined)
+}
 
-export default function DetailUpdateForm({detail}: Props) {
+export default function DetailUpdateForm({detail, id_product}: Props) {
   const [open, setOpen] = useState(false)
-  const router = useRouter()
+  const {data} = useSWR(`${RoutesApi.PRODUCTS}/${id_product}/details`)
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,14 +40,10 @@ export default function DetailUpdateForm({detail}: Props) {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     values.id_detail = detail.id
-    toast.promise(updateAmountDetail(values.id_detail, values.amount_supply), {
-      loading: 'Actualizando detalle...',
-      success: 'Detalle Actualizado correctamente',
-      error: 'Error al actualizar'
-    })
-    router.refresh()
+    const data = await UpdateAmountDetailFetch(`${RoutesApi.PRODUCTS}/update_detail?id_detail=${values.id_detail}&amount_supply=${values.amount_supply}`)
+    mutate(`${RoutesApi.PRODUCTS}/${id_product}/details`)
     setOpen(false)
   }
 
@@ -71,7 +71,7 @@ export default function DetailUpdateForm({detail}: Props) {
                 <FormItem>
                   <FormLabel>Cantidad</FormLabel>
                   <FormControl>
-                    <Input id="amount_supplies" type="number" placeholder="0" defaultValue={detail.amount_supply} {...field} className="col-span-3" />
+                    <Input id="amount_supply" type="number" defaultValue={detail.amount_supply} className="col-span-3" {...form.register("amount_supply", {valueAsNumber: true})} onChange={field.onChange} placeholder={detail.amount_supply.toString()}/>
                   </FormControl>
                   <FormDescription>
                     Digite la cantidad del insumo.
@@ -86,7 +86,7 @@ export default function DetailUpdateForm({detail}: Props) {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input id="amount_supply" type="number" placeholder="0" {...field} className="col-span-3 hidden" value={detail.id} defaultValue={detail.id} />
+                    <Input id="id_detail" type="text" placeholder="0" {...field} className="col-span-3 hidden" value={detail.id} defaultValue={detail.id} />
                   </FormControl>
                   <FormMessage />
               </FormItem>
