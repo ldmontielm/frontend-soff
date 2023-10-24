@@ -14,7 +14,6 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import StepContent from '@mui/material/StepContent';
-// import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { Input } from "@/components/ui/input"
@@ -23,17 +22,20 @@ import useSWR, {mutate} from 'swr';
 import toast from 'react-hot-toast';
 import { getPermissions } from '@/app/permissions/services/permissions';
 import { createRoles, getRole, urlRoles} from '../../services/roles.services';
-// import { mutate } from 'swr';
+import { RoutesApi } from '@/models/routes.models';
+import { useToast } from '@/components/ui/use-toast';
+import { fetcherPost } from '@/context/swr-context-provider/SwrContextProvider';
 
 export default function AddRole() {
   
-  const {data:permissions} = useSWR('http://localhost:8000/permission/get-permision', getPermissions)
-  const {data:roles} = useSWR('http://localhost:8000/role/get-role', getRole)
+  const {data:permissions} = useSWR(`${RoutesApi.PERMISSIONS}/get-permision`)
   const [activeStep, setActiveStep] = useState(0);
   const [open, setOpen]= useState(false)
   const [rolename, setRolname] = useState("")
   const [assingPermissions, setAssingPermission] = useState<any[]>([])
   const [rolenameInput, setRolenameInput] = useState("");
+  const { toast } = useToast()
+
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -46,6 +48,26 @@ export default function AddRole() {
   const handleReset = () => {
     setActiveStep(0);
   };
+
+
+  const UpdateRolesFetch = async(url: string, assingPermissions: any[])=>{
+    return await fetcherPost<any>(url, assingPermissions)
+  }
+
+
+  const onSubmit = async(rolename:string, assingPermissions: any[])=>{
+    const res = await UpdateRolesFetch(`${RoutesApi.ROLES}/post-permissions/${rolename}`, assingPermissions)
+    toast({variant: "default", title: "Rol Registrado",
+    description:"Se ha registrado el rol con exito"})
+    setOpen(false)
+    mutate(`${RoutesApi.USERS}`)
+    setOpen(false)
+    setRolname("")
+    setAssingPermission([])
+    setActiveStep(0)
+    setRolenameInput("")
+    mutate(`${RoutesApi.ROLES}/get-role`)
+  }
 
   return (
     <div>
@@ -96,9 +118,7 @@ export default function AddRole() {
                       }else{
                         let listaNewPermissions = assingPermissions.filter((id) => id.id_permission !== permission.id)
                         setAssingPermission(listaNewPermissions)
-                        // setAssingPermission()
                       }
-                      // e ? setAssingPermission([...assingPermissions, permission.id]) : setAssingPermission([assingPermissions.filter(permission  => permission !== permission.id)])
                       }} />
                     <label htmlFor="">{permission.name}</label>
                   </div>
@@ -111,29 +131,15 @@ export default function AddRole() {
               className='w-full m-2'
                 disabled={assingPermissions.length === 0}
                 variant='default'
-                onClick={() => {
-                  toast.promise(createRoles(rolename, assingPermissions), {
-                    success: "Rol agregado",
-                    error: "No se pudo agregar el rol",
-                    loading: "Agregando rol"
-                  })
-                  setOpen(false)
-                  setRolname("")
-                  setAssingPermission([])
-                  setActiveStep(0)
-                  setRolenameInput("")
-                  mutate(`${urlRoles}`)
-                }}
+                onClick={() => onSubmit(rolename, assingPermissions)}
                 size='sm'
               >
                 Finalizar
               </Button>
 
                   <Button
-                    // disabled={assingPermissions.length === 0}
                     onClick={handleBack}
                     className='m-2'
-                    // sx={{ mt: 1, mr: 1 }}
                   >
                     Volver
                   </Button>

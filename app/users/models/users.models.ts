@@ -21,6 +21,9 @@ export interface UserCre {
   password:string;
   role: string;
 }
+export interface UserStatus {
+  status: boolean;
+}
 
 
 export interface createUser{

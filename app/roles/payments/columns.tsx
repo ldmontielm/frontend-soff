@@ -16,8 +16,7 @@ import PermissionModal from "../components/permission-modal/PermissionModal"
 import toast from 'react-hot-toast';
 import Delete from "../components/delete/Delete"
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
-
-
+import { UpdateTable } from "../components/update-table/UpdateTable"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -31,17 +30,17 @@ import { useSWRConfig } from "swr"
 
 
 
+
+
 export default function statusnew() {
   const { data: roles, isLoading, error } = useSWR(urlRoles, getRole)
   const [localRoles, setLocalRoles] = useState<Role[]>([])
-
 
   useEffect(() => {
     if (roles) {
       setLocalRoles(roles)
     }
   }, [roles]);
-
 
 
   const updateProductStatus = (id_role: string, newStatus: boolean) => {
@@ -98,11 +97,9 @@ export const columns: ColumnDef<Role>[] = [
         </Button>
       )
     },
-
     cell: ({ row }) => {
       const role = row.original
       return (
-
         <Badge className={`bg-${role.status === true ? "green": "red"}-500`}>{role.status === true ? "Activo": "Inactivo"}</Badge>
       )
       
@@ -116,41 +113,40 @@ export const columns: ColumnDef<Role>[] = [
       return (
         <div>
           <DropdownMenu>
-
           <DropdownMenuTrigger asChild>
             <Button variant='ghost' size='icon' className="ml-4">
               <MoreHorizontal className="h-4 w-4 " />
             </Button>
           </DropdownMenuTrigger>
-         <DropdownMenuContent align="end" className="flex flex-col">
-           <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-           {role.name !== "Administrador" && role.name !== "Base" ? (
-             <div className=" flex flex-col">
-               <SwitchDemo
-                 id_role={role.id}
-                 role={role}
-                 onUpdateStatus={() => statusnew()}
-               />
+        <DropdownMenuContent align="end" className="flex flex-col">
+          <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+          {role.name !== "Administrador" && role.name !== "Base" ? (
+            <div className=" flex flex-col">
+              <SwitchDemo
+                id_role={role.id}
+                role={role}
+                onUpdateStatus={() => statusnew()}
+              />
               {
                 role.status === true ?(
-                  
-                  <Delete id_role={role.id}/>
-                  
+                  <div>
+                    <div className=" flex items-center justify-left ml-4 mb-2">
+                      <Delete id_role={role.id}/>
+                      <span className="ml-2">Eliminar</span>
+                    </div>
+                    {/* <UpdateTable/> */}
+                  </div>
                 ): null
               }
-
-             </div>
-
-           ) : null
-           }
-
-         </DropdownMenuContent>
-       </DropdownMenu>
+            </div>
+          ) : null
+          }
+        </DropdownMenuContent>
+      </DropdownMenu>
         </div>
       )
     } 
   }
-
 ];
 
 
