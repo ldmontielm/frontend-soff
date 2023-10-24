@@ -125,7 +125,6 @@ export const columns: ColumnDef<Role>[] = [
               <SwitchDemo
                 id_role={role.id}
                 role={role}
-                onUpdateStatus={() => statusnew()}
               />
               {
                 role.status === true ?(
@@ -134,7 +133,9 @@ export const columns: ColumnDef<Role>[] = [
                       <Delete id_role={role.id}/>
                       <span className="ml-2">Eliminar</span>
                     </div>
-                    {/* <UpdateTable/> */}
+                    <div className=" flex items-center justify-left ml-4 mb-2">
+                      <UpdateTable id_role={role.id} role={role}/>
+                    </div>
                   </div>
                 ): null
               }

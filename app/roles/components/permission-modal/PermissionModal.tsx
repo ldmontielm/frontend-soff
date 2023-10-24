@@ -25,8 +25,7 @@ interface Props {
 
 export default function PermissionModal({ id_role }: Props) {
   const [open, setOpen]= useState(false)
-  const { data: permissionsroles, isValidating, error } = useSWR(`${RoutesApi.ROLES}/${id_role}/permissionrole-get`, getPermissionRole);
-
+  const { data: permissionsroles, isValidating, error } = useSWR(`${RoutesApi.ROLES}/${id_role}/permissionrole-get`); 
   if (error) {
     return <p>No tiene permisos</p>;
   }
@@ -47,8 +46,9 @@ export default function PermissionModal({ id_role }: Props) {
 
             {
               Array.isArray(permissionsroles) && permissionsroles.map((permission) => (
-                <h4 key={permission.id_permission}>{permission.id_permission}</h4>
+                <h2 key={permission.id_permission}>{permission.id_permission}</h2>
               ))
+              
             }
           </AlertDialogDescription>
         </AlertDialogHeader>
