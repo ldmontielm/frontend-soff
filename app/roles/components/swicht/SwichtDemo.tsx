@@ -1,21 +1,26 @@
 'use client'
 import React from 'react'
-import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import { Role } from '../../models/roles.models'
-import { UpdateStatusRole, urlRoles } from '../../services/roles.services'
-import { buffer } from 'stream/consumers'
 import { Button } from '@/components/ui/button'
-import { useSWRConfig } from 'swr'
+import { RoutesApi } from '@/models/routes.models'
+import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
+import { Role } from '../../models/roles.models'
+import { mutate } from 'swr'
 
-export default function SwitchDemo({id_role, role, onUpdateStatus}: {id_role:string, role: Role, onUpdateStatus: (id_role:string, newStatus:boolean)=>void}) {
+const UpdateStateRoleFecht= async(url:string, args:Role)=>{
+  return await fetcherPut(url, args)
+}
+
+interface Props{
+  id_role:string
+  role: Role
+}
+
+export default function SwitchDemo({id_role, role}:Props) {
   const [state, setState] = useState(true)
-  const router = useRouter()
-  const { mutate } = useSWRConfig()
-  console.log(id_role)
+
 
   useEffect(()=>{
     if(role){
@@ -25,15 +30,14 @@ export default function SwitchDemo({id_role, role, onUpdateStatus}: {id_role:str
 
   async function onSubmit() {
     try{
-      const res = await UpdateStatusRole(id_role)
+      const res = await UpdateStateRoleFecht(`${RoutesApi.ROLES}/${id_role}/status-update-role`,role)
       if (res.status !== undefined){
-        setState(res.status)
-        onUpdateStatus(id_role, res.status)
-      }
+        setState(res.status === 1)
+    }
   }catch(error){
       console.log(error)
   }
-  mutate(`${urlRoles}/get-role`)
+  mutate(`${RoutesApi.ROLES}/get-role`)
 }
 
   return (
@@ -46,7 +50,5 @@ export default function SwitchDemo({id_role, role, onUpdateStatus}: {id_role:str
       />
       <span>Cambiar estado</span>
     </Button>
-    // <div className="flex items-center space-x-2">
-    // </div>
   )
 }

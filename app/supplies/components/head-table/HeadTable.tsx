@@ -1,6 +1,8 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider";
+import { useToast } from "@/components/ui/use-toast"
 
 import * as z from 'zod'
 import {
@@ -37,30 +39,42 @@ import { Input } from "@/components/ui/input";
 import { createSupply, getSupplies, urlSupply } from "../../services/supply.services";
 import { SupplyCreate } from "../../models/supply.models";
 import {useRouter} from "next/navigation"
-import { Routes } from "@/models/routes.models";
+import { Routes, RoutesApi  } from "@/models/routes.models";
 import { ToastAction } from "@/components/ui/toast"
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import useSWR, { mutate, useSWRConfig } from "swr";
 
+const AddSupplyFetch = async (url: string, body: SupplyCreate) => {
+  return await fetcherPost<SupplyCreate>(url, body)
+}
 
 
 const fromSchema = z.object({
-  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}),
-  price: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese el precio del insumo'}).transform(Number),
-  quantity_stock: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).transform(Number),
-  unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccioné una opción'})
-})
+  supply_id: z.string(),
+  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}).max(255, {message: 'El nombre del insumo es demasiado largo'}),
+  price: z.number({required_error: "El campo es requerido"}).min(3, {message: 'Ingrese el precio del insumo'}).max(999999, {message: 'El precio es demasiado alto'}),
+  quantity_stock: z.number({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).max(999999, {message: 'La cantidad es demasiado alta'}),
+  unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccioné una opción'}).max(50, {message: 'La unidad de medida es demasiado larga'}),
+});
 
 
 export default function HeadTable() {
   const [open, setOpen] = useState(false)
   const routes  = useRouter()
-  const {data:supply} = useSWR(`{urlSupply}`,getSupplies)
+  const { toast } = useToast()
+  const {data:supply} = useSWR(`{RoutesApi.SUPPLIES}`)
   const form = useForm<z.infer<typeof fromSchema>>({
     resolver: zodResolver(fromSchema),
+    defaultValues: {
+      supply_id: '',
+      name: '',
+      price: 0,
+      quantity_stock: 0,
+      unit_measure: ''
+    }
   });
-  const {mutate } = useSWRConfig()
+  // const {mutate } = useSWRConfig()
 
     // function onSubmit(values: z.infer<typeof fromSchema>){
     //   toast.promise(createSupply(values), {
@@ -72,20 +86,17 @@ export default function HeadTable() {
     //   setOpen(false)
     //   mutate(`${urlSupply}`)
     // }
-    function onSubmit(values: z.infer<typeof fromSchema>) {
-      toast.promise(createSupply(values), {
-        success: "Insumo agregado",
-        error: "Algo ocurrió",
-        loading: 'Cargando información...'
-      }).then(() => {
-        form.setValue("name", ""); // Restablece el valor del campo "name" a una cadena vacía
-        form.setValue("price", 0); // Restablece el valor del campo "price" a 0
-        form.setValue("quantity_stock", 0); // Restablece el valor del campo "quantity_stock" a 0
-        form.setValue("unit_measure", ""); // Restablece el valor del campo "unit_measure" a una cadena vacía
-  
-        setOpen(false);
-        mutate(`${urlSupply}`);
-      });
+
+    const onSubmit = async (values: z.infer<typeof fromSchema>) => {
+      if (values.unit_measure === 'Kilogramos') {
+        values.quantity_stock *= 1000; 
+      }
+    
+      await AddSupplyFetch(`${RoutesApi.SUPPLIES}/create_supply`, values);
+      setOpen(false);
+      toast({ variant: 'default', title: "Insumo creado correctamente", description: "Se ha creado correctamente el Insumo." });
+      form.reset();
+      mutate(`${RoutesApi.SUPPLIES}`);
     }
 
 
@@ -123,7 +134,7 @@ return (
               <FormItem>
               <FormLabel>Precio </FormLabel>
               <FormControl>
-                <Input placeholder="Ingrese el precio" type="number" {...field} />
+                <Input placeholder="Ingrese el precio" type="number" {...form.register("price", {valueAsNumber: true})} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -136,7 +147,7 @@ return (
               <FormItem>
               <FormLabel>Cantidad en stock </FormLabel>
               <FormControl>
-              <Input placeholder="Ingrese la cantidad en stock" type="number" {...field} />
+              <Input placeholder="Ingrese la cantidad en stock" type="number" {...form.register("quantity_stock", {valueAsNumber: true})} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -154,7 +165,7 @@ return (
             <SelectValue placeholder="Seleccioné" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="Kilosgramos">Kilogramos</SelectItem>
+            <SelectItem value="Kilogramos">Kilogramos</SelectItem>
             <SelectItem value="Gramos">Gramos</SelectItem>
             <SelectItem value="Unidades">Unidades</SelectItem>
           </SelectContent>

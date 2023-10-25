@@ -14,40 +14,44 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { FormField, Form, FormItem, FormControl } from "@/components/ui/form";
-import toast from "react-hot-toast";
-import { deleteDetail } from "@/app/products/services/products.services";
-import { useRouter } from "next/navigation";
 import { DetailsRecipe } from "@/app/products/models/product.models";
+import { fetcherDelete } from "@/context/swr-context-provider/SwrContextProvider";
+import { RoutesApi } from "@/models/routes.models";
+import useSWR, {mutate} from 'swr'
 
-const formSchema = z.object({
-  id_detail: z.string().optional(),
-});
-interface Props {
-  detail: DetailsRecipe;
+// const formSchema = z.object({
+//   id_detail: z.string().optional(),
+// })
+
+const DeleteDetailFetch = async (url: string) => {
+  return await fetcherDelete(url)
 }
 
-export default function DetailDeleteForm({ detail }: Props) {
-  const router = useRouter()
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-        id_detail: "",
-    },
-  });
+interface Props {
+  detail: DetailsRecipe;
+  id_product: string
+}
 
-  async function onSubmit() {
-    console.log(detail.id)
-    toast.promise(deleteDetail(detail.id), {
-      loading: 'Eliminando detalle...',
-      success: 'Detalle eliminado correctamente',
-      error: 'Error al eliminar'
-    })
-    router.refresh()
-  }
+export default function DetailDeleteForm({ detail, id_product }: Props) {
+  // const router = useRouter()
+
+  // const form = useForm<z.infer<typeof formSchema>>({
+  //   resolver: zodResolver(formSchema),
+  //   defaultValues: {
+  //       id_detail: "",
+  //   },
+  // });
+  const {data} = useSWR(`${RoutesApi.PRODUCTS}/${id_product}/details`)
+
+  // async function onSubmit() {
+  //   console.log(detail.id)
+  //   toast.promise(deleteDetail(detail.id), {
+  //     loading: 'Eliminando detalle...',
+  //     success: 'Detalle eliminado correctamente',
+  //     error: 'Error al eliminar'
+  //   })
+  //   router.refresh()
+  // }
 
   return (
     <AlertDialog>
@@ -70,8 +74,12 @@ export default function DetailDeleteForm({ detail }: Props) {
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction type="button" onClick={() => onSubmit()} className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90">
-          Continue
+        <AlertDialogAction type="button" onClick={async () => {
+            const res = await DeleteDetailFetch(`${RoutesApi.PRODUCTS}/${detail.id}/delete_detail`)
+            mutate(`${RoutesApi.PRODUCTS}/${id_product}/details`)
+          }} 
+          className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90">
+          Eliminar
         </AlertDialogAction>
       </AlertDialogFooter>
     </AlertDialogContent>

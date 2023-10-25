@@ -9,7 +9,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { RoutesApi } from "@/models/routes.models";
 
 const CreateSaleFetch = async (url: string) => {
-  return await fetcherPost(url, undefined)
+  return await fetcherPost(url)
 }
 
 export default function HeadTable() {
@@ -25,7 +25,6 @@ export default function HeadTable() {
           const res = await CreateSaleFetch(RoutesApi.SALES)
           toast({variant: "default", title: "Venta abierta", description: "Ya hemos abierto una nueva venta."})
           router.push(`${Routes.CREATESALE}/${res.id}`)
-
         }}
       >
         Registrar venta
