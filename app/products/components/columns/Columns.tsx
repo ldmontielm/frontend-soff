@@ -156,7 +156,7 @@ export const columns: ColumnDef<Product>[] = [
                 }
                 mutate (RoutesApi.PRODUCTS)
             }
-            return <div className="text-right">
+            return <div className="text-left">
             { 
                 row.getValue("status") ? (
                 <>
@@ -193,6 +193,7 @@ export const columns: ColumnDef<Product>[] = [
     },
     {
         id: "actions",
+        header: "Acciones",
         cell: ({row}) => {
             const product = row.original
             return(

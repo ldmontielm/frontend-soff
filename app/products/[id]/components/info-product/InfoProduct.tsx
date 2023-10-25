@@ -124,7 +124,7 @@ export default function InfoProduct({id}:Props) {
           </div>
           </form>
           </Form>
-          <div className='mt-4 space-y-2'>
+          <div className=' space-y-2 pl-4 pr-4 pb-4'>
             <Button className="w-full" type='button' variant='outline' onClick={async()=>{
               const res = await CancelProductFetch(`${RoutesApi.PRODUCTS}/${id}/delete_product`)
               toast({variant: 'default', title: "Producto Cancelado correctamente", description: "Se ha cancelado el producto con éxito."})
