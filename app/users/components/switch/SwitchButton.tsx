@@ -1,20 +1,26 @@
 'use client'
 import React from 'react'
-import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { useState } from 'react'
-import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
-import { User } from '../../models/users.models'
-import { UpdateStatus,urlUser } from '../../services/users.services'
-import { buffer } from 'stream/consumers'
 import { Button } from '@/components/ui/button'
-import { useSWRConfig } from 'swr'
+import { RoutesApi } from '@/models/routes.models'
+import { User } from '../../models/users.models'
+import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
+import { mutate } from 'swr'
 
-export default function SwitchDemo({id_user, user, onUpdateStatus}: {id_user:string, user: User, onUpdateStatus: (id_user:string, newStatus:boolean)=>void}) {
+interface Props{
+  id_user:string
+  user:User
+}
+
+const UpdateStateUserFecht = async(url :string, args: User)=>{
+  return await fetcherPut(url, args)
+}
+
+
+export default function SwitchDemo({id_user, user}:Props) {
   const [state, setState] = useState(true)
-  const router = useRouter()
-  const { mutate } = useSWRConfig()
 
   useEffect(()=>{
     if(user){
@@ -24,15 +30,14 @@ export default function SwitchDemo({id_user, user, onUpdateStatus}: {id_user:str
 
   async function onSubmit() {
     try{
-      const res = await UpdateStatus(id_user)
+      const res = await UpdateStateUserFecht(`${RoutesApi.USERS}/${id_user}/status-update`,user)
       if (res.status !== undefined){
-        setState(res.status)
-        onUpdateStatus(id_user, res.status)
+        setState(res.status === 1)
       }
   }catch(error){
       console.log(error)
   }
-  mutate(`${urlUser}/get-users`)
+  mutate(`${RoutesApi.USERS}/get-users`)
 }
 
   return (
@@ -45,7 +50,5 @@ export default function SwitchDemo({id_user, user, onUpdateStatus}: {id_user:str
       />
       <span>Cambiar estado</span>
     </Button>
-    // <div className="flex items-center space-x-2">
-    // </div>
   )
 }

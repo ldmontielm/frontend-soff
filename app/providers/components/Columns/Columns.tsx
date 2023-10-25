@@ -25,15 +25,16 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
-import SwitchDemo from "../switcht/SwichtDemo"
+// import SwitchDemo from "../switcht/SwichtDemo"
 import useSWR from "swr"
 import { useState } from "react"
+import { RoutesApi } from '@/models/routes.models'
 import { useEffect } from "react"
-import { getProviders, urlProvider } from "../../services/provider.services"
+// import { getProviders, urlProvider } from "../../services/provider.services"
 // import { UploadFile } from ".."
 
 export default function Statusnew(){
-  const {data: providers, isLoading, error} = useSWR(urlProvider, getProviders)
+  const {data: providers, isLoading, error} = useSWR(RoutesApi.PROVIDERS)
   const [localProviders, setLocalProviders] = useState<Provider[]>([])
 
   useEffect(()=>{
@@ -218,52 +219,49 @@ export const columns: ColumnDef<Provider>[] = [
     },
     cell: ({ row }) => {
       const provider = row.original
-      return <div>
+      return (
+        <Badge className={`bg-${provider.status === true ? "green": "red"}-500`}>{provider.status === true ? "Activo": "Inactivo"}</Badge>
+      )
+    }
+  },
       { 
-          row.getValue("status") ? (
-          <>
-            <Badge className="bg-green-500">Activo</Badge>
+        id: "actions",
+        header: "Acciones",
+        cell: ({ row }) => {
+          const provider = row.original
+          return (
+            // <div>
+              <>
               <DropdownMenu>
                   <DropdownMenuTrigger asChild>
-                  <Button variant='ghost' size='icon' className="ml-4">
+                  <Button variant='ghost' size='icon' className="ml-3">
                       <MoreHorizontal className="h-4 w-4 " />
                   </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end" className="flex flex-col">
                   <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                  <TableCell className="flex items-center gap-2 justify-end">
-                <ProviderUpdateForm provider={provider} id_provider={provider.id} /><span>Editar</span>
-                <ProviderDeleteForm provider={provider} id_provider={provider.id}/><span>Eliminar</span>
+                  <TableCell className="flex items-center gap-2">
+                
                 </TableCell>
-                  <SwitchDemo 
+                  {/* <SwitchDemo 
                     id_provider={provider.id}
                     provider={provider}
-                    onUpdateStatus={()=> Statusnew()}/>
+                    onUpdateStatus={()=> Statusnew()}/> */}
+                    {provider.status == true ? (
+                      <div className="flex flex-col">
+                        <div className="flex justify-left items-center ml-4 mb-2">
+                          <ProviderUpdateForm provider={provider} id_provider={provider.id} /><span>Editar</span>
+                        </div>
+                        <div className="flex justify-left items-center ml-4 mb-2">
+                          <ProviderDeleteForm provider={provider} id_provider={provider.id}/><span>Eliminar</span>
+                        </div>
+                      </div>
+                    ): null}
                   </DropdownMenuContent>
               </DropdownMenu>
           </>
+            // </div>
           )
-          : (
-          <>
-           <Badge className="bg-red-500">Inactivo</Badge>
-              <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                  <Button variant='ghost' size='icon' className="ml-2">
-                      <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="flex flex-col">
-                  <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                  <SwitchDemo 
-                      id_provider={provider.id}
-                      provider={provider}
-                      onUpdateStatus={()=> Statusnew()}/>
-                  </DropdownMenuContent>
-              </DropdownMenu>
-          </>
-          ) 
-      }
-      </div>
 
     },
   },

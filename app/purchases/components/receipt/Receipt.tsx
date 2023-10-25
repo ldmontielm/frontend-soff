@@ -2,24 +2,25 @@
 import React from 'react'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
-import { urlPurchases, getOrdersByPurchaseId, getPurchaseById } from '../../services/purchase.services'
 import useSWR from 'swr'
 import { convertDate } from '../../utils'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
-import { Order, Purchase } from '@/app/purchases/models/purchase.models'
+import { Order } from '@/app/purchases/models/purchase.models'
+import { RoutesApi } from '@/models/routes.models'
 
+interface Props {
+    id: string
+  }
 interface OrderInvoice {
   supply: string
   amount: number
   price: number
   subtotal: number
 }
-interface Props {
-    purchaseId: string
-    purchase: Purchase
-  }
-export default function Receipt({purchaseId, purchase}:Props) {
-  const {data:orders} = useSWR(`${urlPurchases}/${purchaseId}/orders`, getOrdersByPurchaseId)
+export default function Receipt({id}:Props) {
+  const {data:orders} = useSWR<Order[]>(`${RoutesApi.PURCHASES}/${id}/orders`)
+  const {data:purchase} = useSWR(`${RoutesApi.PURCHASES}/${id}`)
+  
   const generateReceipt = () => {
     const doc = new jsPDF()
     doc.text(`N° Factura: ${purchase !== undefined ? purchase?.invoice_number : "No hay factura"}`, 15, 20);
@@ -46,7 +47,7 @@ export default function Receipt({purchaseId, purchase}:Props) {
     // const total = data.reduce((sum, [, , , total]) => sum + total, 0);
 
     // Guardar o mostrar el PDF (puedes personalizar esta parte según tus necesidades)
-    doc.save(`receipt-${purchaseId}.pdf`);
+    doc.save(`receipt-${id}.pdf`);
   }
 
   return (

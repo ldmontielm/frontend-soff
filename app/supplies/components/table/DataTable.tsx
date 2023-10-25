@@ -53,12 +53,14 @@ import { number } from "zod"
 interface DataTableProps<TData, TValue>{
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
+    isLoading: boolean
+    error: any
 }
 
-export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, TValue>){
-    const [sorting, setSorting] = React.useState<SortingState>([])
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
-    const [columnVisibility, setColumnVisibility] =React.useState<VisibilityState>({})
+export function DataTable<TData, TValue>({columns, data, isLoading, error}: DataTableProps<TData, TValue>){
+    const [sorting, setSorting] = useState<SortingState>([])
+    const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+    const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     
     const table = useReactTable({
         data,columns,
@@ -115,7 +117,8 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                         column.id === 'price' ? 'Precio' :
                         column.id === 'quantity_stock' ? 'Cantidad en stock' :
                         column.id === 'unit_measure' ? 'Unidad de medida' :
-                        column.id === 'status' ? 'Estado' :                    
+                        column.id === 'status' ? 'Estado' :
+                        column.id === 'actions' ? 'Acciones' :                        
                         column.id
                     }
                     </DropdownMenuCheckboxItem>
@@ -173,7 +176,7 @@ export function DataTable<TData, TValue>({columns, data}: DataTableProps<TData, 
                                 ))
                             ) : (
                                 <TableRow>
-                                    <TableCell colSpan={columns.length} className="h-24" text-center>
+                                    <TableCell colSpan={columns.length} className="h-24 text-center" >
                                         No resultados
                                     </TableCell>
                                 </TableRow>

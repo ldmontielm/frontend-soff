@@ -32,7 +32,6 @@ export interface PurchaseCreate{
 
 
 export interface PurchaseConfirm {
-  id_purchase: string;
   provider_id: string;
   invoice_number: string;
 }

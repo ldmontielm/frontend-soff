@@ -182,7 +182,7 @@ export const columns: ColumnDef<User>[] = [
             )
             : (
             <>
-             <Badge className="bg-red-500">Inactivo</Badge>
+            <Badge className="bg-red-500">Inactivo</Badge>
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                     <Button variant='ghost' size='icon' className="ml-2">
