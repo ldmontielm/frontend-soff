@@ -44,7 +44,7 @@ import { ToastAction } from "@/components/ui/toast"
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import useSWR, { mutate, useSWRConfig } from "swr";
-
+import { PlusIcon } from "@heroicons/react/24/outline";
 const AddSupplyFetch = async (url: string, body: SupplyCreate) => {
   return await fetcherPost<SupplyCreate>(url, body)
 }
@@ -52,18 +52,21 @@ const AddSupplyFetch = async (url: string, body: SupplyCreate) => {
 
 const fromSchema = z.object({
   supply_id: z.string(),
-  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}).max(255, {message: 'El nombre del insumo es demasiado largo'}),
+  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}).max(50, {message: 'El nombre del insumo es demasiado largo'}),
   price: z.number({required_error: "El campo es requerido"}).min(3, {message: 'Ingrese el precio del insumo'}).max(999999, {message: 'El precio es demasiado alto'}),
   quantity_stock: z.number({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).max(999999, {message: 'La cantidad es demasiado alta'}),
   unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccioné una opción'}).max(50, {message: 'La unidad de medida es demasiado larga'}),
 });
 
+interface Props {
+  location?:string
+}
 
-export default function HeadTable() {
+export default function HeadTable({location}: Props) {
   const [open, setOpen] = useState(false)
   const routes  = useRouter()
   const { toast } = useToast()
-  const {data:supply} = useSWR(`{RoutesApi.SUPPLIES}`)
+  const {data:supply} = useSWR(RoutesApi.SUPPLIES)
   const form = useForm<z.infer<typeof fromSchema>>({
     resolver: zodResolver(fromSchema),
     defaultValues: {
@@ -96,7 +99,7 @@ export default function HeadTable() {
       setOpen(false);
       toast({ variant: 'default', title: "Insumo creado correctamente", description: "Se ha creado correctamente el Insumo." });
       form.reset();
-      mutate(`${RoutesApi.SUPPLIES}`);
+      mutate(RoutesApi.SUPPLIES);
     }
 
 
@@ -104,7 +107,13 @@ return (
   <div>
   <Dialog open={open} onOpenChange={setOpen}>
     <DialogTrigger asChild>
-    <Button variant="default" className="w-full md:w-[180px]">Registrar insumo</Button>
+    <Button variant={`${location === 'purchases' ? 'outline' : 'default'}`} size={`${location === 'purchases' ? 'icon' : 'default'}`} className={`${location === 'purchases' ? '' : 'w-full md:w-[180px]'}`}>
+        {
+        location === 'purchases' ? (
+          <PlusIcon className="w-4 h-4" />
+        ): "Registrar Insumo"
+        }
+      </Button>
     </DialogTrigger>
     <DialogContent className="sm:min-w-[415px]">
       <DialogHeader>

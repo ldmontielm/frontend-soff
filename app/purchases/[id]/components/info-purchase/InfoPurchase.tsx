@@ -101,13 +101,12 @@ export default function InfoPurchase({id}:Props) {
               <FormItem>
                 <FormLabel>Fecha de Compra:</FormLabel>
                 <FormControl >
-                    {/* <Input placeholder='Número de factura'{...field} required/> */}
                     <Popover>
                     <PopoverTrigger asChild>
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "w-[265px] justify-start text-left font-normal",
+                          "w-full justify-start text-left font-normal",
                           !date && "text-muted-foreground"
                         )}
                       >
@@ -146,10 +145,9 @@ export default function InfoPurchase({id}:Props) {
             control={formPurchase.control}
             name="provider_id"
             render={({ field }) => (
-              <FormItem className="w-full md:w-[260px]">
+              <FormItem className="w-full">
               <FormLabel>Proveedor</FormLabel>
-              
-              <div className="w-full xl:w-[260px]">
+              <div className="w-full flex items-center justify-content">
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -157,7 +155,7 @@ export default function InfoPurchase({id}:Props) {
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-[260px] justify-between",
+                          "w-full justify-between mr-1",
                           !field.value && "text-muted-foreground"
                         )}
                       >
@@ -165,7 +163,7 @@ export default function InfoPurchase({id}:Props) {
                           ? providers?.find((provider_id:any)=>provider_id.id === field.value)?.name
                           : "Seleccione proveedor"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                      </Button>
+                      </Button> 
                     </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-[250px] h-full p-0">
@@ -194,15 +192,12 @@ export default function InfoPurchase({id}:Props) {
                       </Command>
                     </PopoverContent>
                   </Popover>
+                  <HeadTable location='purchases'/>
                   </div>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <div className='mt-4 space-y-2'>
-            {/* <UserPlusIcon className="h-4 w-4" /> */}
-            <HeadTable/>
-          </div> 
 
           </div>
             <div className='my-3 w-full text-center'>

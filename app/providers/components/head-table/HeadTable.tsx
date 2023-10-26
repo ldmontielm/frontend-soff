@@ -38,7 +38,7 @@ import { ToastAction } from "@/components/ui/toast"
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import useSWR, { mutate, useSWRConfig } from "swr";
-
+import { UserPlusIcon } from "@heroicons/react/24/outline";
 const AddProviderFetch = async (url: string, body: ProviderCreate) => {
   return await fetcherPost<ProviderCreate>(url, body)
 }
@@ -57,14 +57,14 @@ const fromSchema = z.object({
 
 
 interface Props {
-  id: string
+  location?:string
 }
 
-export default function HeadTable() {
+export default function HeadTable({location}: Props) {
   const [open, setOpen] = useState(false)
   const routes  = useRouter()
   const { toast } = useToast()
-  const {data:provider} = useSWR(`{RoutesApi.PROVIDERS}`)
+  const {data:provider} = useSWR(RoutesApi.PROVIDERS)
   const form = useForm<z.infer<typeof fromSchema>> ({
     resolver: zodResolver(fromSchema),
     defaultValues: {
@@ -86,7 +86,7 @@ export default function HeadTable() {
     toast({variant: 'default', title: "Proveedor creado correctamente", description: "Se ha creado correctamente el proveedor."})
     
     setOpen(false)
-    mutate(`${RoutesApi.PROVIDERS}`)
+    mutate(RoutesApi.PROVIDERS)
   }
 
 
@@ -115,7 +115,13 @@ return (
   <div>
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-      <Button variant="default"className="w-full md:w-[180px]">Registrar Proveedor</Button>
+      <Button variant={`${location === 'purchases' ? 'outline' : 'default'}`} size={`${location === 'purchases' ? 'icon' : 'default'}`} className={`${location === 'purchases' ? '' : 'w-full md:w-[180px]'}`}>
+        {
+        location === 'purchases' ? (
+          <UserPlusIcon className="w-4 h-4" />
+        ): "Registrar Proveedor"
+        }
+      </Button>
       </DialogTrigger>
       <DialogContent >
 
