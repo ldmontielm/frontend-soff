@@ -49,7 +49,7 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
-  const {} = useSWR(`{RoutesApi.PROVIDERS}`)
+  // const {} = useSWR(RoutesApi.PROVIDERS)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -68,9 +68,9 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     values.id_provider = provider.id
-    const data = await UpdateProviderFetch(`${RoutesApi.PROVIDERS}/update_provider/${provider.id}`, values )
+    const data = await UpdateProviderFetch(`${RoutesApi.PROVIDERS}/update_provider/${id_provider}`, values )
     toast({variant: 'default', title: "Proveedor actualizado correctamente", description: "Se ha actualizado correctamente el proveedor."})
-    mutate(`${RoutesApi.PROVIDERS}`)
+    mutate(RoutesApi.PROVIDERS)
     form.reset()
     setOpen(false)
   }

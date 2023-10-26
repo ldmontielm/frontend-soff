@@ -64,7 +64,7 @@ export default function HeadTable() {
   const [open, setOpen] = useState(false)
   const routes  = useRouter()
   const { toast } = useToast()
-  const {data:provider} = useSWR(`{RoutesApi.PROVIDERS}`)
+  const {data:provider} = useSWR(RoutesApi.PROVIDERS)
   const form = useForm<z.infer<typeof fromSchema>> ({
     resolver: zodResolver(fromSchema),
     defaultValues: {
@@ -86,7 +86,7 @@ export default function HeadTable() {
     toast({variant: 'default', title: "Proveedor creado correctamente", description: "Se ha creado correctamente el proveedor."})
     
     setOpen(false)
-    mutate(`${RoutesApi.PROVIDERS}`)
+    mutate(RoutesApi.PROVIDERS)
   }
 
 
