@@ -1,6 +1,6 @@
 'use client'
 
-import { RoutesApi } from '@/models/routes.models'
+import { Routes, RoutesApi } from '@/models/routes.models'
 import { fetcherPut, fetcherDelete } from '@/context/swr-context-provider/SwrContextProvider'
 import { convertToCOP } from '@/app/sales/utils'
 import { Button } from '@/components/ui/button'
@@ -39,11 +39,11 @@ const ConfirmProductFetch = async (url: string, arg: ProductCreate) => {
 
 export default function InfoProduct({id}:Props) {
   const {data:details} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
-  const {data: product} = useSWR<Product>(`${RoutesApi.PRODUCTS}/${id}`)
+  const {data: product} = useSWR<ProductCreate>(`${RoutesApi.PRODUCTS}/${id}`)
   const router = useRouter()
   const { toast } = useToast()
 
-  console.log(product)
+  
   const formProduct = useForm<z.infer<typeof formProductSchema>>({
     resolver: zodResolver(formProductSchema),
     defaultValues: {
@@ -51,31 +51,37 @@ export default function InfoProduct({id}:Props) {
       sale_price: product?.sale_price
     }
   })
-
+  console.log(product)
   async function onSubmit(values: z.infer<typeof formProductSchema>){
     const product = {
       name: values.name,
       sale_price: values.sale_price
     }
     
-    if (product.name === '' || product.sale_price === 0){
-      toast({variant: 'destructive', title: "Campos del producto requeridos", description: "Todos los campos del producto son necesarios para editar el producto."})
+    const isValid = await formProduct.trigger();
+
+
+    // if (product.name === '' || product.sale_price === 0){
+    //   toast({variant: 'destructive', title: "Campos del producto requeridos", description: "Todos los campos del producto son necesarios para editar el producto."})
+    // }
+    if(isValid){
+      const res = await ConfirmProductFetch(`${RoutesApi.PRODUCTS}/${id}/update_product`, product)
+        toast({variant: 'default', title: "Registro guardado correctamente", description: "Se ha guardado con exito el producto, mira el historial en la sección de productos."})
+        router.push(Routes.CREATEPRODUCT)
     }
     else{
-        const res = await ConfirmProductFetch(`${RoutesApi.PRODUCTS}/${id}/update_product`, product)
-        toast({variant: 'default', title: "Registro guardado correctamente", description: "Se ha guardado con exito el producto, mira el historial en la sección de productos."})
-        router.push('/products')
+      toast({variant: 'destructive', title: "Campos del producto requeridos", description: "Todos los campos del producto son necesarios para editar el producto."})
       }
     }
 
     async function cancelProduct(){
-      router.push('/products')
+      router.push(Routes.CREATEPRODUCT)
     }
 
   return (
     <div className='w-full'>
       <div className='w-full text-center mt-1 mb-1 p-4'>
-        <h3 className='font-bold'>MANDISA</h3>
+        <h3 className='font-bold'>MANDISAaaaa</h3>
         <p className='text-sm text-gray-400'>NIT 71227771-4</p>
         <p className='text-sm text-gray-400'>Navarra/Bello</p>
         <p className='text-sm text-gray-400'>(+57) 3146486791</p>
@@ -92,7 +98,7 @@ export default function InfoProduct({id}:Props) {
                     <FormItem>
                       <FormLabel>Nombre</FormLabel>
                       <FormControl >
-                         <Input defaultValue={product?.name} {...field} />
+                         <Input defaultValue={product?.name || ""} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
