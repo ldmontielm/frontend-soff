@@ -1,6 +1,4 @@
 "use client"
- 
-// import { addOrder, getSupplies } from "@/app/purchases/services/purchase.services"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -12,6 +10,7 @@ import { useForm } from "react-hook-form"
 import { OrderCreate } from "@/app/purchases/models/purchase.models"
 import toast from "react-hot-toast"
 import useSWR, {mutate} from 'swr'
+import { HeadTable } from "@/app/supplies/components"
 import * as z from 'zod'
 import { Check, ChevronsUpDown } from "lucide-react"
 import * as React from "react"
@@ -40,7 +39,7 @@ interface Props {
 }
 
 
-export default function HeadTable({id}: Props) {
+export default function HeadTablep({id}: Props) {
   const {data:supplies} = useSWR(RoutesApi.SUPPLIES)
   const {data} = useSWR(`${RoutesApi.PURCHASES}/${id}/orders`)
   const [open, setOpen] = useState(false)
@@ -66,13 +65,13 @@ export default function HeadTable({id}: Props) {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-wrap lg:flex-nowrap items-end  justify-between gap-2">
         <div className="w-full flex flex-wrap lg:flex-nowrap items-center gap-2">
-          <FormField 
+          <FormField
             control={form.control}
             name="supply_id"
             render = {({field}) => (
-              <FormItem className="w-full md:w-[200px]">
+              <FormItem className="w-full md:w-[230px]">
               <FormLabel>Insumo</FormLabel>
-              <div className="w-full xl:w-[200px]">
+              <div className="w-full flex items-center justify-content">
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -80,7 +79,7 @@ export default function HeadTable({id}: Props) {
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-[200px] justify-between",
+                          "w-full justify-between mr-1",
                           !field.value && "text-muted-foreground"
                         )}
                       >
@@ -117,6 +116,7 @@ export default function HeadTable({id}: Props) {
                       </Command>
                     </PopoverContent>
                   </Popover>
+                  <HeadTable location='purchases'/>
                   </div>
                 <FormMessage />
               </FormItem>

@@ -44,7 +44,7 @@ import { ToastAction } from "@/components/ui/toast"
 import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import useSWR, { mutate, useSWRConfig } from "swr";
-
+import { PlusIcon } from "@heroicons/react/24/outline";
 const AddSupplyFetch = async (url: string, body: SupplyCreate) => {
   return await fetcherPost<SupplyCreate>(url, body)
 }
@@ -58,8 +58,11 @@ const fromSchema = z.object({
   unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccioné una opción'}).max(50, {message: 'La unidad de medida es demasiado larga'}),
 });
 
+interface Props {
+  location?:string
+}
 
-export default function HeadTable() {
+export default function HeadTable({location}: Props) {
   const [open, setOpen] = useState(false)
   const routes  = useRouter()
   const { toast } = useToast()
@@ -104,7 +107,13 @@ return (
   <div>
   <Dialog open={open} onOpenChange={setOpen}>
     <DialogTrigger asChild>
-    <Button variant="default" className="w-full md:w-[180px]">Registrar insumo</Button>
+    <Button variant={`${location === 'purchases' ? 'outline' : 'default'}`} size={`${location === 'purchases' ? 'icon' : 'default'}`} className={`${location === 'purchases' ? '' : 'w-full md:w-[180px]'}`}>
+        {
+        location === 'purchases' ? (
+          <PlusIcon className="w-4 h-4" />
+        ): "Registrar Insumo"
+        }
+      </Button>
     </DialogTrigger>
     <DialogContent className="sm:min-w-[415px]">
       <DialogHeader>

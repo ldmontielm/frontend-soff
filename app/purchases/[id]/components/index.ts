@@ -1,4 +1,4 @@
-export * from './head-table';
+export * from './head-tablep';
 export * from './info-purchase';
 export * from './order-delete-form';
 export * from './order-update-form';
