@@ -69,8 +69,8 @@ export default function ProviderDeleteForm({ provider, id_provider }: Props) {
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel> {/* Cerrar el diálogo de alerta */}
           <AlertDialogAction type="button" onClick={async () => {
-            await DeleteProviderFetch(`${RoutesApi.PROVIDERS}/delete_provider/${provider.id}`)
-            mutate(`${RoutesApi.PROVIDERS}`)
+            await DeleteProviderFetch(`${RoutesApi.PROVIDERS}/delete_provider/${id_provider}`)
+            mutate(RoutesApi.PROVIDERS)
           }} 
           className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90">
           Eliminar

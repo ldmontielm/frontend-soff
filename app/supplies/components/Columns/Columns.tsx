@@ -1,6 +1,7 @@
 'use client'
 import {ColumnDef} from "@tanstack/react-table"
 import { Supply } from "../../models/supply.models"
+import { convertToCOP } from "@/app/purchases/utils"
 import { Badge } from "@/components/ui/badge"
 import SupplyUpdateForm from "../supply-update-form/SupplyUpdateForm" 
 import SupplyByIdDeleteForm from "../supply-delete-form/SupplyDeleteForm"
@@ -45,9 +46,14 @@ import { MoreHorizontal } from "lucide-react"
 import { Column } from "jspdf-autotable"
 import { RoutesApi } from '@/models/routes.models'
 
+// const [menuOpen, setMenuOpen] = useState(false);
+
+
 export default function Statusnew(){
   const {data: supplies, isLoading, error} = useSWR(RoutesApi.SUPPLIES)
   const [localSupplies, setLocalSupplies] = useState<Supply[]>([])
+  // const [menuOpen, setMenuOpen] = useState(false);
+
 
   useEffect(()=>{
     if(supplies){
@@ -102,7 +108,10 @@ export const columns: ColumnDef<Supply>[] = [
       )
     },
     cell: ({row}) => {
-      return <div>{row.getValue('price')}</div>
+      const price: number = row.getValue('price'); // Especifica el tipo como número
+      const priceInCOP = convertToCOP(price); // Aplica la conversión
+
+      return <div>{priceInCOP}</div>
     }
   },
   {
@@ -136,10 +145,10 @@ export const columns: ColumnDef<Supply>[] = [
       );
     },
     cell: ({ row }) => {
-      const unitMeasure = row.getValue('unit_measure');
+      const unitMeasure: string = row.getValue('unit_measure');
       // Aquí, verificamos si la unidad de medida es "Kilogramos" y la mostramos como "gramos" si es así
-      const displayUnitMeasure = unitMeasure === 'Kilogramos' ? 'gramos' : unitMeasure;
-      return <div>{displayUnitMeasure as string}</div>; // Agregamos "as string" para ayudar a TypeScript a inferir el tipo
+      const displayUnitMeasure = unitMeasure === 'Kilogramos' ? 'Gramos' : unitMeasure;
+      return <div>{displayUnitMeasure}</div>; // Agregamos "as string" para ayudar a TypeScript a inferir el tipo
     }
   },
   {

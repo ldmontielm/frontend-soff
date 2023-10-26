@@ -19,7 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import toast from 'react-hot-toast'
-import { updatedSupply, getSupplies, urlSupply } from '../../services/supply.services'
+// import { updatedSupply, getSupplies, urlSupply } from '../../services/supply.services'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useContext } from "react"
@@ -35,7 +35,7 @@ const UpdateSupplyFetch = async (url: string, body: SupplyCreate) => {
 
 const formSchema = z.object({
   id_supply:z.string().optional(),
-  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}).max(255, {message: 'El nombre del insumo es demasiado largo'}),
+  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}).max(50, {message: 'El nombre del insumo es demasiado largo'}),
   price: z.number({required_error: "El campo es requerido"}).min(3, {message: 'Ingrese el precio del insumo'}).max(999999, {message: 'El precio es demasiado alto'}),
   quantity_stock: z.number({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).max(999999, {message: 'La cantidad es demasiado alta'}),
   unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccioné una opción'}).max(50, {message: 'La unidad de medida es demasiado larga'}),
@@ -52,7 +52,7 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
-  const {} = useSWR(`{urlSupply}`,getSupplies)
+  // const {} = useSWR(`{RoutesApi.SUPPLIES}`)
   // const {updateProvider} = useContext(OrderContext) as OrderContextInterface
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -72,7 +72,7 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     values.id_supply = supply.id
-    const data = await UpdateSupplyFetch(`${RoutesApi.SUPPLIES}/update_supply/${supply.id}`, values)
+    const data = await UpdateSupplyFetch(`${RoutesApi.SUPPLIES}/update_supply/${id_supply}`, values)
     toast({variant: 'default', title: "Insumo actualizado correctamente", description: "Se ha actualizado correctamente el Insumo."})
     mutate(`${RoutesApi.SUPPLIES}`)
     form.reset()
@@ -150,12 +150,14 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
                 <FormItem>
                   <FormLabel>Unidad de medida</FormLabel>
                   <FormControl>
-                  <Select onValueChange={field.onChange} >
+                  <Select onValueChange={field.onChange}>
                     <SelectTrigger className="w-default">
-                      <SelectValue id="unit_measure" {...field} />
+                      <SelectValue>
+                        {supply.unit_measure}
+                      </SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Kilosgramos">Kilogramos</SelectItem>
+                      {/* <SelectItem value="Kilogramos">Kilogramos</SelectItem> */}
                       <SelectItem value="Gramos">Gramos</SelectItem>
                       <SelectItem value="Unidades">Unidades</SelectItem>
                     </SelectContent>
