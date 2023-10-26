@@ -48,7 +48,7 @@ export default function InfoProduct({id}:Props) {
     resolver: zodResolver(formProductSchema),
     defaultValues: {
       name: product?.name,
-      sale_price: product?.price
+      sale_price: product?.sale_price
     }
   })
 
