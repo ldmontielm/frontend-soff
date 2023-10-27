@@ -9,10 +9,10 @@ import { PencilIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
-import toast from 'react-hot-toast'
-import { UpdateAmountOrder } from '@/app/purchases/services/purchase.services'
-import { useRouter } from 'next/navigation'
+import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
 import { useState } from 'react'
+import useSWR, { mutate} from 'swr'
+import { RoutesApi } from '@/models/routes.models'
 
 const formSchema = z.object({
   amount_supplies: z.string().transform((val) => parseInt(val)),
@@ -21,30 +21,32 @@ const formSchema = z.object({
 
 interface Props{
   order: Order
+  id_purchase: string | string[]
 }
 
+const UpdateAmountOrderFetch = async (url: string) => {
+  return await fetcherPut(url, undefined)
+}
 
-export default function OrderUpdateForm({order}: Props) {
+export default function OrderUpdateForm({order, id_purchase}: Props) {
   const [open, setOpen] = useState(false)
-  const router = useRouter()
+  const {data} = useSWR(`${RoutesApi.PURCHASES}/${id_purchase}/orders`)
+  
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       id_order:"",
-      amount_supplies: 0
+      amount_supplies: order.amount_supplies
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     values.id_order = order.id_order
-    toast.promise(UpdateAmountOrder(values.id_order, values.amount_supplies), {
-      loading: 'Actualizando ordenr...',
-      success: 'Orden Actualizada correctamente',
-      error: 'Error al actualizar'
-    })
-    router.refresh()
+    const data = await UpdateAmountOrderFetch(`${RoutesApi.PURCHASES}/update-amount-order?id_order=${values.id_order}&amount_supplies=${values.amount_supplies}`)
+    mutate(`${RoutesApi.PURCHASES}/${id_purchase}/orders`)
     setOpen(false)
   }
+
 
 
   return (
@@ -58,7 +60,7 @@ export default function OrderUpdateForm({order}: Props) {
         <DialogHeader>
           <DialogTitle>Editar cantidad</DialogTitle>
           <DialogDescription>
-            Puedes cambiar la cantidad del insumo <span className="capitalize font-semibold text-gray-600">{order.supply_id}</span>
+            Puedes cambiar la cantidad del insumo <span className="capitalize font-semibold text-gray-600">{order.supply}</span>
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -70,7 +72,7 @@ export default function OrderUpdateForm({order}: Props) {
                 <FormItem>
                   <FormLabel>Cantidad</FormLabel>
                   <FormControl>
-                    <Input id="amount_supplies" type="number" placeholder="0" {...field} className="col-span-3" />
+                    <Input id="amount_supplies" type="number" {...field} className="col-span-3" />
                   </FormControl>
                   <FormDescription>
                     Digite la cantidad del insumo.
@@ -85,7 +87,7 @@ export default function OrderUpdateForm({order}: Props) {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input id="amount_supplies" type="number" placeholder="0" {...field} className="col-span-3 hidden" value={order.id_order} defaultValue={order.id_order} />
+                    <Input id="amount_supplies" type="number" {...field} className="col-span-3 hidden" value={order.id_order} defaultValue={order.id_order} />
                   </FormControl>
                   <FormMessage />
               </FormItem>

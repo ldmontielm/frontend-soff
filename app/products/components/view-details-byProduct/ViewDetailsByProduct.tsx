@@ -9,8 +9,7 @@ import {
   DialogHeader, 
   DialogTitle, 
   DialogTrigger } from "@/components/ui/dialog"
-import { EyeIcon, QueueListIcon } from '@heroicons/react/24/outline'
-import { useRouter } from 'next/navigation'
+import { QueueListIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import useSWR from 'swr'
 import { convertToCOP } from '@/app/products/utils'
@@ -31,17 +30,9 @@ import { Product } from '../../models/product.models'
     product: Product
   }
 
-export default function ViewDetailsByProduct(
-  // {productId}:{productId:string}
-  {id, product}: Props
-
-  ) {
+export default function ViewDetailsByProduct({id, product}: Props) {
   const [open, setOpen] = useState(false)
-  // const router = useRouter()
-  // const {data:products}= useSWR(`${RoutesApi.PRODUCTS}/${id}`)
   const {data: details} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
-  // const cost = products?.price || 0
-  // const sale_price = products?.sale_price || 0
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -51,13 +42,13 @@ export default function ViewDetailsByProduct(
       </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
-        <div className='w-full md:col-span-8'>
+        <div className='relative w-full bg-white col-span-8'>
           <div className='w-full text-center mb-1 p-2'>
             <p className='font-bold'>Detalles del producto</p>
             <p className='text-sm'>Aquí puedes ver el detalle de cada producto</p>
           </div>
           <hr />
-          <div>
+          <div className='w-full'>
             <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mt-2'>
               <div className='my-3 w-full text-center'>
                 <p className='font-bold text-sm '>Nombre</p>
@@ -74,6 +65,7 @@ export default function ViewDetailsByProduct(
             </div>
           </div>
         </div>
+
         <div className='relative w-full bg-white col-span-8 border rounded'>
           <Table>
             <TableHeader>

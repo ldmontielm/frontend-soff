@@ -1,51 +1,13 @@
 'use client'
 import React, { useState } from 'react'
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { Badge } from '@/components/ui/badge'
+import {Table,TableBody,TableCell,TableHead,TableHeader,TableRow,} from "@/components/ui/table"
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { convertToCOP, convertDate } from '../../utils'
-import Link from 'next/link'
-import { Routes } from '@/models/routes.models'
-import { Purchase } from '../../models/purchase.models'
-import { createPurchase } from '../../services/purchase.services'
 import { HeadTable } from '..'
+import { Report } from '../report'
 import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-
-import {
-  ColumnDef,
-  flexRender,
-  ColumnFiltersState,
-  getFilteredRowModel,
-  VisibilityState,
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-  SortingState
-} from "@tanstack/react-table"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import {ColumnDef,flexRender,ColumnFiltersState,getFilteredRowModel,VisibilityState,getCoreRowModel,getPaginationRowModel,useReactTable,SortingState, getSortedRowModel} from "@tanstack/react-table"
+import {DropdownMenu,DropdownMenuCheckboxItem,DropdownMenuContent,DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
 
 
 interface DataTableProps<TData, TValue> {
@@ -60,19 +22,21 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
-  console.log(data)
+ 
   const table = useReactTable({
     data, columns, getCoreRowModel: getCoreRowModel(), getPaginationRowModel: getPaginationRowModel(),
     onColumnFiltersChange: setColumnFilters,
     getFilteredRowModel: getFilteredRowModel(),
     onColumnVisibilityChange: setColumnVisibility,
     onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
     state: {
       sorting,
       columnFilters,
       columnVisibility
     }
   })
+
 
   return (
     <div>
@@ -122,11 +86,8 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant='outline' className='flex items-center w-full md:w-fit gap-2'>
-            <DocumentChartBarIcon className='w-4 h-4' />
-            <span>Reporte</span>
-          </Button>
-        </div>
+          <Report/>
+        </div> 
         <HeadTable />
       </div>
 

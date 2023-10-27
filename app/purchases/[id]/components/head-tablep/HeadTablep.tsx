@@ -1,34 +1,25 @@
 "use client"
- 
-import { addOrder, getSupplies } from "@/app/purchases/services/purchase.services"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { redirect, useParams, useRouter } from 'next/navigation'
+import { useParams, useRouter } from 'next/navigation'
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { OrderCreate } from "@/app/purchases/models/purchase.models"
 import toast from "react-hot-toast"
-import useSWR from 'swr'
+import useSWR, {mutate} from 'swr'
+import { HeadTable } from "@/app/supplies/components"
 import * as z from 'zod'
 import { Check, ChevronsUpDown } from "lucide-react"
 import * as React from "react"
 import { cn } from "@/lib/utils"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import {HeadTable as HeadTableSupply} from "@/app/supplies/components"
+import {Command,CommandEmpty,CommandGroup,CommandInput,CommandItem,} from "@/components/ui/command"
+import {Popover,PopoverContent,PopoverTrigger,} from "@/components/ui/popover"
+import { RoutesApi } from "@/models/routes.models"
+import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider"
+import { Supply } from "@/app/supplies/models/supply.models"
 
 const formSchema = z.object({
   purchase_id: z.string(),
@@ -39,16 +30,19 @@ const formSchema = z.object({
   price_supplies: z.string().transform(Number)
 })
 
+const AddOrderFetch = async (url: string, body: OrderCreate) => {
+  return await fetcherPost<OrderCreate>(url, body)
+}
 
-export default function HeadTable() {
-  const params = useParams()
-  const [insumo, setInsumo] = useState(false)
-  const [amountSupply, setAmountSupply] = useState<number>()
-  const [value, setValue] = useState("")
-  const router = useRouter()
-  const {data:supplies} = useSWR('http://localhost:8000/supplies', getSupplies)
+interface Props {
+  id: string
+}
 
-  const [open, setOpen] = React.useState(false)
+
+export default function HeadTablep({id}: Props) {
+  const {data:supplies} = useSWR(RoutesApi.SUPPLIES)
+  const {data} = useSWR(`${RoutesApi.PURCHASES}/${id}/orders`)
+  const [open, setOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -61,13 +55,9 @@ export default function HeadTable() {
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>){
-    values.purchase_id = params.id.toString()
-    toast.promise(addOrder(values), {
-      loading: 'Agregando orden...',
-      success: 'Orden agregada correctamente',
-      error: 'Error when fetching'
-    })
-    router.refresh()
+    values.purchase_id = id
+    const data = await AddOrderFetch(`${RoutesApi.PURCHASES}/${id}/add-order`, values)
+    mutate(`${RoutesApi.PURCHASES}/${id}/orders`)
   }
 
 
@@ -75,13 +65,13 @@ export default function HeadTable() {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-wrap lg:flex-nowrap items-end  justify-between gap-2">
         <div className="w-full flex flex-wrap lg:flex-nowrap items-center gap-2">
-          <FormField 
+          <FormField
             control={form.control}
             name="supply_id"
             render = {({field}) => (
-              <FormItem className="w-full md:w-[200px]">
+              <FormItem className="w-full md:w-[230px]">
               <FormLabel>Insumo</FormLabel>
-              <div className="w-full xl:w-[200px]">
+              <div className="w-full flex items-center justify-content">
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -89,12 +79,12 @@ export default function HeadTable() {
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-[200px] justify-between",
+                          "w-full justify-between mr-1",
                           !field.value && "text-muted-foreground"
                         )}
                       >
                         {field.value
-                          ? supplies?.find((supply)=>supply.id === field.value)?.name
+                          ? supplies.find((supply:Supply)=>supply.id === field.value)?.name
                           : "Seleccione insumo"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
@@ -126,6 +116,7 @@ export default function HeadTable() {
                       </Command>
                     </PopoverContent>
                   </Popover>
+                  <HeadTable location='purchases'/>
                   </div>
                 <FormMessage />
               </FormItem>
@@ -150,7 +141,7 @@ export default function HeadTable() {
             control={form.control}
             name="price_supplies"
             render={({ field }) => (
-              <FormItem className="w-full md:w-[200px]">
+              <FormItem className="w-full md:w-[200px] ml-4">
                 <FormLabel>Precio</FormLabel>
                 <FormControl>
                   <Input type="number" placeholder="Precio del insumo" min="100" {...field} className="lg:w-fit"/>

@@ -2,32 +2,46 @@
 
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { createPurchase } from "../../services/purchase.services";
+import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider";
 import {useRouter} from "next/navigation"
 import { Routes } from "@/models/routes.models";
+import { useToast } from "@/components/ui/use-toast"
 import { ToastAction } from "@/components/ui/toast"
-import toast from "react-hot-toast";
+import { RoutesApi } from "@/models/routes.models";
 
+const CreatePurchaseFetch = async (url:string)=>{
+  return await fetcherPost(url, undefined)
+}
 
 export default function HeadTable() {
   const router = useRouter()
+  const { toast } = useToast()
   return (
     <>
-      <Button
+      {/* <Button
         type="submit"
         className="w-full md:w-[180px]"
         onClick={async () => {
-          const response = await createPurchase();
-          if (response) {
-            toast.success(`Compra #${response.id}`)
-            router.push(`${Routes.CREATEPURCHASE}/${response.id}`)
-          }
-          if(response === null){
-            toast.error("No se pudo crear la compra, vuelve a intentar.")
-          }
+          const res = await CreatePurchaseFetch(RoutesApi.PURCHASES);
+          toast({variant: "default", title: "Compra creada", description: "Ya hemos creado una nueva compra."})
+          router.push(`${Routes.CREATEPURCHASE}/${res.id}`)
         }}
-      >
+      > */}
+          <Button
+            type="submit"
+            className="w-full md:w-[180px]"
+            onClick={async() => {
+              const res = await CreatePurchaseFetch(RoutesApi.PURCHASES);
+              toast({
+                title: "Compra creada ",
+                description: "Se ha creado una nueva compra",
+                action: (
+              <ToastAction altText="Goto schedule to undo">OK</ToastAction>
+              ),
+            })
+            router.push(`${Routes.CREATEPURCHASE}/${res.id}`)
+          }}
+          >
         Registrar compra
       </Button>
     </>
