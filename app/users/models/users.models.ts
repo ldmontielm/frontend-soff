@@ -22,6 +22,13 @@ export interface UserCre {
   role: string;
 }
 export interface UserStatus {
+  name : string;
+  document_type: string;
+  document: string;
+  phone: string;
+  email : string;
+  password : string;
+  id_role: string;
   status: boolean;
 }
 
