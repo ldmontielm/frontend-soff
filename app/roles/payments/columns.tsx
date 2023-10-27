@@ -134,7 +134,7 @@ export const columns: ColumnDef<Role>[] = [
                       <span className="ml-2">Eliminar</span>
                     </div>
                     <div className=" flex items-center justify-left ml-4 mb-2">
-                      <UpdateTable id_role={role.id} role={role}/>
+                      <UpdateTable id_role={role.id} role={role}/> <span className="ml-2">Editar</span>
                     </div>
                   </div>
                 ): null
