@@ -1,7 +1,7 @@
 'use client'
 import React, {useState} from 'react'
 import useSWR from 'swr'
-import { getPermissions } from '../sales/services/sale.services'
+import { getPermissions } from '../(protected)/sales/services/sale.services'
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 
