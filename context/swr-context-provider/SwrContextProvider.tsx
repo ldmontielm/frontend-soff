@@ -4,7 +4,7 @@ import axios, { AxiosRequestConfig } from 'axios'
 import React from 'react'
 import { SWRConfig } from 'swr'
 import { AxiosInterceptors } from '@/interceptors/axios.interceptors'
-import { SaleConfirm } from '@/app/sales/models/sale.models'
+import { SaleConfirm } from '@/app/(protected)/sales/models/sale.models'
 
 interface Props {
   children: React.ReactNode

@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useContext } from "react"
 import { urlProvider } from '../../services/provider.services'
-import { OrderContextInterface } from "@/app/sales/models/sale.models"
+import { OrderContextInterface } from "@/app/(protected)/sales/models/sale.models"
 import useSWR, { mutate, useSWRConfig } from "swr";
 
 const formSchema = z.object({
