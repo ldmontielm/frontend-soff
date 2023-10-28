@@ -122,7 +122,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
             {
               data.length === 0 ? (
                   <TableRow>
-                      <TableCell colSpan={columns.length} className='h-24 text-center' text-center>
+                      <TableCell colSpan={columns.length} className='h-24 text-center'>
                       No se encontraron resultados.
                     </TableCell>
                   </TableRow>
