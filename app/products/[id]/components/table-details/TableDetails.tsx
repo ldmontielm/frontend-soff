@@ -1,6 +1,10 @@
 'use client'
 
-import { convertToCOP } from "@/app/sales/utils"
+import { DetailsRecipe } from "@/app/products/models/product.models"
+import { convertToCOP } from "@/app/(protected)/sales/utils"
+import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { HeadTable } from ".."
 import useSWR from 'swr'

@@ -1,4 +1,3 @@
-export * from './card-client';
 export * from './head-table';
 export * from './info-sale-header';
 export * from './info-sale';

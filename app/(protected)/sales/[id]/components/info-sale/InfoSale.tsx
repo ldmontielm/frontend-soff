@@ -1,8 +1,8 @@
 'use client'
-import { Order, Sale, SaleConfirm } from '@/app/sales/models/sale.models'
+import { Order, Sale, SaleConfirm } from '@/app/(protected)/sales/models/sale.models'
 import { fetcherPut, fetcherDelete } from '@/context/swr-context-provider/SwrContextProvider'
 import { RoutesApi } from '@/models/routes.models'
-import { convertToCOP } from '@/app/sales/utils'
+import { convertToCOP } from '@/app/(protected)/sales/utils'
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
