@@ -1,6 +1,6 @@
 'use client'
 import { Routes, RoutesApi } from '@/models/routes.models'
-import { fetcherPut, fetcherDelete } from '@/context/swr-context-provider/SwrContextProvider'
+import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
 import { convertToCOP } from '@/app/(protected)/sales/utils'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
@@ -10,7 +10,7 @@ import { useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import * as z from 'zod'
 import { Input } from '@/components/ui/input'
-import { DetailsRecipe, Product, ProductCreate } from '@/app/products/models/product.models'
+import { DetailsRecipe, ProductCreate } from '@/app/(protected)/products/models/product.models'
 import { useToast } from "@/components/ui/use-toast"
 
 const formProductSchema = z.object({
@@ -73,7 +73,7 @@ export default function InfoProduct({id}:Props) {
   return (
     <div className='w-full'>
       <div className='w-full text-center mt-1 mb-1 p-4'>
-        <h3 className='font-bold'>MANDISAaaaa</h3>
+        <h3 className='font-bold'>MANDISA</h3>
         <p className='text-sm text-gray-400'>NIT 71227771-4</p>
         <p className='text-sm text-gray-400'>Navarra/Bello</p>
         <p className='text-sm text-gray-400'>(+57) 3146486791</p>

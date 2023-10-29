@@ -12,7 +12,7 @@ import {
 import { QueueListIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import useSWR from 'swr'
-import { convertToCOP } from '@/app/products/utils'
+import { convertToCOP } from '../../utils'
 import {
     Table,
     TableBody,

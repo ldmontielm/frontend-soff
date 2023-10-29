@@ -1,6 +1,6 @@
 'use client'
 
-import { DetailsRecipe } from '@/app/products/models/product.models'
+import { DetailsRecipe } from '@/app/(protected)/products/models/product.models'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -16,7 +16,6 @@ import useSWR,  {mutate} from 'swr'
 
 const formSchema = z.object({
   amount_supply: z.number({invalid_type_error: "Debes ingresar un número, no un texto", required_error: "El campo es requerido"}).min(1, {message: "El valor de la cantidad debe ser diferente de 0"}),
-  // amount_supply: z.string().transform((val) => parseInt(val)),
   id_detail:z.string().optional(),
 })
 
@@ -33,7 +32,6 @@ export default function DetailUpdateForm({detail, id_product}: Props) {
   const [open, setOpen] = useState(false)
   const {data} = useSWR(`${RoutesApi.PRODUCTS}/${id_product}/details`)
 
-  // const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,16 +44,8 @@ export default function DetailUpdateForm({detail, id_product}: Props) {
     values.id_detail = detail.id
     const data = await UpdateAmountDetailFetch(`${RoutesApi.PRODUCTS}/update_detail?id_detail=${values.id_detail}&amount_supply=${values.amount_supply}`)
     mutate(`${RoutesApi.PRODUCTS}/${id_product}/details`)
-   
-    // toast.promise(updateAmountDetail(values.id_detail, values.amount_supply), {
-    //   loading: 'Actualizando detalle...',
-    //   success: 'Detalle Actualizado correctamente',
-    //   error: 'Error al actualizar'
-    // })
-    // router.refresh()
     setOpen(false)
   }
-
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

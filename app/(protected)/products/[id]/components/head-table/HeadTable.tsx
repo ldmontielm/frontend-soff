@@ -2,14 +2,12 @@
 
 import { RoutesApi } from "@/models/routes.models"
 import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider"
-import { urlSupply } from "@/app/supplies/services/supply.services"
 import { Supply } from "@/app/supplies/models/supply.models"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useParams, useRouter } from 'next/navigation'
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import useSWR, {mutate} from 'swr'
@@ -31,7 +29,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import {HeadTable as HeadTableSupply} from "@/app/supplies/components"
-import { DetailCreate } from "@/app/products/models/product.models"
+import { DetailCreate } from "../../../models/product.models"
 
 const formSchema = z.object({
   product_id: z.string(),

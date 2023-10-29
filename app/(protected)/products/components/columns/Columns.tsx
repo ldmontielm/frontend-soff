@@ -2,8 +2,6 @@
 
 import {ColumnDef} from "@tanstack/react-table"
 import { Product } from '../../models/product.models'
-import { ArrowUpDown } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -19,22 +17,6 @@ import {PencilIcon } from "@heroicons/react/24/outline"
 import Link from 'next/link'
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
 import { Routes } from "@/models/routes.models"
-import {
-    Tooltip,
-    TooltipContent,
-    TooltipProvider,
-    TooltipTrigger,
-  } from "@/components/ui/tooltip"
-
-// import { Product } from '@/app/products/models/product.models'
-// import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { Switch } from '@/components/ui/switch'
-import { useEffect } from 'react'
-import { RoutesApi } from '@/models/routes.models'
-import useSWR, { mutate} from 'swr'
-import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
 
 export const columns: ColumnDef<Product>[] = [
     {

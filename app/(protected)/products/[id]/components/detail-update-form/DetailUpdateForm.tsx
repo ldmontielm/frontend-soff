@@ -1,6 +1,6 @@
 'use client'
 
-import { DetailsRecipe } from '@/app/products/models/product.models'
+import { DetailsRecipe } from '../../../models/product.models'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'

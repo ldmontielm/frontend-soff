@@ -23,12 +23,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import {
   ColumnDef,
   flexRender,
   ColumnFiltersState,
@@ -92,19 +86,10 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-            {/* <TooltipProvider>
-              <Tooltip>
-                  <TooltipTrigger asChild> */}
               <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
                 <AdjustmentsHorizontalIcon className='w-4 h-4' />
                 <span>Columnas</span>
               </Button>
-              {/* </TooltipTrigger>
-                        <TooltipContent className="bg-gray-500">
-                        <p className="text-xs font-semibold">Aquí puedes ocultar las columnas que no necesites.</p>
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider> */}
             </DropdownMenuTrigger>
             <DropdownMenuContent align='start'>
             {table

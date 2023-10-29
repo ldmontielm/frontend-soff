@@ -14,14 +14,11 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { DetailsRecipe } from "@/app/products/models/product.models";
+import { DetailsRecipe } from "@/app/(protected)/products/models/product.models";
 import { fetcherDelete } from "@/context/swr-context-provider/SwrContextProvider";
 import { RoutesApi } from "@/models/routes.models";
 import useSWR, {mutate} from 'swr'
 
-// const formSchema = z.object({
-//   id_detail: z.string().optional(),
-// });
 
 const DeleteDetailFetch = async (url: string) => {
   return await fetcherDelete(url)
@@ -33,25 +30,7 @@ interface Props {
 }
 
 export default function DetailDeleteForm({ detail,  id_product }: Props) {
-  // const router = useRouter()
-  // const form = useForm<z.infer<typeof formSchema>>({
-  //   resolver: zodResolver(formSchema),
-  //   defaultValues: {
-  //       id_detail: "",
-  //   },
-  // });
-
   const {data} = useSWR(`${RoutesApi.PRODUCTS}/${id_product}/details`)
-
-  // async function onSubmit() {
-  //   console.log(detail.id)
-  //   toast.promise(deleteDetail(detail.id), {
-  //     loading: 'Eliminando detalle...',
-  //     success: 'Detalle eliminado correctamente',
-  //     error: 'Error al eliminar'
-  //   })
-  //   router.refresh()
-  // }
 
   return (
     <AlertDialog>

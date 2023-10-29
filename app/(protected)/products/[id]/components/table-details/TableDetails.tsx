@@ -1,16 +1,11 @@
 'use client'
 
-import { DetailsRecipe } from "@/app/products/models/product.models"
-import { convertToCOP } from "@/app/(protected)/sales/utils"
-import { Button } from "@/components/ui/button"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { ScrollArea } from "@/components/ui/scroll-area"
+import { convertToCOP } from "../../../utils"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { HeadTable } from ".."
 import useSWR from 'swr'
 import DetailUpdateForm from "../detail-update-form/DetailUpdateForm"
 import DetailDeleteForm from "../datails-delete-form/DetailsDeleteForm"
-import { HeadTable as HeadTableSupply} from "@/app/supplies/components"
 import { RoutesApi } from "@/models/routes.models"
 
 interface Props {
@@ -22,7 +17,6 @@ const {data:DetailsContext} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
   return (
     <div>
       <HeadTable id={id} />
-      {/* <HeadTableSupply/> */}
       <div className="mt-2">
       <Table className="border rounded">
             <TableHeader>

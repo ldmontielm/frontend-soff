@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import * as z from 'zod'
 import { Input } from '@/components/ui/input'
-import { DetailsRecipe, Product, ProductConfim } from '@/app/products/models/product.models'
+import { DetailsRecipe, Product, ProductConfim } from '../../../models/product.models'
 import { useToast } from "@/components/ui/use-toast"
 
 

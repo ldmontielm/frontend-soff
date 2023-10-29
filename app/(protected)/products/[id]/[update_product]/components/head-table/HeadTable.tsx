@@ -12,7 +12,7 @@ import useSWR, {mutate} from 'swr'
 import * as z from 'zod'
 import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
-import { DetailCreate } from "@/app/products/models/product.models"
+import { DetailCreate } from "@/app/(protected)/products/models/product.models"
 import { cn } from "@/lib/utils"
 import {
   Command,
