@@ -14,7 +14,7 @@ import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useContext } from "react"
-// import { urlProvider } from '../../services/provider.services'
+import { EyeIcon, QueueListIcon } from '@heroicons/react/24/outline'
 import { OrderContextInterface } from "@/app/sales/models/sale.models"
 import useSWR, { mutate, useSWRConfig } from "swr";
 import { fetcherPut } from "@/context/swr-context-provider/SwrContextProvider";
@@ -43,6 +43,7 @@ interface Props{
   provider: Provider
   id_provider: string
 }
+
 
 
 export default function ProviderUpdateForm({provider, id_provider}: Props) {
@@ -75,6 +76,12 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
     setOpen(false)
   }
 
+  const handleCancelar = () => {
+    // Cierra el diálogo y Reinicia los campos del formulario
+    setOpen(false);
+    
+  };
+
 
   // function onSubmit(values: z.infer<typeof formSchema>) {
   //   values.id_provider = provider.id
@@ -94,8 +101,8 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>  
-        <Button variant='outline' size='icon' onClick={() => setOpen(true)}>
-          <PencilIcon className="h-4 w-4" />
+        <Button variant='ghost' > 
+          <PencilIcon className=" h-4 w-4 mr-2" onClick={() => setOpen(true)}/><span>Editar</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -220,9 +227,20 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
               )}
             />
             
-            <DialogFooter>
-              <Button type="submit">Actualizar cambios</Button>
-            </DialogFooter>
+            <div className=" mt-4 flex justify-between">
+              <DialogFooter>
+                <div>
+                  <Button type="button" onClick={handleCancelar} className="mr-2 bg-red-500 hover:bg-red-600 text-white">
+                    Cancelar
+                  </Button>
+                </div>
+                <div>
+                  <Button type="submit" >
+                    Actualizar cambios
+                  </Button>
+                </div>
+              </DialogFooter>
+          </div>
           </form>
         </Form>
       </DialogContent>

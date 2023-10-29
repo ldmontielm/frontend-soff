@@ -70,11 +70,10 @@ export default function ProviderDeleteForm({ supply, id_supply }: Props) {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
-          variant="outline"
-          size="icon"
-          className="group hover:bg-red-500"
+          variant="ghost"
+
         >
-          <TrashIcon className="w-4 h-4 group-hover:text-white" />
+          <TrashIcon className="w-4 h-4 mr-2 group-hover:text-white" /><span>Eliminar</span>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

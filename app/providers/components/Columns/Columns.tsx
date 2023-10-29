@@ -5,6 +5,7 @@ import { Provider } from "../../models/provider.models"
 import { Badge } from "@/components/ui/badge"
 import ProviderDeleteForm from '../provider-delete-form/ProviderDeleteForm'
 import ProviderUpdateForm from '../provider-update-form/ProviderUpdateForm'
+import DisableProvider from "../disable-provider/DisableProvider"
 
 import { ArrowUpDown} from "lucide-react"
 import {
@@ -25,13 +26,21 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
-// import SwitchDemo from "../switcht/SwichtDemo"
-import useSWR from "swr"
-import { useState } from "react"
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { Switch } from '@/components/ui/switch'
+import { useEffect } from 'react'
 import { RoutesApi } from '@/models/routes.models'
-import { useEffect } from "react"
-// import { getProviders, urlProvider } from "../../services/provider.services"
-// import { UploadFile } from ".."
+import useSWR, { mutate} from 'swr'
+import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+
+
 
 export default function Statusnew(){
   const {data: providers, isLoading, error} = useSWR(RoutesApi.PROVIDERS)
@@ -217,52 +226,54 @@ export const columns: ColumnDef<Provider>[] = [
         </Button>
       )
     },
-    cell: ({ row }) => {
-      const provider = row.original
-      return (
-        <Badge className={`bg-${provider.status === true ? "green": "red"}-500`}>{provider.status === true ? "Activo": "Inactivo"}</Badge>
+    cell: ({row}) => {
+      const provider = row.original;
+      return <DisableProvider provider={provider}/>
+    }
+    },
+    {
+      id: "actions",
+      header: "Acciones",
+      cell: ({row}) => {
+          const provider = row.original
+          return(
+              <div className="text-left">
+                  {
+          row.getValue("status") ? (
+              <>
+                  <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                      <Button variant='ghost' size='icon' className="ml-2">
+                          <MoreHorizontal className="h-4 w-4 " />
+                      </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="flex flex-col items-start">
+                      <DropdownMenuLabel >Acciones</DropdownMenuLabel>
+                          <ProviderUpdateForm provider={provider} id_provider={provider.id} />
+                          <ProviderDeleteForm provider={provider} id_provider={provider.id}/>
+                      </DropdownMenuContent>
+                  </DropdownMenu>
+              </>
+          ):
+          (
+              <>
+                  <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                      <Button variant='ghost' size='icon' className="ml-2">
+                          <MoreHorizontal className="h-4 w-4" />
+                      </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="flex flex-col">
+                      <DropdownMenuLabel>Sin acciones</DropdownMenuLabel>
+                      <span className="p-2 text-center">...</span>
+                      {/* <DisableProduct id={product.id} product={product}/> */}
+                      </DropdownMenuContent>
+                  </DropdownMenu>
+              </>
+          ) 
+      }
+      </div>
       )
     }
-  },
-      { 
-        id: "actions",
-        header: "Acciones",
-        cell: ({ row }) => {
-          const provider = row.original
-          return (
-            // <div>
-              <>
-              <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                  <Button variant='ghost' size='icon' className="ml-3">
-                      <MoreHorizontal className="h-4 w-4 " />
-                  </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="flex flex-col">
-                  <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                  <TableCell className="flex items-center gap-2">
-                
-                </TableCell>
-                  {/* <SwitchDemo 
-                    id_provider={provider.id}
-                    provider={provider}
-                    onUpdateStatus={()=> Statusnew()}/> */}
-                    {provider.status == true ? (
-                      <div className="flex flex-col">
-                        <div className="flex justify-left items-center ml-4 mb-2">
-                          <ProviderUpdateForm provider={provider} id_provider={provider.id} /><span>Editar</span>
-                        </div>
-                        <div className="flex justify-left items-center ml-4 mb-2">
-                          <ProviderDeleteForm provider={provider} id_provider={provider.id}/><span>Eliminar</span>
-                        </div>
-                      </div>
-                    ): null}
-                  </DropdownMenuContent>
-              </DropdownMenu>
-          </>
-            // </div>
-          )
-
-    },
-  },
+  }
 ]
