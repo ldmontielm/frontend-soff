@@ -41,18 +41,21 @@
     "@types/react-dom": "18.2.7",
     "autoprefixer": "10.4.14",
     "axios": "^1.4.0",
+    "axios-auth-refresh": "^3.3.6",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
     "date-fns": "^2.30.0",
+    "cookies-next": "^4.0.0",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
     "heroicons": "^2.0.18",
     "html2pdf.js": "^0.10.1",
+    "js-cookie": "^3.0.5",
     "jspdf": "^2.5.1",
     "jspdf-autotable": "^3.6.0",
     "lucide-react": "^0.271.0",
-    "next": "13.5.1-canary.1",
+    "next": "14.0.1-canary.1",
     "postcss": "8.4.27",
     "react": "18.2.0",
     "react-day-picker": "^8.9.1",
@@ -65,5 +68,8 @@
     "tailwindcss-animate": "^1.0.6",
     "typescript": "5.1.6",
     "zod": "^3.21.4"
+  },
+  "devDependencies": {
+    "@types/js-cookie": "^3.0.5"
   }
 }

@@ -14,8 +14,7 @@ import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useContext } from "react"
-// import { urlProvider } from '../../services/provider.services'
-import { OrderContextInterface } from "@/app/sales/models/sale.models"
+import { OrderContextInterface } from "@/app/(protected)/sales/models/sale.models"
 import useSWR, { mutate, useSWRConfig } from "swr";
 import { fetcherPut } from "@/context/swr-context-provider/SwrContextProvider";
 import { Routes, RoutesApi } from "@/models/routes.models";

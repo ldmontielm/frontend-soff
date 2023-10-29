@@ -1,216 +1,180 @@
 'use client'
 import React, {useState} from 'react'
-
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
 import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import StepContent from '@mui/material/StepContent';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Role } from '../../models/roles.models'
+import { Switch } from '@/components/ui/switch';
+import useSWR, {useSWRConfig} from 'swr';
+import toast from 'react-hot-toast';
+import { getPermissions } from '@/app/permissions/services/permissions';
+import { getRole, urlRoles,UpdateRoles} from '../../services/roles.services';
+import { createRole } from '../../models/roles.models';
+import { Role } from '../../models/roles.models';
+import { RoutesApi } from '@/models/routes.models';
+import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider';
+import { any, array } from 'zod';
+import { mutate } from 'swr';
+import { useToast } from '@/components/ui/use-toast';
+import { Pencil } from 'lucide-react';
+
+
 
 interface Props{
     id_role:string
     role:Role
 }
 
-export function UpdateTable({id_role,role}:Props) {
-    return (
-    <Dialog>
-        <DialogTrigger asChild>
-        <Button variant="outline">Editar Rol</Button>
-        </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-            <DialogTitle>Editar Rol</DialogTitle>
-            <DialogDescription>
-            Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-4 py-4">
-            <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-                Nombre
-            </Label>
-            <Input id="name" value="Pedro Duarte" className="col-span-3" /> <span>{id_role}</span>
-            </div>
-            <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-                Username
-            </Label>
-            <Input id="username" value="@peduarte" className="col-span-3" />
-            </div>
-        </div>
-        <DialogFooter>
-            <Button type="submit">Save changes</Button>
-        </DialogFooter>
-        </DialogContent>
-    </Dialog>
-)
+export function UpdateTable({id_role, role}:Props) {
+    const { data: permissionsroles, isValidating, error } = useSWR(`${RoutesApi.ROLES}/${id_role}/permissionrole-get`); 
+    const {data:permissions} = useSWR(`${RoutesApi.PERMISSIONS}/get-permision`)
+    const [activeStep, setActiveStep] = useState(0);
+    const [open, setOpen]= useState(false)
+    const [rolename, setRolname] = useState("")
+    const [assingPermissions, setAssingPermission] = useState<any[]>([])
+    const [rolenameInput, setRolenameInput] = useState(role.name);
+    const { toast } = useToast()
+
+
+    const handleNext = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+};
+
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+};
+
+    const handleReset = () => {
+        setActiveStep(0);
+};
+
+
+    const UpdateRolesFetch = async(url: string, assingPermissions: {})=>{
+        return await fetcherPut<any>(url, assingPermissions)
 }
 
 
+    const onSubmit = async(role:any, rolename:string ,assingPermissions: any[])=>{
+        const datos={
+            "name": rolename,
+            "permissions": assingPermissions
+        }
+        
+    id_role = role.id
+    const res = await UpdateRolesFetch(`${RoutesApi.ROLES}/update_role/${id_role}`, datos)
+    toast({variant: "default", title: "Rol Editado",
+    description:"Se ha Editado el rol con exito"})
+    setOpen(false)
+    mutate(`${RoutesApi.USERS}`)
+    setOpen(false)
+    setRolname("")
+    setAssingPermission([])
+    setActiveStep(0)
+    setRolenameInput("")
+    mutate(`${RoutesApi.ROLES}/get-role`)
+}
 
+return (
+    <div>
+    <Dialog open={open} onOpenChange={setOpen}>
+        <DialogTrigger asChild>
+        <Button variant="outline" size='icon'><Pencil className="w-4 h-4"/></Button>
+        </DialogTrigger>
+        <DialogContent>
 
+        <DialogHeader>
+            <DialogTitle>Editar Rol</DialogTitle>
+        </DialogHeader>
+        <Box sx={{ maxWidth: 400 }}>
+    <Stepper activeStep={activeStep} orientation="vertical">
+        <Step>
+        <StepLabel>Nombre rol</StepLabel>
+        <StepContent>
+            <Input placeholder="Nombre " value={rolenameInput} onChange={(e) => setRolenameInput(e.target.value)}/>
+            <Box sx={{ mb: 2 }} className="mt-2">
+            <div>
+                <Button
+                disabled={rolenameInput === ""}
+                variant="default"
+                onClick={() => {
+                    setRolname(rolenameInput);
+                    handleNext();
+                }}
+                size="sm"
+                >
+                Siguiente
+                </Button>
+            </div>
+            </Box>
+        </StepContent>
+        </Step>
+        <Step>
+        <StepLabel>Asignar Permisos</StepLabel>
+        <StepContent>
+            <div>
+            {
+                
+                // Array.isArray(permissions) && permissions.map((permission) => ())
+                Array.isArray(permissions) && Array.isArray(permissionsroles) && permissions.map((permission) => (
+                <div key={permission.id}>
+                    <Switch onCheckedChange={(e) => {
+                    if(e === true){
+                        setAssingPermission([...assingPermissions, {
+                        id_permission: permission.id
+                        }])
+                        console.log(permissionsroles)
+                        // console.log(permission.id_permission)
+                    }else{
+                        let listaNewPermissions = assingPermissions.filter((id) => id.id_permission !== permission.id)
+                        setAssingPermission(listaNewPermissions)
+                    }
+                    }} />
+                    <label htmlFor="">{permission.name}</label>
+                </div>
+                ))
+                }</div>
+        <Box sx={{ mb: 2 }}>
+            <div className='flex justify-center items-center w-full mt-4'>
+            <Button
+            className='w-full m-2'
+                disabled={assingPermissions.length === 0}
+                variant='default'
+                onClick={() => onSubmit(role, rolenameInput, assingPermissions)}
+                size='sm'
+            >
+                Finalizar
+            </Button>
 
-
-// import { Button } from '@/components/ui/button'
-// import {
-//     Dialog,
-//     DialogContent,
-//     DialogDescription,
-//     DialogHeader,
-//     DialogTitle,
-//     DialogTrigger,
-// } from "@/components/ui/dialog"
-// import Box from '@mui/material/Box';
-// import Stepper from '@mui/material/Stepper';
-// import Step from '@mui/material/Step';
-// import StepLabel from '@mui/material/StepLabel';
-// import StepContent from '@mui/material/StepContent';
-// import Paper from '@mui/material/Paper';
-// import Typography from '@mui/material/Typography';
-// import { Input } from "@/components/ui/input"
-// import { Switch } from '@/components/ui/switch';
-// import useSWR, {useSWRConfig} from 'swr';
-// import toast from 'react-hot-toast';
-// import { getPermissions } from '@/app/permissions/services/permissions';
-// import { getRole, urlRoles,UpdateRoles} from '../../services/roles.services';
-// import { createRole } from '../../models/roles.models';
-
-
-
-// interface Props{
-//     role:createRole
-//     id_role: string
-// }
-
-// export default function UpdateTable({role, id_role}: Props) {
-
-//     const {data:permissions} = useSWR('http://localhost:8000/permission/get-permision', getPermissions)
-//     const {data:roles} = useSWR('http://localhost:8000/role/get-role', getRole)
-//     const [activeStep, setActiveStep] = useState(0);
-//     const [open, setOpen]= useState(false)
-//     const { mutate } = useSWRConfig()
-//     const [rolename, setRolname] = useState(id_role)
-//     const [assingPermissions, setAssingPermission] = useState<any[]>([])
-//     const [rolenameInput, setRolenameInput] = useState("");
-
-//     const handleNext = () => {
-//     setActiveStep((prevActiveStep) => prevActiveStep + 1);
-// };
-//     const handleBack = () => {
-//     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-// };
-
-//     const handleReset = () => {
-//     setActiveStep(0);
-// };
-
-//     return (
-//     <div>
-//     <Dialog open={open} onOpenChange={setOpen}>
-//         <DialogTrigger asChild>
-//         <Button variant="default">Registrar rol</Button>
-//         </DialogTrigger>
-//         <DialogContent>
-
-//         <DialogHeader>
-//             <DialogTitle>Registrar Rol</DialogTitle>
-//         </DialogHeader>
-//         <Box sx={{ maxWidth: 400 }}>
-//     <Stepper activeStep={activeStep} orientation="vertical">
-//         <Step>
-//         <StepLabel>Nombre rol</StepLabel>
-//         <StepContent>
-//             <Input placeholder="Nombre " value={rolenameInput} onChange={(e) => setRolenameInput(e.target.value)}/>
-//             <Box sx={{ mb: 2 }} className="mt-2">
-//             <div>
-//                 <Button
-//                 disabled={rolenameInput === ""}
-//                 variant="default"
-//                 onClick={() => {
-//                     setRolname(rolenameInput);
-//                     handleNext();
-//                 }}
-//                 size="sm"
-//                 >
-//                 Siguiente
-//                 </Button>
-//             </div>
-//             </Box>
-//         </StepContent>
-//         </Step>
-//         <Step>
-//         <StepLabel>Asignar Permisos</StepLabel>
-//         <StepContent>
-//             <div>
-//             {
-//                 Array.isArray(permissions) && permissions.map((permission) => (
-//                 <div key={permission.id}>
-//                     <Switch onCheckedChange={(e) => {
-//                     if(e === true){
-//                         setAssingPermission([...assingPermissions, {
-//                         id_permission: permission.id
-//                         }])
-//                     }else{
-//                         let listaNewPermissions = assingPermissions.filter((id) => id.id_permission !== permission.id)
-//                         setAssingPermission(listaNewPermissions)
-//                     }
-//                     }} />
-//                     <label htmlFor="">{permission.name}</label>
-//                 </div>
-//                 ))
-//             }
-//             </div>
-//         <Box sx={{ mb: 2 }}>
-//             <div className='flex justify-center items-center w-full mt-4'>
-//             <Button
-//             className='w-full m-2'
-//                 disabled={assingPermissions.length === 0}
-//                 variant='default'
-//                 onClick={() => {
-//                 toast.promise(UpdateRoles(rolename, assingPermissions), {
-//                     success: "Rol agregado",
-//                     error: "No se pudo agregar el rol",
-//                     loading: "Agregando rol"
-//                 })
-//                 setOpen(false)
-//                 setRolname("")
-//                 setAssingPermission([])
-//                 setActiveStep(0)
-//                 setRolenameInput("")
-//                 mutate(`${urlRoles}/get-role`)
-
-//                 }}
-//                 size='sm'
-//             >
-//                 Finalizar
-//             </Button>
-
-//                 <Button
-//                     onClick={handleBack}
-//                     className='m-2'
-//                 >
-//                     Volver
-//                 </Button>
-//             </div>
-//         </Box>
-//         </StepContent>
-//         </Step>
-//     </Stepper>
-//     </Box>
-//         </DialogContent>
-//         {
-//         open === false ? "" : ""
-//         }
-//     </Dialog>
-//     </div>
-// )
-// }
+                <Button
+                    onClick={handleBack}
+                    className='m-2'
+                >
+                    Volver
+                </Button>
+            </div>
+        </Box>
+        </StepContent>
+        </Step>
+    </Stepper>
+    </Box>
+        </DialogContent>
+        {
+        open === false ? "" : ""
+        }
+    </Dialog>
+    </div>
+    )
+}

@@ -16,5 +16,6 @@ export enum RoutesApi {
   ROLES = 'http://localhost:8000/roles',
   SUPPLIES = 'http://localhost:8000/supplies',
   USERS = 'http://localhost:8000/users',
-  PERMISSIONS = 'http://localhost:8000/permissions'
+  PERMISSIONS = 'http://localhost:8000/permissions',
+  AUTH='http://localhost:8000/auth'
 }
