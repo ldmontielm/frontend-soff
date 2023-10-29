@@ -20,15 +20,31 @@ import {Popover,PopoverContent,PopoverTrigger,} from "@/components/ui/popover"
 import { RoutesApi } from "@/models/routes.models"
 import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider"
 import { Supply } from "@/app/supplies/models/supply.models"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { useToast } from "@/components/ui/use-toast"
+import { ToastAction } from "@/components/ui/toast"
 
 const formSchema = z.object({
   purchase_id: z.string(),
   supply_id: z.string({
-    required_error: "Please select a supply.",
-  }),
-  amount_supplies: z.string().transform(Number),
-  price_supplies: z.string().transform(Number)
-})
+    required_error: "Campo requerido.",
+    invalid_type_error: "Debe seleccionar un insumo."
+  }).min(2, {message:'Seleccione un insumo.'}),
+  amount_supplies: z.string({
+    required_error: "Campo requerido.",  
+    invalid_type_error: "Debe ingresar la cantidad."
+  }).min(1, {message:'La cantidad mínima es 1.'}).max(3, {message:'Excedió el número de dígitos.'}).transform(Number),
+  price_supplies: z.string({
+    required_error: "Campo requerido.", 
+    invalid_type_error: "Debe ingresar el precio."
+  }).min(3, {message:'El precio mínimo es 100.'}).max(6, {message:'Excedió el número de dígitos.'}).transform(Number)
+}
+  )
 
 const AddOrderFetch = async (url: string, body: OrderCreate) => {
   return await fetcherPost<OrderCreate>(url, body)
@@ -43,6 +59,7 @@ export default function HeadTablep({id}: Props) {
   const {data:supplies} = useSWR(RoutesApi.SUPPLIES)
   const {data} = useSWR(`${RoutesApi.PURCHASES}/${id}/orders`)
   const [open, setOpen] = useState(false)
+  const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -121,7 +138,6 @@ export default function HeadTablep({id}: Props) {
                 <FormMessage />
               </FormItem>
             )}
-
           />
           <FormField
             control={form.control}
@@ -130,7 +146,7 @@ export default function HeadTablep({id}: Props) {
               <FormItem className="w-full md:w-[200px]">
                 <FormLabel>Cantidad</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Cantidad del insumo" min="1" {...field} className="lg:w-fit"/>
+                  <Input type="number" placeholder="Cantidad del insumo" {...field} className="lg:w-fit"/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -144,18 +160,35 @@ export default function HeadTablep({id}: Props) {
               <FormItem className="w-full md:w-[200px] ml-4">
                 <FormLabel>Precio</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Precio del insumo" min="100" {...field} className="lg:w-fit"/>
+                  <Input type="number" placeholder="Precio del insumo" {...field} className="lg:w-fit"/>
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )
           }
           />
 
         </div>
-        <Button type="submit" className="w-full md:w-fit">
-          <PlusIcon className="w-4 h-4 mr-2" />
-          <span>Agregar</span>
-        </Button>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button type="submit" className="w-full md:w-fit"
+                onClick={async () => {
+                  toast({
+                    title: "Agregando orden",
+                    description: "Se ha agregado la orden correctamente.",
+                    action: (
+                  <ToastAction altText="Goto schedule to undo">OK</ToastAction>
+                  ),})}}>
+                <PlusIcon className="w-4 h-4 mr-2" />
+                <span>Agregar</span>
+              </Button>
+            </TooltipTrigger>
+          <TooltipContent className="bg-gray-500">
+            <p className="text-xs font-semibold">Aquí puedes agregar ordenes a la compra.</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
       </form>
     </Form>
   )

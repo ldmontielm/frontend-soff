@@ -1,7 +1,7 @@
 'use client'
 import { convertToCOP } from "@/app/purchases/utils"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
-import { HeadTable } from ".."
+import {HeadTablep} from ".."
 import useSWR from "swr"
 import { RoutesApi } from "@/models/routes.models"
 import OrderUpdateForm from "../order-update-form/OrderUpdateForm"
@@ -17,7 +17,7 @@ export default function TableOrders({id}:Props) {
 
   return (
     <div>
-      <HeadTable id={id}/>
+      <HeadTablep id={id}/>
       <div className="mt-2">
       <Table className="border rounded">
             <TableHeader>

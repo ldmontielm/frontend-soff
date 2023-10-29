@@ -9,7 +9,6 @@ import { MoreHorizontal, PencilIcon } from "lucide-react"
 import { SeeDetail } from "../see-detail"
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
 
-
 export const columns: ColumnDef<Purchase>[] = [
     {
       accessorKey: 'invoice_number',
@@ -106,7 +105,7 @@ export const columns: ColumnDef<Purchase>[] = [
             <DropdownMenuTrigger asChild>
               <Button variant='ghost' size='icon'>
                 <MoreHorizontal className="h-4 w-4"/>
-              </Button>
+              </Button> 
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="flex flex-col items-start">
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>

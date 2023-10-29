@@ -13,6 +13,14 @@ import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
 import { useState } from 'react'
 import useSWR, { mutate} from 'swr'
 import { RoutesApi } from '@/models/routes.models'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { useToast } from "@/components/ui/use-toast"
+import { ToastAction } from "@/components/ui/toast"
 
 const formSchema = z.object({
   amount_supplies: z.string().transform((val) => parseInt(val)),
@@ -31,6 +39,7 @@ const UpdateAmountOrderFetch = async (url: string) => {
 export default function OrderUpdateForm({order, id_purchase}: Props) {
   const [open, setOpen] = useState(false)
   const {data} = useSWR(`${RoutesApi.PURCHASES}/${id_purchase}/orders`)
+  const { toast } = useToast()
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -51,10 +60,19 @@ export default function OrderUpdateForm({order, id_purchase}: Props) {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>  
-        <Button variant='outline' size='icon' onClick={() => setOpen(true)}>
-          <PencilIcon className="h-4 w-4" />
-        </Button>
+      <DialogTrigger asChild> 
+      <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild> 
+              <Button variant='outline' size='icon' onClick={() => setOpen(true)}>
+                <PencilIcon className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+          <TooltipContent className="bg-gray-500">
+            <p className="text-xs font-semibold">Aquí puedes editar la cantidad del insumo.</p>
+          </TooltipContent>
+          </Tooltip>
+      </TooltipProvider>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

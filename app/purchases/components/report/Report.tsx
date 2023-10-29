@@ -8,6 +8,14 @@ import { convertDate } from '../../utils'
 import { DocumentChartBarIcon } from '@heroicons/react/24/outline'
 import { Purchase } from '@/app/purchases/models/purchase.models'
 import { RoutesApi } from '@/models/routes.models'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { useToast } from "@/components/ui/use-toast"
+import { ToastAction } from "@/components/ui/toast"
 
 export function getCurrentDate() {
     const currentDate = new Date();
@@ -25,6 +33,7 @@ interface PurchaseInvoice {
 export default function Report() {
   const {data:purchases} = useSWR<Purchase[]>(`${RoutesApi.PURCHASES}`)
   const [currentDate, setCurrentDate] = useState('');
+  const { toast } = useToast()
 
   useEffect(() => {
     const currentDate = getCurrentDate();
@@ -64,10 +73,33 @@ export default function Report() {
 
   return (
     <div>
-        <Button onClick={() => generateReceipt()} variant='outline' className='flex items-center w-full md:w-fit gap-2'>
+        {/* <Button onClick={() => generateReceipt()} variant='outline' className='flex items-center w-full md:w-fit gap-2'>
             <DocumentChartBarIcon className='w-4 h-4' />
             <span>Reporte</span>
-        </Button>
+        </Button> */}
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                variant='outline'
+                className="flex items-center w-full md:w-fit gap-2"
+                onClick={async () => {
+                  generateReceipt()
+                  toast({
+                    title: "Generando reporte",
+                    description: "Se ha generado un nuevo informe de compras.",
+                    action: (
+                  <ToastAction altText="Goto schedule to undo">OK</ToastAction>
+                  ),})}}>
+                <DocumentChartBarIcon className='w-4 h-4' />
+                <span>Reporte</span>
+              </Button>   
+          </TooltipTrigger>
+          <TooltipContent className="bg-gray-500">
+            <p className="text-xs font-semibold">Aquí puedes generar un informe de todas las compras.</p>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     </div>
   )
   }

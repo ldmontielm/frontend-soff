@@ -24,10 +24,24 @@ import { Popover,PopoverContent, PopoverTrigger,} from "@/components/ui/popover"
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
+import { ToastAction } from "@/components/ui/toast"
 
 const formPurchaseSchema = z.object({
-  provider_id: z.string(),
-  invoice_number: z.string()
+  purchase_date:z.date({
+    required_error: "Seleccione la fecha de compra.",
+  }),
+  invoice_number: z.string({
+    required_error: "El campo es requerido"
+  }).min(2, {message: 'Ingrese el número de factura.'}).max(20, {message:'Excedio el limite de caracteres.'}),
+  provider_id: z.string({
+    required_error: "El campo es requerido"
+  }).min(2, {message: 'Ingrese el nombre del proveedor.'})
 })
 
 interface Props{
@@ -63,22 +77,23 @@ export default function InfoPurchase({id}:Props) {
   const formPurchase = useForm<z.infer<typeof formPurchaseSchema>>({
     resolver: zodResolver(formPurchaseSchema),
     defaultValues: {
-      provider_id: '',
-      invoice_number: ''
+      invoice_number: '',
+      provider_id: ''
     }
   })
 
   async function onSubmitPurchase(values: z.infer<typeof formPurchaseSchema>){
 
     const purchase = {
-      purchase_date: date,
-      provider_id: values.provider_id,
-      invoice_number: values.invoice_number
+      purchase_date: values.purchase_date,
+      invoice_number: values.invoice_number,
+      provider_id: values.provider_id
     }
-    
+
     const res = await ConfirmPurchaseFetch(`${RoutesApi.PURCHASES}/${id}/confirm-purchase`, purchase)
     toast({variant: 'default', title: "Compra confirmada", description: "Se ha confirmado con exito la compra, mira el historial en la sección de compras."})
     router.push('/purchases')
+
   }
 
   return (
@@ -96,36 +111,71 @@ export default function InfoPurchase({id}:Props) {
           <div className='mb-5'>
           <FormField 
             control={formPurchase.control}
-            name="invoice_number"
+            name="purchase_date"
             render ={({field}) => (
+              // <FormItem>
+              //   <FormLabel>Fecha de Compra:</FormLabel>
+              //   <FormControl >
+              //       <Popover>
+              //       <PopoverTrigger asChild>
+              //         <Button
+              //           variant={"outline"}
+              //           className={cn(
+              //             "w-full justify-start text-left font-normal",
+              //             !date && "text-muted-foreground"
+              //           )}
+              //         >
+              //           <CalendarIcon className="mr-2 h-4 w-4" />
+              //           {date ? format(date, "PPP") : <span>Seleccionar fecha</span>}
+              //         </Button>
+              //       </PopoverTrigger>
+              //       <PopoverContent className="w-auto p-0">
+              //         <Calendar
+              //           mode="single"
+              //           selected={date}
+              //           onSelect={setDate}
+              //           initialFocus
+              //         />
+              //       </PopoverContent>
+              //     </Popover>
+              //   </FormControl>
+              //   <FormMessage />
+              // </FormItem>
               <FormItem>
-                <FormLabel>Fecha de Compra:</FormLabel>
-                <FormControl >
-                    <Popover>
-                    <PopoverTrigger asChild>
-                      <Button
-                        variant={"outline"}
-                        className={cn(
-                          "w-full justify-start text-left font-normal",
-                          !date && "text-muted-foreground"
-                        )}
-                      >
-                        <CalendarIcon className="mr-2 h-4 w-4" />
-                        {date ? format(date, "PPP") : <span>Seleccionar fecha</span>}
-                      </Button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
-                      <Calendar
-                        mode="single"
-                        selected={date}
-                        onSelect={setDate}
-                        initialFocus
-                      />
-                    </PopoverContent>
-                  </Popover>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
+              <FormLabel>Fecha de compra</FormLabel>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant={"outline"}
+                      className={cn(
+                        "w-full justify-start text-left font-normal",
+                        !field.value && "text-muted-foreground"
+                      )}
+                    >
+                      {field.value ? (
+                        format(field.value, "PPP")
+                      ) : (
+                        <span>Seleccione la fecha</span>
+                      )}
+                      <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="end">
+                  <Calendar
+                    mode="single"
+                    selected={field.value}
+                    onSelect={field.onChange}
+                    disabled={(date) =>
+                      date > new Date() || date < new Date("1900-01-01")
+                    }
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+              <FormMessage />
+            </FormItem>
             )}
           />
           <FormField 
@@ -135,7 +185,7 @@ export default function InfoPurchase({id}:Props) {
               <FormItem>
                 <FormLabel>Número de Factura:</FormLabel>
                 <FormControl >
-                    <Input placeholder='Número de factura'{...field} required/>
+                    <Input type='text' placeholder='Número de factura'{...field}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -145,7 +195,7 @@ export default function InfoPurchase({id}:Props) {
             control={formPurchase.control}
             name="provider_id"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem>
               <FormLabel>Proveedor</FormLabel>
               <div className="w-full flex items-center justify-content">
                 <Popover open={open} onOpenChange={setOpen}>
@@ -207,20 +257,38 @@ export default function InfoPurchase({id}:Props) {
           </div>
           
           <div className='mt-4 space-y-2'>
-            <Button className="w-full" type='submit' >
-              Consolidar compra
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button className="w-full" type='submit'>
+                    Consolidar compra
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent className="bg-gray-500">
+                  <p className="text-xs font-semibold">Aquí puedes confirmar la compra.</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
           
 
           <div className='mt-4 space-y-2'>
-            <Button className="w-full" variant='outline' onClick={async () => {
-              const res = await CancelPurchaseFetch(`${RoutesApi.PURCHASES}/${id}/deletepurchase`)
-              toast({variant: 'default', title: "Compra cancelada correctamente", description: "Se ha eliminado la compra con éxito."})
-              router.push("/purchases")
-            }}>
-              Cancelar compra
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button className="w-full" variant='outline' onClick={async () => {
+                    const res = await CancelPurchaseFetch(`${RoutesApi.PURCHASES}/${id}/deletepurchase`)
+                    toast({variant: 'default', title: "Compra cancelada correctamente", description: "Se ha eliminado la compra con éxito."})
+                    router.push("/purchases")
+                  }}>
+                    Cancelar compra
+                  </Button>
+                </TooltipTrigger>
+            <TooltipContent className="bg-gray-500">
+              <p className="text-xs font-semibold">Aquí puedes cancelar la compra.</p>
+            </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </form>
       </Form>
