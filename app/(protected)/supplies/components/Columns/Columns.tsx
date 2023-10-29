@@ -1,7 +1,8 @@
 'use client'
 import {ColumnDef} from "@tanstack/react-table"
 import { Supply } from "../../models/supply.models"
-import { convertToCOP } from "@/app/purchases/utils"
+// import { convertToCOP } from "@/app/purchases/utils"
+import { convertToCOP } from "@/app/(protected)/purchases/utils"
 import { Badge } from "@/components/ui/badge"
 import SupplyUpdateForm from "../supply-update-form/SupplyUpdateForm" 
 import SupplyByIdDeleteForm from "../supply-delete-form/SupplyDeleteForm"
