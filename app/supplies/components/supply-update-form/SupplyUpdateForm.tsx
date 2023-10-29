@@ -48,6 +48,8 @@ interface Props{
 }
 
 
+
+
 export default function SupplyUpdateForm({supply, id_supply}: Props) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
@@ -64,11 +66,7 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
       unit_measure: supply.unit_measure
     },
   })
-  // function onSubmit(values: z.infer<typeof formSchema>) {
-  //   values.id_provider = provider.id
-  //   updateProvider(values.id_provider, provider )
-  //   setOpen(false)
-  // }
+
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     values.id_supply = supply.id
@@ -79,11 +77,17 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
     setOpen(false)
   }
 
+  const handleCancelar = () => {
+    // Cierra el diálogo y Reinicia los campos del formulario
+    setOpen(false);
+    
+  };
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>  
-        <Button variant='outline' size='icon' onClick={() => setOpen(true)}>
-          <PencilIcon className="h-4 w-4" />
+        <Button variant='ghost'>
+          <PencilIcon className="h-4 w-4 mr-2" onClick={() => setOpen(true)}/><span>Editar</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -171,9 +175,20 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
               )}
             />
             
-            <DialogFooter>
-              <Button type="submit">Actualizar cambios</Button>
-            </DialogFooter>
+            <div className=" mt-4 flex justify-between">
+              <DialogFooter>
+                <div>
+                  <Button type="button" onClick={handleCancelar} className="mr-2 bg-red-500 hover:bg-red-600 text-white">
+                    Cancelar
+                  </Button>
+                </div>
+                <div>
+                  <Button type="submit" >
+                    Actualizar cambios
+                  </Button>
+                </div>
+              </DialogFooter>
+          </div>
           </form>
         </Form>
       </DialogContent>
