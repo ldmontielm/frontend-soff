@@ -33,13 +33,16 @@ export function middleware(request: NextRequest) {
         if (request.nextUrl.pathname.startsWith('/products') && !user.permissions.includes('productos')) {
             return NextResponse.redirect(new URL("/", request.url))
         }
+        if (request.nextUrl.pathname.startsWith('/purchases') && !user.permissions.includes('compras')) {
+            return NextResponse.redirect(new URL("/", request.url))
+        }
     }else {
-        if(request.nextUrl.pathname.startsWith('/sales') || (request.nextUrl.pathname.startsWith('/products'))){
+        if(request.nextUrl.pathname.startsWith('/sales') || request.nextUrl.pathname.startsWith('/products') || request.nextUrl.pathname.startsWith('/purchases')){
             return NextResponse.redirect(new URL("/auth/login", request.url))
         }
     }
 }
 
 export const config = {
-    matcher: ["/auth/:path*", '/sales', "/products/:path*"],
+    matcher: ["/auth/:path*", '/sales', "/products/:path*", "/purchases/:path*"],
   };

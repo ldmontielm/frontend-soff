@@ -1,5 +1,5 @@
 'use client'
-import { convertToCOP } from "@/app/purchases/utils"
+import { convertToCOP } from "@/app/(protected)/purchases/utils"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {HeadTablep} from ".."
 import useSWR from "swr"

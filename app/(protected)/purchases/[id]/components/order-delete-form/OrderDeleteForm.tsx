@@ -4,7 +4,7 @@ import React from "react";
 import {AlertDialog, AlertDialogAction,AlertDialogCancel,AlertDialogContent, AlertDialogDescription,AlertDialogFooter,AlertDialogHeader,AlertDialogTitle,AlertDialogTrigger,} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "@heroicons/react/24/outline";
-import { Order } from "@/app/purchases/models/purchase.models";
+import { Order } from "@/app/(protected)/purchases/models/purchase.models";
 import * as z from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";

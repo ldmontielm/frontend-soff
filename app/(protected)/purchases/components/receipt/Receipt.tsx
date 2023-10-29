@@ -5,7 +5,7 @@ import autoTable from 'jspdf-autotable'
 import useSWR from 'swr'
 import { convertDate } from '../../utils'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
-import { Order } from '@/app/purchases/models/purchase.models'
+import { Order } from '@/app/(protected)/purchases/models/purchase.models'
 import { RoutesApi } from '@/models/routes.models'
 
 interface Props {

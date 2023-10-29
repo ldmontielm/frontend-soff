@@ -1,8 +1,8 @@
 'use client'
-import { PurchaseConfirm, Order, Purchase } from '@/app/purchases/models/purchase.models'
+import { PurchaseConfirm, Order, Purchase } from '@/app/(protected)/purchases/models/purchase.models'
 import { fetcherPut, fetcherDelete} from '@/context/swr-context-provider/SwrContextProvider'
 import { RoutesApi } from '@/models/routes.models'
-import { convertToCOP } from '@/app/purchases/utils'
+import { convertToCOP } from '@/app/(protected)/purchases/utils'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'

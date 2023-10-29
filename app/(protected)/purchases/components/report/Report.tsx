@@ -6,7 +6,7 @@ import useSWR from 'swr'
 import { Button } from '@/components/ui/button'
 import { convertDate } from '../../utils'
 import { DocumentChartBarIcon } from '@heroicons/react/24/outline'
-import { Purchase } from '@/app/purchases/models/purchase.models'
+import { Purchase } from '@/app/(protected)/purchases/models/purchase.models'
 import { RoutesApi } from '@/models/routes.models'
 import {
   Tooltip,

@@ -1,7 +1,7 @@
 'use client'
 
 import React, {useState} from 'react'
-import { Order, Purchase } from '@/app/purchases/models/purchase.models'
+import { Order, Purchase } from '@/app/(protected)/purchases/models/purchase.models'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { QueueListIcon } from '@heroicons/react/24/outline'
 import useSWR from 'swr'

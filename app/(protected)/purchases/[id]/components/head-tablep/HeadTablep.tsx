@@ -7,7 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useParams, useRouter } from 'next/navigation'
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import { OrderCreate } from "@/app/purchases/models/purchase.models"
+import { OrderCreate } from "@/app/(protected)/purchases/models/purchase.models"
 import toast from "react-hot-toast"
 import useSWR, {mutate} from 'swr'
 import { HeadTable } from "@/app/supplies/components"
