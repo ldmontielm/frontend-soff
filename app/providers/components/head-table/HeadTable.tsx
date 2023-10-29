@@ -3,7 +3,12 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider";
 import { useToast } from "@/components/ui/use-toast"
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 
 import * as z from 'zod'
 import {
@@ -78,6 +83,18 @@ export default function HeadTable({location}: Props) {
     }
   })
 
+  const handleCancelar = () => {
+    // Cierra el diálogo y Reinicia los campos del formulario
+    setOpen(false);
+    form.reset({
+      nit: '',
+      name: '',
+      company: '',
+      address: '',
+      phone: '',
+      city: '',
+    });
+  };
   
   const onSubmit = async (values: z.infer<typeof fromSchema>) => {
     // values.provider_id = id
@@ -90,27 +107,6 @@ export default function HeadTable({location}: Props) {
   }
 
 
-    // function onSubmit(values: z.infer<typeof fromSchema>){
-    //   toast.promise(createProvider(values), {
-    //     success: "Proveedor agregado",
-    //     error: "Algo ocurrio",
-    //     loading: 'Cargando información...'
-    //   }).then(() => {
-    //     form.setValue("nit", "");
-    //     form.setValue("name", "");
-    //     form.setValue("company", "");
-    //     form.setValue("address", "");
-    //     // form.setValue("email", "");
-    //     form.setValue("phone", "");
-    //     form.setValue("city", "");
-
-    //   setOpen(false)
-    //   mutate(`${urlProvider}`)
-    //   });
-    // }
-      
-      
-    // const {data: proveedor} = useSWR(urlProvider, getProviders)
 return (
   <div>
     <Dialog open={open} onOpenChange={setOpen}>
@@ -124,6 +120,7 @@ return (
       </Button>
       </DialogTrigger>
       <DialogContent >
+      
 
         <DialogHeader>
           <DialogTitle>Agregar Nuevo Proveedor</DialogTitle>
@@ -223,9 +220,21 @@ return (
               </FormItem>
               )}
               />
-            <DialogFooter>
-              <Button type="submit">Guardar Proveedor</Button>
-            </DialogFooter>
+              
+            <div className=" mt-4 flex justify-between">
+              <DialogFooter>
+                <div>
+                  <Button type="button" onClick={handleCancelar} className="mr-2 bg-red-500 hover:bg-red-600 text-white">
+                    Cancelar
+                  </Button>
+                </div>
+                <div>
+                  <Button type="submit" >
+                    Registrar Proveedor
+                  </Button>
+                </div>
+              </DialogFooter>
+            </div>
           </form>
         </Form>
       </DialogContent>

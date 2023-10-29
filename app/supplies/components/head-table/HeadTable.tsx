@@ -77,18 +77,16 @@ export default function HeadTable({location}: Props) {
       unit_measure: ''
     }
   });
-  // const {mutate } = useSWRConfig()
-
-    // function onSubmit(values: z.infer<typeof fromSchema>){
-    //   toast.promise(createSupply(values), {
-    //     success: "Insumo agregado",
-    //     error: "Algo ocurrio",
-    //     loading: 'Cargando información...'
-    //   })
-    //   routes.refresh()
-    //   setOpen(false)
-    //   mutate(`${urlSupply}`)
-    // }
+  const handleCancelar = () => {
+    // Cierra el diálogo y Reinicia los campos del formulario
+    setOpen(false);
+    form.reset({
+      name: '',
+      price: 0,
+      quantity_stock: 0,
+      unit_measure: ''
+    });
+  };
 
     const onSubmit = async (values: z.infer<typeof fromSchema>) => {
       if (values.unit_measure === 'Kilogramos') {
@@ -171,7 +169,7 @@ return (
           <FormControl>
         <Select onValueChange={field.onChange}>
           <SelectTrigger className="w-default">
-            <SelectValue placeholder="Seleccioné" />
+            <SelectValue placeholder="Seleccione" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="Kilogramos">Kilogramos</SelectItem>
@@ -184,9 +182,20 @@ return (
       </FormItem>
   )}
 />
-          <DialogFooter>
-            <Button type="submit" className="w-full mt-2">Registrar Insumo</Button>
-          </DialogFooter>
+        <div className=" mt-4 flex justify-between">
+        <DialogFooter>
+          <div>
+            <Button type="button" onClick={handleCancelar} className="mr-2 bg-red-500 hover:bg-red-600 text-white">
+              Cancelar
+            </Button>
+          </div>
+          <div>
+            <Button type="submit" >
+              Registrar Insumo
+            </Button>
+          </div>
+        </DialogFooter>
+        </div>
         </form>
       </Form>
     </DialogContent>
