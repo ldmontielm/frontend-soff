@@ -70,11 +70,10 @@ export default function ProviderDeleteForm({ supply, id_supply }: Props) {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
-          variant="outline"
-          size="icon"
-          className="group hover:bg-red-500"
+          variant="ghost"
+
         >
-          <TrashIcon className="w-4 h-4 group-hover:text-white" />
+          <TrashIcon className="w-4 h-4 mr-2 group-hover:text-white" /><span>Eliminar</span>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -88,8 +87,8 @@ export default function ProviderDeleteForm({ supply, id_supply }: Props) {
         <AlertDialogFooter>
           <AlertDialogCancel>Cancelar</AlertDialogCancel> {/* Cerrar el diálogo de alerta */}
           <AlertDialogAction type="button" onClick={async () => {
-            await DeleteSupplyFetch(`${RoutesApi.SUPPLIES}/delete_supply/${supply.id}`)
-            mutate(`${RoutesApi.SUPPLIES}`)
+            await DeleteSupplyFetch(`${RoutesApi.SUPPLIES}/delete_supply/${id_supply}`)
+            mutate(RoutesApi.SUPPLIES)
           }} 
           className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90">
           Eliminar

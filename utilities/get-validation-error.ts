@@ -107,6 +107,42 @@ export const getValidationErrors = (errorCode: string) => {
         DETAIL_NOT_FOUND:{
             title: "Detalle no encontrado",
             message:"Lo sentimos, el detalle no pudo ser encontrado."
+        },
+        CREDENCIALES_INVALIDAS: {
+            title: "Credenciales invalidas",
+            message:"El correo o contraseña son incorrectos"
+        },
+        "Not authenticated": {
+            title: "Usted no se encuentra autenticado",
+            message:"Por favor, inicie sesión para acceder a esta parte del aplicativo."
+        },
+        INACTIVATE: {
+            title: "Usuario inactivo",
+            message:"Actualmente se encuentra inactivo en el sistema, por favor inicie sesión."
+        },
+        INACTIVATE_USER: {
+            title: "Usuario inactivo",
+            message:"Actualmente se encuentra inactivo en el sistema, por favor inicie sesión."
+        },
+        EMAIL_NOT_FOUND: {
+            title: "Email no encontrado",
+            message:"El email no fue encontrado en nuestra base de datos."
+        },
+        CODE_NOT_FOUND_OR_EXPIRED: {
+            title: "Código erróneo o expirado",
+            message:"El código digitado es incorrecto o ya expiró, por favor, solicite uno nuevo."
+        },
+        CODE_CONFIRMATED: {
+            title: "Código ya fue utilizado",
+            message:"El código digitado ya fue utilizado para confirmar cambio de contraseña."
+        },
+        USER_ID_NOT_FOUND: {
+            title: "Usuario no encontrado",
+            message:"El usuario no fue encontrado en nuestra base de datos."
+        },
+        APIKEY_NOT_FOUND: {
+            title: "Lo sentimos, ocurrió un error con tu acceso.",
+            message:"Algo sucedio al momento de confirmar tu contraseña, vuelve a intentarlo más tarde."
         }
     }
 

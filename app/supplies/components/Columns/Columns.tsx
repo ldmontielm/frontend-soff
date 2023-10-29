@@ -1,12 +1,10 @@
 'use client'
 import {ColumnDef} from "@tanstack/react-table"
 import { Supply } from "../../models/supply.models"
+import { convertToCOP } from "@/app/purchases/utils"
 import { Badge } from "@/components/ui/badge"
 import SupplyUpdateForm from "../supply-update-form/SupplyUpdateForm" 
 import SupplyByIdDeleteForm from "../supply-delete-form/SupplyDeleteForm"
-import useSWR from "swr"
-import { useState } from "react"
-import { useEffect } from "react"
 // import SwitchDemo from "../switcht/SwichtDemo"
 import {
   ColumnFiltersState,
@@ -21,17 +19,13 @@ import {
 } from "@tanstack/react-table"
 
 import { ArrowUpDown} from "lucide-react"
-
+import DisableSupply from "../../disable-supply/DisableSupply"
 import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-  
-} from "@/components/ui/table"
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -41,13 +35,24 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { MoreHorizontal } from "lucide-react"
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { Switch } from '@/components/ui/switch'
+import { useEffect } from 'react'
+import { RoutesApi } from '@/models/routes.models'
+import useSWR, { mutate} from 'swr'
+import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
 // import { getSupplies, urlSupply } from "../../services/supply.services"
 import { Column } from "jspdf-autotable"
-import { RoutesApi } from '@/models/routes.models'
+
+// const [menuOpen, setMenuOpen] = useState(false);
+
 
 export default function Statusnew(){
   const {data: supplies, isLoading, error} = useSWR(RoutesApi.SUPPLIES)
   const [localSupplies, setLocalSupplies] = useState<Supply[]>([])
+  // const [menuOpen, setMenuOpen] = useState(false);
+
 
   useEffect(()=>{
     if(supplies){
@@ -102,7 +107,10 @@ export const columns: ColumnDef<Supply>[] = [
       )
     },
     cell: ({row}) => {
-      return <div>{row.getValue('price')}</div>
+      const price: number = row.getValue('price'); // Especifica el tipo como número
+      const priceInCOP = convertToCOP(price); // Aplica la conversión
+
+      return <div>{priceInCOP}</div>
     }
   },
   {
@@ -136,10 +144,10 @@ export const columns: ColumnDef<Supply>[] = [
       );
     },
     cell: ({ row }) => {
-      const unitMeasure = row.getValue('unit_measure');
+      const unitMeasure: string = row.getValue('unit_measure');
       // Aquí, verificamos si la unidad de medida es "Kilogramos" y la mostramos como "gramos" si es así
-      const displayUnitMeasure = unitMeasure === 'Kilogramos' ? 'gramos' : unitMeasure;
-      return <div>{displayUnitMeasure as string}</div>; // Agregamos "as string" para ayudar a TypeScript a inferir el tipo
+      const displayUnitMeasure = unitMeasure === 'Kilogramos' ? 'Gramos' : unitMeasure;
+      return <div>{displayUnitMeasure}</div>; // Agregamos "as string" para ayudar a TypeScript a inferir el tipo
     }
   },
   {
@@ -157,68 +165,75 @@ export const columns: ColumnDef<Supply>[] = [
     },
 
     cell: ({ row }) => {
-      const supply = row.original
-      return (
-        <Badge className={`bg-${supply.status === true ? "green": "red"}-500`}>{supply.status === true ? "Activo": "Inactivo"}</Badge>
-      )
+      const supply = row.original;
+      return <DisableSupply supply={supply}/>
     }
-  },
-      { 
+    },
+      {
         id: "actions",
         header: "Acciones",
-        cell: ({ row }) => {
-          const supply = row.original
-          return (
-            <div>
-              <>
-              <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                  <Button variant='ghost' size='icon' className="ml-3">
-                      <MoreHorizontal className="h-4 w-4 " />
-                  </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="flex flex-col">
-                  <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                  {/* <TableCell className="flex items-center gap-2">
-                
-                </TableCell> */}
-                  {/* <SwitchDemo 
-                    id_supply={supply.id}
-                    supply={supply}
-                    onUpdateStatus={()=> Statusnew()}/> */}
-                    {supply.status == true ? (
-                      <div className="flex flex-col">
-                        <div className="flex justify-left items-center ml-4 mb-2">
-                          <SupplyUpdateForm supply={supply} id_supply={supply.id} /><span className="ml-2">Editar</span>
-                        </div>
-                        <div className="flex justify-left items-center ml-4 mb-2">
-                          <SupplyByIdDeleteForm supply={supply} id_supply={supply.id}/><span className="ml-2">Eliminar</span>
-                        </div>
-                      </div>
-                    ): null}
-                  </DropdownMenuContent>
-              </DropdownMenu>
-          </>
-
-          {/* ) : (
-            <>
-              <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                  <Button variant='ghost' size='icon' className="ml-2">
-                      <MoreHorizontal className="h-4 w-4" />
-                  </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="flex flex-col">
-                  <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                  <SwitchDemo 
-                      id_supply={supply.id}
-                      supply={supply}
-                      onUpdateStatus={()=> Statusnew()}/>
-                  </DropdownMenuContent>
-              </DropdownMenu>
-          </> */}
-            </div>
-          )
+        cell: ({row}) => {
+            const supply = row.original
+            return(
+                <div className="text-left">
+                    {
+            row.getValue("status") ? (
+                <>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                        {/* <TooltipProvider>
+                        <Tooltip>
+                        <TooltipTrigger asChild> */}
+                        <Button variant='ghost' size='icon' className="ml-2">
+                            <MoreHorizontal className="h-4 w-4 " />
+                        </Button>
+                        {/* </TooltipTrigger>
+                            <TooltipContent className="bg-gray-500">
+                            <p className="text-xs font-semibold">Aquí encuentras acciones adicionales relacionadas con cada producto.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                        </TooltipProvider> */}
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="flex flex-col items-start">
+                        <DropdownMenuLabel >Acciones</DropdownMenuLabel>
+                            
+                        <SupplyUpdateForm supply={supply} id_supply={supply.id} />
+                          
+  
+                        <SupplyByIdDeleteForm supply={supply} id_supply={supply.id}/>
+                        {/* <DisableProduct id={product.id} product={product}/> */}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </>
+            ):
+            (
+                <>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                        {/* <TooltipProvider>
+                        <Tooltip>
+                        <TooltipTrigger asChild> */}
+                        <Button variant='ghost' size='icon' className="ml-2">
+                            <MoreHorizontal className="h-4 w-4" />
+                        </Button>
+                        {/* </TooltipTrigger>
+                            <TooltipContent className="bg-gray-500 w-2 h-2">
+                            <p className="text-xs font-semibold">Aquí encuentras acciones adicionales relacionadas con cada producto.</p>
+                            </TooltipContent>
+                        </Tooltip>
+                        </TooltipProvider> */}
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="flex flex-col">
+                        <DropdownMenuLabel>Sin acciones</DropdownMenuLabel>
+                        <span className="p-2 text-center">...</span>
+                        {/* <DisableProduct id={product.id} product={product}/> */}
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                </>
+            ) 
+        }
+        </div>
+        )
+      }
     }
-  },
 ];

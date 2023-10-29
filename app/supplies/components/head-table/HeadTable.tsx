@@ -52,7 +52,7 @@ const AddSupplyFetch = async (url: string, body: SupplyCreate) => {
 
 const fromSchema = z.object({
   supply_id: z.string(),
-  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}).max(255, {message: 'El nombre del insumo es demasiado largo'}),
+  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}).max(50, {message: 'El nombre del insumo es demasiado largo'}),
   price: z.number({required_error: "El campo es requerido"}).min(3, {message: 'Ingrese el precio del insumo'}).max(999999, {message: 'El precio es demasiado alto'}),
   quantity_stock: z.number({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).max(999999, {message: 'La cantidad es demasiado alta'}),
   unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccioné una opción'}).max(50, {message: 'La unidad de medida es demasiado larga'}),
@@ -66,7 +66,7 @@ export default function HeadTable({location}: Props) {
   const [open, setOpen] = useState(false)
   const routes  = useRouter()
   const { toast } = useToast()
-  const {data:supply} = useSWR(`{RoutesApi.SUPPLIES}`)
+  const {data:supply} = useSWR(RoutesApi.SUPPLIES)
   const form = useForm<z.infer<typeof fromSchema>>({
     resolver: zodResolver(fromSchema),
     defaultValues: {
@@ -77,18 +77,16 @@ export default function HeadTable({location}: Props) {
       unit_measure: ''
     }
   });
-  // const {mutate } = useSWRConfig()
-
-    // function onSubmit(values: z.infer<typeof fromSchema>){
-    //   toast.promise(createSupply(values), {
-    //     success: "Insumo agregado",
-    //     error: "Algo ocurrio",
-    //     loading: 'Cargando información...'
-    //   })
-    //   routes.refresh()
-    //   setOpen(false)
-    //   mutate(`${urlSupply}`)
-    // }
+  const handleCancelar = () => {
+    // Cierra el diálogo y Reinicia los campos del formulario
+    setOpen(false);
+    form.reset({
+      name: '',
+      price: 0,
+      quantity_stock: 0,
+      unit_measure: ''
+    });
+  };
 
     const onSubmit = async (values: z.infer<typeof fromSchema>) => {
       if (values.unit_measure === 'Kilogramos') {
@@ -99,7 +97,7 @@ export default function HeadTable({location}: Props) {
       setOpen(false);
       toast({ variant: 'default', title: "Insumo creado correctamente", description: "Se ha creado correctamente el Insumo." });
       form.reset();
-      mutate(`${RoutesApi.SUPPLIES}`);
+      mutate(RoutesApi.SUPPLIES);
     }
 
 
@@ -171,7 +169,7 @@ return (
           <FormControl>
         <Select onValueChange={field.onChange}>
           <SelectTrigger className="w-default">
-            <SelectValue placeholder="Seleccioné" />
+            <SelectValue placeholder="Seleccione" />
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="Kilogramos">Kilogramos</SelectItem>
@@ -184,9 +182,20 @@ return (
       </FormItem>
   )}
 />
-          <DialogFooter>
-            <Button type="submit" className="w-full mt-2">Registrar Insumo</Button>
-          </DialogFooter>
+        <div className=" mt-4 flex justify-between">
+        <DialogFooter>
+          <div>
+            <Button type="button" onClick={handleCancelar} className="mr-2 bg-red-500 hover:bg-red-600 text-white">
+              Cancelar
+            </Button>
+          </div>
+          <div>
+            <Button type="submit" >
+              Registrar Insumo
+            </Button>
+          </div>
+        </DialogFooter>
+        </div>
         </form>
       </Form>
     </DialogContent>

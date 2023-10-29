@@ -14,8 +14,7 @@ import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useContext } from "react"
-// import { urlProvider } from '../../services/provider.services'
-import { OrderContextInterface } from "@/app/sales/models/sale.models"
+// import { EyeIcon, QueueListIcon } from '@heroicons/react/24/outline'
 import useSWR, { mutate, useSWRConfig } from "swr";
 import { fetcherPut } from "@/context/swr-context-provider/SwrContextProvider";
 import { Routes, RoutesApi } from "@/models/routes.models";
@@ -45,11 +44,12 @@ interface Props{
 }
 
 
+
 export default function ProviderUpdateForm({provider, id_provider}: Props) {
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
-  const {} = useSWR(`{RoutesApi.PROVIDERS}`)
+  // const {} = useSWR(RoutesApi.PROVIDERS)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -68,12 +68,18 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     values.id_provider = provider.id
-    const data = await UpdateProviderFetch(`${RoutesApi.PROVIDERS}/update_provider/${provider.id}`, values )
+    const data = await UpdateProviderFetch(`${RoutesApi.PROVIDERS}/update_provider/${id_provider}`, values )
     toast({variant: 'default', title: "Proveedor actualizado correctamente", description: "Se ha actualizado correctamente el proveedor."})
-    mutate(`${RoutesApi.PROVIDERS}`)
+    mutate(RoutesApi.PROVIDERS)
     form.reset()
     setOpen(false)
   }
+
+  const handleCancelar = () => {
+    // Cierra el diálogo y Reinicia los campos del formulario
+    setOpen(false);
+    
+  };
 
 
   // function onSubmit(values: z.infer<typeof formSchema>) {
@@ -94,8 +100,8 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>  
-        <Button variant='outline' size='icon' onClick={() => setOpen(true)}>
-          <PencilIcon className="h-4 w-4" />
+        <Button variant='ghost' > 
+          <PencilIcon className=" h-4 w-4 mr-2" onClick={() => setOpen(true)}/><span>Editar</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
@@ -220,9 +226,20 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
               )}
             />
             
-            <DialogFooter>
-              <Button type="submit">Actualizar cambios</Button>
-            </DialogFooter>
+            <div className=" mt-4 flex justify-between">
+              <DialogFooter>
+                <div>
+                  <Button type="button" onClick={handleCancelar} className="mr-2 bg-red-500 hover:bg-red-600 text-white">
+                    Cancelar
+                  </Button>
+                </div>
+                <div>
+                  <Button type="submit" >
+                    Actualizar cambios
+                  </Button>
+                </div>
+              </DialogFooter>
+          </div>
           </form>
         </Form>
       </DialogContent>

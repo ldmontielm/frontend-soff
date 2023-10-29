@@ -95,8 +95,7 @@ export default function AddRole() {
                     setRolname(rolenameInput);
                     handleNext();
                   }}
-                  size="sm"
-                >
+                  size="sm">
                   Siguiente
                 </Button>
               </div>
