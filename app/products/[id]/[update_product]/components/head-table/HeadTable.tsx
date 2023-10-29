@@ -27,6 +27,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Supply } from "@/app/supplies/models/supply.models"
+import { HeadTable as HeadTableSupply } from "@/app/supplies/components"
 
 const formSchema = z.object({
   product_id: z.string(),
@@ -74,10 +75,9 @@ export default function HeadTable({id}: Props) {
             control={form.control}
             name="supply_id"
             render = {({field}) => (
-              <FormItem className="w-full md:w-[200px]">
+              <FormItem className="w-full md:w-[230px]">
                 <FormLabel>Insumo</FormLabel>
-                <FormControl>
-                  <div className="w-full xl:w-[200px]">
+                  <div className="w-full  flex items-center justify-content">
                   <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -85,7 +85,7 @@ export default function HeadTable({id}: Props) {
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-[200px] justify-between",
+                          "w-[200px] justify-between mr-1",
                           !field.value && "text-muted-foreground"
                         )}
                       >
@@ -122,8 +122,8 @@ export default function HeadTable({id}: Props) {
                       </Command>
                     </PopoverContent>
                   </Popover>
+                  <HeadTableSupply location='purchases'/>
                   </div>
-                </FormControl>
                 <FormMessage />
               </FormItem>
             )}

@@ -58,19 +58,12 @@ export default function InfoProduct({id}:Props) {
       sale_price: values.sale_price
     }
     
-    const isValid = await formProduct.trigger();
-
-
-    // if (product.name === '' || product.sale_price === 0){
-    //   toast({variant: 'destructive', title: "Campos del producto requeridos", description: "Todos los campos del producto son necesarios para editar el producto."})
-    // }
-    if(isValid){
+    if (product.name === '' || product.sale_price === 0){
+      toast({variant: 'destructive', title: "Campos del producto requeridos", description: "Todos los campos del producto son necesarios para editar el producto."})
+    }else{
       const res = await ConfirmProductFetch(`${RoutesApi.PRODUCTS}/${id}/update_product`, product)
         toast({variant: 'default', title: "Registro guardado correctamente", description: "Se ha guardado con exito el producto, mira el historial en la sección de productos."})
         router.push(Routes.CREATEPRODUCT)
-    }
-    else{
-      toast({variant: 'destructive', title: "Campos del producto requeridos", description: "Todos los campos del producto son necesarios para editar el producto."})
       }
     }
 
@@ -98,7 +91,7 @@ export default function InfoProduct({id}:Props) {
                     <FormItem>
                       <FormLabel>Nombre</FormLabel>
                       <FormControl >
-                         <Input defaultValue={product?.name || ""} {...field} />
+                         <Input defaultValue={product?.name} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

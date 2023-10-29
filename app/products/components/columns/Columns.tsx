@@ -137,58 +137,7 @@ export const columns: ColumnDef<Product>[] = [
         }, 
         cell: ({row}) => {
             const product = row.original;
-            const DisableProductFetch = async (url: string, arg: Product) => {
-                return await fetcherPut(url, arg)
-            }
-            const [state, setState] = useState(true)
-            // const router = useRouter()
-        
-            useEffect(()=>{
-                if(product){
-                    setState(product.status)
-                }
-            }, [product]);
-        
-            async function onSubmit() {
-                const res = await DisableProductFetch(`${RoutesApi.PRODUCTS}/${product.id}/change_status`, product)
-                if (res.status !== undefined){
-                    setState(res.status === 1)
-                }
-                mutate (RoutesApi.PRODUCTS)
-            }
-            return <div className="text-left">
-            { 
-                row.getValue("status") ? (
-                <>
-                 <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                        <Button className="h-5 w-20 text-xs font-semibold bg-green-500 hover:bg-gray-700" onClick={onSubmit}>Activo</Button>
-                        </TooltipTrigger>
-                        <TooltipContent className="bg-gray-500">
-                        <p className="text-xs font-semibold">Aquí puedes cambiar el estado a: Inactivo.</p>
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
-
-                </>
-                )
-                : (
-                <>
-                <TooltipProvider>
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                        <Button className=" h-5 w-20 text-xs font-semibold bg-red-500 hover:bg-gray-700" onClick={onSubmit}>Inactivo</Button>
-                        </TooltipTrigger>
-                        <TooltipContent className="bg-gray-500">
-                        <p className="text-xs font-semibold">Aquí puedes cambiar el estado a: Activo.</p>
-                        </TooltipContent>
-                    </Tooltip>
-                </TooltipProvider>
-                </>
-                ) 
-            }
-        </div>
+            return <DisableProduct product={product}/>
         }
     },
     {
@@ -203,18 +152,9 @@ export const columns: ColumnDef<Product>[] = [
                             <>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                    {/* <TooltipProvider>
-                                    <Tooltip>
-                                    <TooltipTrigger asChild> */}
                                     <Button variant='ghost' size='icon' className="ml-2">
                                         <MoreHorizontal className="h-4 w-4 " />
                                     </Button>
-                                    {/* </TooltipTrigger>
-                                        <TooltipContent className="bg-gray-500">
-                                        <p className="text-xs font-semibold">Aquí encuentras acciones adicionales relacionadas con cada producto.</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                    </TooltipProvider> */}
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="flex flex-col items-start">
                                     <DropdownMenuLabel>Acciones</DropdownMenuLabel>
@@ -224,7 +164,6 @@ export const columns: ColumnDef<Product>[] = [
                                         </Button>
                                     </Link>
                                     <ViewDetailsByProduct product={product} id={product.id}/>
-                                    {/* <DisableProduct id={product.id} product={product}/> */}
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </>
@@ -233,23 +172,13 @@ export const columns: ColumnDef<Product>[] = [
                             <>
                                 <DropdownMenu>
                                     <DropdownMenuTrigger asChild>
-                                    {/* <TooltipProvider>
-                                    <Tooltip>
-                                    <TooltipTrigger asChild> */}
                                     <Button variant='ghost' size='icon' className="ml-2">
                                         <MoreHorizontal className="h-4 w-4" />
                                     </Button>
-                                    {/* </TooltipTrigger>
-                                        <TooltipContent className="bg-gray-500 w-2 h-2">
-                                        <p className="text-xs font-semibold">Aquí encuentras acciones adicionales relacionadas con cada producto.</p>
-                                        </TooltipContent>
-                                    </Tooltip>
-                                    </TooltipProvider> */}
                                     </DropdownMenuTrigger>
                                     <DropdownMenuContent align="end" className="flex flex-col">
                                     <DropdownMenuLabel>Sin acciones</DropdownMenuLabel>
                                     <span className="p-2 text-center">...</span>
-                                    {/* <DisableProduct id={product.id} product={product}/> */}
                                     </DropdownMenuContent>
                                 </DropdownMenu>
                             </>

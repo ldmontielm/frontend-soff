@@ -76,9 +76,9 @@ export default function HeadTable({id}:Props) {
             control={form.control}
             name="supply_id"
             render = {({field}) => (
-            <FormItem className="w-full md:w-[200px]">
+            <FormItem className="w-full md:w-[230px]">
               <FormLabel>Insumo</FormLabel>
-              <div className="w-full xl:w-[200px]">
+              <div className="w-full flex items-center justify-content">
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
                     <FormControl>
@@ -86,7 +86,7 @@ export default function HeadTable({id}:Props) {
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-[200px] justify-between",
+                          "w-[200px] justify-between mr-1",
                           !field.value && "text-muted-foreground"
                         )}
                       >
@@ -123,6 +123,7 @@ export default function HeadTable({id}:Props) {
                       </Command>
                     </PopoverContent>
                   </Popover>
+                  <HeadTableSupply location='purchases'/>
                   </div>
                 <FormMessage />
               </FormItem>
@@ -136,7 +137,7 @@ export default function HeadTable({id}:Props) {
               <FormItem className="w-full md:w-[200px]">
                 <FormLabel>Cantidad</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Cantidad de insumo" min="1" {...form.register('amount_supply', {valueAsNumber: true})} className="lg:w-fit"/>
+                  <Input type="number" placeholder="Cantidad de insumo" min="1" {...form.register('amount_supply', {valueAsNumber: true})} className=" lg:w-fit"/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
