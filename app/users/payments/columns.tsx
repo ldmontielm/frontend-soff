@@ -120,7 +120,7 @@ export const columns: ColumnDef<User>[] = [
       },
     },
     {
-      accessorKey: "status",
+      accessorKey: "id",
       header: 'Acciones',
       cell: ({ row }) => {
         const user = row.original

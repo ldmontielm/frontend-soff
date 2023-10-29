@@ -22,12 +22,14 @@ interface Props{
 
 export function UpdateStatusUser({id_user, user}:Props){
 
-
-
-    const onSubmit = async(id_user:string, user:User)=>{
-        const url =`${RoutesApi.USERS}/${id_user}/status-update`
+    const updateStatusfecher = async(url:string, user:User)=>{
         const res = await fetcherPut(url, user)
         mutate(`${RoutesApi.USERS}/get-users`)
+    }
+
+    const onSubmit = async(id_user:string, user:User)=>{
+        const res = updateStatusfecher(`${RoutesApi.USERS}/${id_user}/status-update`, user)
+
 
     }
 

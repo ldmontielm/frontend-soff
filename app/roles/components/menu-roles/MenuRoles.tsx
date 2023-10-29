@@ -35,7 +35,6 @@ export function MenuRoles({role}:Props){
         <DropdownMenuLabel className="flex justify-center items-center">Acciones</DropdownMenuLabel>
         {role.name !== "Administrador" && role.name !== "Base" ? (
             <div className=" flex flex-col">
-
             {
                 role.status === true ?(
                 <div>
