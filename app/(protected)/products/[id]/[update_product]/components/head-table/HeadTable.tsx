@@ -26,8 +26,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { Supply } from "@/app/supplies/models/supply.models"
-import { HeadTable as HeadTableSupply } from "@/app/supplies/components"
+import { Supply } from "@/app/(protected)/supplies/models/supply.models"
+import { HeadTable as HeadTableSupply } from "@/app/(protected)/supplies/components"
 
 const formSchema = z.object({
   product_id: z.string(),

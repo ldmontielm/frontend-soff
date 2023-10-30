@@ -2,7 +2,7 @@
 
 import { RoutesApi } from "@/models/routes.models"
 import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider"
-import { Supply } from "@/app/supplies/models/supply.models"
+import { Supply } from "@/app/(protected)/supplies/models/supply.models"
 import { Button } from "@/components/ui/button"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
@@ -28,7 +28,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import {HeadTable as HeadTableSupply} from "@/app/supplies/components"
+import { HeadTable as HeadTableSupply } from "@/app/(protected)/supplies/components"
 import { DetailCreate } from "../../../models/product.models"
 
 const formSchema = z.object({

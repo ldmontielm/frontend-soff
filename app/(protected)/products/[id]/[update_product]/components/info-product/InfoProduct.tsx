@@ -1,20 +1,23 @@
 'use client'
 import { Routes, RoutesApi } from '@/models/routes.models'
 import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
-import { convertToCOP } from '@/app/(protected)/sales/utils'
+import { convertToCOP } from '@/app/(protected)/products/utils'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
-import useSWR from 'swr'
+import useSWR, {mutate} from 'swr'
 import * as z from 'zod'
 import { Input } from '@/components/ui/input'
-import { DetailsRecipe, ProductCreate } from '@/app/(protected)/products/models/product.models'
+import { DetailsRecipe, ProductCreate, Product } from '@/app/(protected)/products/models/product.models'
 import { useToast } from "@/components/ui/use-toast"
 
 const formProductSchema = z.object({
-    name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Producto'}),
+    id_product:z.string().optional(),
+    name: z.string().min(2, {message: "Ingrese el nombre del producto"}).or(z.string().refine(value => value === "", {
+      message: "El campo es requerido"
+    })),
     sale_price: z.number({required_error: "El campo es requerido", invalid_type_error: "Se espera un número"}).min(1, {message: "El valor del precio debe ser diferente de 0"})
 });
 
@@ -32,38 +35,43 @@ const calculateSubtotal = (details: Array<DetailsRecipe>) => {
   return subtotal
 }
 
-const ConfirmProductFetch = async (url: string, arg: ProductCreate) => {
-  return await fetcherPut(url, arg)
+const UpdateProductFetch = async (url: string, arg: ProductCreate) => {
+  return await fetcherPut<ProductCreate>(url, arg)
 }
 
 export default function InfoProduct({id}:Props) {
   const {data:details} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
-  const {data: product} = useSWR<ProductCreate>(`${RoutesApi.PRODUCTS}/${id}`)
+  const {data: product} = useSWR<Product>(`${RoutesApi.PRODUCTS}/${id}`)
   const router = useRouter()
   const { toast } = useToast()
 
-  
+  console.log(product)
+  // console.log(details)
   const formProduct = useForm<z.infer<typeof formProductSchema>>({
     resolver: zodResolver(formProductSchema),
     defaultValues: {
+      id_product: product?.id,
       name: product?.name,
       sale_price: product?.sale_price
-    }
+    },
+    shouldUnregister: false,
   })
-  console.log(product)
+  
   async function onSubmit(values: z.infer<typeof formProductSchema>){
-    const product = {
-      name: values.name,
-      sale_price: values.sale_price
-    }
+    // const product = {
+    //   name: values.name,
+    //   sale_price: values.sale_price
+    // }
     
-    if (product.name === '' || product.sale_price === 0){
-      toast({variant: 'destructive', title: "Campos del producto requeridos", description: "Todos los campos del producto son necesarios para editar el producto."})
-    }else{
-      const res = await ConfirmProductFetch(`${RoutesApi.PRODUCTS}/${id}/update_product`, product)
+    // if (product.name === '' || product.sale_price === 0){
+    //   toast({variant: 'destructive', title: "Campos del producto requeridos", description: "Todos los campos del producto son necesarios para editar el producto."})
+    // }else{
+      values.id_product = product?.id
+      const res = await UpdateProductFetch(`${RoutesApi.PRODUCTS}/${id}/update_product`, values)
         toast({variant: 'default', title: "Actualización exitosa", description: "Se ha actualizado con exito el producto, mira el historial en la sección de productos."})
+        // mutate(RoutesApi.PRODUCTS)
         router.push(Routes.CREATEPRODUCT)
-      }
+      // }
     }
 
     async function cancelProduct(){
