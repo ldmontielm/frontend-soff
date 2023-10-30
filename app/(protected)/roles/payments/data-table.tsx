@@ -31,6 +31,7 @@ import {  ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import HeadTable from "../components/head-table/HeadTable"
+import { Checkbox } from "@mui/material"
 // import PermissionTable from "../components/permissions/PermissionsTable"
 
 
@@ -88,28 +89,39 @@ export function DataTable<TData, TValue>({
 <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" className="ml-auto mr-2">
-              Columns
+              Columnas
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <DropdownMenuContent align="center">
             {table
               .getAllColumns()
               .filter(
                 (column) => column.getCanHide()
               )
               .map((column) => {
+                // return (
+                //   <DropdownMenuCheckboxItem
+                //     key={column.id}
+                //     className="capitalize"
+                //     checked={column.getIsVisible()}
+                //     onCheckedChange={(value) =>
+                //       column.toggleVisibility(!!value)
+                //     }
+                //   >
+                //   </DropdownMenuCheckboxItem>
+                // )
                 return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                )
+                  <div key={column.id} className="capitalize">
+                    <Checkbox
+                      checked={column.getIsVisible()}
+                      onChange={(event) => {
+                        column.toggleVisibility(event.target.checked);
+                      }}
+                      color="primary"
+                      />
+                      {column.id == "name"? "Nombre" :( column.id == "Permissions" ? "Permisos":(column.id == "status" ? "Estado":(column.id == "actions" ? "Acciones": null)))}
+                  </div>
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
