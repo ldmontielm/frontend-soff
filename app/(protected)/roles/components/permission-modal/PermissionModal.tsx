@@ -46,7 +46,7 @@ export default function PermissionModal({ id_role }: Props) {
 
             {
               Array.isArray(permissionsroles) && permissionsroles.map((permission) => (
-                <h2 key={permission.id_permission}>{permission.id_permission}</h2>
+                <span className='flex' key={permission.id_permission}>{permission.id_permission}</span>
               ))
               
             }
