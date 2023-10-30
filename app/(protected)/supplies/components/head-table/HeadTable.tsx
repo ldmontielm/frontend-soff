@@ -182,8 +182,8 @@ return (
       </FormItem>
   )}
 />
-        <div className=" mt-4 flex justify-between">
         <DialogFooter>
+        <div className=" mt-4 flex justify-between">
           <div>
             <Button type="button" onClick={handleCancelar} className="mr-2 bg-red-500 hover:bg-red-600 text-white">
               Cancelar
@@ -194,8 +194,8 @@ return (
               Registrar Insumo
             </Button>
           </div>
-        </DialogFooter>
         </div>
+        </DialogFooter>
         </form>
       </Form>
     </DialogContent>

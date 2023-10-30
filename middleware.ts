@@ -36,7 +36,7 @@ export function middleware(request: NextRequest) {
         if (request.nextUrl.pathname.startsWith('/purchases') && !user.permissions.includes('compras')) {
             return NextResponse.redirect(new URL("/", request.url))
         }
-        if (request.nextUrl.pathname.startsWith('/providers') && !user.permissions.includes('proveedor')) {
+        if (request.nextUrl.pathname.startsWith('/providers') && !user.permissions.includes('proveedores')) {
             return NextResponse.redirect(new URL("/", request.url))
         }
         if (request.nextUrl.pathname.startsWith('/supplies') && !user.permissions.includes('insumos')) {
