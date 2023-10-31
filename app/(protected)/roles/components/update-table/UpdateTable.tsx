@@ -20,7 +20,6 @@ import { Input } from "@/components/ui/input"
 import { Switch } from '@/components/ui/switch';
 import useSWR, {useSWRConfig} from 'swr';
 import toast from 'react-hot-toast';
-import { getPermissions } from '@/app/permissions/services/permissions';
 import { getRole, urlRoles,UpdateRoles} from '../../services/roles.services';
 import { createRole } from '../../models/roles.models';
 import { Role } from '../../models/roles.models';

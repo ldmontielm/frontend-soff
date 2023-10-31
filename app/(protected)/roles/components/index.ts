@@ -1,3 +1,8 @@
+export { default as Delete } from './delete/Delete';
 export * from './head-table';
-export * from './header-table';
-export * from './table';
+export * from './header-module';
+export * from './menu-roles';
+export * from './permission-modal';
+export { default as SwichtDemo } from './swicht/SwichtDemo';
+export * from './update-table';
+export * from './updates-tatus';

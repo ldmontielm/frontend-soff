@@ -30,7 +30,6 @@ export const options = {
   plugins: {
     legend: {
         position: 'top' as const,
-        align: 'start',
         pointStyleWidth: 9,
     },
     title: {

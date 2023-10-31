@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Check, ChevronsUpDown } from "lucide-react"
-import { Product } from "@/app/products/models/product.models"
+import { Product } from "@/app/(protected)/products/models/product.models"
 import { RoutesApi } from "@/models/routes.models"
 import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider"
 
