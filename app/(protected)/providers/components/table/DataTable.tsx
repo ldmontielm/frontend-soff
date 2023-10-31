@@ -19,7 +19,12 @@ import { Checkbox } from "@mui/material"
 
 import { HeadTable } from ".."
 import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
-
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+  } from "@/components/ui/tooltip"
 
 import {
     ColumnDef,
@@ -148,12 +153,21 @@ export function DataTable<TData, TValue>({columns, data,isLoading, error, setAct
                 })}
             </DropdownMenuContent>
             </DropdownMenu>
-            {/* <Button variant='outline' className="flex items-center w-full md:w-fit gap-2">
-                <DocumentChartBarIcon className="w-4 h-4" />
-                <span>Reporte</span>
-            </Button> */}
-            </div>
-            <Button onClick={() => setActive(!consult)}></Button>
+            <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" className=" text-sm bg-white hover:bg-gray-100" 
+                  onClick={() => {setActive(!consult)
+                    }}>
+                      {consult === true ? "Activos" : "Inactivos"}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="bg-gray-500">
+                <p className="text-xs font-semibold">Click para ver Proveedores {consult === true ? "Inactivos" : "Activos"}.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          </div>
                 <HeadTable/>
             </div>
 

@@ -11,6 +11,8 @@ import {
     TooltipProvider,
     TooltipTrigger,
   } from "@/components/ui/tooltip"
+  import React, {useState} from 'react'
+
 
 const DisableProductFetch = async (url: string, arg: Product) => {
     return await fetcherPut(url, arg)
@@ -21,9 +23,10 @@ interface Props {
   }
 
 export default function DisableProduct({product}: Props) {
+    const [active, setActive] = useState(true)
     async function onSubmit() {
         const res = await DisableProductFetch(`${RoutesApi.PRODUCTS}/${product.id}/change_status`, product)
-        mutate (RoutesApi.PRODUCTS)
+        mutate (`${RoutesApi.PRODUCTS}?status=${product.status ? active : !active}`)
     }
 
     return (
