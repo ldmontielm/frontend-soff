@@ -48,9 +48,6 @@ export default function HeadTable({id}: Props) {
   const {data:details} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
   const [open, setOpen] = useState(false)
 
-  console.log(supplies)
-  console.log(details)
-
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

@@ -15,9 +15,7 @@ import { useToast } from "@/components/ui/use-toast"
 
 const formProductSchema = z.object({
     id_product:z.string().optional(),
-    name: z.string().min(2, {message: "Ingrese el nombre del producto"}).or(z.string().refine(value => value === "", {
-      message: "El campo es requerido"
-    })),
+    name: z.string({required_error: "El campo es requerido"}).min(2, {message: "Ingrese el nombre del producto"}),
     sale_price: z.number({required_error: "El campo es requerido", invalid_type_error: "Se espera un número"}).min(1, {message: "El valor del precio debe ser diferente de 0"})
 });
 
@@ -45,8 +43,6 @@ export default function InfoProduct({id}:Props) {
   const router = useRouter()
   const { toast } = useToast()
 
-  console.log(product)
-  // console.log(details)
   const formProduct = useForm<z.infer<typeof formProductSchema>>({
     resolver: zodResolver(formProductSchema),
     defaultValues: {
@@ -58,20 +54,10 @@ export default function InfoProduct({id}:Props) {
   })
   
   async function onSubmit(values: z.infer<typeof formProductSchema>){
-    // const product = {
-    //   name: values.name,
-    //   sale_price: values.sale_price
-    // }
-    
-    // if (product.name === '' || product.sale_price === 0){
-    //   toast({variant: 'destructive', title: "Campos del producto requeridos", description: "Todos los campos del producto son necesarios para editar el producto."})
-    // }else{
       values.id_product = product?.id
       const res = await UpdateProductFetch(`${RoutesApi.PRODUCTS}/${id}/update_product`, values)
         toast({variant: 'default', title: "Actualización exitosa", description: "Se ha actualizado con exito el producto, mira el historial en la sección de productos."})
-        // mutate(RoutesApi.PRODUCTS)
         router.push(Routes.CREATEPRODUCT)
-      // }
     }
 
     async function cancelProduct(){
