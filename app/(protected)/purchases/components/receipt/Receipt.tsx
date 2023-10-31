@@ -23,11 +23,11 @@ export default function Receipt({id}:Props) {
   
   const generateReceipt = () => {
     const doc = new jsPDF()
-    doc.text(`N° Factura: ${purchase !== undefined ? purchase?.invoice_number : "No hay factura"}`, 15, 20);
+    doc.text(`Factura: ${purchase !== undefined ? purchase?.invoice_number : "No hay factura"}`, 15, 28).setFontSize(10);
 
     // Datos del cliente y fecha
-    doc.text(`Proveedor: ${purchase !== undefined ? purchase?.provider : "No hay Proveedor"}`, 150, 20);
-    doc.text(`${purchase !== undefined ? convertDate(purchase?.purchase_date) : "No hay fecha"}`, 150, 30, ).setFontSize(10);
+    doc.text(`Proveedor: ${purchase !== undefined ? purchase?.provider : "No hay Proveedor"}`, 150, 20).setFontSize(10);
+    doc.text(`Fecha: ${purchase !== undefined ? convertDate(purchase?.purchase_date) : "No hay fecha"}`, 150, 25 ).setFontSize(10);
 
     // Datos de la tabla de productos
     const columns = ['Insumo', 'Cantidad', 'Precio Unitario', 'Subtotal'];

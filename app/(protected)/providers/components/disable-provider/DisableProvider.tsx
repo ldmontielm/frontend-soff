@@ -28,7 +28,7 @@ interface Props {
 export default function DisableProvider({provider}: Props) {
     async function onSubmit() {
         const res = await DisableProviderFetch(`${RoutesApi.PROVIDERS}/${provider.id}/status_update_provider`, provider)
-        mutate (RoutesApi.SUPPLIES)
+        mutate (RoutesApi.PROVIDERS)
     }
 
     return (

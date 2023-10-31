@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form"
 import { OrderCreate } from "@/app/(protected)/purchases/models/purchase.models"
 import toast from "react-hot-toast"
 import useSWR, {mutate} from 'swr'
-import { HeadTable } from "@/app/supplies/components"
+import { HeadTable } from "@/app/(protected)/supplies/components"
 import * as z from 'zod'
 import { Check, ChevronsUpDown } from "lucide-react"
 import * as React from "react"
@@ -19,7 +19,7 @@ import {Command,CommandEmpty,CommandGroup,CommandInput,CommandItem,} from "@/com
 import {Popover,PopoverContent,PopoverTrigger,} from "@/components/ui/popover"
 import { RoutesApi } from "@/models/routes.models"
 import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider"
-import { Supply } from "@/app/supplies/models/supply.models"
+import { Supply } from "@/app/(protected)/supplies/models/supply.models"
 import {
   Tooltip,
   TooltipContent,
@@ -75,6 +75,7 @@ export default function HeadTablep({id}: Props) {
     values.purchase_id = id
     const data = await AddOrderFetch(`${RoutesApi.PURCHASES}/${id}/add-order`, values)
     mutate(`${RoutesApi.PURCHASES}/${id}/orders`)
+    toast({variant: 'default', title: "Agregando orden", description: "Se ha agregado la orden correctamente."})
   }
 
 
@@ -172,14 +173,7 @@ export default function HeadTablep({id}: Props) {
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button type="submit" className="w-full md:w-fit"
-                onClick={async () => {
-                  toast({
-                    title: "Agregando orden",
-                    description: "Se ha agregado la orden correctamente.",
-                    action: (
-                  <ToastAction altText="Goto schedule to undo">OK</ToastAction>
-                  ),})}}>
+              <Button type="submit" className="w-full md:w-fit">
                 <PlusIcon className="w-4 h-4 mr-2" />
                 <span>Agregar</span>
               </Button>

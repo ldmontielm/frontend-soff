@@ -1,23 +1,11 @@
 'use client'
 import {ColumnDef} from "@tanstack/react-table"
 import { Supply } from "../../models/supply.models"
-// import { convertToCOP } from "@/app/purchases/utils"
 import { convertToCOP } from "@/app/(protected)/purchases/utils"
 import { Badge } from "@/components/ui/badge"
 import SupplyUpdateForm from "../supply-update-form/SupplyUpdateForm" 
 import SupplyByIdDeleteForm from "../supply-delete-form/SupplyDeleteForm"
-// import SwitchDemo from "../switcht/SwichtDemo"
-import {
-  ColumnFiltersState,
-  SortingState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-  
-} from "@tanstack/react-table"
+import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
 
 import { ArrowUpDown} from "lucide-react"
 import DisableSupply from "../../disable-supply/DisableSupply"
@@ -43,11 +31,7 @@ import { useEffect } from 'react'
 import { RoutesApi } from '@/models/routes.models'
 import useSWR, { mutate} from 'swr'
 import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
-// import { getSupplies, urlSupply } from "../../services/supply.services"
 import { Column } from "jspdf-autotable"
-
-// const [menuOpen, setMenuOpen] = useState(false);
-
 
 export default function Statusnew(){
   const {data: supplies, isLoading, error} = useSWR(RoutesApi.SUPPLIES)
@@ -86,7 +70,7 @@ export const columns: ColumnDef<Supply>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Nombre
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
         </Button>
       )
     },
@@ -103,7 +87,7 @@ export const columns: ColumnDef<Supply>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Precio
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
         </Button>
       )
     },
@@ -123,7 +107,7 @@ export const columns: ColumnDef<Supply>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Cantidad
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
         </Button>
       )
     },
@@ -140,7 +124,7 @@ export const columns: ColumnDef<Supply>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Unidad de medida
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -160,7 +144,7 @@ export const columns: ColumnDef<Supply>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Estado
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
         </Button>
       )
     },

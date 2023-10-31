@@ -13,7 +13,7 @@ import { useToast } from "@/components/ui/use-toast"
 import { useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 import useSWR from 'swr'
-import { HeadTable } from '@/app/providers/components'
+import { HeadTable } from '@/app/(protected)/providers/components'
 import * as z from 'zod'
 import { Input } from '@/components/ui/input'
 import { Check, ChevronsUpDown } from "lucide-react"

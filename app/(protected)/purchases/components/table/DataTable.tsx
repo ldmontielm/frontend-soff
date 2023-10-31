@@ -23,7 +23,6 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({columns, data, isLoading, error}: DataTableProps<TData, TValue>){
-
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -66,7 +65,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
             {table
                 .getAllColumns()
                 .filter(
-                  (column) => column.getCanHide()
+                  (column) =>  typeof column.accessorFn !== "undefined" && column.getCanHide()
                   )
                   .map((column) => {
                     return (
