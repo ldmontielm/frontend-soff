@@ -25,9 +25,10 @@ interface Props {
   }
 
 export default function DisableSupply({supply}: Props) {
+    const [active, setActive] = useState(true)
     async function onSubmit() {
         const res = await DisableSupplyFetch(`${RoutesApi.SUPPLIES}/${supply.id}/status_update_supply`, supply)
-        mutate (RoutesApi.SUPPLIES)
+        mutate (`${RoutesApi.SUPPLIES}?status=${supply.status ? active : !active}`)
     }
 
     return (
