@@ -19,13 +19,8 @@ import { createSupply } from "../../services/supply.services"
 // import HeadTable from "@/app/users/components/head-table/HeadTable"
 import { HeadTable } from ".."
 import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
-import { Select,
-SelectContent,
-SelectGroup,
-SelectItem,
-SelectLabel,
-SelectTrigger,
-SelectValue } from "@/components/ui/select"
+import { Checkbox } from "@mui/material"
+
 
 import {
     ColumnDef,
@@ -97,31 +92,50 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                     <span>Columnas</span>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
+            <DropdownMenuContent align="center">
                 {table
                 .getAllColumns()
                 .filter(
-                    (column) => column.getCanHide()
+                    (column) => typeof column.accessorFn !== "undefined" && column.getCanHide()
                 )
                 .map((column) => {
                     return (
-                    <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                        }>
-                        { 
+                    // <DropdownMenuCheckboxItem
+                    //     key={column.id}
+                    //     className="capitalize"
+                    //     checked={column.getIsVisible()}
+                    //     onCheckedChange={(value) =>
+                    //     column.toggleVisibility(!!value)
+                    //     }>
+                    //     { 
+                    //     column.id === 'name' ? 'Nombre' :
+                    //     column.id === 'price' ? 'Precio' :
+                    //     column.id === 'quantity_stock' ? 'Cantidad en stock' :
+                    //     column.id === 'unit_measure' ? 'Unidad de medida' :
+                    //     column.id === 'status' ? 'Estado' :
+                    //     column.id === 'actions' ? 'Acciones' :                        
+                    //     column.id
+                    // }
+                    // </DropdownMenuCheckboxItem>
+
+                    <div key={column.id} className="capitalize">
+                    <Checkbox
+                      checked={column.getIsVisible()}
+                      onChange={(event) => {
+                        column.toggleVisibility(event.target.checked);
+                      }}
+                      color="primary"
+                      />
+                      { 
                         column.id === 'name' ? 'Nombre' :
                         column.id === 'price' ? 'Precio' :
-                        column.id === 'quantity_stock' ? 'Cantidad en stock' :
+                        column.id === 'quantity_stock' ? 'Cantidad' :
                         column.id === 'unit_measure' ? 'Unidad de medida' :
                         column.id === 'status' ? 'Estado' :
                         column.id === 'actions' ? 'Acciones' :                        
                         column.id
                     }
-                    </DropdownMenuCheckboxItem>
+                  </div>
                     )
                 })}
             </DropdownMenuContent>

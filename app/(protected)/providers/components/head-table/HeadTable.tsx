@@ -99,10 +99,10 @@ export default function HeadTable({location}: Props) {
   const onSubmit = async (values: z.infer<typeof fromSchema>) => {
     // values.provider_id = id
     await AddProviderFetch(`${RoutesApi.PROVIDERS}/create_provider`, values)
-    form.reset()
-    toast({variant: 'default', title: "Proveedor creado correctamente", description: "Se ha creado correctamente el proveedor."})
-    
     setOpen(false)
+    toast({variant: 'default', title: "Proveedor creado correctamente", description: "Se ha creado correctamente el proveedor."})
+    form.reset()
+    
     mutate(RoutesApi.PROVIDERS)
   }
 
