@@ -46,7 +46,7 @@ export default function page() {
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const res = await loginFetch('http://localhost:8000/auth/login', values)
         saveSession(res)
-        routes.push('/')
+        routes.push('/dashboard')
     }
 
   return (
