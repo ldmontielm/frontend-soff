@@ -46,6 +46,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
+import { Checkbox } from "@mui/material"
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
@@ -107,28 +109,28 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error, setAc
                   )
                   .map((column) => {
                     return (
-                      <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      { 
-                        column.id === 'name' ? 'Nombre' :
-                        column.id === 'price' ? 'Costo' :
-                        column.id === 'sale_price' ? 'Precio de venta' :
-                        column.id === 'register_date' ? 'fecha registro' : 
-                        column.id === 'status' ? 'Estado' : column.id
-                      }
-                    </DropdownMenuCheckboxItem>
-                  )
+                      <div  key={column.id} className="text-sm">
+                        <Checkbox
+                        checked={column.getIsVisible()}
+                        onChange={(event) =>{
+                          column.toggleVisibility(event.target.checked);
+                        }}
+                        color="primary"
+                        />
+                        { 
+                          column.id === 'name' ? 'Nombre' :
+                          column.id === 'price' ? 'Costo' :
+                          column.id === 'sale_price' ? 'Precio de venta' :
+                          column.id === 'register_date' ? 'Fecha registro' : 
+                          column.id === 'status' ? 'Estado' : column.id
+                        }
+                      </div>
+                  );
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
           <TooltipProvider>
-            <Tooltip>
+            <Tooltip >
               <TooltipTrigger asChild>
                 <Button variant="outline" className=" text-sm bg-white hover:bg-gray-100" 
                   onClick={() => {setActive(!consult)

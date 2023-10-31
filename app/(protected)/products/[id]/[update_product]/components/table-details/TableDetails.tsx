@@ -15,7 +15,6 @@ interface Props {
 
 export default function TableDetails({id}:Props) {
   const {data:DetailsContext} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
-  console.log(DetailsContext)
   return (
     <div>
       <HeadTable id={id}/>
