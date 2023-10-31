@@ -64,9 +64,9 @@ export default function page() {
                                         </div>
                                     {
                                         user.permissions.map((permission, i) => (
-                                            <div className='flex items-center gap-2 ml-4 text-sm my-1'>
+                                            <div key={i} className='flex items-center gap-2 ml-4 text-sm my-1'>
                                                 <ArrowLongRightIcon className='w-4 h-4' />
-                                                <p className='capitalize' key={permission}>{permission}</p>
+                                                <p className='capitalize' >{permission}{i}</p>
                                             </div>
                                         ))
                                     }

@@ -19,12 +19,10 @@ export default function Profile() {
 
   return (
     <Popover>
-        <PopoverTrigger>
-            <div className='flex items-center gap-2 hover:bg-neutral-100 p-2 rounded relative'>
-                <Button variant='ghost' size='icon'>
-                    <BellIcon className='w-6 h-6' />
-                </Button>
-            </div>
+        <PopoverTrigger asChild>
+            <Button variant='ghost' size='icon'>
+                <BellIcon className='w-4 h-4' />
+            </Button>
         </PopoverTrigger>
         <PopoverContent align='end' className='dark:bg-neutral-900 sm:w-96 mt-3 text-sm'>
             <div className='flex items-center gap-4'>
@@ -42,7 +40,7 @@ export default function Profile() {
                 Array.isArray(supplies) && supplies.map((supply) => {
                     if (supply.quantity_stock <= 5000 && supply.quantity_stock >0 &&supply.unit_measure == 'Gramos' && supply.status == true) {
                     return (
-                        <span className={`flex w-full items-center text-neutral-700 gap-2 rounded cursor-pointer px-3 py-4 hover:bg-gray-100 dark:hover-bg-neutral-700`}>
+                        <span key={supply.id} className={`flex w-full items-center text-neutral-700 gap-2 rounded cursor-pointer px-3 py-4 hover:bg-gray-100 dark:hover-bg-neutral-700`}>
                         <ExclamationCircleIcon className='w-6 h-6 stroke-yellow-600' />
                         <p><strong>{supply.name}:</strong> Este insumo está cerca de terminarse.</p>
                         </span>
@@ -50,7 +48,7 @@ export default function Profile() {
                     } 
                     if (supply.quantity_stock <= 40 && supply.quantity_stock>0 &&supply.unit_measure == 'Unidades' && supply.status ==true){
                     return(
-                        <span className={`flex w-full items-center text-neutral-700 gap-2 rounded cursor-pointer px-3 py-4 hover:bg-gray-100 dark:hover-bg-neutral-700`}>
+                        <span  key={supply.id} className={`flex w-full items-center text-neutral-700 gap-2 rounded cursor-pointer px-3 py-4 hover:bg-gray-100 dark:hover-bg-neutral-700`}>
                         <ExclamationCircleIcon className='w-6 h-6 stroke-yellow-600' />
                         <p><strong>{supply.name}:</strong> Este insumo está cerca de terminarse.</p>
                         </span>
@@ -58,7 +56,7 @@ export default function Profile() {
                     }
                     if (supply.quantity_stock == 0  && supply.status ==true){
                     return(
-                        <span className={`flex w-full items-center text-neutral-700 gap-2 rounded cursor-pointer px-3 py-4 hover:bg-gray-100 dark:hover:bg-neutral-700`}>
+                        <span key={supply.id}  className={`flex w-full items-center text-neutral-700 gap-2 rounded cursor-pointer px-3 py-4 hover:bg-gray-100 dark:hover:bg-neutral-700`}>
                             <XMarkIcon className='w-6 h-6 stroke-red-600' />
                             <p><strong>{supply.name}:</strong> Este insumo no está disponible, recuerda comprar. </p>
                         </span>

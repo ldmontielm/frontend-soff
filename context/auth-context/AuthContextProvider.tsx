@@ -44,7 +44,7 @@ const AuthContext = createContext({
         email: "",
         status: true,
         role: "",
-        permissions: []
+        permissions: ['']
     },
     setUser: (user: User) => {},
     setIsAuthenticated: (data: boolean) => {}

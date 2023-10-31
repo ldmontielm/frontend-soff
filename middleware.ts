@@ -25,32 +25,35 @@ export function middleware(request: NextRequest) {
 
     if(session){
         const user = JSON.parse(request.cookies.get('profile')?.value!)
-        if(request.nextUrl.pathname.startsWith('/auth/login')){
-            return NextResponse.redirect(new URL("/dashboard", request.url))
-        }
-        if (request.nextUrl.pathname.startsWith('/sales') && !user.permissions.includes('ventas')) {
-            return NextResponse.redirect(new URL("/dashboard", request.url))
-        }
-        if (request.nextUrl.pathname.startsWith('/products') && !user.permissions.includes('productos')) {
-            return NextResponse.redirect(new URL("/", request.url))
-        }
-        if (request.nextUrl.pathname.startsWith('/purchases') && !user.permissions.includes('compras')) {
-            return NextResponse.redirect(new URL("/", request.url))
-        }
-        if (request.nextUrl.pathname.startsWith('/providers') && !user.permissions.includes('proveedores')) {
-            return NextResponse.redirect(new URL("/", request.url))
-        }
-        if (request.nextUrl.pathname.startsWith('/supplies') && !user.permissions.includes('insumos')) {
-            return NextResponse.redirect(new URL("/", request.url))
-        }
-        if (request.nextUrl.pathname.startsWith('/users') && !user.permissions.includes('usuarios')) {
-            return NextResponse.redirect(new URL("/", request.url))
-        }
-        if (request.nextUrl.pathname.startsWith('/roles') && !user.permissions.includes('roles')) {
-            return NextResponse.redirect(new URL("/", request.url))
-        }
-        if (request.nextUrl.pathname.startsWith('/permissions') && !user.permissions.includes('permissions')) {
-            return NextResponse.redirect(new URL("/", request.url))
+        if(user.role !== 'Administrador') {
+
+            if(request.nextUrl.pathname.startsWith('/auth/login')){
+                return NextResponse.redirect(new URL("/dashboard", request.url))
+            }
+            if (request.nextUrl.pathname.startsWith('/sales') && !user.permissions.includes('ventas')) {
+                return NextResponse.redirect(new URL("/dashboard", request.url))
+            }
+            if (request.nextUrl.pathname.startsWith('/products') && !user.permissions.includes('productos')) {
+                return NextResponse.redirect(new URL("/dashboard", request.url))
+            }
+            if (request.nextUrl.pathname.startsWith('/purchases') && !user.permissions.includes('compras')) {
+                return NextResponse.redirect(new URL("/dashboard", request.url))
+            }
+            if (request.nextUrl.pathname.startsWith('/providers') && !user.permissions.includes('proveedores')) {
+                return NextResponse.redirect(new URL("/dashboard", request.url))
+            }
+            if (request.nextUrl.pathname.startsWith('/supplies') && !user.permissions.includes('insumos')) {
+                return NextResponse.redirect(new URL("/dashboard", request.url))
+            }
+            if (request.nextUrl.pathname.startsWith('/users') && !user.permissions.includes('usuarios')) {
+                return NextResponse.redirect(new URL("/dashboard", request.url))
+            }
+            if (request.nextUrl.pathname.startsWith('/roles') && !user.permissions.includes('roles')) {
+                return NextResponse.redirect(new URL("/dashboard", request.url))
+            }
+            if (request.nextUrl.pathname.startsWith('/permissions') && !user.permissions.includes('permisos')) {
+                return NextResponse.redirect(new URL("/dashboard", request.url))
+            }
         }
         
     }else {

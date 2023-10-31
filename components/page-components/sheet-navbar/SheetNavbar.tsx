@@ -83,10 +83,10 @@ export default function SheetNavbar() {
         <div className='flex flex-col w-full text-white mt-5'>
           {
             menuItems.map((item) => {
-              if(user.permissions.includes(item.permission)){
+              if(user.permissions.includes(item.permission) || user.role === "Administrador"){
                 return (
                   <Link key={item.id} href={item.url} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'>{item.icon}<p>{item.name}</p></Link>
-                ) 
+                )
               }
               return null
             })
