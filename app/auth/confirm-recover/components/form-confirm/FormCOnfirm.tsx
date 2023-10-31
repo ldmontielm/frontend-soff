@@ -20,6 +20,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { setCookie, getCookie, deleteCookie } from "cookies-next";
 import { useToast } from "@/components/ui/use-toast";
+import { RoutesApi } from "@/models/routes.models";
 
 const formSchema = z.object({
   code: z.string({ required_error: "" }),
@@ -60,7 +61,7 @@ export default function FormCOnfirm() {
   async function onSubmit(values: z.infer<typeof formRequired>) {
     const email = getCookie("email");
     const res: RecoverPasswordResponse = await recoverFetch(
-      "http://localhost:8000/auth/confirm-recover",
+      `${RoutesApi.AUTH}/confirm-recover`,
       email!,
       values.code
     );

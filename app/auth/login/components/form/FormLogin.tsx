@@ -10,7 +10,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useAuth } from "@/context/auth-context/AuthContextProvider"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
-
+import { RoutesApi } from '@/models/routes.models'
 const formSchema = z.object({
     username: z.string().email({message: "Ingresa una dirección de correo electrónico válida."}),
     password: z.string()
@@ -45,7 +45,7 @@ export default function FormLogin() {
     })
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const res = await loginFetch('http://localhost:8000/auth/login', values)
+        const res = await loginFetch(`${RoutesApi.AUTH}/login`, values)
         saveSession(res)
         routes.push('/dashboard')
     }

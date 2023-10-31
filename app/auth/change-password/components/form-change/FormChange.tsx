@@ -14,6 +14,7 @@ import { deleteCookie, getCookie, setCookie } from "cookies-next"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useState } from "react"
 import { useToast } from "@/components/ui/use-toast"
+import { RoutesApi } from '@/models/routes.models'
 
 
 const formSchema = z.object({
@@ -57,7 +58,7 @@ export default function FormChange() {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const apikey =  getCookie('apikey')
-        const res = await recoverFetch('http://localhost:8000/auth/change-password', apikey!, values.password)
+        const res = await recoverFetch(`${RoutesApi.AUTH}/change-password`, apikey!, values.password)
         deleteCookie('apikey')
         toast({variant: "default", title: "¡Contraseña cambiada con éxito!", description: `Dentro de poco nos veremos adentro.`})
         setTimeout(() => {

@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { setCookie } from "cookies-next"
 import { useToast } from "@/components/ui/use-toast"
+import { RoutesApi } from '@/models/routes.models'
 
 
 const formSchema = z.object({
@@ -47,7 +48,7 @@ export default function FormREcovery() {
     })
     
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const res = await recoverFetch('http://localhost:8000/auth/recover-password', values.email)
+        const res = await recoverFetch(`${RoutesApi.AUTH}/recover-password`, values.email)
         setCookie('email', values.email)
         toast({variant: "default", title: "¡Código de confirmación enviado!", description: <p>Hemos enviado un código de confirmación al correo <span className="font-semibold">{values.email}</span></p>})
         routes.push('/auth/confirm-recover')
