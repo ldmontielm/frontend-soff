@@ -15,6 +15,7 @@ export function middleware(request: NextRequest) {
     }
 
 
+
     if(apikey){
         if(request.nextUrl.pathname.startsWith('/auth/recovery-password') || request.nextUrl.pathname.startsWith('/auth/confirm-recover')
         || request.nextUrl.pathname.startsWith('/auth/login')){
@@ -23,20 +24,20 @@ export function middleware(request: NextRequest) {
     }
 
     if(session){
-        const user:User = JSON.parse(request.cookies.get('profile')?.value!)
+        const user = JSON.parse(request.cookies.get('profile')?.value!)
         if(request.nextUrl.pathname.startsWith('/auth/login')){
-            return NextResponse.redirect(new URL("/", request.url))
+            return NextResponse.redirect(new URL("/dashboard", request.url))
         }
         if (request.nextUrl.pathname.startsWith('/sales') && !user.permissions.includes('ventas')) {
-            return NextResponse.redirect(new URL("/", request.url))
+            return NextResponse.redirect(new URL("/dashboard", request.url))
         }
     }else {
-        if(request.nextUrl.pathname.startsWith('/sales')){
+        if(request.nextUrl.pathname.startsWith('/sales') || request.nextUrl.pathname.startsWith('/dashboard') || request.nextUrl.pathname.startsWith('/profile') ){
             return NextResponse.redirect(new URL("/auth/login", request.url))
         }
     }
 }
 
 export const config = {
-    matcher: ["/auth/:path*", '/sales'],
+    matcher: ["/auth/:path*", '/sales/:path*', '/dashboard', '/profile'],
   };

@@ -8,7 +8,9 @@ import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronRightIcon, Chev
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ColumnDef, flexRender, ColumnFiltersState, getFilteredRowModel, VisibilityState, getCoreRowModel, getPaginationRowModel, useReactTable, SortingState, getSortedRowModel } from "@tanstack/react-table"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
-
+import { Checkbox } from '@mui/material'
+import { generateExcelReport } from '../../utils'
+import { Sale } from '../../models/sale.models'
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -41,10 +43,10 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
       <div className='w-full flex flex-col md:flex-row items-center py-4 gap-3 justify-between'>
         <div className='w-full flex flex-col md:flex-row items-center gap-3'>
           <Input
-            placeholder="Filtrar por cliente..."
-            value={(table.getColumn("client")?.getFilterValue() as string) ?? ""}
+            placeholder="Filtrar por número de factura..."
+            value={(table.getColumn("invoice_number")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
-              table.getColumn("client")?.setFilterValue(event.target.value)
+              table.getColumn("invoice_number")?.setFilterValue(event.target.value)
             }
             className="w-full md:max-w-sm"
           />
@@ -63,13 +65,14 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                   )
                   .map((column) => {
                     return (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                          column.toggleVisibility(!!value)
-                        }>
+                      <div key={column.id} className="capitalize">
+                        <Checkbox
+                          checked={column.getIsVisible()}
+                          onChange={(event) => {
+                            column.toggleVisibility(event.target.checked);
+                          }}
+                          color="primary"
+                          />
                       {
                         column.id  === 'client' ? 'Cliente' : 
                         column.id === 'sale_date' ? 'Fecha' :
@@ -78,17 +81,18 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                         column.id === 'type_sale' ? 'Tipo' :
                         column.id === 'total' ? 'Total' :
                         column.id === 'status' ? 'Estado' : 
-                        column.id === 'actions' ? 'Operaciones' : column.id
+                        column.id === 'actions' ? 'Acciones' : 
+                        column.id === 'invoice_number' ? 'Factura': column.id 
 
                       }
-                    </DropdownMenuCheckboxItem>
+                    </div>
                   )
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant='outline' className='flex items-center w-full md:w-fit gap-2'>
+          <Button variant='outline' className='flex items-center w-full md:w-fit gap-2' onClick={() => generateExcelReport(data as Array<Sale>)}>
             <DocumentChartBarIcon className='w-4 h-4' />
-            <span>Reporte</span>
+            <span>Generar Excel</span>
           </Button>
         </div>
         <HeadTable />
@@ -184,7 +188,6 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
             ))}
           </SelectContent>
         </Select>
-        <p>Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}</p>
       </div>
     </div>
   )

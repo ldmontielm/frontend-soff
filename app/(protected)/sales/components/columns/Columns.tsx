@@ -183,7 +183,7 @@ export const columns: ColumnDef<Sale>[] = [
                 ): ""
             }
             <SeeDetail id={sale.id}/>
-            <Receipt id={sale.id} />
+            <Receipt id={sale.id} sale={sale} />
           </DropdownMenuContent>
         </DropdownMenu>
       )
