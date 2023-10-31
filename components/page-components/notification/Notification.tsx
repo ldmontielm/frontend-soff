@@ -2,16 +2,11 @@
 
 import React from 'react'
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import Image from 'next/image'
-import ImageProfile from '@/public/profile.png'
 import { useAuth } from '@/context/auth-context/AuthContextProvider'
-import Link from 'next/link'
-import { Bars3BottomRightIcon, UserCircleIcon, InformationCircleIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { BellIcon } from '@heroicons/react/24/outline'
-import {ExclamationCircleIcon} from '@heroicons/react/24/outline'
-import {XMarkIcon} from '@heroicons/react/24/outline'
+import {ExclamationCircleIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import { RoutesApi } from '@/models/routes.models'
 import useSWR from 'swr'
 
@@ -42,15 +37,6 @@ export default function Profile() {
             </div>
             <hr className='mt-4' />
             <div className='my-2'>
-                {/* {
-                  Array.isArray(supplies) && supplies.map((supply) => (
-                    <span className={`flex w-full items-center text-neutral-700 gap-2 rounded cursor-pointer px-3 py-4 hover:bg-gray-100 dark:hover:bg-neutral-700`}>
-                        <ExclamationCircleIcon className='w-6 h-6 stroke-yellow-600' />
-                        <p><strong>{supply.name}</strong> Este insumo esta cerca de terminarse.</p>
-                    </span>
-       
-                  ))
-                } */}
 
                 {
                 Array.isArray(supplies) && supplies.map((supply) => {
