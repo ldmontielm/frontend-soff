@@ -2,7 +2,7 @@
 
 import { RoutesApi } from '@/models/routes.models'
 import { fetcherPut, fetcherDelete } from '@/context/swr-context-provider/SwrContextProvider'
-import { convertToCOP } from '@/app/(protected)/sales/utils'
+import { convertToCOP } from '../../../utils'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -127,7 +127,7 @@ export default function InfoProduct({id}:Props) {
           <div className=' space-y-2 pl-4 pr-4 pb-4'>
             <Button className="w-full" type='button' variant='outline' onClick={async()=>{
               const res = await CancelProductFetch(`${RoutesApi.PRODUCTS}/${id}/delete_product`)
-              toast({variant: 'default', title: "Producto Cancelado correctamente", description: "Se ha cancelado el producto con éxito."})
+              toast({variant: 'default', title: "Producto cancelado correctamente", description: "Se ha cancelado el producto con éxito."})
               router.push("/products")
             }}>
               Cancelar

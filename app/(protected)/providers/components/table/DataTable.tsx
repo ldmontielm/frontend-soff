@@ -15,17 +15,11 @@ import { Input } from "@/components/ui/input"
 import Link from "next/link"
 import { Routes } from "@/models/routes.models"
 import { Provider } from "../../models/provider.models"
-// import { createProvider } from "../../services/provider.services"
-// import HeadTable from "@/app/users/components/head-table/HeadTable"
+import { Checkbox } from "@mui/material"
+
 import { HeadTable } from ".."
 import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
-import { Select,
-SelectContent,
-SelectGroup,
-SelectItem,
-SelectLabel,
-SelectTrigger,
-SelectValue } from "@/components/ui/select"
+
 
 import {
     ColumnDef,
@@ -55,12 +49,15 @@ interface DataTableProps<TData, TValue>{
     data: TData[]
     isLoading: boolean
     error: any
+    setActive:React.Dispatch<React.SetStateAction<boolean>>,
+    consult: boolean
 }
 
-export function DataTable<TData, TValue>({columns, data,isLoading, error}: DataTableProps<TData, TValue>){
+export function DataTable<TData, TValue>({columns, data,isLoading, error, setActive, consult}: DataTableProps<TData, TValue>){
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
+    // const [value, setValue] = useState("")
     
     const table = useReactTable({
         data,columns,
@@ -97,22 +94,44 @@ export function DataTable<TData, TValue>({columns, data,isLoading, error}: DataT
                     <span>Columnas</span>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
+            <DropdownMenuContent align="center">
                 {table
                 .getAllColumns()
                 .filter(
-                    (column) => column.getCanHide()
+                    (column) => typeof column.accessorFn !== "undefined" && column.getCanHide()
                 )
                 .map((column) => {
                     return (
-                    <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                        }>
-                        { 
+                    // <DropdownMenuCheckboxItem
+                    //     key={column.id}
+                    //     className="capitalize"
+                    //     checked={column.getIsVisible()}
+                    //     onCheckedChange={(value) =>
+                    //     column.toggleVisibility(!!value)
+                    //     }>
+                    //     { 
+                    //     column.id === 'name' ? 'Nombre' :
+                    //     column.id === 'company' ? 'Empresa' :
+                    //     column.id === 'address' ? 'Dirección' :
+                    //     column.id === 'date_registration' ? 'Fecha' :
+                    //     column.id === 'email' ? 'Correo' :
+                    //     column.id === 'phone' ? 'Teléfono' :
+                    //     column.id === 'city' ? 'Ciudad' :
+                    //     column.id === 'status' ? 'Estado' :
+                    //     column.id === 'actions' ? 'Acciones' :                     
+                    //     column.id
+                    // }
+                    // </DropdownMenuCheckboxItem>
+
+                    <div key={column.id} className="capitalize">
+                    <Checkbox
+                      checked={column.getIsVisible()}
+                      onChange={(event) => {
+                        column.toggleVisibility(event.target.checked);
+                      }}
+                      color="primary"
+                      />
+                      { 
                         column.id === 'name' ? 'Nombre' :
                         column.id === 'company' ? 'Empresa' :
                         column.id === 'address' ? 'Dirección' :
@@ -124,7 +143,7 @@ export function DataTable<TData, TValue>({columns, data,isLoading, error}: DataT
                         column.id === 'actions' ? 'Acciones' :                     
                         column.id
                     }
-                    </DropdownMenuCheckboxItem>
+                    </div>
                     )
                 })}
             </DropdownMenuContent>
@@ -134,6 +153,7 @@ export function DataTable<TData, TValue>({columns, data,isLoading, error}: DataT
                 <span>Reporte</span>
             </Button> */}
             </div>
+            <Button onClick={() => setActive(!consult)}></Button>
                 <HeadTable/>
             </div>
 

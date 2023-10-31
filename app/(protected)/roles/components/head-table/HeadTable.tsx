@@ -20,11 +20,13 @@ import { Input } from "@/components/ui/input"
 import { Switch } from '@/components/ui/switch';
 import useSWR, {mutate} from 'swr';
 import toast from 'react-hot-toast';
-import { getPermissions } from '@/app/permissions/services/permissions';
+// import { getPermissions } from '@/app/permissions/services/permissions';
 import { createRoles, getRole, urlRoles} from '../../services/roles.services';
 import { RoutesApi } from '@/models/routes.models';
 import { useToast } from '@/components/ui/use-toast';
 import { fetcherPost } from '@/context/swr-context-provider/SwrContextProvider';
+
+
 
 export default function AddRole() {
   
@@ -78,18 +80,20 @@ export default function AddRole() {
         <DialogContent>
           
           <DialogHeader>
-            <DialogTitle>Registrar Rol</DialogTitle>
+            <DialogTitle className='flex items-center justify-center mb-1'>Registrar Rol</DialogTitle>
+            <label className="text-[0.8rem] text-muted-foreground" >Ahora puedes registrar un rol. Por favor, ten en cuenta que todos los campos a continuación son obligatorios.</label>
           </DialogHeader>
-          <Box sx={{ maxWidth: 400 }}>
+          <Box sx={{ maxWidth: 600 }}>
       <Stepper activeStep={activeStep} orientation="vertical">
         <Step>
           <StepLabel>Nombre rol</StepLabel>
           <StepContent>
-            <Input placeholder="Nombre " value={rolenameInput} onChange={(e) => setRolenameInput(e.target.value)}/>
+            <Input placeholder="Nombre" value={rolenameInput} onChange={(e) => setRolenameInput(e.target.value)}/>
             <Box sx={{ mb: 2 }} className="mt-2">
-              <div>
+              <div className='flex items-center justify-end'>
                 <Button
                   disabled={rolenameInput === ""}
+                  className='w-[40%]'
                   variant="default"
                   onClick={() => {
                     setRolname(rolenameInput);
@@ -104,12 +108,15 @@ export default function AddRole() {
         </Step>
         <Step>
           <StepLabel>Asignar Permisos</StepLabel>
-          <StepContent>
-            <div>
+          <StepContent >
+            <div  className='grid grid-rows-2 grid-cols-2'>
               {
                 Array.isArray(permissions) && permissions.map((permission) => (
-                  <div key={permission.id}>
-                    <Switch onCheckedChange={(e) => {
+                  <div key={permission.id} className='grid grid-rows-1 grid-cols-2'>
+                    <label className='flex justify-left items-center'>{permission.name}</label>
+                    <div  className='flex justify-end mr-4'>
+                    <Switch
+                    onCheckedChange={(e) => {
                       if(e === true){
                         setAssingPermission([...assingPermissions, {
                           id_permission: permission.id
@@ -119,15 +126,17 @@ export default function AddRole() {
                         setAssingPermission(listaNewPermissions)
                       }
                       }} />
-                    <label htmlFor="">{permission.name}</label>
+                    </div>
                   </div>
                 ))
               }
             </div>
           <Box sx={{ mb: 2 }}>
-            <div className='flex justify-center items-center w-full mt-4'>
+
+            <div className='flex justify-center items-center w-full mt-4 h-full'>
+              
               <Button
-              className='w-full m-2'
+              className='w-full  mr-3'
                 disabled={assingPermissions.length === 0}
                 variant='default'
                 onClick={() => onSubmit(rolename, assingPermissions)}
@@ -135,13 +144,13 @@ export default function AddRole() {
               >
                 Finalizar
               </Button>
-
-                  <Button
-                    onClick={handleBack}
-                    className='m-2'
-                  >
-                    Volver
-                  </Button>
+              <Button
+                onClick={handleBack}
+                className='mr-1'
+                variant='outline'
+                >
+                  Volver
+              </Button>
             </div>
           </Box>
           </StepContent>

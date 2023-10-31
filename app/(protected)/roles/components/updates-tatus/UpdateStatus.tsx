@@ -11,7 +11,7 @@ import {
     TooltipProvider,
     TooltipTrigger,
 } from "@/components/ui/tooltip"
-
+import { useToast } from "@/components/ui/use-toast"
 
 interface Props{
     id_role :string,
@@ -20,14 +20,25 @@ interface Props{
 
 
 export default function UpdateStatus({id_role, role}:Props) {
-    
+
+    const { toast } = useToast()
+
     const UpdateStatus = async(url:string, role:Role)=>{
         const res = await fetcherPut(url, role)
     }
     const onSubmit = async(id_role:string, role:Role)=>{
-        const res = await UpdateStatus(`${RoutesApi.ROLES}/${id_role}/status-update-role`, role)
-        mutate(`${RoutesApi.ROLES}/get-role`)
+        if(role.name !== "Administrador" && role.name !== "Base" ){
+            const res = await UpdateStatus(`${RoutesApi.ROLES}/${id_role}/status-update-role`, role)
+            mutate(`${RoutesApi.ROLES}/get-role`)
+        }else{
+            toast({
+                title: "El rol "+role.name+" es inmutable",
+                description: "Este rol no permite modificaciones por parte de los usuarios.",
+            })
+        }
+
     }
+        
 
 
     return (
