@@ -45,10 +45,10 @@ export default function Profile() {
                 <div className='w-3 h-3 bg-green-500 rounded-full absolute bottom-1 right-2 ring ring-white'></div>
             </div>
         </PopoverTrigger>
-        <PopoverContent align='end' className='dark:bg-neutral-900 sm:w-96 mt-3 text-sm'>
+        <PopoverContent align='end' className='dark:bg-neutral-900 sm:w-96 mt-3 text-sm pt-6'>
             <div className='flex items-center gap-4'>
               <div className='flex items-center gap-2 w-fit py-2 rounded relative'>
-                  <Image src={ImageProfile} alt='image profile' width={32} height={32}/>
+                  <Image src={ImageProfile} alt='image profile' width={46} height={46}/>
                   <div className='w-3 h-3 bg-green-500 rounded-full absolute bottom-1 right-2 ring ring-white'></div>
               </div>
               <div>
@@ -56,10 +56,10 @@ export default function Profile() {
                 <p className='text-neutral-700'>{user.email}</p>
               </div>
             </div>
-            <hr className='mt-4' />
-            <div className='my-2'>
+            <hr className='mt-5' />
+            <div className='mt-4'>
               <Link href={'/profile'}>
-                <span className={`flex w-full items-center gap-2 rounded cursor-pointer px-3 py-4 hover:bg-gray-100 dark:hover:bg-neutral-700`}>
+                <span className={`flex w-full items-center gap-2 rounded cursor-pointer px-3 py-3 hover:bg-gray-100 dark:hover:bg-neutral-700`}>
                   <UserCircleIcon className='w-5 h-5 stroke-gray-700' />
                   <p>Perfil</p>
                 </span>
@@ -68,7 +68,7 @@ export default function Profile() {
                 logout()
                 router.push('/auth/login')
               }}>
-                <span className={`flex w-full items-center gap-2 rounded cursor-pointer px-3 py-4 hover:bg-gray-100 dark:hover:bg-neutral-700`}>
+                <span className={`flex w-full items-center gap-2 rounded cursor-pointer px-3 py-3 hover:bg-gray-100 dark:hover:bg-neutral-700`}>
                   <ArrowLeftOnRectangleIcon className='w-5 h-5 stroke-gray-700' />
                   <p>Cerrar sesión</p>
                 </span>

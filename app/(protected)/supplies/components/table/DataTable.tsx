@@ -20,7 +20,12 @@ import { createSupply } from "../../services/supply.services"
 import { HeadTable } from ".."
 import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
 import { Checkbox } from "@mui/material"
-
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipProvider,
+    TooltipTrigger,
+  } from "@/components/ui/tooltip"
 
 import {
     ColumnDef,
@@ -44,15 +49,18 @@ import {
     DropdownMenuTrigger,
   } from "@/components/ui/dropdown-menu"
 import { number } from "zod"
+import DisableSupply from "../../disable-supply/DisableSupply"
 
 interface DataTableProps<TData, TValue>{
     columns: ColumnDef<TData, TValue>[]
     data: TData[]
     isLoading: boolean
     error: any
+    setActive:React.Dispatch<React.SetStateAction<boolean>>,
+    consult: boolean
 }
 
-export function DataTable<TData, TValue>({columns, data, isLoading, error}: DataTableProps<TData, TValue>){
+export function DataTable<TData, TValue>({columns, data, isLoading, error, setActive, consult}: DataTableProps<TData, TValue>){
     const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -72,6 +80,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
           columnVisibility,
         },
       })
+
 
     return(
         <div>
@@ -140,12 +149,21 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                 })}
             </DropdownMenuContent>
             </DropdownMenu>
-            {/* <Button variant='outline' className="flex items-center w-full md:w-fit gap-2">
-                <DocumentChartBarIcon className="w-4 h-4" />
-                <span>Reporte</span>
-            </Button> */}
-                    </div>
-            <HeadTable/>
+            <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="outline" className=" text-sm bg-white hover:bg-gray-100" 
+                  onClick={() => {setActive(!consult)
+                    }}>
+                      {consult === true ? "Activos" : "Inactivos"}
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent className="bg-gray-500">
+                <p className="text-xs font-semibold">Click para ver Proveedores {consult === true ? "Inactivos" : "Activos"}.</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
+          </div>
                 </div>
 
             <div className="rounden-md border">

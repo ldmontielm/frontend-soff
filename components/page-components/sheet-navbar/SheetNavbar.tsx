@@ -91,25 +91,30 @@ export default function SheetNavbar() {
               return null
             })
           }
-          {/* <Collapsible
-            open={isOpen}
-            onOpenChange={setIsOpen}
-            className="w-full space-y-2"
-          >
-            <CollapsibleTrigger asChild>
-                <div className='w-full cursor-pointer flex items-center justify-between gap-4 p-3 rounded hover:bg-blue-800'>
-                  <div className='flex items-center gap-4'>
-                    <Cog6ToothIcon className='w-6 h-6' />
-                    <p>Configuración</p>
-                  </div>
-                  <ChevronDownIcon className={`transition ease-in-out w-4 h-4 ${isOpen ?  'rotate-180': 'rotate-0'}`} />
-                </div>
-              </CollapsibleTrigger>
-            <CollapsibleContent className="space-y-2">
-              <Link href={Routes.ROLES} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'><LockClosedIcon className='ml-6 w-6 h-6' /><p>Roles</p></Link>
-              <Link href={Routes.USERS} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'><UserGroupIcon className='ml-6 w-6 h-6' /><p>Usuarios</p></Link>
-            </CollapsibleContent>
-          </Collapsible> */}
+          {
+            user.permissions.includes("configuraciones") ? (
+              <Collapsible
+                open={isOpen}
+                onOpenChange={setIsOpen}
+                className="w-full space-y-2"
+              >
+                <CollapsibleTrigger asChild>
+                    <div className='w-full cursor-pointer flex items-center justify-between gap-4 p-3 rounded hover:bg-blue-800'>
+                      <div className='flex items-center gap-4'>
+                        <Cog6ToothIcon className='w-6 h-6' />
+                        <p>Configuración</p>
+                      </div>
+                      <ChevronDownIcon className={`transition ease-in-out w-4 h-4 ${isOpen ?  'rotate-180': 'rotate-0'}`} />
+                    </div>
+                  </CollapsibleTrigger>
+                <CollapsibleContent className="space-y-2">
+                  <Link href={Routes.ROLES} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'><LockClosedIcon className='ml-6 w-6 h-6' /><p>Roles</p></Link>
+                  <Link href={Routes.USERS} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'><UserGroupIcon className='ml-6 w-6 h-6' /><p>Usuarios</p></Link>
+                </CollapsibleContent>
+              </Collapsible>
+            ) : ""
+          }
+          
         </div>
       </SheetContent>
     </Sheet>

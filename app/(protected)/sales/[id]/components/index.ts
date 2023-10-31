@@ -1,3 +1,4 @@
+export * from './form-client';
 export * from './head-table';
 export * from './info-sale-header';
 export * from './info-sale';

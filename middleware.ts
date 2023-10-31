@@ -15,6 +15,7 @@ export function middleware(request: NextRequest) {
     }
 
 
+
     if(apikey){
         if(request.nextUrl.pathname.startsWith('/auth/recovery-password') || request.nextUrl.pathname.startsWith('/auth/confirm-recover')
         || request.nextUrl.pathname.startsWith('/auth/login')){
@@ -23,12 +24,12 @@ export function middleware(request: NextRequest) {
     }
 
     if(session){
-        const user:User = JSON.parse(request.cookies.get('profile')?.value!)
+        const user = JSON.parse(request.cookies.get('profile')?.value!)
         if(request.nextUrl.pathname.startsWith('/auth/login')){
-            return NextResponse.redirect(new URL("/", request.url))
+            return NextResponse.redirect(new URL("/dashboard", request.url))
         }
         if (request.nextUrl.pathname.startsWith('/sales') && !user.permissions.includes('ventas')) {
-            return NextResponse.redirect(new URL("/", request.url))
+            return NextResponse.redirect(new URL("/dashboard", request.url))
         }
         if (request.nextUrl.pathname.startsWith('/products') && !user.permissions.includes('productos')) {
             return NextResponse.redirect(new URL("/", request.url))
@@ -53,12 +54,21 @@ export function middleware(request: NextRequest) {
         }
         
     }else {
-        if(request.nextUrl.pathname.startsWith('/sales') || request.nextUrl.pathname.startsWith('/products') || request.nextUrl.pathname.startsWith('/purchases') || request.nextUrl.pathname.startsWith('/providers') || request.nextUrl.pathname.startsWith('/supplies') || request.nextUrl.pathname.startsWith('/users') || request.nextUrl.pathname.startsWith('/roles')|| request.nextUrl.pathname.startsWith('/permissions')){
+        if(request.nextUrl.pathname.startsWith('/sales') || 
+            request.nextUrl.pathname.startsWith('/products') || 
+            request.nextUrl.pathname.startsWith('/purchases') || 
+            request.nextUrl.pathname.startsWith('/providers') || 
+            request.nextUrl.pathname.startsWith('/supplies') || 
+            request.nextUrl.pathname.startsWith('/users') || 
+            request.nextUrl.pathname.startsWith('/roles')|| 
+            request.nextUrl.pathname.startsWith('/permissions') ||
+            request.nextUrl.pathname.startsWith('/dashboard') || 
+            request.nextUrl.pathname.startsWith('/profile') ){
             return NextResponse.redirect(new URL("/auth/login", request.url))
         }
     }
 }
 
 export const config = {
-    matcher: ["/auth/:path*", '/sales', "/products/:path*", "/purchases/:path*", "/providers/:path*", "/supplies/:path*","/users/:path*","/roles/:path*","/users/:path*" ,"/permissions/:path*"],
+    matcher: ["/auth/:path*", '/sales/:path*', '/dashboard', '/profile', "/products/:path*", "/purchases/:path*", "/providers/:path*", "/supplies/:path*","/users/:path*","/roles/:path*","/users/:path*" ,"/permissions/:path*"],
   };

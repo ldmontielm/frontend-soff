@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { BellIcon } from '@heroicons/react/24/outline'
 import { useRouter } from 'next/navigation'
 import {Profile} from '../profile'
+import { Notification } from '../notification'
 
 export default function Navbar() {
   const { isAuthenticated , logout, user } = useAuth()
@@ -20,9 +21,7 @@ export default function Navbar() {
           <p className='font-medium capitalize'>{`Hola ${user.name} 👋`}</p>
         </div>
         <div className='flex items-center gap-2'>
-          <Button variant='ghost' size='icon'>
-            <BellIcon className='w-4 h-4' />
-          </Button>
+          <Notification/>
           <Profile />
         </div>
       </div>
