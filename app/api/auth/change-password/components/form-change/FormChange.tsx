@@ -9,7 +9,6 @@ import { Input } from "@/components/ui/input"
 import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider"
 import { useAuth } from "@/context/auth-context/AuthContextProvider"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 import { deleteCookie, getCookie, setCookie } from "cookies-next"
 import { Checkbox } from "@/components/ui/checkbox"
 import { useState } from "react"
@@ -62,7 +61,7 @@ export default function FormChange() {
         deleteCookie('apikey')
         toast({variant: "default", title: "¡Contraseña cambiada con éxito!", description: `Dentro de poco nos veremos adentro.`})
         setTimeout(() => {
-            routes.push('/auth/login')
+            routes.push('/api/auth/signin')
         }, 5000)
     }
   return (

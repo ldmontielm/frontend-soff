@@ -72,7 +72,7 @@ export default function FormCOnfirm() {
       title: "¡Código validado!",
       description: `Dentro de poco podrás cambiar tu contraseña.`,
     });
-    routes.push("/auth/change-password");
+    routes.push("/api/auth/change-password");
   }
   return (
     <Form {...form}>

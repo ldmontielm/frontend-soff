@@ -25,13 +25,13 @@ export default function FormProfile() {
     const form = useForm<z.infer<typeof formSchema>>({
         resolver: zodResolver(formSchema),
         defaultValues: {
-          name: "",
-          document_type: "",
-          document: "",
-          phone: "",
+          name: user.name,
+          document_type: user.document_type,
+          document: user.document,
+          phone: user.phone,
           email: user.email,
           status: true,
-          role: ""
+          role: user.role
         },
       })
 
@@ -140,8 +140,7 @@ export default function FormProfile() {
                     />
                 </div>
                 <div className='flex items-center gap-2'>
-                    <Button type="submit" className='bg-green-600'>Guardar</Button>
-                    <Button type="submit" variant='destructive'>Desactivar cuenta</Button>
+                    <Button type="submit">Guardar</Button>
                 </div>
             </form>
         </Form>

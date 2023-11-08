@@ -9,8 +9,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Textarea } from "@/components/ui/textarea";
-import { saveInLocalStorage } from "@/utilities";
-
+import { useLocalStorage } from "@/hooks";
 
 const formSchema = z.object({
   name: z.string({required_error: 'Campo requerido'}).min(2, {message: 'El nombre debe tener más de dos carácteres.'}),
@@ -22,7 +21,7 @@ const formSchema = z.object({
 
 export default function FormClient() {
   const [open, setOpen] = useState(false)
-
+  const {setItem} = useLocalStorage('client')
   const formSale = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,12 +33,12 @@ export default function FormClient() {
   })
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    saveInLocalStorage('client', JSON.stringify(values))
+    setItem(values)
     setOpen(false)
   }
 
   return (
-    <Dialog open={open}>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="outline" onClick={() => setOpen(true)} className="w-full">Añadir información del cliente</Button>
       </DialogTrigger>

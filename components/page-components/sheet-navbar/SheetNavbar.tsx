@@ -1,26 +1,19 @@
 'use client'
+
 import React, {useState} from 'react'
 import { Bars3BottomLeftIcon } from '@heroicons/react/24/outline'
 import { Button } from "@/components/ui/button"
 import { Routes } from '@/models/routes.models'
 import SoffLogo from "@/public/soff.svg"
 import Image from 'next/image'
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
-import {ChartPieIcon, BanknotesIcon, Cog6ToothIcon, Square3Stack3DIcon, LockClosedIcon, ChevronRightIcon, ChevronDownIcon,BriefcaseIcon, UserGroupIcon, SwatchIcon, ShoppingBagIcon, CakeIcon} from '@heroicons/react/24/outline'
+import { Sheet, SheetContent,  SheetHeader, SheetTrigger } from "@/components/ui/sheet"
+import {ChartPieIcon, BanknotesIcon, Cog6ToothIcon,  LockClosedIcon,  ChevronDownIcon,BriefcaseIcon, UserGroupIcon, SwatchIcon, ShoppingBagIcon, CakeIcon} from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { useAuth } from '@/context/auth-context/AuthContextProvider'
-
+import { useSession } from 'next-auth/react'
 
 
 const menuItems = [
-  {
-    id: 1,
-    name: "Dashboard",
-    icon: <ChartPieIcon className='w-6 h-6' />,
-    url: '/',
-    permission: 'dashboard'
-  },
   {
     id: 2,
     name: "Ventas",
@@ -61,7 +54,8 @@ const menuItems = [
 
 export default function SheetNavbar() {
   const [isOpen, setIsOpen] = useState(false)
-  const {user} = useAuth()
+  const {data: session} = useSession()
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -79,11 +73,11 @@ export default function SheetNavbar() {
             <p className='text-sm font-semibold'>Systematization Of Fast Food</p>
           </div>
         </SheetHeader>
-        {/* <Separator className="my-4" /> */}
         <div className='flex flex-col w-full text-white mt-5'>
+        <Link href={Routes.DASHBOARD} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'><ChartPieIcon className='w-6 h-6' /><p>Dashboard</p></Link>
           {
             menuItems.map((item) => {
-              if(user.permissions.includes(item.permission) || user.role === "Administrador"){
+              if(session && session.user && session?.user.permissions.includes(item.permission)){
                 return (
                   <Link key={item.id} href={item.url} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'>{item.icon}<p>{item.name}</p></Link>
                 )
@@ -92,7 +86,7 @@ export default function SheetNavbar() {
             })
           }
           {
-            user.permissions.includes("configuraciones") ? (
+            session && session.user && session?.user.permissions.includes("configuraciones") ? (
               <Collapsible
                 open={isOpen}
                 onOpenChange={setIsOpen}
