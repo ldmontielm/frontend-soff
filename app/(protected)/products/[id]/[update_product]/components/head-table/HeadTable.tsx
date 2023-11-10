@@ -12,7 +12,7 @@ import useSWR, {mutate} from 'swr'
 import * as z from 'zod'
 import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
-import { DetailCreate } from "@/app/(protected)/products/models/product.models"
+import { DetailCreate, Product } from "@/app/(protected)/products/models/product.models"
 import { cn } from "@/lib/utils"
 import {
   Command,
@@ -28,11 +28,13 @@ import {
 } from "@/components/ui/popover"
 import { Supply } from "@/app/(protected)/supplies/models/supply.models"
 import { HeadTable as HeadTableSupply } from "@/app/(protected)/supplies/components"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Tooltip } from "@mui/material"
 
 const formSchema = z.object({
   product_id: z.string(),
   supply_id: z.string().uuid({message: 'Debe seleccionar un insumo'}),
-  amount_supply: z.number({required_error: "Este campo es requerido", invalid_type_error: "Se espera un número"}).min(1, {message: "Como mínimo debe usar un insumo"}).max(999, {message: "Como máximo solo puedes usar 900 de cada insumo"})
+  amount_supply: z.number({required_error: "Este campo es requerido", invalid_type_error: "Se espera un número"}).max(999999, {message: "La cantidad es demasiado larga"})
 })
 
 const AddDetailFetch = async (url: string, body: DetailCreate) => {
@@ -45,7 +47,7 @@ interface Props {
 
 export default function HeadTable({id}: Props) {
   const {data:supplies} = useSWR(RoutesApi.SUPPLIES)
-  const {data:details} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
+  // const {data:details} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
   const [open, setOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -98,23 +100,26 @@ export default function HeadTable({id}: Props) {
                         <CommandInput placeholder="Buscar insumo..." />
                         <CommandEmpty>Sin resultados.</CommandEmpty>
                         <CommandGroup>
-                          {Array.isArray(supplies) && supplies.map((supply) => (
-                            <CommandItem
-                            value={supply.name}
-                              key={supply.id}
-                              onSelect={() => {
-                                form.setValue("supply_id", supply.id)
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  supply.id === field.value ? "opacity-100" : "opacity-0"
-                                )}
-                              />
-                              {supply.name}
-                            </CommandItem>
-                          ))}
+                        <ScrollArea className={`h-[200px] w-48  ${open ? 'open' : ''}`}>
+                            {Array.isArray(supplies) && supplies.map((supply) => (
+                              <CommandItem
+                              value={supply.name}
+                                key={supply.id}
+                                onSelect={() => {
+                                  form.setValue("supply_id", supply.id)
+                                  setOpen(!open)
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    supply.id === field.value ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                                {supply.name}
+                              </CommandItem>
+                            ))}
+                          </ScrollArea>
                         </CommandGroup>
                       </Command>
                     </PopoverContent>
@@ -156,10 +161,12 @@ export default function HeadTable({id}: Props) {
           /> */}
 
         </div>
-        <Button type="submit" className="w-full md:w-fit">
-          <PlusIcon className="w-4 h-4 mr-2" />
-          <span>Agregar</span>
-        </Button>
+        <Tooltip placement="top" title="Agregar detalles al producto" arrow>
+          <Button type="submit" className="w-full md:w-fit">
+            <PlusIcon className="w-4 h-4 mr-2" />
+            <span>Agregar</span>
+          </Button>
+        </Tooltip>
       </form>
     </Form>
   )
