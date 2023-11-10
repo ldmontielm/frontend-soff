@@ -25,12 +25,10 @@ import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { Calendar } from "@/components/ui/calendar"
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+  Tooltip
+} from "@mui/material"
 import { ToastAction } from "@/components/ui/toast"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 const formPurchaseSchema = z.object({
   purchase_date:z.date({
@@ -113,34 +111,6 @@ export default function InfoPurchase({id}:Props) {
             control={formPurchase.control}
             name="purchase_date"
             render ={({field}) => (
-              // <FormItem>
-              //   <FormLabel>Fecha de Compra:</FormLabel>
-              //   <FormControl >
-              //       <Popover>
-              //       <PopoverTrigger asChild>
-              //         <Button
-              //           variant={"outline"}
-              //           className={cn(
-              //             "w-full justify-start text-left font-normal",
-              //             !date && "text-muted-foreground"
-              //           )}
-              //         >
-              //           <CalendarIcon className="mr-2 h-4 w-4" />
-              //           {date ? format(date, "PPP") : <span>Seleccionar fecha</span>}
-              //         </Button>
-              //       </PopoverTrigger>
-              //       <PopoverContent className="w-auto p-0">
-              //         <Calendar
-              //           mode="single"
-              //           selected={date}
-              //           onSelect={setDate}
-              //           initialFocus
-              //         />
-              //       </PopoverContent>
-              //     </Popover>
-              //   </FormControl>
-              //   <FormMessage />
-              // </FormItem>
               <FormItem>
               <FormLabel>Fecha de compra</FormLabel>
               <Popover>
@@ -216,28 +186,31 @@ export default function InfoPurchase({id}:Props) {
                       </Button> 
                     </FormControl>
                     </PopoverTrigger>
-                    <PopoverContent className="w-[250px] h-full p-0">
+                    <PopoverContent className="w-[200px] p-0">
                       <Command>
                         <CommandInput placeholder="Buscar proveedor..." />
                         <CommandEmpty>Sin resultados.</CommandEmpty>
                         <CommandGroup>
-                          {Array.isArray(providers) && providers.map((provider) => (
-                            <CommandItem
-                              value={provider.name}
-                              key={provider.id}
-                              onSelect={() => {
-                                formPurchase.setValue("provider_id", provider.id)
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  provider.id === field.value ? "opacity-100" : "opacity-0"
-                                )}
-                              />
-                              {provider.name}
-                            </CommandItem>
-                          ))}
+                          <ScrollArea className={`h-[200px] w-48 ${open ? 'open' : ''}`}>
+                            {Array.isArray(providers) && providers.map((provider) => (
+                              <CommandItem
+                                value={provider.name}
+                                key={provider.id}
+                                onSelect={() => {
+                                  formPurchase.setValue("provider_id", provider.id)
+                                  setOpen(!open)
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    provider.id === field.value ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                                {provider.name}
+                              </CommandItem>
+                            ))}
+                            </ScrollArea>
                         </CommandGroup>
                       </Command>
                     </PopoverContent>
@@ -257,38 +230,24 @@ export default function InfoPurchase({id}:Props) {
           </div>
           
           <div className='mt-4 space-y-2'>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button className="w-full" type='submit'>
-                    Consolidar compra
-                  </Button>
-                </TooltipTrigger>
-                <TooltipContent className="bg-gray-500">
-                  <p className="text-xs font-semibold">Aquí puedes confirmar la compra.</p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+          <Tooltip placement="top" title="Aqui podrás confirmar la compra" arrow>
+            <Button className="w-full" type='submit'>
+              Consolidar compra
+            </Button>
+          </Tooltip>
           </div>
           
 
           <div className='mt-4 space-y-2'>
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Button className="w-full" variant='outline' onClick={async () => {
-                    const res = await CancelPurchaseFetch(`${RoutesApi.PURCHASES}/${id}/deletepurchase`)
-                    toast({variant: 'default', title: "Compra cancelada correctamente", description: "Se ha eliminado la compra con éxito."})
-                    router.push("/purchases")
-                  }}>
-                    Cancelar compra
-                  </Button>
-                </TooltipTrigger>
-            <TooltipContent className="bg-gray-500">
-              <p className="text-xs font-semibold">Aquí puedes cancelar la compra.</p>
-            </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
+          <Tooltip placement="top" title="Aqui podrás cancelar la compra" arrow>
+              <Button className="w-full" variant='outline' onClick={async () => {
+                const res = await CancelPurchaseFetch(`${RoutesApi.PURCHASES}/${id}/deletepurchase`)
+                toast({variant: 'default', title: "Compra cancelada correctamente", description: "Se ha eliminado la compra con éxito."})
+                router.push("/purchases")
+              }}>
+                Cancelar compra
+              </Button>
+          </Tooltip>
           </div>
         </form>
       </Form>

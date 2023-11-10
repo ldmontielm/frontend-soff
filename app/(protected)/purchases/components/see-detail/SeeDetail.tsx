@@ -25,18 +25,18 @@ const formatted = new Intl.DateTimeFormat(['ban', 'id']).format(date)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>  
-          <div className='flex items-center px-2 cursor-default rounded hover:bg-neutral-100 select-none text-sm py-1.5 transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50' onClick={() => setOpen(true)}>
+          <div className='flex items-center px-2 w-full cursor-default rounded hover:bg-neutral-100 select-none text-sm py-1.5 transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50' onClick={() => setOpen(true)}>
             <QueueListIcon className="w-4 h-4 mr-2"/> Ver detalle
           </div>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px]">
-          <div className='w-full md:col-span-8'>
+          <div className='relative w-full bg-white col-span-8'>
               <div className='w-full text-center mb-1 p-2'>
                 <p className='font-bold'>Detalles de la compra</p>
                 <p className='text-sm'>Aquí puedes ver el detalle de cada compra</p>
               </div>
               <hr />
-              <div>
+              <div className='w-full'>
                 <div className='grid grid-cols-1 lg:grid-cols-4 gap-4 mt-2'>
                   <div className='my-3 w-full text-center'>
                     <p className='font-bold text-sm '>Factura</p>
