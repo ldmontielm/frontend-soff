@@ -4,11 +4,9 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useParams, useRouter } from 'next/navigation'
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { OrderCreate } from "@/app/(protected)/purchases/models/purchase.models"
-import toast from "react-hot-toast"
 import useSWR, {mutate} from 'swr'
 import { HeadTable } from "@/app/(protected)/supplies/components"
 import * as z from 'zod'
@@ -20,29 +18,27 @@ import {Popover,PopoverContent,PopoverTrigger,} from "@/components/ui/popover"
 import { RoutesApi } from "@/models/routes.models"
 import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider"
 import { Supply } from "@/app/(protected)/supplies/models/supply.models"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import {Tooltip} from "@mui/material"
 import { useToast } from "@/components/ui/use-toast"
-import { ToastAction } from "@/components/ui/toast"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 const formSchema = z.object({
   purchase_id: z.string(),
-  supply_id: z.string({
-    required_error: "Campo requerido.",
-    invalid_type_error: "Debe seleccionar un insumo."
-  }).min(2, {message:'Seleccione un insumo.'}),
-  amount_supplies: z.string({
-    required_error: "Campo requerido.",  
-    invalid_type_error: "Debe ingresar la cantidad."
-  }).min(1, {message:'La cantidad mínima es 1.'}).max(3, {message:'Excedió el número de dígitos.'}).transform(Number),
-  price_supplies: z.string({
-    required_error: "Campo requerido.", 
-    invalid_type_error: "Debe ingresar el precio."
-  }).min(3, {message:'El precio mínimo es 100.'}).max(6, {message:'Excedió el número de dígitos.'}).transform(Number)
+  // supply_id: z.string({
+  //   required_error: "Campo requerido.",
+  //   invalid_type_error: "Debe seleccionar un insumo."
+  // }).min(2, {message:'Seleccione un insumo.'}),
+  // amount_supplies: z.string({
+  //   required_error: "Campo requerido.",  
+  //   invalid_type_error: "Debe ingresar la cantidad."
+  // }).min(1, {message:'La cantidad mínima es 1.'}).max(3, {message:'Excedió el número de dígitos.'}).transform(Number),
+  // price_supplies: z.string({
+  //   required_error: "Campo requerido.", 
+  //   invalid_type_error: "Debe ingresar el precio."
+  // }).min(3, {message:'El precio mínimo es 100.'}).max(6, {message:'Excedió el número de dígitos.'}).transform(Number)
+  supply_id: z.string().uuid({message: 'Debe seleccionar un insumo'}),
+  amount_supplies: z.number({required_error: "Este campo es requerido", invalid_type_error: "Se espera un número"}).min(1, {message: "La cantidad mínima es 1"}).max(200, {message: "La cantidad máxima es 200"}),
+  price_supplies: z.number({required_error: "Este campo es requerido", invalid_type_error: "Se espera un número"}).min(1, {message: "La cantidad mínima es 200"}).max(100000, {message: "La cantidad máxima es 100.000"})
 }
   )
 
@@ -74,8 +70,10 @@ export default function HeadTablep({id}: Props) {
   async function onSubmit(values: z.infer<typeof formSchema>){
     values.purchase_id = id
     const data = await AddOrderFetch(`${RoutesApi.PURCHASES}/${id}/add-order`, values)
+    form.reset()
     mutate(`${RoutesApi.PURCHASES}/${id}/orders`)
     toast({variant: 'default', title: "Agregando orden", description: "Se ha agregado la orden correctamente."})
+
   }
 
 
@@ -113,12 +111,14 @@ export default function HeadTablep({id}: Props) {
                         <CommandInput placeholder="Buscar insumo..." />
                         <CommandEmpty>Sin resultados.</CommandEmpty>
                         <CommandGroup>
+                        <ScrollArea className={`h-[200px] w-48 ${open ? 'open' : ''}`}>
                           {Array.isArray(supplies) && supplies.map((supply) => (
                             <CommandItem
                               value={supply.name}
                               key={supply.id}
                               onSelect={() => {
                                 form.setValue("supply_id", supply.id)
+                                setOpen(!open)
                               }}
                             >
                               <Check
@@ -130,6 +130,7 @@ export default function HeadTablep({id}: Props) {
                               {supply.name}
                             </CommandItem>
                           ))}
+                          </ScrollArea>
                         </CommandGroup>
                       </Command>
                     </PopoverContent>
@@ -147,7 +148,7 @@ export default function HeadTablep({id}: Props) {
               <FormItem className="w-full md:w-[200px]">
                 <FormLabel>Cantidad</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Cantidad del insumo" {...field} className="lg:w-fit"/>
+                  <Input type="number" placeholder="Cantidad del insumo" {...form.register('amount_supplies', {valueAsNumber: true})} className="lg:w-fit"/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -161,7 +162,7 @@ export default function HeadTablep({id}: Props) {
               <FormItem className="w-full md:w-[200px] ml-4">
                 <FormLabel>Precio</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Precio del insumo" {...field} className="lg:w-fit"/>
+                  <Input type="number" placeholder="Precio del insumo" {...form.register('price_supplies', {valueAsNumber: true})} className="lg:w-fit"/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -170,19 +171,12 @@ export default function HeadTablep({id}: Props) {
           />
 
         </div>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button type="submit" className="w-full md:w-fit">
-                <PlusIcon className="w-4 h-4 mr-2" />
-                <span>Agregar</span>
-              </Button>
-            </TooltipTrigger>
-          <TooltipContent className="bg-gray-500">
-            <p className="text-xs font-semibold">Aquí puedes agregar ordenes a la compra.</p>
-          </TooltipContent>
+        <Tooltip placement="top" title="Aqui podrás agregar ordenes a la compra" arrow>
+          <Button type="submit" className="w-full md:w-fit">
+            <PlusIcon className="w-4 h-4 mr-2" />
+            <span>Agregar</span>
+          </Button>
         </Tooltip>
-      </TooltipProvider>
       </form>
     </Form>
   )

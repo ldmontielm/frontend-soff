@@ -8,6 +8,9 @@ import { Button } from "@/components/ui/button"
 import { MoreHorizontal, PencilIcon } from "lucide-react"
 import { SeeDetail } from "../see-detail"
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
+import {
+  Tooltip
+} from "@mui/material"
 
 export const columns: ColumnDef<Purchase>[] = [
     {
@@ -103,9 +106,11 @@ export const columns: ColumnDef<Purchase>[] = [
         return(
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
+            <Tooltip placement="top" title="Aqui podrás ver las acciones de las compras" arrow>
               <Button variant='ghost' size='icon'>
                 <MoreHorizontal className="h-4 w-4"/>
               </Button> 
+            </Tooltip>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="flex flex-col items-start">
               <DropdownMenuLabel>Acciones</DropdownMenuLabel>
