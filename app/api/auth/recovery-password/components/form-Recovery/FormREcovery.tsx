@@ -51,7 +51,7 @@ export default function FormREcovery() {
         const res = await recoverFetch(`${RoutesApi.AUTH}/recover-password`, values.email)
         setCookie('email', values.email)
         toast({variant: "default", title: "¡Código de confirmación enviado!", description: <p>Hemos enviado un código de confirmación al correo <span className="font-semibold">{values.email}</span></p>})
-        routes.push('/auth/confirm-recover')
+        routes.push('/api/auth/confirm-recover')
     }
   return (
     <Form {...form}>
@@ -71,7 +71,7 @@ export default function FormREcovery() {
                         />
                         <Button type="submit" className="w-full">Enviar Código</Button>
                         <div className="text-center">
-                            <Link href='/auth/login' className="text-sm">¡Ya me acuerdo! <span className="font-semibold">Iniciar sesión</span></Link>
+                            <Link href='/api/auth/signin' className="text-sm">¡Ya me acuerdo! <span className="font-semibold">Iniciar sesión</span></Link>
                         </div>
                     </form>
                 </Form>

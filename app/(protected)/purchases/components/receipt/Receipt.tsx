@@ -7,6 +7,7 @@ import { convertDate } from '../../utils'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
 import { Order } from '@/app/(protected)/purchases/models/purchase.models'
 import { RoutesApi } from '@/models/routes.models'
+import { useToast } from "@/components/ui/use-toast"
 
 interface Props {
     id: string
@@ -20,15 +21,29 @@ interface OrderInvoice {
 export default function Receipt({id}:Props) {
   const {data:orders} = useSWR<Order[]>(`${RoutesApi.PURCHASES}/${id}/orders`)
   const {data:purchase} = useSWR(`${RoutesApi.PURCHASES}/${id}`)
+    const { toast } = useToast()
+  const formatted = new Intl.NumberFormat("en-US", {
+    style: 'currency',
+    currency: "USD",
+    maximumFractionDigits: 0
+  }).format(purchase?.total)
   
   const generateReceipt = () => {
     const doc = new jsPDF()
-    doc.text(`Factura: ${purchase !== undefined ? purchase?.invoice_number : "No hay factura"}`, 15, 28).setFontSize(10);
+    doc.text('RECIBO DE FACTURA - MANDISA', 60, 20)
+    doc.setFontSize(10)
+    doc.text('NÚMERO DE FACTURA: ', 15, 35)
+    doc.text(purchase.invoice_number, 57, 35)
+    doc.text('TOTAL:', 15, 40)
+    doc.text(formatted, 30, 40)
+    doc.text('CANTIDAD DE ORDENES:', 15, 45)
+    doc.text(purchase.amount_order.toString(), 60, 45)
 
     // Datos del cliente y fecha
-    doc.text(`Proveedor: ${purchase !== undefined ? purchase?.provider : "No hay Proveedor"}`, 150, 20).setFontSize(10);
-    doc.text(`Fecha: ${purchase !== undefined ? convertDate(purchase?.purchase_date) : "No hay fecha"}`, 150, 25 ).setFontSize(10);
-
+    doc.text('PROVEEDOR:', 130, 35)
+    doc.text(purchase.provider.toUpperCase(), 155, 35);
+    doc.text('FECHA:', 130, 40 )
+    doc.text(`${convertDate(purchase?.purchase_date)}`, 145, 40);
     // Datos de la tabla de productos
     const columns = ['Insumo', 'Cantidad', 'Precio Unitario', 'Subtotal'];
     const data:any[] = [];
@@ -47,14 +62,16 @@ export default function Receipt({id}:Props) {
     // const total = data.reduce((sum, [, , , total]) => sum + total, 0);
 
     // Guardar o mostrar el PDF (puedes personalizar esta parte según tus necesidades)
-    doc.save(`receipt-${id}.pdf`);
+    doc.save(`factura-${id}.pdf`);
   }
 
   return (
     <div>
       
       {/* <button onClick={() => generateReceipt()}>Descargar pdf</button> */}
-      <div onClick={() => generateReceipt()} className='flex items-center px-2 cursor-default rounded hover:bg-neutral-100 select-none text-sm py-1.5 transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50'>
+      <div onClick={() => {generateReceipt()
+      toast({variant: 'default',title: "Generando fcatura",description: "Se ha generado la factura de la compra.",})
+      }} className='flex items-center px-2 cursor-default rounded hover:bg-neutral-100 select-none text-sm py-1.5 transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50'>
           <ArrowDownOnSquareIcon className="w-4 h-4 mr-2"/> Descargar factura
       </div>
     </div>

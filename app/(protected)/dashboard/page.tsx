@@ -1,8 +1,18 @@
 import { HeaderModule } from "@/components/page-components"
 import { ContentTargets, BarSales, PieSales } from "./components"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/utilities/authOptions"
+import { redirect } from "next/navigation"
+
 
 export default function page() {
-    return (
+  const session = getServerSession(authOptions)
+
+  if(!session){
+    redirect('/auth/login')
+  }
+
+  return (
         <main className="w-full mx-auto max-w-7xl p-4">
           <HeaderModule />
           <ContentTargets />
