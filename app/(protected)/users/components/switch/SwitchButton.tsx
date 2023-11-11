@@ -41,7 +41,9 @@ export default function SwitchDemo({id_user, user}:Props) {
 }
 
   return (
-    <Button variant='ghost'onClick={onSubmit}>
+    <Button 
+    variant='ghost'
+    onClick={onSubmit}>
       <Switch id="airplane-mode" className='mr-2'
       checked={state}
       onCheckedChange={(newStatus)=>{

@@ -2,13 +2,12 @@
 
 import { ColumnDef } from "@tanstack/react-table"
 import { Role } from "../models/roles.models"
-import SwitchDemo from "../components/swicht/SwichtDemo"
 import PermissionModal from "../components/permission-modal/PermissionModal"
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
 import { Button } from "@/components/ui/button"
 import UpdateStatus from "../components/updates-tatus/UpdateStatus"
 import { MenuRoles } from "../components/menu-roles"
-
+import { Tooltip } from "@mui/material"
 
 
 
@@ -35,23 +34,14 @@ export const columns: ColumnDef<Role>[] = [
     cell: ({ row }) => {
       const role = row.original
       return (
-        <PermissionModal id_role={role.id} />        
+        <PermissionModal id_role={role.id} role={role} />        
       )
     }
 
   },
   {
     accessorKey: "status",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-          Estado
-          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
+    header:'Estado',
     cell: ({ row }) => {
       const role = row.original
       return (

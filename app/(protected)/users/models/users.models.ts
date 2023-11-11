@@ -42,3 +42,11 @@ export interface createUser{
     password : string;
     id_role: string;
 }
+export interface updateUser{
+    name : string;
+    document_type: string;
+    document: string;
+    phone: string;
+    email : string;
+    id_role: string;
+}

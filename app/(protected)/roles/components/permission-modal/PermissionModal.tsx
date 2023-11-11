@@ -12,45 +12,48 @@ import {
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import useSWR from 'swr'
-import { urlRoles, urlPermissionRole } from '../../services/roles.services'
-import axios from 'axios'
-import { getRole } from '../../services/roles.services'
-import { getPermissionRole } from '../../services/roles.services'
 import { useState } from 'react'
 import { RoutesApi } from '@/models/routes.models'
-
+import { Role } from '../../models/roles.models'
+import { Tooltip } from "@mui/material"
 interface Props {
   id_role: string
+  role:Role
 }
 
-export default function PermissionModal({ id_role }: Props) {
+export default function PermissionModal({ id_role, role }: Props) {
   const [open, setOpen]= useState(false)
-  const { data: permissionsroles, isValidating, error } = useSWR(`${RoutesApi.ROLES}/${id_role}/permissionrole-get`); 
-  if (error) {
-    return <p>No tiene permisos</p>;
-  }
-
-  if (isValidating) {
-    return <div>Cargando...</div>;
-  }
+    const { data: permissionsroles, isValidating, error } = useSWR(`${RoutesApi.ROLES}/${id_role}/permissionrole-get`); 
+    if (error) {
+      return <p>ERROR</p>;
+    }
+  
+  
+    if (isValidating) {
+      return <div>Cargando...</div>;
+    }
+    
 
   return (
-    <AlertDialog open={open} onOpenChange={setOpen} >
+    <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="outline">Permisos</Button>
+      <Tooltip title="Ver los permisos asociados a este rol" arrow placement="top">
+          <Button variant="outline">Permisos</Button>
+        </Tooltip>
+
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle className='flex justify-center items-center'>Permisos</AlertDialogTitle>
           <AlertDialogDescription>
-
+            A continuación, se presentan los permisos relacionados con el rol
+          </AlertDialogDescription>
             {
-              Array.isArray(permissionsroles) && permissionsroles.map((permission) => (
-                <span className='flex' key={permission.id_permission}>{permission.id_permission}</span>
+              Array.isArray(permissionsroles) && permissionsroles.map((permissions) => (
+                <span className='flex' key={permissions.id_permission}>{permissions.id_permission}</span>
               ))
               
             }
-          </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogAction className='w-full'>Volver</AlertDialogAction>

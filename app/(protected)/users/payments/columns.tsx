@@ -102,16 +102,7 @@ export const columns: ColumnDef<User>[] = [
     },
     {
       accessorKey: "status",
-      header: ({ column }) => {
-        return (
-          <Button
-            variant="ghost"
-            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
-            Estado
-          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
-          </Button>
-        )
-      },
+      header: 'Estado',
       cell: ({ row }) => {
         const user = row.original
         return(
@@ -120,7 +111,7 @@ export const columns: ColumnDef<User>[] = [
       },
     },
     {
-      accessorKey: "id",
+      id: "id",
       header: 'Acciones',
       cell: ({ row }) => {
         const user = row.original

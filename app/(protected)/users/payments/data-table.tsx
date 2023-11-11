@@ -31,12 +31,16 @@ import { Input } from "@/components/ui/input"
 import { HeadTable } from "../components"
 import UpdateTable from "../components/update-table/UpdateTable"
 import {  ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
-
+import { Checkbox } from "@mui/material"
+import { AdjustmentsHorizontalIcon} from "@heroicons/react/24/outline"
+import { Tooltip } from "@mui/material"
 
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data: TData[],
+  consult:boolean,
+  setActive:React.Dispatch<React.SetStateAction<boolean>>
 }
 
 
@@ -44,6 +48,8 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  consult,
+  setActive
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
@@ -85,32 +91,45 @@ export function DataTable<TData, TValue>({
 
 <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="outline" className="ml-auto mr-[10px]">
-              Columnas
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
+          <Tooltip title="Quitar columnas de la tabla" arrow placement="top">
+                <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center mr-2">
+                    <AdjustmentsHorizontalIcon className="w-4 h-4"/>
+                    <span>Columnas</span>
+                </Button>
+          </Tooltip>
+
+
+            </DropdownMenuTrigger>
+          <DropdownMenuContent align="center">
             {table
               .getAllColumns()
               .filter(
-                (column) => column.getCanHide()
+                (column) => typeof column.accessorFn !== "undefined" && column.getCanHide()
               )
               .map((column) => {
                 return (
-                  <DropdownMenuCheckboxItem
-                    key={column.id}
-                    className="capitalize"
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) =>
-                      column.toggleVisibility(!!value)
-                    }
-                  >
-                    {column.id}
-                  </DropdownMenuCheckboxItem>
-                )
+                  <div key={column.id} className="capitalize">
+                    <Checkbox
+                      checked={column.getIsVisible()}
+                      onChange={(event) => {
+                        column.toggleVisibility(event.target.checked);
+                      }}
+                      color="primary"
+                      />
+                      {column.id == "name"? "Nombre" :( column.id == "document_type" ? "Tipo":(column.id == "document" ? "Documento":(column.id == "phone" ? "Telefono": (column.id == "email" ? "Correo":(column.id == "role" ? "Rol": (column.id == "status" ? "Estado": (column.id == "phone" ? "Telefono": null)))))))}
+                  </div>
+                );
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+
+        <Tooltip title={`Ver los usuarios ${consult === true ? 'Inactivos' : 'Activos'}`}arrow placement="top">
+          <Button
+          variant="outline" className="text-sm gb-white hover:bg-gray-100 mr-2"
+          onClick={()=>{setActive(!consult)} }>
+            {consult === true ?  "Inactivos" :"Activos"}
+          </Button>
+        </Tooltip>
 
 
       <HeadTable/>

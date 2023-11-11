@@ -37,27 +37,23 @@ import { mutate } from "swr"
 import { useRouter } from "next/navigation"
 import { Pencil } from "lucide-react"
 import { UserCre } from "../../models/users.models"
-import { RoutesApi } from "@/models/routes.models"
-import { createUser } from "../../models/users.models"
-import { fetcherPut } from "@/context/swr-context-provider/SwrContextProvider"
+import { RoutesApi, Routes } from "@/models/routes.models"
+import { updateUser } from "../../models/users.models"
+import { fetcherPut} from "@/context/swr-context-provider/SwrContextProvider"
 import { useToast } from "@/components/ui/use-toast"
+
 
 
 const formSchema = z.object({
   id:z.string(),
-  name: z.string({required_error: 'El nombre es requerido'}).min(5, {message: 'El nombre debe tener al menos 5 caracteres'}).max(35, {message: 'El nombre debe tener un máximo de 35 caracteres'}).refine(value => /^[a-zA-Z\s]+$/.test(value), {message: 'El nombre debe contener solo letras y espacios, y tener al menos dos caracteres.'}),
+  name: z.string({required_error: 'El nombre es requerido'}).min(5, {message: 'El nombre debe tener al menos 5 caracteres'}).max(60, {message: 'El nombre debe tener un máximo de 60 caracteres'}).refine(value => /^[a-zA-Z\s]+$/.test(value), {message: 'El nombre debe contener solo letras y espacios, y tener al menos dos caracteres.'}),
   document_type: z.string({required_error: 'El tipo de documento es requerido', invalid_type_error: 'El tipo de documento debe contener letras'}).min(2, {message: 'El tipo de documento debe contener al menos 2 caracteres'}).max(6,{message:'No puede contener mas de 6 caracteres'}),
   document: z.string({required_error: 'El documento es requerido'}).min(8, {message: 'El número de documento debe contener al menos 8 caracteres'}).max(15,{message:'No puede contener mas de 6 caracteres'}).refine(value => /^\d+$/.test(value), {message: 'El número de identificación debe contener solo números.'}),
   phone: z.string({required_error: 'El teléfono es requerido'}).min(6,{message:'El Numero de telefono debe de tener minimo 8 caracteres'}).max(15,{message:'No puede contener mas de 10 caracteres'}).refine(value => /^\d+$/.test(value), {message: 'El campo debe contener solo números.'}),
   email: z.string({required_error: 'El correo es requerido'}).email({ message: 'El correo electrónico no es válido' }).min(6,{message:'El Numero de correo debe de tener minimo 6 caracteres'}),
   // .max(15,{message:'No puede contener mas de 60 caracteres'}),
-  password: z.string({required_error: 'La contraseña es requerida'}).min(8, {message: 'La contraseña debe tener al menos 8 caracteres'}).max(20,{message:'No puede contener mas de 20 caracteres'}),
-  confirmPassword: z.string().min(8, {message: 'La contraseña debe tener al menos 8 caracteres'}).max(20,{message:'No puede contener mas de 20 caracteres'}),
   id_role: z.string({required_error: 'El rol es requerido'}).uuid()
-}).refine(data => data.password === data.confirmPassword, {
-  message: 'Las contraseñas no coinciden',
-  path: ['confirmPassword'], // Indicamos que el error se aplique al campo 'confirmPassword'
-});
+})
 
 interface Props{
   user: UserCre
@@ -69,6 +65,7 @@ export default function UpdateTable({user, id_user}: Props) {
   
   const [open, setOpen]= useState(false)
   const router = useRouter()
+  const [active, setActive] = useState(true)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -79,15 +76,13 @@ export default function UpdateTable({user, id_user}: Props) {
       document: user.document,
       phone: user.phone,
       email: user.email,
-      password: user.password,
-      confirmPassword: user.password,
       id_role:user.role
     }
   })
 
   const { toast } = useToast()
-  const CreateUserFetch = async (url: string, Value:createUser) => {
-    return await fetcherPut<createUser>(url, Value)
+  const CreateUserFetch = async (url: string, Value:updateUser) => {
+    return await fetcherPut<updateUser>(url, Value)
 }
 
 const onSubmit = async(values: z.infer<typeof formSchema>)=>{
@@ -95,14 +90,12 @@ const onSubmit = async(values: z.infer<typeof formSchema>)=>{
     const res = await CreateUserFetch(`${RoutesApi.USERS}/${id_user}/put-user`,values)
     toast({variant: "default", title: "Usuario Actualizado",
     description:"Se ha Actualizado el usuario con exito"})
-    form.reset()
+    mutate(`${RoutesApi.USERS}/get-users/?status=${active}`)
     setOpen(false)
-    mutate(`${RoutesApi.USERS}/get-users`)
-
   }
 
 
-const {data: role} = useSWR(`${RoutesApi.ROLES}/get-role`)
+const {data: role} = useSWR(`${RoutesApi.ROLES}/get-role/?status=${true}`)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -132,29 +125,28 @@ const {data: role} = useSWR(`${RoutesApi.ROLES}/get-role`)
               </FormItem>
               )}
             />
-
-          <FormField
-            control={form.control}
-            name ="document_type"
-            render={({ field }) => (
-              <FormItem>
-              <FormLabel>Tipo de documento</FormLabel>
-              <FormControl>
-              <Select  onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Tipo de documento" />
-                  </SelectTrigger>
-                  <SelectContent >
-                    <SelectItem value="CC" >CC</SelectItem>
-                    <SelectItem value="TI">TI</SelectItem>
-                    <SelectItem value="CE">CE</SelectItem>
-                  </SelectContent>
-                </Select>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-            )}
-            />
+            <FormField
+                control={form.control}
+                name ="document_type"
+                render={({ field }) => (
+                  <FormItem>
+                  <FormLabel>Tipo de documento</FormLabel>
+                  <FormControl>
+                  <Select  onValueChange={field.onChange}>
+                      <SelectTrigger className="w-full">
+                        <SelectValue placeholder="Tipo de documento"/>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="CC" >Cédula de ciudadanía</SelectItem>
+                        <SelectItem value="TI">Tarjeta de identidad</SelectItem>
+                        <SelectItem value="CE">Cédula de extranjería</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+                )}
+                />
 
             <FormField 
               control={form.control}
@@ -196,34 +188,6 @@ const {data: role} = useSWR(`${RoutesApi.ROLES}/get-role`)
                   <FormMessage />
               </FormItem>
               )}
-            />
-
-            <FormField 
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Contraseña</FormLabel>
-                  <FormControl>
-                    <Input id="passwor" type="password" placeholder="" {...field} className="col-span-3" />
-                  </FormControl>
-                  <FormMessage />
-              </FormItem>
-              )}
-            />
-
-            <FormField
-            control={form.control}
-            name ="confirmPassword"
-            render={({ field }) => (
-              <FormItem>
-              <FormLabel>Validación</FormLabel>
-              <FormControl>
-                <Input type="password" placeholder="Vuelva a escribir la contraseña" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-            )}
             />
       
         <FormField

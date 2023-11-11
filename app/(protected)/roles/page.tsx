@@ -5,16 +5,17 @@ import { urlRoles, getRole } from "./services/roles.services";
 import useSWR from "swr";
 import { RoutesApi } from "@/models/routes.models";
 import HeaderModule from "./components/header-module/Header";
-
+import { useState } from "react";
 
 export default  function DemoPage() {
-  const { data:roles} = useSWR(`${RoutesApi.ROLES}/get-role`)
+  const [active, setActive] = useState(true)
+  const { data:roles} = useSWR(`${RoutesApi.ROLES}/get-role?status=${active}`)
 
     
   return (
     <div className="container mx-auto py-10">
       <HeaderModule/>
-      <DataTable columns={columns} data={roles || []} />
+      <DataTable  columns={columns} data={roles || []} consult={active} setActive={setActive} />
     </div>
   );
 }
