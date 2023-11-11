@@ -23,7 +23,6 @@ import toast from 'react-hot-toast'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { useContext } from "react"
-import { OrderContextInterface } from "@/app/(protected)/sales/models/sale.models"
 import useSWR, { mutate, useSWRConfig } from "swr";
 import { useToast } from "@/components/ui/use-toast"
 

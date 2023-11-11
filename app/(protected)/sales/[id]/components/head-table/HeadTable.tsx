@@ -8,13 +8,13 @@ import { useParams } from 'next/navigation'
 import { useForm } from "react-hook-form"
 import useSWR, { mutate} from 'swr'
 import * as z from 'zod'
-import { OrderCreate } from "@/app/(protected)/sales/models/sale.models"
+import { OrderCreate } from "@/app/(protected)/roles/sales/models/sale.models"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Check, ChevronsUpDown } from "lucide-react"
-import { Product } from "@/app/products/models/product.models"
+import { Product } from "@/app/(protected)/products/models/product.models"
 import { RoutesApi } from "@/models/routes.models"
 import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider"
 

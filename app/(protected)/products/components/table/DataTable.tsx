@@ -40,12 +40,11 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { Checkbox } from "@mui/material"
+import {Tooltip} from "@mui/material"
+import { mutate } from 'swr'
+import { RoutesApi } from '@/models/routes.models'
+import { Product } from '../../models/product.models'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
@@ -57,7 +56,6 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({columns, data, isLoading, error, setActive, consult}: DataTableProps<TData, TValue>){
-
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -94,10 +92,12 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error, setAc
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
+              <Tooltip placement="top" title="Ocultar columnas" arrow>
               <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
                 <AdjustmentsHorizontalIcon className='w-4 h-4' />
                 <span>Columnas</span>
               </Button>
+              </Tooltip>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='start'>
             {table
@@ -107,40 +107,33 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error, setAc
                   )
                   .map((column) => {
                     return (
-                      <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      { 
-                        column.id === 'name' ? 'Nombre' :
-                        column.id === 'price' ? 'Costo' :
-                        column.id === 'sale_price' ? 'Precio de venta' :
-                        column.id === 'register_date' ? 'fecha registro' : 
-                        column.id === 'status' ? 'Estado' : column.id
-                      }
-                    </DropdownMenuCheckboxItem>
-                  )
+                      <div  key={column.id} className="text-sm pr-3">
+                        <Checkbox
+                        checked={column.getIsVisible()}
+                        onChange={(event) =>{
+                          column.toggleVisibility(event.target.checked);
+                        }}
+                        color="primary"
+                        />
+                        { 
+                          column.id === 'name' ? 'Nombre' :
+                          column.id === 'price' ? 'Costo' :
+                          column.id === 'sale_price' ? 'Precio de venta' :
+                          column.id === 'register_date' ? 'Fecha registro' : 
+                          column.id === 'status' ? 'Estado' : column.id
+                        }
+                      </div>
+                  );
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
-          <TooltipProvider>
-            <Tooltip>
-              <TooltipTrigger asChild>
+          <Tooltip placement="top" title={`Ver productos ${consult === true ? 'Inactivos' : 'Activos'}`} arrow>
                 <Button variant="outline" className=" text-sm bg-white hover:bg-gray-100" 
                   onClick={() => {setActive(!consult)
                     }}>
-                      {consult === true ? "Activos" : "Inactivos"}
+                      {consult === !true ? "Activos" : "Inactivos"}
                 </Button>
-              </TooltipTrigger>
-              <TooltipContent className="bg-gray-500">
-                <p className="text-xs font-semibold">Click para ver productos {consult === true ? "Inactivos" : "Activos"}.</p>
-              </TooltipContent>
             </Tooltip>
-          </TooltipProvider>
         </div>
         <HeadTable />
       </div>
@@ -194,7 +187,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error, setAc
                 ))
                 ) : (
                   <TableRow>
-                  <TableCell colSpan={columns.length} className='h-24 text-center' text-center>
+                  <TableCell colSpan={columns.length} className='h-24 text-center'>
                     No se encontró {value}
                   </TableCell>
                 </TableRow>
