@@ -42,12 +42,12 @@ export default function BarSales() {
         datasets: [
           {
             label: 'Dataset 1',
-            data: labels.map(() => faker.datatype.number({ min: 0, max: 700 })),
+            data: labels.map(() => faker.number.int({ min: 0, max: 700 })),
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
           },
           {
             label: 'Dataset 2',
-            data: labels.map(() => faker.datatype.number({ min: 0, max: 600 })),
+            data: labels.map(() => faker.number.int({ min: 0, max: 600 })),
             backgroundColor: 'rgba(222++, 162, 235, 0.5)',
           },
         ],
