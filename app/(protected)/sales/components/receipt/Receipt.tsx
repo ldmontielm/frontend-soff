@@ -1,14 +1,18 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import useSWR from 'swr'
 import { convertDate } from '../../utils'
 import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
-import { Order } from '../../models/sale.models'
+import { Order, Sale } from '../../models/sale.models'
 import { RoutesApi } from '@/models/routes.models'
+import { Button } from '@/components/ui/button'
+import { PDFViewer } from '@react-pdf/renderer';
+
 interface Props {
-  id: string
+  id: string,
+  sale: Sale
 }
 
 interface OrderInvoice {
@@ -17,18 +21,36 @@ interface OrderInvoice {
   price: number
   total: number
 }
-export default function Receipt({id}:Props) {
+export default function Receipt({id, sale}:Props) {
   const {data:orders} = useSWR<Order[]>(`${RoutesApi.SALES}/${id}/orders`)
-  const {data:sale} = useSWR(`${RoutesApi.SALES}/${id}`)
+  const formatted = new Intl.NumberFormat("en-US", {
+    style: 'currency',
+    currency: "USD",
+    maximumFractionDigits: 0
+  }).format(sale.total)
+
+  const formattedDate = new Intl.DateTimeFormat(['ban', 'id']).format(Date.parse(sale.sale_date))
 
   const generateReceipt = () => {
     const doc = new jsPDF()
-    doc.text('Factura de Venta', 15, 20);
-
-    // Datos del cliente y fecha
-    doc.text(`Cliente: ${sale !== undefined ? sale.client : "No hay cliente"}`, 150, 20);
-    doc.text(`${sale !== undefined ? convertDate(sale.sale_date) : "No hay fecha"}`, 150, 30, ).setFontSize(10);
-
+    doc.text('RECIBO DE FACTURA - MANDISA', 60, 20)
+    doc.setFontSize(10)
+    doc.text('NÚMERO DE FACTURA: ', 15, 35)
+    doc.text(sale.invoice_number, 57, 35)
+    doc.text('TOTAL:', 15, 40)
+    doc.text(formatted, 30, 40)
+    doc.text('CANTIDAD DE ORDENES:', 15, 45)
+    doc.text(sale.amount_order.toString(), 60, 45)
+    doc.text('TIPO DE VENTA:', 15, 50)
+    doc.text(sale.type_sale.toUpperCase(), 45, 50)
+    doc.text('MÉTODO DE PAGO:', 15, 55)
+    doc.text(sale.payment_method.toUpperCase(), 51, 55)
+    
+    doc.text('CLIENTE:', 140, 35)
+    doc.text(sale.client.toUpperCase(), 157, 35);
+    doc.text('FECHA:', 140, 40)
+    doc.text(formattedDate, 154, 40);
+    
     // Datos de la tabla de productos
     const columns = ['Producto', 'Cantidad', 'Precio Unitario', 'Total'];
     const data:any[] = [];
@@ -40,7 +62,7 @@ export default function Receipt({id}:Props) {
     autoTable(doc, {
       head: [columns],
       body: data,
-      startY: 50
+      startY: 60
     });
 
     // Calcular el total

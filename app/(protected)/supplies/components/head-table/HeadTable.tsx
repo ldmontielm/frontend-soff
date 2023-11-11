@@ -3,7 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider";
 import { useToast } from "@/components/ui/use-toast"
-
+import {Tooltip} from "@mui/material"
 import * as z from 'zod'
 import {
   Form,
@@ -53,9 +53,9 @@ const AddSupplyFetch = async (url: string, body: SupplyCreate) => {
 const fromSchema = z.object({
   supply_id: z.string(),
   name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}).max(50, {message: 'El nombre del insumo es demasiado largo'}),
-  price: z.number({required_error: "El campo es requerido"}).min(3, {message: 'Ingrese el precio del insumo'}).max(999999, {message: 'El precio es demasiado alto'}),
+  price: z.number({required_error: "El campo es requerido"}).min(3, {message: 'Ingrese el precio del insumo'}).max(999999, {message: 'El precio es demasiado alto'}), 
   quantity_stock: z.number({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).max(999999, {message: 'La cantidad es demasiado alta'}),
-  unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccioné una opción'}).max(50, {message: 'La unidad de medida es demasiado larga'}),
+  unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccione una opción'}).max(50, {message: 'La unidad de medida es demasiado larga'}),
 });
 
 interface Props {
@@ -65,15 +65,16 @@ interface Props {
 export default function HeadTable({location}: Props) {
   const [open, setOpen] = useState(false)
   const routes  = useRouter()
+  const [active, setActive] = useState(true)
   const { toast } = useToast()
-  const {data:supply} = useSWR(RoutesApi.SUPPLIES)
+  const {data:supply} = useSWR(`${RoutesApi.SUPPLIES}?status=${active}`)
   const form = useForm<z.infer<typeof fromSchema>>({
     resolver: zodResolver(fromSchema),
     defaultValues: {
       supply_id: '',
       name: '',
-      price: 0,
-      quantity_stock: 0,
+      price: 0.0,
+      quantity_stock: 0.0,
       unit_measure: ''
     }
   });
@@ -89,15 +90,21 @@ export default function HeadTable({location}: Props) {
   };
 
     const onSubmit = async (values: z.infer<typeof fromSchema>) => {
+      
+      
       if (values.unit_measure === 'Kilogramos') {
-        values.quantity_stock *= 1000; 
+        values.price = values.price/1000;
+        values.quantity_stock *= 1000;
       }
-    
+      if (values.unit_measure == 'Gramos'){
+        values.price = (values.price / 1000)
+      }
       await AddSupplyFetch(`${RoutesApi.SUPPLIES}/create_supply`, values);
       setOpen(false);
       toast({ variant: 'default', title: "Insumo creado correctamente", description: "Se ha creado correctamente el Insumo." });
       form.reset();
-      mutate(RoutesApi.SUPPLIES);
+      mutate(`${RoutesApi.SUPPLIES}?status=${active}`);
+      
     }
 
 
@@ -105,6 +112,7 @@ return (
   <div>
   <Dialog open={open} onOpenChange={setOpen}>
     <DialogTrigger asChild>
+    <Tooltip placement="top" title="Aquí puedes registrar un insumo." arrow>
     <Button variant={`${location === 'purchases' ? 'outline' : 'default'}`} size={`${location === 'purchases' ? 'icon' : 'default'}`} className={`${location === 'purchases' ? '' : 'w-full md:w-[180px]'}`}>
         {
         location === 'purchases' ? (
@@ -112,6 +120,7 @@ return (
         ): "Registrar Insumo"
         }
       </Button>
+      </Tooltip>
     </DialogTrigger>
     <DialogContent className="sm:min-w-[415px]">
       <DialogHeader>
@@ -141,7 +150,7 @@ return (
               <FormItem>
               <FormLabel>Precio </FormLabel>
               <FormControl>
-                <Input placeholder="Ingrese el precio" type="number" {...form.register("price", {valueAsNumber: true})} />
+                <Input placeholder="Ingrese el precio" type="number" step="any" {...form.register("price", {valueAsNumber: true})} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -154,7 +163,7 @@ return (
               <FormItem>
               <FormLabel>Cantidad en stock </FormLabel>
               <FormControl>
-              <Input placeholder="Ingrese la cantidad en stock" type="number" {...form.register("quantity_stock", {valueAsNumber: true})} />
+              <Input placeholder="Ingrese la cantidad en stock" type="number" step="any" {...form.register("quantity_stock", {valueAsNumber: true})} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -185,7 +194,7 @@ return (
         <DialogFooter>
         <div className=" mt-4 flex justify-between">
           <div>
-            <Button type="button" onClick={handleCancelar} className="mr-2 bg-red-500 hover:bg-red-600 text-white">
+            <Button type="button" onClick={handleCancelar} className="mr-6 bg-white-500 border border-2 border-black hover:bg-gray-100 text-black">
               Cancelar
             </Button>
           </div>

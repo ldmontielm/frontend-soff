@@ -7,6 +7,7 @@ import axios from "axios"
 import { saveInLocalStorage, clearLocalStorage, LocalStorageKeys, getInLocalStorage} from "@/utilities/local-storage-manage"
 import { RequestCookie, RequestCookies } from "next/dist/compiled/@edge-runtime/cookies"
 import {setCookie, getCookie, deleteCookie} from 'cookies-next'
+import { boolean } from "zod"
 
 
 interface Props {
@@ -19,10 +20,15 @@ interface AuthResponse {
 }
 
 export interface User {
+    id: string,
     name: string,
+    document_type: string,
+    document: string,
+    phone: string,
     email: string,
     status: boolean,
-    permissions: Array<string>
+    role: string,
+    permissions: []
 }
 
 const AuthContext = createContext({
@@ -30,9 +36,14 @@ const AuthContext = createContext({
     saveSession: (session: AuthResponse) => {},
     logout: () => {},
     user: {
+        id: "",
         name: "",
+        document_type: "",
+        document: "",
+        phone: "",
         email: "",
         status: true,
+        role: "",
         permissions: ['']
     },
     setUser: (user: User) => {},
@@ -61,9 +72,14 @@ export default function AuthContextProvider({children}:Props) {
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const [persist, setPersist] = useState(false);
     const [user, setUser] = useState<User>({
+        id: "",
         name: "",
+        document_type: "",
+        document: "",
+        phone: "",
         email: "",
         status: true,
+        role: "",   
         permissions: []
     })
 
@@ -71,9 +87,14 @@ export default function AuthContextProvider({children}:Props) {
     function logout(){
         setIsAuthenticated(false)
         setUser({
+            id: "",
             name: "",
+            document_type: "",
+            document: "",
+            phone: "",
             email: "",
             status: true,
+            role: "",   
             permissions: []
         })
         deleteCookie(LocalStorageKeys.REFRESH_TOKEN)

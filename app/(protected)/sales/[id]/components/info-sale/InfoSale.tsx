@@ -17,17 +17,13 @@ import useSWR from 'swr'
 import * as z from 'zod'
 import { InfoSaleHeader } from '..'
 import { getValidationErrors } from '@/utilities'
-
-
+import {FormClient} from '../form-client'
+import { getInLocalStorage, clearLocalStorage } from '@/utilities'
 
 
 const formSaleSchema = z.object({
   payment_method: z.enum(['transferencia', 'efectivo']),
   type_sale: z.enum(['pedido', 'fisico']),
-  name: z.string().optional(),
-  email: z.string().optional(),
-  direction: z.string().optional(),
-  phone: z.string().optional()
 })
 
 interface Props{
@@ -57,43 +53,40 @@ export default function InfoSale({id}:Props) {
   const {data: sale} = useSWR<Sale>(`${RoutesApi.SALES}/${id}`)
   const router = useRouter()
   const { toast } = useToast()
-  console.log(orders)
+  const client = getInLocalStorage('client')
 
   const formSale = useForm<z.infer<typeof formSaleSchema>>({
     resolver: zodResolver(formSaleSchema),
     defaultValues: {
       payment_method: 'efectivo',
-      type_sale: 'fisico',
-      name: '',
-      direction: '',
-      phone: '',
-      email: ''
+      type_sale: client !== null ? 'pedido' : 'fisico' ,
     }
   })
+
+  
 
   async function onSubmitSale(values: z.infer<typeof formSaleSchema>){
     const sale = {
       payment_method: values.payment_method,
       type_sale: values.type_sale,
       client: {
-        name: values.name,
-        direction: values.direction,
-        phone: values.phone,
-        email: values.email
+        name: client ? JSON.parse(client).name : "",
+        direction: client ? JSON.parse(client).direction : "",
+        phone: client ? JSON.parse(client).phone : "",
+        email: client ? JSON.parse(client).email : ""
       }
     }
 
     if(Array.isArray(orders) && orders.length <= 0) {
       toast({variant: 'destructive', title: getValidationErrors("SALE_NOT_CONTENT").title, description: getValidationErrors("SALE_NOT_CONTENT").message})
     }else {
-      if(values.type_sale === 'pedido' &&  (values.name === '' || values.direction === '' || values.email === '' || values.phone === '' )){
-        toast({variant: 'destructive', title: "Campos del cliente requeridos", description: "Todos los campos de cliente son necesarios para realizar el pedido."})
-      }else{
-    
+      if(formSale.getValues().type_sale === 'pedido' && client === null){
+        toast({variant: 'destructive', title: "Información del cliente necesaria", description: "La información del cliente para realizar pedidos es de suma importancia, por favor digite dicha información."})
+      }else {
         const res = await ConfirmSaleFetch(`${RoutesApi.SALES}/${id}/confirm-sale`, sale)
         toast({variant: 'default', title: "Venta confirmada correctamente", description: "Se ha confirmado con exito la venta, mira el historial en la sección de ventas."})
-        router.push('/sales') 
-      
+        clearLocalStorage()
+        router.push('/sales')
       }
     }
   }
@@ -111,10 +104,27 @@ export default function InfoSale({id}:Props) {
           </AlertDescription>
         </Alert>
       </div>
+      <div className='px-4'>
+        {
+          client !== null && formSale.getValues().type_sale === 'pedido' ?  (
+            <div className='p-2 border rounded text-sm'>
+              <p className='font-semibold'>{JSON.parse(client).name}</p>
+              <p>{JSON.parse(client).email}</p>
+            </div>
+          ) : ""
+        }
+        
+        {
+          formSale.getValues().type_sale !== 'pedido'  || client !== null ? "" : (
+            <FormClient />
+          )
+        }
+
+      </div>
       <Form {...formSale}>
         <form onSubmit={formSale.handleSubmit(onSubmitSale)} className='p-4 h-full flex flex-col justify-between'>
           <div>
-          <div className='mb-5'>
+          <div className='mb-5 space-y-2'>
           <FormField
             control={formSale.control}
             name="type_sale"
@@ -137,65 +147,6 @@ export default function InfoSale({id}:Props) {
               </FormItem>
             )}
           />
-          {
-            (formSale.getValues().type_sale === 'pedido'
-            ) ? ( 
-              <div>
-                <FormField 
-                  control={formSale.control}
-                  name='name'
-                  render ={({field}) => (
-                    <FormItem>
-                      <FormLabel>Nombre</FormLabel>
-                      <FormControl>
-                        <Input placeholder='nombre' {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField 
-                  control={formSale.control}
-                  name='email'
-                  render ={({field}) => (
-                    <FormItem>
-                      <FormLabel>Correo</FormLabel>
-                      <FormControl>
-                        <Input placeholder='correo' {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField 
-                  control={formSale.control}
-                  name='direction'
-                  render ={({field}) => (
-                    <FormItem>
-                      <FormLabel>Dirección</FormLabel>
-                      <FormControl>
-                        <Input placeholder='dirección' {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField 
-                  control={formSale.control}
-                  name='phone'
-                  render ={({field}) => (
-                    <FormItem>
-                      <FormLabel>Teléfono</FormLabel>
-                      <FormControl>
-                        <Input placeholder='dirección' {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            ) : <></>
-          }
           </div>
             <div className='my-3 w-full text-center'>
               <p className='font-bold text-4xl'>${convertToCOP(clculateTotal(orders !== undefined ? orders : [] ))}</p>
@@ -238,7 +189,8 @@ export default function InfoSale({id}:Props) {
       <div className='space-y-2 px-4 pb-4'>
         <Button className="w-full" variant='outline' onClick={async () => {
           const res = await CancelSaleFetch(`${RoutesApi.SALES}/${id}/cancel-sale`)
-          toast({variant: 'default', title: "Venta eliminada correctamente", description: "Se ha eliminado la venta con éxito."})
+          toast({variant: 'default', title: "Venta cancelada correctamente", description: "Se ha cancelado la venta con éxito."})
+          clearLocalStorage()
           router.push("/sales")
         }}>
           Cancelar venta

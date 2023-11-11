@@ -4,6 +4,7 @@ export interface Supply {
   price: number;
   quantity_stock: number;
   unit_measure: string;
+  total: number;
   status: boolean;
 }
 
@@ -27,5 +28,6 @@ export interface SupplyDelete{
   price: number;
   quantity_stock: number;
   unit_measure: string;
+  total: number;
   status: boolean;
 }

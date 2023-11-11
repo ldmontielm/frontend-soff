@@ -19,13 +19,8 @@ import { createSupply } from "../../services/supply.services"
 // import HeadTable from "@/app/users/components/head-table/HeadTable"
 import { HeadTable } from ".."
 import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
-import { Select,
-SelectContent,
-SelectGroup,
-SelectItem,
-SelectLabel,
-SelectTrigger,
-SelectValue } from "@/components/ui/select"
+import { Checkbox } from "@mui/material"
+import {Tooltip} from "@mui/material"
 
 import {
     ColumnDef,
@@ -51,14 +46,16 @@ import {
 import { number } from "zod"
 
 interface DataTableProps<TData, TValue>{
-    columns: ColumnDef<TData, TValue>[]
-    data: TData[]
-    isLoading: boolean
-    error: any
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  isLoading: boolean
+  error: any
+  setActive:React.Dispatch<React.SetStateAction<boolean>>,
+  consult: boolean
 }
 
-export function DataTable<TData, TValue>({columns, data, isLoading, error}: DataTableProps<TData, TValue>){
-    const [sorting, setSorting] = useState<SortingState>([])
+export function DataTable<TData, TValue>({columns, data,isLoading, error, setActive, consult}: DataTableProps<TData, TValue>){
+  const [sorting, setSorting] = useState<SortingState>([])
     const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
     const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
     
@@ -77,6 +74,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
           columnVisibility,
         },
       })
+
 
     return(
         <div>
@@ -97,42 +95,64 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                     <span>Columnas</span>
                 </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="start">
+            <DropdownMenuContent align="center">
                 {table
                 .getAllColumns()
                 .filter(
-                    (column) => column.getCanHide()
+                    (column) => typeof column.accessorFn !== "undefined" && column.getCanHide()
                 )
                 .map((column) => {
                     return (
-                    <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
-                        checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                        }>
-                        { 
+                    // <DropdownMenuCheckboxItem
+                    //     key={column.id}
+                    //     className="capitalize"
+                    //     checked={column.getIsVisible()}
+                    //     onCheckedChange={(value) =>
+                    //     column.toggleVisibility(!!value)
+                    //     }>
+                    //     { 
+                    //     column.id === 'name' ? 'Nombre' :
+                    //     column.id === 'price' ? 'Precio' :
+                    //     column.id === 'quantity_stock' ? 'Cantidad en stock' :
+                    //     column.id === 'unit_measure' ? 'Unidad de medida' :
+                    //     column.id === 'status' ? 'Estado' :
+                    //     column.id === 'actions' ? 'Acciones' :                        
+                    //     column.id
+                    // }
+                    // </DropdownMenuCheckboxItem>
+
+                    <div key={column.id} className="capitalize">
+                    <Checkbox
+                      checked={column.getIsVisible()}
+                      onChange={(event) => {
+                        column.toggleVisibility(event.target.checked);
+                      }}
+                      color="primary"
+                      />
+                      { 
                         column.id === 'name' ? 'Nombre' :
                         column.id === 'price' ? 'Precio' :
-                        column.id === 'quantity_stock' ? 'Cantidad en stock' :
+                        column.id === 'quantity_stock' ? 'Cantidad' :
                         column.id === 'unit_measure' ? 'Unidad de medida' :
                         column.id === 'status' ? 'Estado' :
                         column.id === 'actions' ? 'Acciones' :                        
                         column.id
                     }
-                    </DropdownMenuCheckboxItem>
+                  </div>
                     )
                 })}
             </DropdownMenuContent>
             </DropdownMenu>
-            {/* <Button variant='outline' className="flex items-center w-full md:w-fit gap-2">
-                <DocumentChartBarIcon className="w-4 h-4" />
-                <span>Reporte</span>
-            </Button> */}
-                    </div>
-            <HeadTable/>
-                </div>
+            
+          <Tooltip placement="top" title={`Click para ver los insumos ${consult === true ? "Inactivos" : "Activos"}`} arrow>
+          <Button variant="outline" className=" text-sm bg-white hover:bg-gray-100" 
+                  onClick={() => {setActive(!consult)
+                    }}>
+                      {consult === true ? "Inactivos" : "Activos"}</Button>
+        </Tooltip>
+          </div>
+              <HeadTable/>
+            </div>
 
             <div className="rounden-md border">
                 <Table>

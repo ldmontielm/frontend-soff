@@ -80,18 +80,6 @@ export default function DetailUpdateForm({detail, id_product}: Props) {
               </FormItem>
               )}
             />
-            <FormField 
-              control={form.control}
-              name="id_detail"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input id="id_detail" type="text" placeholder="0" {...field} className="col-span-3 hidden" value={detail.id} defaultValue={detail.id} />
-                  </FormControl>
-                  <FormMessage />
-              </FormItem>
-              )}
-            />
             <DialogFooter>
               <Button type="submit">Actualizar cambios</Button>
             </DialogFooter>

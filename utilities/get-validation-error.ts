@@ -70,7 +70,7 @@ export const getValidationErrors = (errorCode: string) => {
             message: "No se puede confirmar una compra con el número de factura vacio."
         },
         INVOICE_NUMBER_EXIST: {
-            title: "Número de Factura ya existe",
+            title: "Número de factura ya existe",
             message: "No se puede confirmar una compra con el número de factura repetido."
         },
 

@@ -1,16 +1,15 @@
 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { DataTable } from './DataTable'
 import { columns } from '..'
 import { RoutesApi } from '@/models/routes.models'
 import useSWR from 'swr'
 export default function TableComponent() {
-    const {data: supplies, isLoading,error} = useSWR(RoutesApi.SUPPLIES)
+    const [active, setActive] = useState(true)
+    const {data: supplies, isLoading,error} = useSWR(`${RoutesApi.SUPPLIES}?status=${active}`)
     return (
       <div>
-        {
-          <DataTable columns={columns}  data={supplies || []} isLoading={isLoading} error={error}/>
-        }
+        <DataTable consult={active} setActive={setActive} columns={columns}  data={supplies || []} isLoading={isLoading} error={error}/>
       </div>
   )
 }

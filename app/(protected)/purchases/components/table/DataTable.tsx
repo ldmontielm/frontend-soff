@@ -8,12 +8,10 @@ import { Report } from '../report'
 import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import {ColumnDef,flexRender,ColumnFiltersState,getFilteredRowModel,VisibilityState,getCoreRowModel,getPaginationRowModel,useReactTable,SortingState, getSortedRowModel} from "@tanstack/react-table"
 import {DropdownMenu,DropdownMenuCheckboxItem,DropdownMenuContent,DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
+import { Checkbox } from "@mui/material"
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+  Tooltip
+} from "@mui/material"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -23,7 +21,6 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({columns, data, isLoading, error}: DataTableProps<TData, TValue>){
-
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -57,26 +54,29 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
-                <AdjustmentsHorizontalIcon className='w-4 h-4' />
-                <span>Columnas</span>
-              </Button>
+            <Tooltip placement="top" title="Aqui podrás ocultar las columnas de la tabla." arrow>
+                <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
+                  <AdjustmentsHorizontalIcon className='w-4 h-4' />
+                  <span>Columnas</span>
+                </Button>
+              </Tooltip>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='start'>
             {table
                 .getAllColumns()
                 .filter(
-                  (column) => column.getCanHide()
+                  (column) =>  typeof column.accessorFn !== "undefined" && column.getCanHide()
                   )
                   .map((column) => {
                     return (
-                      <DropdownMenuCheckboxItem
-                        key={column.id}
-                        className="capitalize"
+                      <div  key={column.id} className="text-sm">
+                        <Checkbox
                         checked={column.getIsVisible()}
-                        onCheckedChange={(value) =>
-                          column.toggleVisibility(!!value)
-                        }>
+                        onChange={(event) =>{
+                          column.toggleVisibility(event.target.checked);
+                        }}
+                        color="default"
+                        />
                       {
                         column.id === 'invoice_number' ? 'Factura':
                         column.id === 'purchase_date' ? 'Fecha' :
@@ -86,12 +86,12 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                         column.id === 'actions' ? 'Operaciones' : column.id
 
                       }
-                    </DropdownMenuCheckboxItem>
+                    </div>
                   )
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Report/>
+          <Report data={data}/>
         </div> 
         <HeadTable />
       </div>
@@ -124,7 +124,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
             {
               data.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={columns.length} className='h-24 text-center' text-center>
+                  <TableCell colSpan={columns.length} className='h-24 text-center'>
                     No se encontraron resultados
                   </TableCell>
                 </TableRow>

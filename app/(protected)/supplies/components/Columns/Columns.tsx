@@ -1,32 +1,15 @@
 'use client'
 import {ColumnDef} from "@tanstack/react-table"
 import { Supply } from "../../models/supply.models"
-// import { convertToCOP } from "@/app/purchases/utils"
 import { convertToCOP } from "@/app/(protected)/purchases/utils"
 import { Badge } from "@/components/ui/badge"
 import SupplyUpdateForm from "../supply-update-form/SupplyUpdateForm" 
 import SupplyByIdDeleteForm from "../supply-delete-form/SupplyDeleteForm"
-// import SwitchDemo from "../switcht/SwichtDemo"
-import {
-  ColumnFiltersState,
-  SortingState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  useReactTable,
-  
-} from "@tanstack/react-table"
+import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
 
 import { ArrowUpDown} from "lucide-react"
 import DisableSupply from "../../disable-supply/DisableSupply"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import {Tooltip} from "@mui/material"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,11 +26,7 @@ import { useEffect } from 'react'
 import { RoutesApi } from '@/models/routes.models'
 import useSWR, { mutate} from 'swr'
 import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
-// import { getSupplies, urlSupply } from "../../services/supply.services"
 import { Column } from "jspdf-autotable"
-
-// const [menuOpen, setMenuOpen] = useState(false);
-
 
 export default function Statusnew(){
   const {data: supplies, isLoading, error} = useSWR(RoutesApi.SUPPLIES)
@@ -86,7 +65,7 @@ export const columns: ColumnDef<Supply>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Nombre
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
         </Button>
       )
     },
@@ -96,22 +75,27 @@ export const columns: ColumnDef<Supply>[] = [
   },
   {
     accessorKey: 'price',
-    header: ({ column }) => {
-      return (
-        <Button className="w-fit"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Precio
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      )
-    },
-    cell: ({row}) => {
-      const price: number = row.getValue('price'); // Especifica el tipo como número
-      const priceInCOP = convertToCOP(price); // Aplica la conversión
+  header: ({ column }) => {
+    return (
+      <Button className="w-fit"
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Precio
+        <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+      </Button>
+    );
+  },
+  cell: ({ row }) => {
+    const price: number = row.getValue('price'); // Suponiendo que 'price' es un número
 
-      return <div>{priceInCOP}</div>
+    // Limita el número a 2 decimales y aplica el formato de moneda
+    const formattedPrice = parseFloat(price.toFixed(2)).toLocaleString('es-ES', {
+      // style: 'currency',
+      // currency: '', // Cambia a tu moneda deseada
+    });
+
+    return <div>{formattedPrice}</div>;
     }
   },
   {
@@ -123,12 +107,15 @@ export const columns: ColumnDef<Supply>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Cantidad
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
         </Button>
-      )
+      );
     },
-    cell: ({row}) => {
-      return <div>{row.getValue('quantity_stock')}</div>
+    cell: ({ row }) => {
+      const quantity: number = row.getValue('quantity_stock');
+      // Limitar la cantidad de decimales a 2
+      const formattedQuantity = quantity.toFixed(0);
+      return <div>{formattedQuantity}</div>;
     }
   },
   {
@@ -140,7 +127,7 @@ export const columns: ColumnDef<Supply>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Unidad de medida
-          <ArrowUpDown className="ml-2 h-4 w-4" />
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
         </Button>
       );
     },
@@ -152,16 +139,39 @@ export const columns: ColumnDef<Supply>[] = [
     }
   },
   {
+    accessorKey: 'total',
+  header: ({ column }) => {
+    return (
+      <Button className="w-fit"
+        variant="ghost"
+        onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+      >
+        Total
+        <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+      </Button>
+    );
+  },
+  cell: ({ row }) => {
+    const total: number = row.getValue('total'); // Suponiendo que 'total' es un número
+
+    // Limita el número a 2 decimales y aplica el formato de moneda
+    const formattedTotal = parseFloat(total.toFixed(2)).toLocaleString('es-ES', {
+      style: 'currency',
+      currency: 'COP', // Cambia a tu moneda deseada
+    });
+
+    return <div className="font-medium">{formattedTotal}</div>;
+    }
+  },
+  
+  {
     accessorKey: "status",
     header: ({ column }) => {
       return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <div 
+        className="ml-4">
           Estado
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
+        </div>
       )
     },
 
@@ -182,18 +192,11 @@ export const columns: ColumnDef<Supply>[] = [
                 <>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                        {/* <TooltipProvider>
-                        <Tooltip>
-                        <TooltipTrigger asChild> */}
+                        <Tooltip placement="top" title="Acciones para el insumo." arrow>
                         <Button variant='ghost' size='icon' className="ml-2">
                             <MoreHorizontal className="h-4 w-4 " />
                         </Button>
-                        {/* </TooltipTrigger>
-                            <TooltipContent className="bg-gray-500">
-                            <p className="text-xs font-semibold">Aquí encuentras acciones adicionales relacionadas con cada producto.</p>
-                            </TooltipContent>
                         </Tooltip>
-                        </TooltipProvider> */}
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="flex flex-col items-start">
                         <DropdownMenuLabel >Acciones</DropdownMenuLabel>
@@ -211,18 +214,9 @@ export const columns: ColumnDef<Supply>[] = [
                 <>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                        {/* <TooltipProvider>
-                        <Tooltip>
-                        <TooltipTrigger asChild> */}
                         <Button variant='ghost' size='icon' className="ml-2">
                             <MoreHorizontal className="h-4 w-4" />
                         </Button>
-                        {/* </TooltipTrigger>
-                            <TooltipContent className="bg-gray-500 w-2 h-2">
-                            <p className="text-xs font-semibold">Aquí encuentras acciones adicionales relacionadas con cada producto.</p>
-                            </TooltipContent>
-                        </Tooltip>
-                        </TooltipProvider> */}
                         </DropdownMenuTrigger>
                         <DropdownMenuContent align="end" className="flex flex-col">
                         <DropdownMenuLabel>Sin acciones</DropdownMenuLabel>
