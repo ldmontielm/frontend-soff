@@ -13,15 +13,31 @@ interface Props {
 const fetcher = (url: string) => axios.get(url).then(res => res.data)
 
 export async function fetcherPost<TData>(url: string, arg?:TData, options?: AxiosRequestConfig){
-  return axios.post(url, arg, options).then(res => res.data)
+  return axios.post(url, arg, {
+    headers: {
+      "Access-Control-Allow-Headers" : "Content-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE,PATCH"
+  }
+  }).then(res => res.data)
 }
 
 export async function fetcherPut<TData>(url: string, arg:TData, options?: AxiosRequestConfig){
-  return axios.put(url, arg, options)
+  return axios.put(url, arg, {
+    headers: {
+      "Access-Control-Allow-Headers" : "Content-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE,PATCH"
+  }})
 }
 
 export async function fetcherDelete(url: string){
-  return axios.delete(url)
+  return axios.delete(url, {
+    headers: {
+      "Access-Control-Allow-Headers" : "Content-Type",
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE,PATCH"
+  }})
 }
 
 export default function SwrContextProvider({children}: Props) {
