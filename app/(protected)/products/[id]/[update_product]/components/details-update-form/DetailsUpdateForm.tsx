@@ -15,7 +15,10 @@ import { RoutesApi } from '@/models/routes.models'
 import useSWR,  {mutate} from 'swr'
 
 const formSchema = z.object({
-  amount_supply: z.number({invalid_type_error: "Debes ingresar un número, no un texto", required_error: "El campo es requerido"}).min(1, {message: "El valor de la cantidad debe ser diferente de 0"}),
+  amount_supply: z.number({ required_error: "El campo es requerido", 
+  invalid_type_error: "Se espera un número"}).
+  min(1, {message: "El valor de la cantidad debe ser diferente de 0"}).
+  max(999999, {message: "La cantidad es demasiado larga"}),
   id_detail:z.string().optional(),
 })
 
@@ -70,23 +73,11 @@ export default function DetailUpdateForm({detail, id_product}: Props) {
                 <FormItem>
                   <FormLabel>Cantidad</FormLabel>
                   <FormControl>
-                    <Input id="amount_supplies" type="number" defaultValue={detail.amount_supply} className="col-span-3" {...form.register("amount_supply", {valueAsNumber: true})} onChange={field.onChange} placeholder={detail.amount_supply.toString()}/>
+                    <Input defaultValue={detail.amount_supply} className="col-span-3" {...form.register("amount_supply", {valueAsNumber: true})}/>
                   </FormControl>
                   <FormDescription>
                     Digite la cantidad del insumo.
                   </FormDescription>
-                  <FormMessage />
-              </FormItem>
-              )}
-            />
-            <FormField 
-              control={form.control}
-              name="id_detail"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input id="amount_supply" type="number" placeholder="0" {...field} className="col-span-3 hidden" value={detail.id} defaultValue={detail.id} />
-                  </FormControl>
                   <FormMessage />
               </FormItem>
               )}

@@ -70,7 +70,7 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
     values.id_provider = provider.id
     const data = await UpdateProviderFetch(`${RoutesApi.PROVIDERS}/update_provider/${id_provider}`, values )
     toast({variant: 'default', title: "Proveedor actualizado correctamente", description: "Se ha actualizado correctamente el proveedor."})
-    mutate(RoutesApi.PROVIDERS)
+    mutate(`${RoutesApi.PROVIDERS}?status=${true}`)
     form.reset()
     setOpen(false)
   }
@@ -226,10 +226,10 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
               )}
             />
             
-            <div className=" mt-4 flex justify-between">
               <DialogFooter>
+            <div className=" mt-4 flex justify-between">
                 <div>
-                  <Button type="button" onClick={handleCancelar} className="mr-2 bg-red-500 hover:bg-red-600 text-white">
+                  <Button type="button" onClick={handleCancelar} className="mr-6 bg-white-500 border border-2 border-black hover:bg-gray-100 text-black">
                     Cancelar
                   </Button>
                 </div>
@@ -238,8 +238,8 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
                     Actualizar cambios
                   </Button>
                 </div>
-              </DialogFooter>
           </div>
+              </DialogFooter>
           </form>
         </Form>
       </DialogContent>

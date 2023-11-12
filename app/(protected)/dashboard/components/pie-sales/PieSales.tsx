@@ -35,6 +35,7 @@ export const options = {
   },
 };
 
+
 export default function PieSales() {
   return <Line className="w-full" options={options} data={data}/>
 }

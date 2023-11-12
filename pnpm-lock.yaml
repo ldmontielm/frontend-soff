@@ -86,6 +86,9 @@ dependencies:
   '@tanstack/react-table':
     specifier: ^8.9.3
     version: 8.9.7(react-dom@18.2.0)(react@18.2.0)
+  '@types/next-auth':
+    specifier: ^3.15.0
+    version: 3.15.0(next@14.0.1-canary.1)(react-dom@18.2.0)(react@18.2.0)
   '@types/node':
     specifier: 20.4.6
     version: 20.4.6
@@ -131,15 +134,6 @@ dependencies:
   eslint-config-next:
     specifier: 13.4.12
     version: 13.4.12(eslint@8.46.0)(typescript@5.1.6)
-  exceljs:
-    specifier: ^4.4.0
-    version: 4.4.0
-  faker:
-    specifier: ^6.6.6
-    version: 6.6.6
-  file-saver:
-    specifier: ^2.0.5
-    version: 2.0.5
   framer-motion:
     specifier: ^10.16.4
     version: 10.16.4(react-dom@18.2.0)(react@18.2.0)
@@ -2366,6 +2360,18 @@ packages:
     resolution: {integrity: sha512-dRLjCWHYg4oaA77cxO64oO+7JwCwnIzkZPdrrC71jQmQtlhM556pwKo5bUzqvZndkVbeFLIIi+9TC40JNF5hNQ==}
     dev: false
 
+  /@types/next-auth@3.15.0(next@14.0.1-canary.1)(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-ZVfejlu81YiIRX1m0iKAfvZ3nK7K9EyZWhNARNKsFop8kNAgEvMnlKpTpwN59xkK2OhyWLagPuiDAVBYSO9jSA==}
+    deprecated: This is a stub types definition. next-auth provides its own type definitions, so you do not need this installed.
+    dependencies:
+      next-auth: 4.24.4(next@14.0.1-canary.1)(react-dom@18.2.0)(react@18.2.0)
+    transitivePeerDependencies:
+      - next
+      - nodemailer
+      - react
+      - react-dom
+    dev: false
+
   /@types/node@14.18.63:
     resolution: {integrity: sha512-fAtCfv4jJg+ExtXhvCkCqUKZ+4ok/JQk01qDKhL5BDDoS3AxKXhV5/MAVUZyQnSEd2GT92fkgZl0pz0Q0AzcIQ==}
     dev: false
@@ -2956,7 +2962,7 @@ packages:
     dependencies:
       '@babel/runtime': 7.22.15
       '@types/raf': 3.4.1
-      core-js: 3.33.0
+      core-js: 3.33.2
       raf: 3.4.1
       regenerator-runtime: 0.13.11
       rgbcolor: 1.0.1
@@ -3137,8 +3143,8 @@ packages:
       cookie: 0.4.2
     dev: false
 
-  /core-js@3.33.0:
-    resolution: {integrity: sha512-HoZr92+ZjFEKar5HS6MC776gYslNOKHt75mEBKWKnPeFDpZ6nH5OeF3S6HFT1mUAUZKrzkez05VboaX8myjSuw==}
+  /core-js@3.33.2:
+    resolution: {integrity: sha512-XeBzWI6QL3nJQiHmdzbAOiMYqjrb7hwU7A39Qhvd/POSa/t9E1AeZyEZx3fNvp/vtM8zXwhoL0FsiS0hD0pruQ==}
     requiresBuild: true
     dev: false
     optional: true
@@ -3996,10 +4002,6 @@ packages:
       '@emotion/is-prop-valid': 0.8.8
     dev: false
 
-  /fs-constants@1.0.0:
-    resolution: {integrity: sha512-y6OAwoSIf7FyjMIv94u+b5rdheZEjzR63GTyZJm5qh4Bi+2YgwLCcI/fPFZkL5PSixOt6ZNKm+w+Hfp/Bciwow==}
-    dev: false
-
   /fs.realpath@1.0.0:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
     dev: false
@@ -4577,7 +4579,7 @@ packages:
       fflate: 0.4.8
     optionalDependencies:
       canvg: 3.0.10
-      core-js: 3.33.0
+      core-js: 3.33.2
       dompurify: 2.4.7
       html2canvas: 1.4.1
     dev: false

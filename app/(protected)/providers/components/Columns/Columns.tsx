@@ -25,12 +25,13 @@ import { useEffect } from 'react'
 import { RoutesApi } from '@/models/routes.models'
 import useSWR, { mutate} from 'swr'
 import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import {Tooltip} from "@mui/material"
+// import {
+//   Tooltip,
+//   TooltipContent,
+//   TooltipProvider,
+//   TooltipTrigger,
+// } from "@/components/ui/tooltip"
 
 
 
@@ -190,14 +191,10 @@ export const columns: ColumnDef<Provider>[] = [
     accessorKey: "status",
     header: ({ column }) => {
       return (
-        <Button
-        className="w-fit"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
+        <div 
+        className="ml-3">
           Estado
-          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
-        </Button>
+        </div>
       )
     },
     cell: ({row}) => {
@@ -215,11 +212,14 @@ export const columns: ColumnDef<Provider>[] = [
                   {
           row.getValue("status") ? (
               <>
+
                   <DropdownMenu>
                       <DropdownMenuTrigger asChild>
+                      <Tooltip placement="top" title="Acciones para el proveedor" arrow>
                       <Button variant='ghost' size='icon' className="ml-2">
                           <MoreHorizontal className="h-4 w-4 " />
                       </Button>
+                      </Tooltip>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="flex flex-col items-start">
                       <DropdownMenuLabel >Acciones</DropdownMenuLabel>

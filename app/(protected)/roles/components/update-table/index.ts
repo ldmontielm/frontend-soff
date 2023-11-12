@@ -1,1 +1,1 @@
-export * from './UpdateTable';
+export { default as UpdateTable } from './UpdateTable';

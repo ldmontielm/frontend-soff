@@ -14,11 +14,10 @@ import { Input } from '@/components/ui/input'
 import { DetailsRecipe, Product, ProductConfim } from '../../../models/product.models'
 import { useToast } from "@/components/ui/use-toast"
 
-
 const formProductSchema = z.object({
-  name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Producto'}),
-  sale_price: z.number({invalid_type_error: "Debes ingresar un número, no un texto", required_error: "El campo es requerido"}).min(1, {message: "El valor del precio debe ser diferente de 0"})
-})
+  name: z.string({required_error: "El campo es requerido"}).min(3, {message: "Ingrese mínimo 3 caracteres"}).max(50, {message: 'El nombre es demasiado largo'}),
+  sale_price: z.number({required_error: "El campo es requerido", invalid_type_error: "Se espera un número"}).min(3, {message: "Ingrese mínimo 3 caracteres"}).max(99999999999, {message: 'El precio es demasiado largo'})
+});
 
 interface Props{
   id: string
@@ -44,7 +43,7 @@ const CancelProductFetch = async (url: string) => {
 
 export default function InfoProduct({id}:Props) {
   const {data:details} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
-  const {data: product} = useSWR<Product>(`${RoutesApi.PRODUCTS}/${id}`)
+  // const {data: product} = useSWR<Product>(`${RoutesApi.PRODUCTS}/${id}`)
   const router = useRouter()
   const { toast } = useToast()
 
@@ -61,14 +60,9 @@ export default function InfoProduct({id}:Props) {
         name: values.name,
         sale_price: values.sale_price
       }
-
-      if(values.name === '' || values.sale_price === 0){
-        toast({variant: 'destructive', title: "Campos del producto requeridos", description: "Todos los campos del producto son necesarios para crear el producto."})
-      }else{
         const res = await ConfirmProductFetch(`${RoutesApi.PRODUCTS}/${id}/confirm_product`, product)
         toast({variant: 'default', title: "Registro guardado correctamente", description: "Se ha guardado con exito el producto, mira el historial en la sección de productos."})
         router.push('/products')
-      }
     }
 
   return (
@@ -91,7 +85,7 @@ export default function InfoProduct({id}:Props) {
                     <FormItem>
                       <FormLabel>Nombre</FormLabel>
                       <FormControl >
-                         <Input placeholder='Nombre'{...field} />
+                         <Input placeholder=''{...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -104,7 +98,7 @@ export default function InfoProduct({id}:Props) {
                     <FormItem>
                       <FormLabel>Precio</FormLabel>
                       <FormControl>
-                        <Input type='number' placeholder='Precio'{...formProduct.register("sale_price", {valueAsNumber: true})}/>
+                        <Input type='number' placeholder=''{...formProduct.register("sale_price", {valueAsNumber: true})}/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

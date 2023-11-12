@@ -20,10 +20,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { useToast } from "@/components/ui/use-toast"
-import { ToastAction } from "@/components/ui/toast"
 
 const formSchema = z.object({
-  amount_supplies: z.string().transform((val) => parseInt(val)),
+  amount_supplies: z.number({invalid_type_error: "Debes ingresar un número, no un texto", required_error: "El campo es requerido"}).min(1, {message: "El valor de la cantidad debe ser diferente de 0"}),
   id_order:z.string().optional(),
 })
 
@@ -39,7 +38,6 @@ const UpdateAmountOrderFetch = async (url: string) => {
 export default function OrderUpdateForm({order, id_purchase}: Props) {
   const [open, setOpen] = useState(false)
   const {data} = useSWR(`${RoutesApi.PURCHASES}/${id_purchase}/orders`)
-  const { toast } = useToast()
   
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,7 +53,6 @@ export default function OrderUpdateForm({order, id_purchase}: Props) {
     mutate(`${RoutesApi.PURCHASES}/${id_purchase}/orders`)
     setOpen(false)
   }
-
 
 
   return (
@@ -90,7 +87,7 @@ export default function OrderUpdateForm({order, id_purchase}: Props) {
                 <FormItem>
                   <FormLabel>Cantidad</FormLabel>
                   <FormControl>
-                    <Input id="amount_supplies" type="number" {...field} className="col-span-3" />
+                    <Input id="amount_supplies" type="number" {...form.register("amount_supplies", {valueAsNumber: true})} className="col-span-3" onChange={field.onChange} defaultValue={order.amount_supplies} placeholder={order.amount_supplies.toString()} />
                   </FormControl>
                   <FormDescription>
                     Digite la cantidad del insumo.
@@ -105,7 +102,7 @@ export default function OrderUpdateForm({order, id_purchase}: Props) {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Input id="amount_supplies" type="number" {...field} className="col-span-3 hidden" value={order.id_order} defaultValue={order.id_order} />
+                    <Input id="amount_supplies" type="text"  {...field} className="col-span-3 hidden" value={order.id_order} defaultValue={order.id_order} />
                   </FormControl>
                   <FormMessage />
               </FormItem>
