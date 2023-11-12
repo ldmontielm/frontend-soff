@@ -1,19 +1,7 @@
 'use client'
-import React from 'react';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Filler,
-  Legend,
-} from 'chart.js';
+import { Chart as ChartJS, LinearScale,PointElement,ArcElement, Tooltip, Legend, LineElement, Title, CategoryScale } from "chart.js";
 import { Line } from 'react-chartjs-2';
-import { faker } from '@faker-js/faker';
-
+import {months} from '@/lib/chart-utils'
 
 ChartJS.register(
   CategoryScale,
@@ -22,41 +10,31 @@ ChartJS.register(
   LineElement,
   Title,
   Tooltip,
-  Filler
+  Legend
 );
+
+const labels = months({count: 7});
+
+const data = {
+  labels: labels,
+  datasets: [{
+    label: 'Ventas',
+    data: [65, 59, 80, 81, 56, 55, 40],
+    fill: false,
+    borderColor: '#6d28d9',
+    tension: 0.1
+  }]
+};
 
 export const options = {
   responsive: true,
   plugins: {
     legend: {
-        position: 'top' as const,
-        pointStyleWidth: 9,
-    },
-    title: {
-      display: true,
-      text: 'Chart.js Line Chart',
+      position: 'top' as const,
     },
   },
 };
 
-const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-
-export const data = {
-  labels,
-  datasets: [
-    {
-      fill: true,
-      label: 'Dataset 2',
-      data: labels.map(() => faker.datatype.number({ min: 0, max: 1000 })),
-      borderColor: 'rgb(53, 162, 235)',
-      backgroundColor: 'rgba(53, 162, 235, 0.5)',
-    },
-  ],
-};
-
-
 export default function PieSales() {
-  return <div>
-     <Line options={options} data={data} />
-  </div>;
+  return <Line className="w-full" options={options} data={data}/>
 }
