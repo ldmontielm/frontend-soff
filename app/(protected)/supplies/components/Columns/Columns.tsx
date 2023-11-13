@@ -4,7 +4,7 @@ import { Supply } from "../../models/supply.models"
 import { convertToCOP } from "@/app/(protected)/purchases/utils"
 import { Badge } from "@/components/ui/badge"
 import SupplyUpdateForm from "../supply-update-form/SupplyUpdateForm" 
-import SupplyByIdDeleteForm from "../supply-delete-form/SupplyDeleteForm"
+import SupplyDeleteForm from "../supply-delete-form/SupplyDeleteForm"
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
 
 import { ArrowUpDown} from "lucide-react"
@@ -204,7 +204,7 @@ export const columns: ColumnDef<Supply>[] = [
                         <SupplyUpdateForm supply={supply} id_supply={supply.id} />
                           
   
-                        <SupplyByIdDeleteForm supply={supply} id_supply={supply.id}/>
+                        <SupplyDeleteForm supply={supply} id_supply={supply.id}/>
                         {/* <DisableProduct id={product.id} product={product}/> */}
                         </DropdownMenuContent>
                     </DropdownMenu>

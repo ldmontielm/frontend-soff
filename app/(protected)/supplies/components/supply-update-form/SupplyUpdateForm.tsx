@@ -28,8 +28,8 @@ import { useToast } from "@/components/ui/use-toast"
 
 
 
-const UpdateSupplyFetch = async (url: string, body: SupplyUpdate) => {
-  return await fetcherPut<SupplyUpdate>(url, body)
+const UpdateSupplyFetch = async (url: string, body: SupplyCreate) => {
+  return await fetcherPut<SupplyCreate>(url, body)
 }
 
 const formSchema = z.object({
@@ -81,10 +81,10 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
 
     values.id_supply = supply.id
     await UpdateSupplyFetch(`${RoutesApi.SUPPLIES}/update_supply/${id_supply}`, values)
-    setOpen(false)
     toast({variant: 'default', title: "Insumo actualizado correctamente", description: "Se ha actualizado correctamente el Insumo."})
+    mutate(`${RoutesApi.SUPPLIES}?status=${true}`);
     form.reset()
-    mutate(`${RoutesApi.SUPPLIES}?status=${active}`);
+    setOpen(false)
   }
 
   const handleCancelar = () => {
