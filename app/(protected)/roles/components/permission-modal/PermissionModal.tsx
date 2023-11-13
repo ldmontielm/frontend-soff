@@ -23,7 +23,7 @@ interface Props {
 
 export default function PermissionModal({ id_role, role }: Props) {
   const [open, setOpen]= useState(false)
-    const { data: permissionsroles, isValidating, error } = useSWR(`${RoutesApi.ROLES}/${id_role}/permissionrole-get`); 
+    const { data: permissionsroles, isValidating, error } = useSWR(`${RoutesApi.ROLES}/permissionrole_get/${id_role}`); 
     if (error) {
       return <p>ERROR</p>;
     }

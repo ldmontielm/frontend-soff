@@ -40,10 +40,10 @@ interface Props{
 
 
 export default function  UpdateTable({id_role,role}:Props) {
-    const { data: permissionsroles} = useSWR(`${RoutesApi.ROLES}/${id_role}/permissionrole-get`); 
+    const { data: permissionsroles} = useSWR(`${RoutesApi.ROLES}/permissionrole_get/${id_role}`); 
     const [formStep, setFormStep] = React.useState(0)
     const [assingPermissions, setAssingPermission] = useState<any[]>([])
-    const {data:Permissions}= useSWR(`${RoutesApi.PERMISSIONS}/get-permision`)
+    const {data:Permissions}= useSWR(`${RoutesApi.PERMISSIONS}/`)
     const {toast} = useToast()
     const [open, setOpen] = useState(false)
     const [rolename, setRolname] = useState("")
@@ -62,7 +62,7 @@ export default function  UpdateTable({id_role,role}:Props) {
         toast({variant: "default", title: "Rol Editado",
         description:"Se ha Editado el rol con exito"})
         setOpen(false)
-        mutate(`${RoutesApi.ROLES}/get-role?status=${Active}`)
+        mutate(`${RoutesApi.ROLES}?status=${Active}`)
 }
 
 
@@ -166,7 +166,7 @@ export default function  UpdateTable({id_role,role}:Props) {
                     }
                     >
                     
-                        Registrar
+                        Editar
                 </Button>
 
                 <Button className={
