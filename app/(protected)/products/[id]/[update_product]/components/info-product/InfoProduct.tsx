@@ -46,6 +46,7 @@ export default function InfoProduct({id}:Props) {
   
   const formProduct = useForm<z.infer<typeof formProductSchema>>({
     resolver: zodResolver(formProductSchema)
+    
   })
   
   useEffect(()=>{
@@ -55,7 +56,7 @@ export default function InfoProduct({id}:Props) {
       sale_price: product?.sale_price
     }
     formProduct.reset(values)
-  },[product])
+  },[product, formProduct])
   
   // if (error) return <div>Failed to load</div>
   // if (!product) return <div>Loading...</div>
