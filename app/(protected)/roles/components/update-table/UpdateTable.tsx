@@ -65,13 +65,6 @@ export default function  UpdateTable({id_role,role}:Props) {
         mutate(`${RoutesApi.ROLES}/get-role?status=${Active}`)
 }
 
-useEffect(()=>{
-    if(Permissions){
-
-    }
-
-},[permissionsroles])
-
 
     return (
         <Dialog  open={open} onOpenChange={setOpen}>

@@ -8,7 +8,8 @@ import { useParams } from 'next/navigation'
 import { useForm } from "react-hook-form"
 import useSWR, { mutate} from 'swr'
 import * as z from 'zod'
-import { OrderCreate } from "@/app/(protected)/roles/sales/models/sale.models"
+// import { OrderCreate } from "@/app/(protected)/roles/sales/models/sale.models"
+import { OrderCreate } from "../../../models/sale.models"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem } from "@/components/ui/command"

@@ -46,7 +46,6 @@ export default function InfoProduct({id}:Props) {
   
   const formProduct = useForm<z.infer<typeof formProductSchema>>({
     resolver: zodResolver(formProductSchema)
-    ,
   })
   
   useEffect(()=>{

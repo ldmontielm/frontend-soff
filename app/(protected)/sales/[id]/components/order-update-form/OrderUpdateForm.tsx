@@ -1,6 +1,7 @@
 'use client'
 
-import { Order } from '@/app/(protected)/roles/sales/models/sale.models'
+// import { Order } from '@/app/(protected)/roles/sales/models/sale.models'
+import { Order } from '../../../models/sale.models'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
