@@ -11,7 +11,7 @@ import { useState } from "react";
 export default  function DemoPage() {
 
   const [active, setActive] = useState(true)
-  const { data: users } = useSWR(`${RoutesApi.USERS}/get-users/?status=${active}`);
+  const { data: users } = useSWR(`${RoutesApi.USERS}/?status=${active}`);
   return (
     <div className="container mx-auto py-10"> 
       <HeaderModule/>

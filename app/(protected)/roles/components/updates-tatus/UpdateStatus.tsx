@@ -28,7 +28,7 @@ export default function UpdateStatus({id_role, role}:Props) {
     async function onSubmit(id_role:string, role:Role){
         
         if(role.name !== "Administrador" && role.name !== "Base" ){
-            const res = await UpdateStatusFetcher(`${RoutesApi.ROLES}/${id_role}/status-update-role`, role)
+            const res = await UpdateStatusFetcher(`${RoutesApi.ROLES}/status-update-role/${id_role}`, role)
             mutate(`${RoutesApi.ROLES}/get-role?status=${role.status ? active : !active}`)
         }else{
             toast({
