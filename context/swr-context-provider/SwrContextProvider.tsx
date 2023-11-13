@@ -10,7 +10,12 @@ interface Props {
   children: React.ReactNode
 }
 // El "fetcher" es una función que devuelve una Promise que recupera los datos
-const fetcher = (url: string) => axios.get(url).then(res => res.data)
+const fetcher = (url: string) => axios.get(url, {
+  headers: {
+    "Access-Control-Allow-Headers" : "Content-Type",
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE,PATCH"
+}}).then(res => res.data)
 
 export async function fetcherPost<TData>(url: string, arg?:TData, options?: AxiosRequestConfig){
   return axios.post(url, arg, {
@@ -27,7 +32,7 @@ export async function fetcherPut<TData>(url: string, arg:TData, options?: AxiosR
     headers: {
       "Access-Control-Allow-Headers" : "Content-Type",
       "Access-Control-Allow-Origin": "*",
-      "Access-Control-Allow-Methods": "OPTIONS,POST,GET,PUT,DELETE,PATCH"
+      "Access-Control-Allow-Methods": "OPTIONS,PUT"
   }})
 }
 
