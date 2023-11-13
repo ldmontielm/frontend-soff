@@ -52,6 +52,7 @@
     "date-fns": "^2.30.0",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
+    "file-saver": "^2.0.5",
     "framer-motion": "^10.16.4",
     "heroicons": "^2.0.18",
     "html2pdf.js": "^0.10.1",

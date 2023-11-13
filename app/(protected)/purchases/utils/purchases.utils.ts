@@ -1,7 +1,7 @@
 import { utils, write } from 'xlsx'
 import { Purchase } from '../models/purchase.models'
 import {saveAs} from 'file-saver'
-import { format } from 'date-fns';
+import { format } from 'date-fns'
 
 
 export const convertToCOP = (money: number | 0) => {

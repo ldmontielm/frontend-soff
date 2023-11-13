@@ -45,7 +45,7 @@ interface Props {
   id_supply: string
 }
 
-export default function ProviderDeleteForm({ supply, id_supply }: Props) {
+export default function SupplyDeleteForm({ supply, id_supply }: Props) {
   const {data} = useSWR(`${RoutesApi.SUPPLIES}/${id_supply}`)
   const { toast } = useToast()
 
