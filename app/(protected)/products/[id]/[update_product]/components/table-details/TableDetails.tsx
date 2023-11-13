@@ -1,7 +1,7 @@
 'use client'
 
 import { RoutesApi } from "@/models/routes.models"
-import { convertToCOP } from "@/app/(protected)/roles/sales/utils"
+import { convertToCOP } from "@/app/(protected)/products/utils"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import useSWR from 'swr'
 import { HeadTable } from ".."
