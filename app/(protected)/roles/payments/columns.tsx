@@ -45,7 +45,7 @@ export const columns: ColumnDef<Role>[] = [
     cell: ({ row }) => {
       const role = row.original
       return (
-      <UpdateStatus role={role}/>
+      <UpdateStatus id_role={role.id} role={role}/>
       )
     }
   },
