@@ -1,6 +1,5 @@
 import { HeaderModule } from "@/components/page-components"
-import { ContentTargets, BarSales, PieSales} from "./components"
-import { PieChart } from "./components/pie-charts"
+import { ContentTargets, BarSales, PieSales } from "./components"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/utilities/authOptions"
 import { redirect } from "next/navigation"
@@ -22,7 +21,7 @@ export default function page() {
               <PieSales />
             </div>
             <div className="col-span-6">
-              <PieChart />
+              <PieSales />
             </div>
           </div>
         </main>
