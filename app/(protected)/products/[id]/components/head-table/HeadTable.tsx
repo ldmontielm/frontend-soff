@@ -51,7 +51,6 @@ interface Props {
 export default function HeadTable({id}:Props) {
 
   const {data:supplies} = useSWR(RoutesApi.SUPPLIES)
-  const {data} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
   const [open, setOpen] = useState(false)
   
   const form = useForm<z.infer<typeof formSchema>>({
@@ -63,7 +62,7 @@ export default function HeadTable({id}:Props) {
     }
   })
 
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+  async function onSubmit(values: z.infer<typeof formSchema>){
     values.product_id = id
     const data = await AddDetailFetch(`${RoutesApi.PRODUCTS}/${id}/add_detail`, values)
     mutate(`${RoutesApi.PRODUCTS}/${id}/details`)
@@ -79,10 +78,10 @@ export default function HeadTable({id}:Props) {
             render = {({field}) => (
             <FormItem className="w-full md:w-[230px]">
               <FormLabel>Insumo</FormLabel>
-              <FormControl>
               <div className="w-full flex items-center justify-content">
                 <Popover open={open} onOpenChange={setOpen}>
                   <PopoverTrigger asChild>
+                    <FormControl>
                       <Button
                         variant="outline"
                         role="combobox"
@@ -96,6 +95,7 @@ export default function HeadTable({id}:Props) {
                           : "Seleccione insumo"}
                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                       </Button>
+                    </FormControl>
                     </PopoverTrigger>
                     <PopoverContent className="w-[200px] p-0">
                       <Command>
@@ -110,7 +110,6 @@ export default function HeadTable({id}:Props) {
                                 onSelect={() => {
                                   form.setValue("supply_id", supply.id)
                                   setOpen(!open)
-                                  form.register("supply_id")
                                 }}
                                 >
                                 <Check
@@ -129,7 +128,6 @@ export default function HeadTable({id}:Props) {
                   </Popover>
                   <HeadTableSupply location='purchases'/>
                   </div>
-                  </FormControl>
                 <FormMessage />
               </FormItem>
             )}
