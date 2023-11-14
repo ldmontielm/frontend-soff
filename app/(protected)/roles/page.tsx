@@ -9,7 +9,7 @@ import { useState } from "react";
 export default  function DemoPage() {
   const [active, setActive] = useState(true)
 
-  const { data:roles} = useSWR(`${RoutesApi.ROLES}/?status=${active}`)
+  const { data:roles} = useSWR(`${RoutesApi.ROLES}?status=${active}`)
 
     
   return (

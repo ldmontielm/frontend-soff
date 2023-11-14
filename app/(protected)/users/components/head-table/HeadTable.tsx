@@ -84,7 +84,7 @@ export default function HeadTable() {
 }
 
   const onSubmit = async(values: z.infer<typeof formSchema>)=>{
-    const res = await CreateUserFetch(`${RoutesApi.USERS}/create_user`,values)
+    const res = await CreateUserFetch(`${RoutesApi.USERS}`,values)
     setFormStep(1)
     toast({variant: "default", title: "Usuario Registrado",
     description:"Se ha registrado el usuario con exito"})
