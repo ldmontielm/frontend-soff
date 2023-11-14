@@ -1,1 +1,1 @@
-export * from './HeadTable';
+export { default as HeadTable } from './HeadTable';

@@ -62,7 +62,7 @@ const formSchema = z.object({
 export default function HeadTable() {
   const [formStep, setFormStep] = React.useState(0)
   const [active, setActive] = useState(true)
-  const {data: role} = useSWR(`${RoutesApi.ROLES}/get-role/?status=${true}`)
+  const {data: role} = useSWR(`${RoutesApi.ROLES}/?status=${true}`)
   const [open, setOpen]= useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -84,13 +84,13 @@ export default function HeadTable() {
 }
 
   const onSubmit = async(values: z.infer<typeof formSchema>)=>{
-    const res = await CreateUserFetch(`${RoutesApi.USERS}/post_user`,values)
+    const res = await CreateUserFetch(`${RoutesApi.USERS}`,values)
     setFormStep(1)
     toast({variant: "default", title: "Usuario Registrado",
     description:"Se ha registrado el usuario con exito"})
     form.reset()
     setOpen(false)
-    mutate(`${RoutesApi.USERS}/get-users/?status=${active}`)
+    mutate(`${RoutesApi.USERS}/?status=${active}`)
   }
   
   return (
@@ -286,6 +286,17 @@ export default function HeadTable() {
             </motion.div>
 
             <div className="flex gap-2">
+            <Button 
+              type="button"
+              onClick={()=>{
+                setFormStep(0)
+              }}
+              className={
+                cn("mt-4 w-full",{hidden: formStep == 0,})} 
+                >
+                Volver <ArrowLeft className="h-4 w-4 ml-2"/>
+              </Button>
+              
               <Button className={
                 cn("mt-4 w-full",{hidden: formStep == 0,})} 
                 type="submit">
@@ -321,16 +332,7 @@ export default function HeadTable() {
                 <ArrowRight className="w-4 h-4 ml-2"/>
               </Button>
 
-              <Button 
-              type="button"
-              onClick={()=>{
-                setFormStep(0)
-              }}
-              className={
-                cn("mt-4 w-full",{hidden: formStep == 0,})} 
-                >
-                Volver <ArrowLeft className="h-4 w-4 ml-2"/>
-              </Button>
+              
 
             </div>
             </form>

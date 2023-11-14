@@ -22,11 +22,11 @@ export function UpdateStatusUser({id_user, user}:Props){
     
     const updateStatusfecher = async(url:string, user:User)=>{
         const res = await fetcherPut(url, user)
-        mutate(`${RoutesApi.USERS}/get-users/?status=${user.status ? active : !active}`)
+        mutate(`${RoutesApi.USERS}/?status=${user.status ? active : !active}`)
     }
 
     const onSubmit = async(id_user:string, user:User)=>{
-        const res = updateStatusfecher(`${RoutesApi.USERS}/${id_user}/status-update`, user)
+        const res = updateStatusfecher(`${RoutesApi.USERS}/status_update/${id_user}`, user)
 
 
     }

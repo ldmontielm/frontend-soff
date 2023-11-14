@@ -31,11 +31,11 @@ export default function Delete({ id_role }: Props) {
     
     const  DeleteRoleFecht = async(url:string)=>{
         const res = await fetcherDelete(url)
-        mutate(`${RoutesApi.ROLES}/get-role?status=${true}`)
+        mutate(`${RoutesApi.ROLES}?status=${true}`)
     }
 
-    const  onSubmit = async(id_rol:string)=>{
-        const res = await DeleteRoleFecht(`${RoutesApi.ROLES}/${id_role}/delete-role`)
+    const  onSubmit = async(id_role:string)=>{
+        const res = await DeleteRoleFecht(`${RoutesApi.ROLES}/delete_role/${id_role}`)
         toast({variant: "default", title: "Rol Eliminado",
         description:"Se ha eliminado el rol con exito"})
         setOpen(false)

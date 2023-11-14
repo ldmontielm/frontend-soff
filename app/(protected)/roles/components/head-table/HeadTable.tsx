@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { RoutesApi } from "@/models/routes.models";
 import useSWR from "swr";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { mutate } from "swr";
 import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider";
@@ -26,27 +26,30 @@ import { cn } from "@/lib/utils"
 import { ArrowRight } from "lucide-react"
 import { ArrowLeft } from "lucide-react"
 import { motion } from "framer-motion"
+import { Role } from "../../models/roles.models";
 
-
+const AddRoleFecher = async(url:string, body: any[])=>{
+    return await fetcherPost(url, body)
+}
 
 export default function  HeadTable() {
     const [formStep, setFormStep] = React.useState(0)
     const [assingPermissions, setAssingPermission] = useState<any[]>([])
-    const {data:Permissions}= useSWR(`${RoutesApi.PERMISSIONS}/get-permision`)
+    const {data:Permissions}= useSWR(`${RoutesApi.PERMISSIONS}/`)
     const {toast} = useToast()
     const [open, setOpen] = useState(false)
     const [rolenameInput, setRolenameInput] = useState("");
     const [active, setActive] = useState(true)
 
-function onSubmit(rolename:string,assingPermissions:any[]) {
-    const res = fetcherPost(`${RoutesApi.ROLES}/post-permissions/${rolename}`, assingPermissions)
+async function  onSubmit (){
+    const res = await AddRoleFecher(`${RoutesApi.ROLES}/create_role/${rolenameInput}`, assingPermissions)
     toast({variant: "default", title: "Rol Registrado",
     description:"Se ha registrado el rol con exito"})
-    mutate(`${RoutesApi.ROLES}/get-role/?status=${active}`)
     setOpen(false)
     setAssingPermission([])
     setFormStep(0)
     setRolenameInput("")
+    mutate(`${RoutesApi.ROLES}?status=${active}`)
 }
 
 
@@ -146,7 +149,7 @@ function onSubmit(rolename:string,assingPermissions:any[]) {
                 <Button 
                     disabled={assingPermissions.length === 0}
                     onClick={()=> {
-                        onSubmit(rolenameInput,assingPermissions)
+                        onSubmit()
                     }}
                     className={
                         cn("mt-4 w-full",{hidden: formStep == 0,})
