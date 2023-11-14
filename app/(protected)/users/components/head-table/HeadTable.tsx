@@ -62,7 +62,7 @@ const formSchema = z.object({
 export default function HeadTable() {
   const [formStep, setFormStep] = React.useState(0)
   const [active, setActive] = useState(true)
-  const {data: role} = useSWR(`${RoutesApi.ROLES}/?status=${true}`)
+  const {data: role} = useSWR(`${RoutesApi.ROLES}?status=${true}`)
   const [open, setOpen]= useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -90,7 +90,7 @@ export default function HeadTable() {
     description:"Se ha registrado el usuario con exito"})
     form.reset()
     setOpen(false)
-    mutate(`${RoutesApi.USERS}/?status=${active}`)
+    mutate(`${RoutesApi.USERS}?status=${active}`)
   }
   
   return (
