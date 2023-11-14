@@ -1,6 +1,6 @@
 import { HeaderModule } from "@/components/page-components"
 import { ContentTargets, BarSales, PieSales} from "./components"
-import PieChart from "./components/pie-charts/PieChart"
+import { PieChart } from "./components/pie-charts"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/utilities/authOptions"
 import { redirect } from "next/navigation"
