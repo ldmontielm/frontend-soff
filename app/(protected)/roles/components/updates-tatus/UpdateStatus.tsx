@@ -1,4 +1,4 @@
-// 'use client'
+'use client'
 import { mutate } from 'swr'
 import { Role } from '../../models/roles.models'
 import { RoutesApi } from '@/models/routes.models'
