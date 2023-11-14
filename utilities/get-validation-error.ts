@@ -174,6 +174,23 @@ export const getValidationErrors = (errorCode: string) => {
             title: "Informacion requerida.",
             message:"La informacion del usuario es requerida."
         },
+        //Provider - Supply EXCEPTIONS
+        SUPPLY_ALREADY_EXISTS:{
+            title: "Nombre existente.",
+            message:"El nombre del insumo ya está registrado."
+        },
+        NIT_ALREADY_EXISTS:{
+            title: "NIT existente.",
+            message:"El NIT del proveedor ya está registrado."
+        },
+        SUPPLY_ASSOCIATED:{
+            title: "Insumo asociado.",
+            message:"El insumo está asociado a un producto registrado."
+        },
+        PROVIDER_ASSOCIATED:{
+            title: "proveedor asociado.",
+            message:"El proveedor está asociado con una compra."
+        }
     }
 
     return codeMatcher[errorCode]
