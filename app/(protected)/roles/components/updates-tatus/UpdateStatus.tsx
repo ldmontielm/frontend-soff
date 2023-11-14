@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
 import { Tooltip } from "@mui/material"
-import { useToast } from "@/components/ui/use-toast"
 import React, { useState } from "react"
 
 
@@ -20,9 +19,7 @@ interface Props{
 // }
 
 export default function UpdateStatus({id_role, role}:Props) {
-    // const [active, setActive] = useState(true)
     const [active, setActive] = useState(true)
-    const { toast } = useToast()
 
     const UpdateStatusFetcher = async(url:string, role:Role)=>{
             const res =  await fetcherPut(url, role)
@@ -30,16 +27,8 @@ export default function UpdateStatus({id_role, role}:Props) {
         }
 
     async function onSubmit(id_role:string, role:Role){
-        
-        if(role.name !== "Administrador" && role.name !== "Base" ){
-            const res = await UpdateStatusFetcher(`${RoutesApi.ROLES}/status_update_role/${id_role}`, role)
-            // mutate(`${RoutesApi.ROLES}?status=${role.status ? active : !active}`)
-        }else{
-            toast({
-                title: "El rol "+role.name+" es inmutable",
-                description: "Este rol no permite modificaciones por parte de los usuarios.",
-            })
-        }
+        const res = await UpdateStatusFetcher(`${RoutesApi.ROLES}/status_update_role/${id_role}`, role)
+        // mutate(`${RoutesApi.ROLES}?status=${role.status ? active : !active}`)
 
     }
         
