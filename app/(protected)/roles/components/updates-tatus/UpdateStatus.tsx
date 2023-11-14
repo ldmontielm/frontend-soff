@@ -11,24 +11,23 @@ import React, { useState } from "react"
 
 
 interface Props{
-    id_role :string,
     role:Role
 }
 
-const UpdateStatusFetcher = async(url:string, role:Role)=>{
-    return await fetcherPut(url, role)
+const UpdateStatusFetcher = async(url:string, arg:Role)=>{
+    return await fetcherPut(url, arg)
 }
 
-export default function UpdateStatus({id_role, role}:Props) {
+export default function UpdateStatus({role}:Props) {
     // const [active, setActive] = useState(true)
     const [active, setActive] = useState(true)
     const { toast } = useToast()
 
 
-    async function onSubmit(id_role:string, role:Role){
+    async function onSubmit(){
         
         if(role.name !== "Administrador" && role.name !== "Base" ){
-            const res = await UpdateStatusFetcher(`${RoutesApi.ROLES}/status_update_role/${id_role}`, role)
+            const res = await UpdateStatusFetcher(`${RoutesApi.ROLES}/status_update_role/${role.id}`, role)
             mutate(`${RoutesApi.ROLES}?status=${role.status ? active : !active}`)
         }else{
             toast({
@@ -43,8 +42,11 @@ export default function UpdateStatus({id_role, role}:Props) {
 
     return (
         
-    <Tooltip title="Cambiar el estado del rol" arrow placement="top">
-        <Button onClick={()=>onSubmit(id_role, role)} className={`bg-${role.status === true ? "green": "red"}-500 w-[35%] h-[25px] hover:bg-gray-700`}>{role.status === true ? "Activo": "Inactivo"}</Button>
+    // <Tooltip title="Cambiar el estado del rol" arrow placement="top">
+    //     <Button onClick={()=>onSubmit(id_role, role)} className={`bg-${role.status === true ? "green": "red"}-500 w-[35%] h-[25px] hover:bg-gray-700`}>{role.status === true ? "Activo": "Inactivo"}</Button>
+    // </Tooltip>
+    <Tooltip placement="top" title={`Cambiar el rol a : ${!role.status ? "Activo" : "Inactivo"}`} arrow>
+    <Button className={`h-5 w-20 text-xs font-semibold bg-${role.status ? "green" : "red"}-500 hover:bg-gray-700`} onClick={onSubmit}>{role.status ? "Activo" : "Inactivo"}</Button>
     </Tooltip>
     )
 }
