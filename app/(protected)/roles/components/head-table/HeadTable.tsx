@@ -42,7 +42,7 @@ function onSubmit(rolename:string,assingPermissions:any[]) {
     const res = fetcherPost(`${RoutesApi.ROLES}/post-permissions/${rolename}`, assingPermissions)
     toast({variant: "default", title: "Rol Registrado",
     description:"Se ha registrado el rol con exito"})
-    mutate(`${RoutesApi.ROLES}/get-role/?status=${active}`)
+    mutate(`${RoutesApi.ROLES}/get-role?status=${active}`)
     setOpen(false)
     setAssingPermission([])
     setFormStep(0)
