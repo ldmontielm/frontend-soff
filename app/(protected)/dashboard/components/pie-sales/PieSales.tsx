@@ -18,25 +18,39 @@ ChartJS.register(
   Legend
 );
 export default function PieSales() {
+  const {data: salesMonth, error } = useSWR(`${RoutesApi.DASHBOARD}/grafic_sales`)
+  const [chartData, setChartData] = useState({labels:[],
+    datasets: [{
+    label: 'Ventas mensuales',
+    data:[],
+    fill: false,
+    borderColor: '#6d28d9',
+    tension: 0.1
+    }]
+  })
 
-// const labels = months({count: 7});
-  const {data: sales, error } = useSWR<Sale[]>(RoutesApi.SALES)
+  useEffect(()=>{
+    if(salesMonth){
+      const labels = salesMonth.map((sale:any) => sale.Mes)
+      const data = salesMonth.map((sale:any) => sale.VentasTotales)
+
+      setChartData({
+        labels,
+        datasets: [{
+        label: 'Ventas mensuales',
+        data,
+        fill: false,
+        borderColor: '#6d28d9',
+        tension: 0.1
+        }]
+      })
+    }
+  }), [salesMonth];
 
   if (error) {
     console.error('Error al obtener datos:', error);
     return <div>Error al cargar datos</div>;
   }
-
-const data = {
-  labels: sales?.map((sale:Sale) => sale.sale_date),
-  datasets: [{
-    label: 'Ventas al mes',
-    data: sales?.map((sale:Sale) => sale.total),
-    fill: false,
-    borderColor: '#6d28d9',
-    tension: 0.1
-  }]
-};
 
  const options = {
   responsive: true,
@@ -47,5 +61,5 @@ const data = {
   },
 };
 
-  return <Line className="w-full" options={options} data={data}/>
+  return <Line className="w-full" options={options} data={chartData}/>
 }
