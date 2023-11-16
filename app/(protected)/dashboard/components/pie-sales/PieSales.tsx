@@ -5,7 +5,7 @@ import {months} from '@/lib/chart-utils'
 import useSWR from 'swr'
 import { RoutesApi } from '@/models/routes.models'
 import { Sale } from "@/app/(protected)/sales/models/sale.models";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 
 
 ChartJS.register(
@@ -19,10 +19,15 @@ ChartJS.register(
 );
 export default function PieSales() {
   const {data: salesMonth, error } = useSWR(`${RoutesApi.DASHBOARD}/grafic_sales`)
-  const [chartData, setChartData] = useState({labels:[],
+  const allMonths = useMemo(() => [
+    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+  ], []);
+
+  const [chartData, setChartData] = useState({labels:allMonths,
     datasets: [{
     label: 'Ventas mensuales',
-    data:[],
+    data:Array(allMonths.length).fill(0),
     fill: false,
     borderColor: '#6d28d9',
     tension: 0.1
@@ -31,21 +36,28 @@ export default function PieSales() {
 
   useEffect(()=>{
     if(salesMonth){
-      const labels = salesMonth.map((sale:any) => sale.Mes)
-      const data = salesMonth.map((sale:any) => sale.VentasTotales)
+      const labels = salesMonth.map((sale:any) => sale.Month)
+      const data = salesMonth.map((sale:any) => sale.Total_Sales)
+      const year = salesMonth.map((sale:any) => sale.Year)
+
+      const filledData = Array(allMonths.length).fill(0);
+      labels.forEach((label: string, index: number) => {
+        const monthIndex = allMonths.indexOf(label);
+        filledData[monthIndex] = data[index];
+      });
 
       setChartData({
-        labels,
+        labels: allMonths,
         datasets: [{
-        label: 'Ventas mensuales',
-        data,
+        label: `Ventas ${year}`,
+        data: filledData,
         fill: false,
         borderColor: '#6d28d9',
         tension: 0.1
         }]
       });
     }
-  }, [salesMonth]);
+  }, [salesMonth, allMonths]);
 
   if (error) {
     console.error('Error al obtener datos:', error);
@@ -59,6 +71,20 @@ export default function PieSales() {
       position: 'top' as const,
     },
   },
+  scales:{
+    x:{
+      title:{
+        display:true,
+        text: 'Meses'
+      }
+    },
+    y:{
+      title:{
+        display:true,
+        text:'Ventas'
+      }
+    }
+  }
 };
 
   return <Line className="w-full" options={options} data={chartData}/>

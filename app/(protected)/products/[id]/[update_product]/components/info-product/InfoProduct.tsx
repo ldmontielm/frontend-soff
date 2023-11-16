@@ -57,19 +57,12 @@ export default function InfoProduct({id}:Props) {
     }
     formProduct.reset(values)
   },[product, formProduct])
-  
-  // if (error) return <div>Failed to load</div>
-  // if (!product) return <div>Loading...</div>
 
   async function onSubmit(values: z.infer<typeof formProductSchema>){
       values.id_product = product?.id
       const res = await UpdateProductFetch(`${RoutesApi.PRODUCTS}/${id}/update_product`, values)
         toast({variant: 'default', title: "Actualización exitosa", description: "Se ha actualizado con exito el producto, mira el historial en la sección de productos."})
         router.push(Routes.CREATEPRODUCT)
-    }
-
-    async function cancelProduct(){
-      router.push(Routes.CREATEPRODUCT)
     }
 
   return (
@@ -121,12 +114,6 @@ export default function InfoProduct({id}:Props) {
           <div className='mt-4 space-y-2'>
             <Button className="w-full" type='submit' >
               Guardar producto
-            </Button>
-          </div>
-
-          <div className='mt-4 space-y-2'>
-            <Button className="w-full" type='button' variant='outline' onClick={()=> (cancelProduct())}>
-              Cancelar
             </Button>
           </div>
         </form>
