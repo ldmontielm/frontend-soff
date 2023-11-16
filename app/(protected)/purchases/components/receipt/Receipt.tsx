@@ -30,7 +30,7 @@ export default function Receipt({id}:Props) {
   
   const generateReceipt = () => {
     const doc = new jsPDF()
-    doc.text('RECIBO DE FACTURA - MANDISA', 60, 20)
+    doc.text('COMPROBANTE DE COMPRA - MANDISA', 60, 20)
     doc.setFontSize(10)
     doc.text('NÚMERO DE FACTURA: ', 15, 35)
     doc.text(purchase.invoice_number, 57, 35)
