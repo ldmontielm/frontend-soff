@@ -157,6 +157,10 @@ export const getValidationErrors = (errorCode: string) => {
             title: "Informacion requerida.",
             message:"La informacion del rol es requerida."
         },
+        NO_UPDATE_STATUS_ADMIN_BASE:{
+            title: "Este rol es inmutable.",
+            message:"El rol Administrador y Base no se pueden inactivar"
+        },
         // -----------USERS EXCEPTIONS-----------
             THE_USER_ALREADY_EXISTS: {
             title: "Documento ya existente.",
