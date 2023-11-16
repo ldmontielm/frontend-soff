@@ -43,9 +43,9 @@ export default function PieSales() {
         borderColor: '#6d28d9',
         tension: 0.1
         }]
-      })
+      });
     }
-  }), [salesMonth];
+  }, [salesMonth]);
 
   if (error) {
     console.error('Error al obtener datos:', error);
