@@ -30,7 +30,7 @@ export default function Receipt({id}:Props) {
   
   const generateReceipt = () => {
     const doc = new jsPDF()
-    doc.text('RECIBO DE FACTURA - MANDISA', 60, 20)
+    doc.text('COMPROBANTE DE COMPRA - MANDISA', 60, 20)
     doc.setFontSize(10)
     doc.text('NÚMERO DE FACTURA: ', 15, 35)
     doc.text(purchase.invoice_number, 57, 35)
@@ -70,9 +70,9 @@ export default function Receipt({id}:Props) {
       
       {/* <button onClick={() => generateReceipt()}>Descargar pdf</button> */}
       <div onClick={() => {generateReceipt()
-      toast({variant: 'default',title: "Generando fcatura",description: "Se ha generado la factura de la compra.",})
+      toast({variant: 'default',title: "Generando detalle",description: "Se ha generado el detalle de la compra.",})
       }} className='flex items-center px-2 cursor-default rounded hover:bg-neutral-100 select-none text-sm py-1.5 transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50'>
-          <ArrowDownOnSquareIcon className="w-4 h-4 mr-2"/> Descargar factura
+          <ArrowDownOnSquareIcon className="w-4 h-4 mr-2"/> Descargar detalle
       </div>
     </div>
   )

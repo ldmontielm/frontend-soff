@@ -81,6 +81,7 @@ export default function UpdateTable({user, id_user}: Props) {
   })
 
   const { toast } = useToast()
+  
   const CreateUserFetch = async (url: string, Value:updateUser) => {
     return await fetcherPut<updateUser>(url, Value)
 }
@@ -90,12 +91,12 @@ const onSubmit = async(values: z.infer<typeof formSchema>)=>{
     const res = await CreateUserFetch(`${RoutesApi.USERS}/update_user/${id_user}`,values)
     toast({variant: "default", title: "Usuario Actualizado",
     description:"Se ha Actualizado el usuario con exito"})
-    mutate(`${RoutesApi.USERS}/?status=${active}`)
+    mutate(`${RoutesApi.USERS}?status=${active}`)
     setOpen(false)
   }
 
 
-const {data: role} = useSWR(`${RoutesApi.ROLES}/?status=${true}`)
+const {data: role} = useSWR(`${RoutesApi.ROLES}?status=${true}`)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

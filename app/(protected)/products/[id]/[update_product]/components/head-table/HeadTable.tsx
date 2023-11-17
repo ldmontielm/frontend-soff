@@ -47,7 +47,6 @@ interface Props {
 
 export default function HeadTable({id}: Props) {
   const {data:supplies} = useSWR(RoutesApi.SUPPLIES)
-  // const {data:details} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
   const [open, setOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
