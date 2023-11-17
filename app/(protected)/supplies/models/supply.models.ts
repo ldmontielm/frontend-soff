@@ -11,6 +11,7 @@ export interface Supply {
 export interface SupplyCreate {
   name: string;
   price: number;
+  total: number;
   quantity_stock: number;
   unit_measure: string;
 }
