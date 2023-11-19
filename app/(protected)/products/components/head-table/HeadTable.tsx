@@ -7,12 +7,7 @@ import { Routes } from "@/models/routes.models";
 import {useRouter} from "next/navigation"
 import { useToast } from "@/components/ui/use-toast"
 import { RoutesApi } from "@/models/routes.models";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import {Tooltip} from "@mui/material"
 
 const CreateProductFetch = async (url: string) => {
   return await fetcherPost(url, undefined)
@@ -23,9 +18,7 @@ export default function HeadTable() {
     const { toast } = useToast()
     return (
       <>
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
+          <Tooltip placement="top" title="Aquí puedes registrar un producto." arrow>
               <Button
                 type="submit"
                 className="w-full md:w-[180px]"
@@ -37,13 +30,7 @@ export default function HeadTable() {
               >
                 Registrar producto
               </Button>   
-          </TooltipTrigger>
-          <TooltipContent className="bg-gray-500">
-            <p className="text-xs font-semibold">Aquí puedes registrar un producto.</p>
-          </TooltipContent>
         </Tooltip>
-      </TooltipProvider>
     </>
   );
 }
-
