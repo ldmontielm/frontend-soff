@@ -24,6 +24,8 @@ import {
   } from "@/components/ui/table"
 import { RoutesApi } from '@/models/routes.models'
 import { Product } from '../../models/product.models'
+import { ScrollArea } from "@/components/ui/scroll-area"
+
 
   interface Props {
     id: string
@@ -41,7 +43,7 @@ export default function ViewDetailsByProduct({id, product}: Props) {
         <QueueListIcon className="w-4 h-4 mr-2 " onClick={() => setOpen(true)}/> <span>Ver detalle</span>
       </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[600px]">
+      <DialogContent className="sm:max-w-[600px] sm:max-h-[500px]">
         <div className='relative w-full bg-white col-span-8'>
           <div className='w-full text-center mb-1 p-2'>
             <p className='font-bold'>Detalles del producto</p>
@@ -50,15 +52,15 @@ export default function ViewDetailsByProduct({id, product}: Props) {
           <hr />
           <div className='w-full'>
             <div className='grid grid-cols-1 lg:grid-cols-3 gap-4 mt-2'>
-              <div className='my-3 w-full text-center'>
+              <div className=' w-full text-center'>
                 <p className='font-bold text-sm '>Nombre</p>
                 <p className='text-sm text-gray-400'>{product.name}</p>  
               </div>
-              <div className='my-3 w-full text-center'>
+              <div className=' w-full text-center'>
                 <p className='font-bold text-sm'>Costo</p>
                 <p className=' text-sm text-gray-400'>${convertToCOP(product.price)}</p>
               </div>
-              <div className='my-3 w-full text-center'>
+              <div className=' w-full text-center'>
                 <p className='font-bold text-sm'>Precio de venta</p>
                 <p className=' text-sm text-gray-400'>${convertToCOP(product.sale_price)}</p>
               </div>
@@ -67,7 +69,8 @@ export default function ViewDetailsByProduct({id, product}: Props) {
         </div>
 
         <div className='relative w-full bg-white col-span-8 border rounded'>
-          <Table>
+          <Table >
+            <ScrollArea className='h-[200px]'>
             <TableHeader>
               <TableRow>
                 <TableHead>Insumo</TableHead>
@@ -90,6 +93,7 @@ export default function ViewDetailsByProduct({id, product}: Props) {
                 ))
               }
             </TableBody>
+              </ScrollArea>
           </Table>
         </div>
       </DialogContent>
