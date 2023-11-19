@@ -69,8 +69,8 @@ export default function ViewDetailsByProduct({id, product}: Props) {
         </div>
 
         <div className='relative w-full bg-white col-span-8 border rounded'>
-          <Table >
             <ScrollArea className='h-[200px]'>
+          <Table >
             <TableHeader>
               <TableRow>
                 <TableHead>Insumo</TableHead>
@@ -93,8 +93,8 @@ export default function ViewDetailsByProduct({id, product}: Props) {
                 ))
               }
             </TableBody>
-              </ScrollArea>
           </Table>
+              </ScrollArea>
         </div>
       </DialogContent>
     </Dialog>  

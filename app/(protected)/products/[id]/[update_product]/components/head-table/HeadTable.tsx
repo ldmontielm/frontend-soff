@@ -85,7 +85,7 @@ export default function HeadTable({id}: Props) {
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-[200px] justify-between mr-1",
+                          "w-full justify-between mr-1",
                           !field.value && "text-muted-foreground"
                         )}
                       >
