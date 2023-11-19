@@ -17,6 +17,7 @@ import {PencilIcon } from "@heroicons/react/24/outline"
 import Link from 'next/link'
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
 import { Routes } from "@/models/routes.models"
+import {Tooltip} from "@mui/material"
 
 export const columns: ColumnDef<Product>[] = [
     {
@@ -106,17 +107,7 @@ export const columns: ColumnDef<Product>[] = [
       },
     { 
         accessorKey: 'status',
-        header: ({column}) => {
-            return (
-                <Button
-                  variant="ghost"
-                  onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-                >
-                  Estado
-                  <ChevronUpDownIcon className="ml-2 h-4 w-4" />
-                </Button>
-            )
-        }, 
+        header: "Estado",
         cell: ({row}) => {
             const product = row.original;
             return <DisableProduct product={product}/>
@@ -129,42 +120,37 @@ export const columns: ColumnDef<Product>[] = [
             const product = row.original
             return(
                 <div className="text-left">
-                    {
-                        row.getValue("status") ? (
-                            <>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
+                    {  
+                        <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                                <Tooltip placement="top" title="Acciones para el producto" arrow>
                                     <Button variant='ghost' size='icon' className="ml-2">
                                         <MoreHorizontal className="h-4 w-4 " />
                                     </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="flex flex-col items-start">
-                                    <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                                    <Link href={`${Routes.CREATEPRODUCT}/${product.id}/update_product`}>
-                                        <Button variant='ghost'>
-                                            <PencilIcon className=" h-4 w-4 mr-2" /> <span>Editar</span>
-                                        </Button>
-                                    </Link>
-                                    <ViewDetailsByProduct product={product} id={product.id}/>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </>
-                        ):
-                        (
-                            <>
-                                <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
-                                    <Button variant='ghost' size='icon' className="ml-2">
-                                        <MoreHorizontal className="h-4 w-4" />
-                                    </Button>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="flex flex-col">
-                                    <DropdownMenuLabel>Sin acciones</DropdownMenuLabel>
-                                    <span className="p-2 text-center">...</span>
-                                    </DropdownMenuContent>
-                                </DropdownMenu>
-                            </>
-                        ) 
+                                </Tooltip>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end" className="flex flex-col">
+                                {
+                                    row.getValue("status") ? (
+                                        <>
+                                            <DropdownMenuLabel>Acciones</DropdownMenuLabel>
+                                            <Link href={`${Routes.CREATEPRODUCT}/${product.id}/update_product`}>
+                                                <Button variant='ghost' className="w-full">
+                                                    <PencilIcon  className=" h-4 w-4 mr-2"  /> <span className="mr-8">Editar</span>
+                                                </Button>
+                                            </Link>
+                                            <ViewDetailsByProduct product={product} id={product.id}/>
+                                        </>
+                                    ):
+                                    ( 
+                                        <>
+                                            <DropdownMenuLabel>Sin acciones</DropdownMenuLabel>
+                                            <span className="p-2 text-center">...</span>
+                                        </>
+                                    )
+                                }
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     }
                 </div>
             )
