@@ -139,7 +139,7 @@ export const columns: ColumnDef<Product>[] = [
                                                     <PencilIcon  className=" h-4 w-4 mr-2"  /> <span className="mr-8">Editar</span>
                                                 </Button>
                                             </Link>
-                                            <ViewDetailsByProduct product={product} id={product.id}/>
+                                            <ViewDetailsByProduct id={product.id}/>
                                         </>
                                     ):
                                     ( 
