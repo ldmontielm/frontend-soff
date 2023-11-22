@@ -1,6 +1,8 @@
 'use client'
-import { Chart as ChartJS, LinearScale,PointElement,ArcElement, Tooltip, Legend, LineElement, Title, CategoryScale } from "chart.js";
+import { Chart as ChartJS, LinearScale,PointElement, Tooltip, Legend, LineElement, Title, CategoryScale } from "chart.js";
 import { Line } from 'react-chartjs-2';
+import { Chart, ArcElement } from 'chart.js'
+Chart.register(ArcElement);
 import useSWR from 'swr'
 import { RoutesApi } from '@/models/routes.models'
 import React, { useEffect, useState, useMemo } from 'react';
