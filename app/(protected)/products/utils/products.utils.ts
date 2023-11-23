@@ -1,3 +1,5 @@
+import { format } from 'date-fns';
+
 export const convertToCOP = (money: number | 0) => {
     let listmoney:string[] = money.toString().split('').reverse()
     if(listmoney.length > 3 && listmoney.length <= 6){
@@ -8,3 +10,7 @@ export const convertToCOP = (money: number | 0) => {
     }
     return listmoney.reverse().join('')
   }
+
+export const formatTime = (time:any) => {
+    return format(time, 'h:mm a');
+  };

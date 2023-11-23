@@ -1,50 +1,15 @@
 'use client'
 import React, { useState } from 'react'
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import {Table,TableBody,TableHead,TableHeader,TableRow, TableCell} from "@/components/ui/table"
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { HeadTable } from '..'
-import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  ColumnDef,
-  flexRender,
-  ColumnFiltersState,
-  getFilteredRowModel,
-  VisibilityState,
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-  SortingState,
-  getSortedRowModel
-} from "@tanstack/react-table"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { AdjustmentsHorizontalIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
+import {Select, SelectContent, SelectTrigger, SelectItem, SelectValue} from "@/components/ui/select"
+import {ColumnDef, flexRender, ColumnFiltersState, getFilteredRowModel, VisibilityState, getCoreRowModel, getPaginationRowModel, useReactTable, SortingState, getSortedRowModel } from "@tanstack/react-table"
+import { DropdownMenu,DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@mui/material"
 import {Tooltip} from "@mui/material"
-import { mutate } from 'swr'
-import { RoutesApi } from '@/models/routes.models'
-import { Product } from '../../models/product.models'
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
