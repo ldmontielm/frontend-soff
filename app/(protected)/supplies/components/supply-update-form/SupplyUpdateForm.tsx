@@ -5,7 +5,7 @@ import { fetcherPut } from "@/context/swr-context-provider/SwrContextProvider";
 import { Supply, SupplyCreate, SupplyUpdate } from '../../models/supply.models'
 import { Button } from '@/components/ui/button'
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
 import { Input } from "@/components/ui/input"
 import { PencilIcon } from '@heroicons/react/24/outline'
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -66,7 +66,7 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
     defaultValues: {
       id_supply:supply.id,
       name: supply.name,
-      // total: supply.total,
+      total: supply.total,
       price: supply.price,
       quantity_stock: supply.quantity_stock,
       unit_measure: supply.unit_measure
@@ -77,10 +77,11 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
-    if (values.unit_measure == 'Gramos'){
-      values.price = (values.total / 1000)
+    // if (values.unit_measure == 'Gramos'){
+    //   values.total = (values.price * 1000)
+    //   values.price = (values.total / 1000)
      
-    }
+    // }
 
     values.id_supply = supply.id
     await UpdateSupplyFetch(`${RoutesApi.SUPPLIES}/update_supply/${id_supply}`, values)
