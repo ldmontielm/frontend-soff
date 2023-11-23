@@ -86,17 +86,16 @@ export const columns: ColumnDef<Supply>[] = [
       </Button>
     );
   },
-  cell: ({ row }) => {
-    const price: number = row.getValue('price'); // Suponiendo que 'price' es un número
+  cell: ({row}) => {
+    const total = parseFloat(row.getValue("total"))
+    const formatted = new Intl.NumberFormat("en-US", {
+      style: 'currency',
+      currency: "USD",
+      maximumFractionDigits: 0
+    }).format(total)
 
-    // Limita el número a 2 decimales y aplica el formato de moneda
-    const formattedPrice = parseFloat(price.toFixed(2)).toLocaleString('es-ES', {
-      // style: 'currency',
-      // currency: '', // Cambia a tu moneda deseada
-    });
-
-    return <div>{formattedPrice}</div>;
-    }
+    return <div className="text-left font-medium">{formatted}</div>
+  }
   },
   {
     accessorKey: 'quantity_stock',
@@ -111,11 +110,15 @@ export const columns: ColumnDef<Supply>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => {
-      const quantity: number = row.getValue('quantity_stock');
-      // Limitar la cantidad de decimales a 2
-      const formattedQuantity = quantity.toFixed(0);
-      return <div>{formattedQuantity}</div>;
+    cell: ({row}) => {
+      const quantity_stock = parseFloat(row.getValue("quantity_stock"));
+      // Elimina el estilo 'currency' del formato
+      const formatted = new Intl.NumberFormat("en-US", {
+        style: 'decimal', // Cambia 'currency' a 'decimal'
+        maximumFractionDigits: 0
+      }).format(quantity_stock);
+    
+      return <div className="text-left font-medium">{formatted}</div>;
     }
   },
   {
@@ -151,17 +154,16 @@ export const columns: ColumnDef<Supply>[] = [
       </Button>
     );
   },
-  cell: ({ row }) => {
-    const total: number = row.getValue('total'); // Suponiendo que 'total' es un número
-
-    // Limita el número a 2 decimales y aplica el formato de moneda
-    const formattedTotal = parseFloat(total.toFixed(2)).toLocaleString('es-ES', {
+  cell: ({row}) => {
+    const total = parseFloat(row.getValue("total"))
+    const formatted = new Intl.NumberFormat("en-US", {
       style: 'currency',
-      currency: 'COP', // Cambia a tu moneda deseada
-    });
+      currency: "USD",
+      maximumFractionDigits: 0
+    }).format(total)
 
-    return <div className="font-medium">{formattedTotal}</div>;
-    }
+    return <div className="text-left font-medium">{formatted}</div>
+  }
   },
   
   {

@@ -22,6 +22,7 @@ import { FormField, Form, FormItem, FormControl } from "@/components/ui/form";
 import toast from "react-hot-toast";
 // import { deleteProvider } from "../../services/provider.services";
 import { useRouter } from "next/navigation";
+
 import { useContext } from "react"
 import { useState } from 'react'
 import { Routes, RoutesApi } from "@/models/routes.models";
@@ -44,6 +45,7 @@ interface Props {
 }
 export default function ProviderDeleteForm({ provider, id_provider }: Props) {
   const {data} = useSWR(`${RoutesApi.PROVIDERS}/${id_provider}`)
+  const { toast } = useToast()
 
 
   return (
@@ -69,7 +71,8 @@ export default function ProviderDeleteForm({ provider, id_provider }: Props) {
           <AlertDialogCancel>Cancelar</AlertDialogCancel> {/* Cerrar el diálogo de alerta */}
           <AlertDialogAction type="button" onClick={async () => {
             await DeleteProviderFetch(`${RoutesApi.PROVIDERS}/delete_provider/${id_provider}`)
-            mutate(RoutesApi.PROVIDERS)
+            toast({variant: 'default', title: "Proveedor eliminado correctamente", description: "Se ha eliminado correctamente el proveedor."})
+            mutate(`${RoutesApi.PROVIDERS}?status=${true}`)
           }} 
           className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90">
           Eliminar
