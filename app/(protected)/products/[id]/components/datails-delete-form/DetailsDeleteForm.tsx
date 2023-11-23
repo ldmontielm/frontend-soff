@@ -24,12 +24,12 @@ const DeleteDetailFetch = async (url: string) => {
 }
 
 interface Props {
-  detail: DetailsRecipe;
+  // detail: DetailsRecipe;
   id_product: string
 }
 
-export default function DetailDeleteForm({ detail, id_product }: Props) {
-  const {data} = useSWR(`${RoutesApi.PRODUCTS}/${id_product}/details`)
+export default function DetailDeleteForm({ id_product }: Props) {
+  const {data:detail} = useSWR(`${RoutesApi.PRODUCTS}/${id_product}/details`)
 
   return (
     <AlertDialog>

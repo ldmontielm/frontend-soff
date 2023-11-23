@@ -20,7 +20,7 @@ const formSchema = z.object({
 })
 
 interface Props{
-  detail: DetailsRecipe
+  // detail: DetailsRecipe
   id_product: string | string[]
 }
 
@@ -28,9 +28,9 @@ const UpdateAmountDetailFetch = async (url: string) => {
   return await fetcherPut(url, undefined)
 }
 
-export default function DetailUpdateForm({detail, id_product}: Props) {
+export default function DetailUpdateForm({id_product}: Props) {
   const [open, setOpen] = useState(false)
-  const {data} = useSWR(`${RoutesApi.PRODUCTS}/${id_product}/details`)
+  const {data: detail} = useSWR(`${RoutesApi.PRODUCTS}/${id_product}/details`)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

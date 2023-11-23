@@ -110,7 +110,7 @@ export const columns: ColumnDef<Product>[] = [
         header: "Estado",
         cell: ({row}) => {
             const product = row.original;
-            return <DisableProduct product={product}/>
+            return <DisableProduct id={product.id}/>
         }
     },
     {
@@ -134,7 +134,7 @@ export const columns: ColumnDef<Product>[] = [
                                     row.getValue("status") ? (
                                         <>
                                             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
-                                            <Link href={`${Routes.CREATEPRODUCT}/${product.id}/update_product`}>
+                                            <Link href={`${Routes.CREATEPRODUCT}/${product.id}/update_product`} >
                                                 <Button variant='ghost' className="w-full">
                                                     <PencilIcon  className=" h-4 w-4 mr-2"  /> <span className="mr-8">Editar</span>
                                                 </Button>
