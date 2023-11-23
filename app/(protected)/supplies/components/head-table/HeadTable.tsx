@@ -91,14 +91,7 @@ export default function HeadTable({location}: Props) {
 
     const onSubmit = async (values: z.infer<typeof fromSchema>) => {
       
-      
-      if (values.unit_measure === 'Kilogramos') {
-        values.price = values.price/1000;
-        values.quantity_stock *= 1000;
-      }
-      if (values.unit_measure == 'Gramos'){
-        values.price = (values.price / 1000)
-      }
+  
       await AddSupplyFetch(`${RoutesApi.SUPPLIES}/create_supply`, values);
       setOpen(false);
       toast({ variant: 'default', title: "Insumo creado correctamente", description: "Se ha creado correctamente el Insumo." });
