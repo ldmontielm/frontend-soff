@@ -12,11 +12,12 @@ import * as z from 'zod'
 import { Input } from '@/components/ui/input'
 import { DetailsRecipe, ProductCreate, Product } from '@/app/(protected)/products/models/product.models'
 import { useToast } from "@/components/ui/use-toast"
+import { useEffect } from "react"
 
 const formProductSchema = z.object({
     id_product:z.string().optional(),
-    name: z.string({required_error: "El campo es requerido"}).min(2, {message: "Ingrese el nombre del producto"}),
-    sale_price: z.number({required_error: "El campo es requerido", invalid_type_error: "Se espera un número"}).min(1, {message: "El valor del precio debe ser diferente de 0"})
+    name: z.string({required_error: "El campo es requerido"}).min(3, {message: "Ingrese mínimo 3 caracteres"}).max(50, {message: 'El nombre del producto es demasiado largo'}),
+    sale_price: z.number({required_error: "El campo es requerido", invalid_type_error: "Se espera un número"}).min(111, {message: "Ingrese mínimo 3 caracter"}).max(9999999, {message: 'El precio es demasiado largo'})
 });
 
 interface Props{
@@ -42,26 +43,26 @@ export default function InfoProduct({id}:Props) {
   const {data: product} = useSWR<Product>(`${RoutesApi.PRODUCTS}/${id}`)
   const router = useRouter()
   const { toast } = useToast()
-
+  
   const formProduct = useForm<z.infer<typeof formProductSchema>>({
-    resolver: zodResolver(formProductSchema),
-    defaultValues: {
+    resolver: zodResolver(formProductSchema)
+    
+  })
+  
+  useEffect(()=>{
+    let values = {
       id_product: product?.id,
       name: product?.name,
       sale_price: product?.sale_price
-    },
-    shouldUnregister: false,
-  })
-  
+    }
+    formProduct.reset(values)
+  },[product, formProduct])
+
   async function onSubmit(values: z.infer<typeof formProductSchema>){
       values.id_product = product?.id
       const res = await UpdateProductFetch(`${RoutesApi.PRODUCTS}/${id}/update_product`, values)
         toast({variant: 'default', title: "Actualización exitosa", description: "Se ha actualizado con exito el producto, mira el historial en la sección de productos."})
         router.push(Routes.CREATEPRODUCT)
-    }
-
-    async function cancelProduct(){
-      router.push(Routes.CREATEPRODUCT)
     }
 
   return (
@@ -84,7 +85,7 @@ export default function InfoProduct({id}:Props) {
                     <FormItem>
                       <FormLabel>Nombre</FormLabel>
                       <FormControl >
-                         <Input defaultValue={product?.name} {...field} />
+                         <Input id="name" type="string" defaultValue={product?.name} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -112,18 +113,11 @@ export default function InfoProduct({id}:Props) {
           
           <div className='mt-4 space-y-2'>
             <Button className="w-full" type='submit' >
-              Guardar producto
-            </Button>
-          </div>
-
-          <div className='mt-4 space-y-2'>
-            <Button className="w-full" type='button' variant='outline' onClick={()=> (cancelProduct())}>
-              Cancelar
+              Guardar cambios
             </Button>
           </div>
         </form>
       </Form>
-
     </div>
   )
 }

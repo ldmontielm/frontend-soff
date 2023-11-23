@@ -1,53 +1,15 @@
 'use client'
 import React, { useState } from 'react'
-import {
-  Table,
-  TableBody,
-  TableCaption,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
+import {Table,TableBody,TableHead,TableHeader,TableRow, TableCell} from "@/components/ui/table"
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { HeadTable } from '..'
-import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
-import {
-  ColumnDef,
-  flexRender,
-  ColumnFiltersState,
-  getFilteredRowModel,
-  VisibilityState,
-  getCoreRowModel,
-  getPaginationRowModel,
-  useReactTable,
-  SortingState,
-  getSortedRowModel
-} from "@tanstack/react-table"
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
+import { AdjustmentsHorizontalIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
+import {Select, SelectContent, SelectTrigger, SelectItem, SelectValue} from "@/components/ui/select"
+import {ColumnDef, flexRender, ColumnFiltersState, getFilteredRowModel, VisibilityState, getCoreRowModel, getPaginationRowModel, useReactTable, SortingState, getSortedRowModel } from "@tanstack/react-table"
+import { DropdownMenu,DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@mui/material"
-
+import {Tooltip} from "@mui/material"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
@@ -59,7 +21,6 @@ interface DataTableProps<TData, TValue> {
 }
 
 export function DataTable<TData, TValue>({columns, data, isLoading, error, setActive, consult}: DataTableProps<TData, TValue>){
-
   const [sorting, setSorting] = useState<SortingState>([])
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
@@ -96,10 +57,12 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error, setAc
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
+              <Tooltip placement="top" title="Ocultar columnas" arrow>
               <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
                 <AdjustmentsHorizontalIcon className='w-4 h-4' />
                 <span>Columnas</span>
               </Button>
+              </Tooltip>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='start'>
             {table
@@ -109,7 +72,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error, setAc
                   )
                   .map((column) => {
                     return (
-                      <div  key={column.id} className="text-sm">
+                      <div  key={column.id} className="text-sm pr-3">
                         <Checkbox
                         checked={column.getIsVisible()}
                         onChange={(event) =>{
@@ -129,20 +92,13 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error, setAc
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
-          <TooltipProvider>
-            <Tooltip >
-              <TooltipTrigger asChild>
-                <Button variant="outline" className=" text-sm bg-white hover:bg-gray-100" 
+          <Tooltip placement="top" title={`Ver productos ${consult === true ? 'Inactivos' : 'Activos'}`} arrow>
+                <Button variant="outline" className=" text-sm bg-white hover:bg-gray-100 w-full md:w-fit flex items-center gap-2" 
                   onClick={() => {setActive(!consult)
                     }}>
-                      {consult === true ? "Activos" : "Inactivos"}
+                      {consult === !true ? "Activos" : "Inactivos"}
                 </Button>
-              </TooltipTrigger>
-              <TooltipContent className="bg-gray-500">
-                <p className="text-xs font-semibold">Click para ver productos {consult === true ? "Inactivos" : "Activos"}.</p>
-              </TooltipContent>
             </Tooltip>
-          </TooltipProvider>
         </div>
         <HeadTable />
       </div>
@@ -196,7 +152,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error, setAc
                 ))
                 ) : (
                   <TableRow>
-                  <TableCell colSpan={columns.length} className='h-24 text-center' text-center>
+                  <TableCell colSpan={columns.length} className='h-24 text-center'>
                     No se encontró {value}
                   </TableCell>
                 </TableRow>

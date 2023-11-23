@@ -12,7 +12,7 @@ import useSWR, {mutate} from 'swr'
 import * as z from 'zod'
 import * as React from "react"
 import { Check, ChevronsUpDown } from "lucide-react"
-import { DetailCreate } from "@/app/(protected)/products/models/product.models"
+import { DetailCreate, Product } from "@/app/(protected)/products/models/product.models"
 import { cn } from "@/lib/utils"
 import {
   Command,
@@ -28,11 +28,15 @@ import {
 } from "@/components/ui/popover"
 import { Supply } from "@/app/(protected)/supplies/models/supply.models"
 import { HeadTable as HeadTableSupply } from "@/app/(protected)/supplies/components"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import { Tooltip } from "@mui/material"
 
 const formSchema = z.object({
   product_id: z.string(),
   supply_id: z.string().uuid({message: 'Debe seleccionar un insumo'}),
-  amount_supply: z.number({required_error: "Este campo es requerido", invalid_type_error: "Se espera un número"}).min(1, {message: "Como mínimo debe usar un insumo"}).max(999, {message: "Como máximo solo puedes usar 900 de cada insumo"})
+  amount_supply: z.number({required_error: "Este campo es requerido", invalid_type_error: "Se espera un número"})
+  .min(1, {message: "El valor de la cantidad debe ser diferente de 0"}).
+  max(999, {message: "El número es muy largo"})
 })
 
 const AddDetailFetch = async (url: string, body: DetailCreate) => {
@@ -45,7 +49,6 @@ interface Props {
 
 export default function HeadTable({id}: Props) {
   const {data:supplies} = useSWR(RoutesApi.SUPPLIES)
-  const {data:details} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
   const [open, setOpen] = useState(false)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -82,7 +85,7 @@ export default function HeadTable({id}: Props) {
                         variant="outline"
                         role="combobox"
                         className={cn(
-                          "w-[200px] justify-between mr-1",
+                          "w-full justify-between mr-1",
                           !field.value && "text-muted-foreground"
                         )}
                       >
@@ -98,23 +101,26 @@ export default function HeadTable({id}: Props) {
                         <CommandInput placeholder="Buscar insumo..." />
                         <CommandEmpty>Sin resultados.</CommandEmpty>
                         <CommandGroup>
-                          {Array.isArray(supplies) && supplies.map((supply) => (
-                            <CommandItem
-                            value={supply.name}
-                              key={supply.id}
-                              onSelect={() => {
-                                form.setValue("supply_id", supply.id)
-                              }}
-                            >
-                              <Check
-                                className={cn(
-                                  "mr-2 h-4 w-4",
-                                  supply.id === field.value ? "opacity-100" : "opacity-0"
-                                )}
-                              />
-                              {supply.name}
-                            </CommandItem>
-                          ))}
+                        <ScrollArea className={`h-[200px] w-48  ${open ? 'open' : ''}`}>
+                            {Array.isArray(supplies) && supplies.map((supply) => (
+                              <CommandItem
+                              value={supply.name}
+                                key={supply.id}
+                                onSelect={() => {
+                                  form.setValue("supply_id", supply.id)
+                                  setOpen(!open)
+                                }}
+                              >
+                                <Check
+                                  className={cn(
+                                    "mr-2 h-4 w-4",
+                                    supply.id === field.value ? "opacity-100" : "opacity-0"
+                                  )}
+                                />
+                                {supply.name}
+                              </CommandItem>
+                            ))}
+                          </ScrollArea>
                         </CommandGroup>
                       </Command>
                     </PopoverContent>
@@ -133,7 +139,7 @@ export default function HeadTable({id}: Props) {
               <FormItem className="w-full md:w-[200px]">
                 <FormLabel>Cantidad</FormLabel>
                 <FormControl>
-                  <Input type="number" placeholder="Cantidad de insumo" min="1" {...form.register('amount_supply', {valueAsNumber: true})} className="lg:w-fit"/>
+                  <Input type="number" placeholder="Cantidad de insumo" {...form.register('amount_supply', {valueAsNumber: true})} className="lg:w-fit"/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -156,10 +162,12 @@ export default function HeadTable({id}: Props) {
           /> */}
 
         </div>
-        <Button type="submit" className="w-full md:w-fit">
-          <PlusIcon className="w-4 h-4 mr-2" />
-          <span>Agregar</span>
-        </Button>
+        <Tooltip placement="top" title="Agregar detalles al producto" arrow>
+          <Button type="submit" className="w-full md:w-fit">
+            <PlusIcon className="w-4 h-4 mr-2" />
+            <span>Agregar</span>
+          </Button>
+        </Tooltip>
       </form>
     </Form>
   )

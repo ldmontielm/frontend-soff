@@ -7,7 +7,7 @@ import useSWR from 'swr'
 import { HeadTable } from ".."
 import DetailUpdateForm from "../details-update-form/DetailsUpdateForm"
 import DetailDeleteForm from "../details-delete-form/DetailsDeleteForm"
-
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface Props {
   id: string
@@ -19,7 +19,8 @@ export default function TableDetails({id}:Props) {
     <div>
       <HeadTable id={id}/>
       <div className="mt-2">
-      <Table className="border rounded">
+      <ScrollArea className='h-[370px] border rounded'>
+      <Table >
             <TableHeader>
               <TableRow>
                 <TableHead>Insumo</TableHead>
@@ -48,6 +49,7 @@ export default function TableDetails({id}:Props) {
               }
             </TableBody>
           </Table>
+            </ScrollArea>
       </div>
     </div>
   )

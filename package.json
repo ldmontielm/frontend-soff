@@ -43,6 +43,7 @@
     "axios": "^1.4.0",
     "axios-auth-refresh": "^3.3.6",
     "chart.js": "^4.4.0",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
