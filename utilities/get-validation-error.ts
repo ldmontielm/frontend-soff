@@ -194,6 +194,10 @@ export const getValidationErrors = (errorCode: string) => {
         PROVIDER_ASSOCIATED:{
             title: "proveedor asociado.",
             message:"El proveedor está asociado con una compra."
+        },
+        SUPPLY_CHANGEUNIT:{
+            title: "Unidad de medida del insumo.",
+            message: "Para cambiar la unidad de medida del insumo, debe cambiar el total y la cantidad."
         }
     }
 

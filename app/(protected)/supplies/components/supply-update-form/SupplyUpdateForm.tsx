@@ -67,7 +67,7 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
       id_supply:supply.id,
       name: supply.name,
       total: supply.total,
-      total: supply.total,
+
       price: supply.price,
       quantity_stock: supply.quantity_stock,
       unit_measure: supply.unit_measure
@@ -78,8 +78,8 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
-    if (values.unit_measure == 'Gramos'){
-      values.price = (values.total / 1000)
+    // if (values.unit_measure == 'Gramos'){
+    //   values.price = (values.total / 1000)
      
     // }
 
@@ -134,7 +134,7 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
               name="total"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Precio</FormLabel>
+                  <FormLabel>Precio total</FormLabel>
                   <FormControl>
                     <Input placeholder="Ingrese el total" type="number" step="any" {...form.register("total", {valueAsNumber: true})} />
                   </FormControl>
