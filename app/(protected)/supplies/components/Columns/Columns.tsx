@@ -87,16 +87,14 @@ export const columns: ColumnDef<Supply>[] = [
     );
   },
   cell: ({row}) => {
-    const total = parseFloat(row.getValue("total"))
-    const formatted = new Intl.NumberFormat("en-US", {
-      style: 'currency',
-      currency: "USD",
-      maximumFractionDigits: 0
-    }).format(total)
+    const price: number = row.getValue('price'); // Especifica el tipo como número
+    const formattedPrice = parseFloat(price.toFixed(2)).toLocaleString('es-ES',{
 
-    return <div className="text-left font-medium">{formatted}</div>
+    });
+
+    return <div>{formattedPrice}</div>
   }
-  },
+},
   {
     accessorKey: 'quantity_stock',
     header: ({ column }) => {
@@ -110,15 +108,11 @@ export const columns: ColumnDef<Supply>[] = [
         </Button>
       );
     },
-    cell: ({row}) => {
-      const quantity_stock = parseFloat(row.getValue("quantity_stock"));
-      // Elimina el estilo 'currency' del formato
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: 'decimal', // Cambia 'currency' a 'decimal'
-        maximumFractionDigits: 0
-      }).format(quantity_stock);
-    
-      return <div className="text-left font-medium">{formatted}</div>;
+    cell: ({ row }) => {
+      const quantity: number = row.getValue('quantity_stock');
+      // Limitar la cantidad de decimales a 2
+      const formattedQuantity = quantity.toFixed(0);
+      return <div>{formattedQuantity}</div>;
     }
   },
   {
@@ -165,6 +159,17 @@ export const columns: ColumnDef<Supply>[] = [
     return <div className="text-left font-medium">{formatted}</div>
   }
   },
+//   cell: ({row}) => {
+//     const total: number = row.getValue('total'); // Especifica el tipo como número
+
+//     const formattedTotal = parseFloat(total.toFixed(2)).toLocaleString('es-ES', {
+//       style: 'currency',
+//       currency: 'COP',
+//     });
+
+//     return <div className="font-medium">{formattedTotal}</div>
+//   }
+// },
   
   {
     accessorKey: "status",

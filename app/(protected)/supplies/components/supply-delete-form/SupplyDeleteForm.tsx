@@ -46,7 +46,7 @@ interface Props {
 
 export default function ProviderDeleteForm({ supply, id_supply }: Props) {
   const {data} = useSWR(`${RoutesApi.SUPPLIES}/${id_supply}`)
-
+  const [active, setActive] = useState(true)
 
   // // Manejar la eliminación del proveedor
   // const handleDeleteSupply = async () => {
@@ -88,7 +88,7 @@ export default function ProviderDeleteForm({ supply, id_supply }: Props) {
           <AlertDialogCancel>Cancelar</AlertDialogCancel> {/* Cerrar el diálogo de alerta */}
           <AlertDialogAction type="button" onClick={async () => {
             await DeleteSupplyFetch(`${RoutesApi.SUPPLIES}/delete_supply/${id_supply}`)
-            mutate(RoutesApi.SUPPLIES)
+            mutate(`${RoutesApi.SUPPLIES}?status=${active}`)
           }} 
           className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90">
           Eliminar

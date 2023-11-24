@@ -50,7 +50,7 @@ const formatted = new Intl.DateTimeFormat(['ban', 'id']).format(date)
                     <p className='font-bold text-sm'>Total</p>
                     <p className=' text-sm text-gray-400'>${purchase.total}</p>
                   </div>
-                  <div className='my-3 w-full text-center'>
+                  <div className='w-full text-center'>
                     <p className='font-bold text-sm'>Fecha</p>
                     <p className=' text-sm text-gray-400'>{formatted}</p>
                   </div>

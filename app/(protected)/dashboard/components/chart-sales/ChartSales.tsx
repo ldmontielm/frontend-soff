@@ -4,8 +4,6 @@ Chart.register(ChartDataLabels);
 import { Pie,Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement } from 'chart.js';
 Chart.register(ArcElement);
-// import ChartDataLabels from 'chartjs-plugin-datalabels';
-// Chart.register(ChartDataLabels);
 import useSWR from 'swr'
 import { RoutesApi } from '@/models/routes.models'
 import React, { useEffect, useState } from 'react';
