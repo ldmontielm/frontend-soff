@@ -21,7 +21,7 @@ export default function HeadTable() {
           <Tooltip placement="top" title="Aquí puedes registrar un producto." arrow>
               <Button
                 type="submit"
-                className="w-full md:w-[180px]"
+                className="w-full md:w-[197px]"
                 onClick={async () => {
                   const res = await CreateProductFetch(`${RoutesApi.PRODUCTS}/add_products`)
                   toast({variant: "default", title: "Registrando producto", description: "Ahora puedes registrar un producto."})

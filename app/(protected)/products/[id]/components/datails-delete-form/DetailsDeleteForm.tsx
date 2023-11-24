@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, {useState, useEffect} from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -17,19 +17,27 @@ import { TrashIcon } from "@heroicons/react/24/outline";
 import { DetailsRecipe } from "../../../models/product.models";
 import { fetcherDelete } from "@/context/swr-context-provider/SwrContextProvider";
 import { RoutesApi } from "@/models/routes.models";
-import useSWR, {mutate} from 'swr'
+import useSWR, {mutate,} from 'swr'
 
 const DeleteDetailFetch = async (url: string) => {
   return await fetcherDelete(url)
 }
 
 interface Props {
-  // detail: DetailsRecipe;
   id_product: string
 }
 
 export default function DetailDeleteForm({ id_product }: Props) {
-  const {data:detail} = useSWR(`${RoutesApi.PRODUCTS}/${id_product}/details`)
+  const {data:details } = useSWR<DetailsRecipe>(`${RoutesApi.PRODUCTS}/${id_product}/details`)     
+
+  const onSubmit = async()=>{ 
+    let id = ""
+    Array.isArray(details) && details.map((detail) => (
+      id = detail.id
+    ))
+    const res = await DeleteDetailFetch(`${RoutesApi.PRODUCTS}/${id}/delete_detail`);
+    mutate(`${RoutesApi.PRODUCTS}/${id_product}/details`)
+  }
 
   return (
     <AlertDialog>
@@ -52,10 +60,7 @@ export default function DetailDeleteForm({ id_product }: Props) {
       </AlertDialogHeader>
       <AlertDialogFooter>
         <AlertDialogCancel>Cancel</AlertDialogCancel>
-        <AlertDialogAction type="button" onClick={async () => {
-            const res = await DeleteDetailFetch(`${RoutesApi.PRODUCTS}/${detail.id}/delete_detail`)
-            mutate(`${RoutesApi.PRODUCTS}/${id_product}/details`)
-          }} 
+        <AlertDialogAction type="button" onClick={onSubmit}
           className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90">
           Eliminar
         </AlertDialogAction>
@@ -63,4 +68,4 @@ export default function DetailDeleteForm({ id_product }: Props) {
     </AlertDialogContent>
   </AlertDialog>
   );
-}
+  }
