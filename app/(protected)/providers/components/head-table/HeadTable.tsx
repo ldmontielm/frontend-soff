@@ -3,13 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { fetcherPost } from "@/context/swr-context-provider/SwrContextProvider";
 import { useToast } from "@/components/ui/use-toast"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-
+import {Tooltip} from "@mui/material"
+// import {
+//   Tooltip,
+//   TooltipContent,
+//   TooltipProvider,
+//   TooltipTrigger,
+// } from "@/components/ui/tooltip"
 import * as z from 'zod'
 import {
   Form,
@@ -67,9 +67,10 @@ interface Props {
 
 export default function HeadTable({location}: Props) {
   const [open, setOpen] = useState(false)
-  const routes  = useRouter()
+  const router  = useRouter()
+  const [active, setActive] = useState(true)
   const { toast } = useToast()
-  const {data:provider} = useSWR(RoutesApi.PROVIDERS)
+  const {data:provider} = useSWR(`${RoutesApi.PROVIDERS}?status=${active}`)
   const form = useForm<z.infer<typeof fromSchema>> ({
     resolver: zodResolver(fromSchema),
     defaultValues: {
@@ -98,26 +99,28 @@ export default function HeadTable({location}: Props) {
   
   const onSubmit = async (values: z.infer<typeof fromSchema>) => {
     // values.provider_id = id
-    await AddProviderFetch(`${RoutesApi.PROVIDERS}/create_provider`, values)
+    const res = await AddProviderFetch(`${RoutesApi.PROVIDERS}/create_provider`, values)
     setOpen(false)
     toast({variant: 'default', title: "Proveedor creado correctamente", description: "Se ha creado correctamente el proveedor."})
     form.reset()
-    
-    mutate(RoutesApi.PROVIDERS)
+    mutate(`${RoutesApi.PROVIDERS}?status=${active}`)
   }
 
 
 return (
   <div>
+         
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
+    <Tooltip placement="top" title="Aquí puedes registrar un proveedor." arrow>
       <Button variant={`${location === 'purchases' ? 'outline' : 'default'}`} size={`${location === 'purchases' ? 'icon' : 'default'}`} className={`${location === 'purchases' ? '' : 'w-full md:w-[180px]'}`}>
         {
-        location === 'purchases' ? (
-          <UserPlusIcon className="w-4 h-4" />
-        ): "Registrar Proveedor"
-        }
+          location === 'purchases' ? (
+            <UserPlusIcon className="w-4 h-4" />
+            ): "Registrar Proveedor"
+          }
       </Button>
+      </Tooltip>
       </DialogTrigger>
       <DialogContent >
       
@@ -136,7 +139,7 @@ return (
                 <FormItem>
                 <FormLabel>NIT </FormLabel>
                 <FormControl>
-                  <Input placeholder="Ingrese el nit" {...field} />
+                  <Input placeholder="Ingrese el NIT" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -162,7 +165,7 @@ return (
                 <FormItem>
                 <FormLabel>Empresa </FormLabel>
                 <FormControl>
-                  <Input placeholder="Ingrese la empresa" {...field} />
+                  <Input placeholder="Ingrese la Empresa" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -175,7 +178,7 @@ return (
                 <FormItem>
                 <FormLabel>Dirección</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ingrese la direccion" {...field} />
+                  <Input placeholder="Ingrese la Dirección" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -201,7 +204,7 @@ return (
                 <FormItem>
                 <FormLabel>Teléfono </FormLabel>
                 <FormControl>
-                  <Input placeholder="Ingrese el telefono" {...field} />
+                  <Input placeholder="Ingrese el Teléfono" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -214,7 +217,7 @@ return (
                 <FormItem>
                 <FormLabel>Ciudad</FormLabel>
                 <FormControl>
-                  <Input placeholder="Ingrese la ciudad" {...field} />
+                  <Input placeholder="Ingrese la Ciudad" {...field} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -224,7 +227,7 @@ return (
               <DialogFooter>
             <div className=" mt-4 flex justify-between">
                 <div>
-                  <Button type="button" onClick={handleCancelar} className="mr-2 bg-red-500 hover:bg-red-600 text-white">
+                  <Button type="button" onClick={handleCancelar} className="mr-6 bg-white-500 border border-2 border-black hover:bg-gray-100 text-black">
                     Cancelar
                   </Button>
                 </div>

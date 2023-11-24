@@ -1,13 +1,14 @@
 'use client'
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+Chart.register(ChartDataLabels);
+import { Pie,Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement } from 'chart.js';
 Chart.register(ArcElement);
-// import ChartDataLabels from 'chartjs-plugin-datalabels';
-// Chart.register(ChartDataLabels);
 import useSWR from 'swr'
 import { RoutesApi } from '@/models/routes.models'
 import React, { useEffect, useState } from 'react';
-import { Pie, Doughnut } from 'react-chartjs-2';
-import { AnyNaptrRecord } from 'dns';
+
+
 
 interface Sale {
     Año: number,
@@ -31,28 +32,23 @@ export default function ChartSales()  {
     const portransfer = salesMonth.map((item: Sale) => item.Porcentaje_Transferencia);
     const total = salesMonth.map((item: Sale) => item.Ventas_Totales);
 
+    const totales = parseFloat(total)
+    const formatted = new Intl.NumberFormat("en-US", {
+      style: 'currency',
+      currency: "USD",
+      maximumFractionDigits: 0
+    }).format(totales)
+
     const chartData = {
         labels: ['Ventas por Efectivo', 'Ventas por Transferencia'],
         datasets: [{
             data: [cashSales, transferSales],
-            backgroundColor: ['#FF6384', '#36A2EB'],
-            hoverBackgroundColor: ['#FF6384', '#36A2EB']
+            backgroundColor: ['green', 'yellow'],
+            hoverBackgroundColor: ['#24872B', '#FFF333']
         }]
     };
-    // const options = {
-    //     plugins: {
-    //         datalabels: {
-    //             formatter: (value:number, ctx:any) => {
-    //                return `${porcash}%, ${portransfer}%`;
-    //             },
-    //             color: '#fff',
-    //         },
-    //         title: {
-    //             display: true,
-    //             text: `Total Ventas: ${total}`
-    //         }
-    //     }
-    // };
+
+
     const options = {
         plugins: {
             datalabels: {
@@ -63,19 +59,44 @@ export default function ChartSales()  {
                        return `${portransfer}%`;
                     }
                 },
-                color: '#fff',
-            },
-            title: {
-                display: true,
-                text: `Total Ventas: ${total}`
+                color: 'black',
+                font: {
+                    size: 20,
+                },
             }
-        }
+        },
+        centerText: {
+            display: true,
+            text: `${formatted}`,
+        },
      };
+
+     const plugins = [
+        {
+            id: 'centerText',
+            beforeDraw: function (chart:any) {
+                const width = chart.width;
+                const height = chart.height;
+                const ctx = chart.ctx;
+                ctx.restore();
+                const fontSize = (height / 220).toFixed(2);
+                ctx.font = `${fontSize}em sans-serif`; 
+                ctx.textBaseline = "top";
+                const text = chart.config.options.centerText.text;
+                const textX = Math.round((width - ctx.measureText(text).width) / 2);
+                const textY = height / 2;
+                ctx.fillStyle = 'black';
+                ctx.fillText(text, textX, textY);
+                ctx.save();
+            },
+        },
+      ];
+      
      
 
     return (
         <div style={{width: "450px", height: "450px"}}> 
-            <Pie data={chartData} options={options}/>
+            <Doughnut data={chartData} options={options} plugins={plugins}/>
         </div>
     ); 
     };

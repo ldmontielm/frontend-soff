@@ -143,6 +143,61 @@ export const getValidationErrors = (errorCode: string) => {
         APIKEY_NOT_FOUND: {
             title: "Lo sentimos, ocurrió un error con tu acceso.",
             message:"Algo sucedio al momento de confirmar tu contraseña, vuelve a intentarlo más tarde."
+        },
+        // -----------ROLES EXCEPTIONS--------------
+        THE_ROLE_ALREADY_EXISTS: {
+            title: "Rol ya existente.",
+            message:"El nombre del rol ya está registrado."
+        },
+        ROLE_NOT_FOUND: {
+            title: "Rol no existente.",
+            message:"No se encontro unformacin sobre el rol."
+        },
+        IROLE_IS_REQUIRED: {
+            title: "Informacion requerida.",
+            message:"La informacion del rol es requerida."
+        },
+        NO_UPDATE_STATUS_ADMIN_BASE:{
+            title: "Este rol es inmutable.",
+            message:"El rol Administrador y Base no se pueden inactivar"
+        },
+        // -----------USERS EXCEPTIONS-----------
+            THE_USER_ALREADY_EXISTS: {
+            title: "Documento ya existente.",
+            message:"El documento del usuario ya está registrado."
+        },
+        THE_EMAIL_USER_ALREADY_EXISTS: {
+            title: "Correo ya existente.",
+            message:"El correo del usuario ya está registrado."
+        },
+        USER_NOT_FAUND: {
+            title: "Usuario no existente.",
+            message:"El usuario no existe."
+        },
+        INFO_IS_REQUIRED: {
+            title: "Informacion requerida.",
+            message:"La informacion del usuario es requerida."
+        },
+        //Provider - Supply EXCEPTIONS
+        SUPPLY_ALREADY_EXISTS:{
+            title: "Nombre existente.",
+            message:"El nombre del insumo ya está registrado."
+        },
+        NIT_ALREADY_EXISTS:{
+            title: "NIT existente.",
+            message:"El NIT del proveedor ya está registrado."
+        },
+        SUPPLY_ASSOCIATED:{
+            title: "Insumo asociado.",
+            message:"El insumo está asociado a un producto registrado."
+        },
+        PROVIDER_ASSOCIATED:{
+            title: "proveedor asociado.",
+            message:"El proveedor está asociado con una compra."
+        },
+        SUPPLY_CHANGEUNIT:{
+            title: "Unidad de medida del insumo.",
+            message: "Para cambiar la unidad de medida del insumo, debe cambiar el total y la cantidad."
         }
     }
 
