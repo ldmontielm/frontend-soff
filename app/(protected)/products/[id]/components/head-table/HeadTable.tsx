@@ -35,9 +35,10 @@ import {Tooltip} from "@mui/material"
 const formSchema = z.object({
   product_id: z.string(),
   supply_id: z.string().uuid({message: 'Debe seleccionar un insumo'}),
-  amount_supply: z.number({required_error: "Este campo es requerido", invalid_type_error: "Se espera un número"})
+  amount_supply: z.number({required_error: "Este campo es requerido", 
+  invalid_type_error: "Se espera un número"})
   .min(1, {message: "El valor de la cantidad debe ser diferente de 0"}).
-  max(999, {message: "Como máximo solo puedes usar 900 de cada insumo"})
+  max(999, {message: "El número es muy largo"})
 })
 
 const AddDetailFetch = async (url: string, body: DetailCreate) => {

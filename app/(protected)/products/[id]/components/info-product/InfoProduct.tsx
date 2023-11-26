@@ -15,8 +15,14 @@ import { DetailsRecipe, Product, ProductConfim } from '../../../models/product.m
 import { useToast } from "@/components/ui/use-toast"
 
 const formProductSchema = z.object({
-  name: z.string({required_error: "El campo es requerido"}).min(3, {message: "Ingrese mínimo 3 caracteres"}).max(50, {message: 'El nombre es demasiado largo'}),
-  sale_price: z.number({required_error: "El campo es requerido", invalid_type_error: "Se espera un número"}).min(3, {message: "Ingrese mínimo 3 caracteres"}).max(99999999999, {message: 'El precio es demasiado largo'})
+  name: z.string({required_error: "El campo es requerido"})
+  .min(3, {message: "Ingrese mínimo 3 caracteres"})
+  .max(40, {message: 'El nombre es demasiado largo'}),
+  sale_price: z.number({required_error: "El campo es requerido",
+  invalid_type_error: "Se espera un número"})
+  .refine(value => value !== 0, { message: "El precio de venta no puede ser cero" })
+  .refine(value => value >= 111, {message: "Ingrese mínimo 3 números"})
+  .refine(value => value <= 99999999999,  {message: 'El precio es demasiado largo'})
 });
 
 interface Props{
@@ -43,7 +49,6 @@ const CancelProductFetch = async (url: string) => {
 
 export default function InfoProduct({id}:Props) {
   const {data:details} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
-  // const {data: product} = useSWR<Product>(`${RoutesApi.PRODUCTS}/${id}`)
   const router = useRouter()
   const { toast } = useToast()
 
@@ -85,7 +90,7 @@ export default function InfoProduct({id}:Props) {
                     <FormItem>
                       <FormLabel>Nombre</FormLabel>
                       <FormControl >
-                         <Input placeholder=''{...field} />
+                         <Input placeholder='Ingrese el nombre del producto'{...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -98,7 +103,7 @@ export default function InfoProduct({id}:Props) {
                     <FormItem>
                       <FormLabel>Precio</FormLabel>
                       <FormControl>
-                        <Input type='number' placeholder=''{...formProduct.register("sale_price", {valueAsNumber: true})}/>
+                        <Input type='number' placeholder='Ingrese el precio de venta'{...formProduct.register("sale_price", {valueAsNumber: true})}/>
                       </FormControl>
                       <FormMessage />
                     </FormItem>

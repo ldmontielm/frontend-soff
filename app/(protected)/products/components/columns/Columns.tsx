@@ -110,7 +110,7 @@ export const columns: ColumnDef<Product>[] = [
         header: "Estado",
         cell: ({row}) => {
             const product = row.original;
-            return <DisableProduct product={product}/>
+            return <DisableProduct id={product.id}/>
         }
     },
     {
@@ -139,7 +139,7 @@ export const columns: ColumnDef<Product>[] = [
                                                     <PencilIcon  className=" h-4 w-4 mr-2"  /> <span className="mr-8">Editar</span>
                                                 </Button>
                                             </Link>
-                                            <ViewDetailsByProduct product={product} id={product.id}/>
+                                            <ViewDetailsByProduct id={product.id}/>
                                         </>
                                     ):
                                     ( 
