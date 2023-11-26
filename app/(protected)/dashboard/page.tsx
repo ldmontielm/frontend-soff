@@ -20,9 +20,9 @@ export default function page() {
             <div className="col-span-6 bg-neutral-100 rounded p-4">
               <PieSales />
             </div>
-            <div className="col-span-6">
-              <PieSales />
-            </div>
+            {/* <div className="col-span-6"> */}
+              {/* <PieSales /> */}
+            {/* </div> */}
           </div>
         </main>
     )
