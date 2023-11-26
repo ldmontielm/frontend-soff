@@ -123,7 +123,7 @@ export default function PieSales() {
 
   return (
     <div className="w-full flex flex-col md:flex-row items-center py-4 gap-3 justify-between">
-    <div className="p-3 gap-3 border rounded ">
+    <div className="p-3 w-[900px] gap-3 border rounded ">
       <div className="flex justify-between items-center">
         <div className="flex items-center ml-10 mt-2">
           <p className="text-gray-600 font-bold">Total Ventas {selectedYear}</p>
@@ -143,7 +143,7 @@ export default function PieSales() {
           </select>
         </div>
       </div>
-      <div className="">
+      <div className="w-[850px]">
         <Line options={options} data={chartData}  />
       </div>
     </div>
