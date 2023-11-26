@@ -16,10 +16,10 @@ export default function page() {
         <main className="w-full mx-auto max-w-7xl p-4">
           <HeaderModule />
           <ContentTargets />
-          <div className="my-10 gap-4 grid grid-cols-1 md:grid-cols-12">
-            <div className="col-span-6 bg-neutral-100 rounded p-4">
+          <div className="my-10 gap-4 grid grid-cols-1">
+            {/* <div className="col-span-6 bg-neutral-100 rounded p-4"> */}
               <PieSales />
-            </div>
+            {/* </div> */}
             {/* <div className="col-span-6"> */}
               {/* <PieSales /> */}
             {/* </div> */}
