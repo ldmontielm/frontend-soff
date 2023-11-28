@@ -26,7 +26,7 @@ interface Props{
 
 const calculateSubtotal = (details: Array<DetailsRecipe>) => {
   let subtotal = 0
-  if(details !== undefined){
+  if(details !== undefined && Array.isArray(details)){
     details.map(detail => {
       subtotal += detail.subtotal
     })
