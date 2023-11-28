@@ -45,9 +45,9 @@ export default function FormClient() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Edit profile</DialogTitle>
+          <DialogTitle>Añadir Cliente</DialogTitle>
           <DialogDescription>
-            Make changes to your profile here. Click save when youre done.
+            Ingresa la información del cliente para realizar el domicilio.
           </DialogDescription>
         </DialogHeader>
         <Form {...formSale}>

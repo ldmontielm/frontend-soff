@@ -27,7 +27,6 @@ import { Calendar } from "@/components/ui/calendar"
 import {
   Tooltip
 } from "@mui/material"
-import { ToastAction } from "@/components/ui/toast"
 import { ScrollArea } from "@/components/ui/scroll-area"
 
 const formPurchaseSchema = z.object({
@@ -230,11 +229,11 @@ export default function InfoPurchase({id}:Props) {
           </div>
           
           <div className='mt-4 space-y-2'>
-          <Tooltip placement="top" title="Aqui podrás confirmar la compra" arrow>
-            <Button className="w-full" type='submit'>
-              Consolidar compra
-            </Button>
-          </Tooltip>
+            <Tooltip placement="top" title="Aqui podrás confirmar la compra" arrow>
+              <Button className="w-full" type='submit'>
+                Consolidar compra
+              </Button>
+            </Tooltip>
           </div>
           
 
