@@ -34,11 +34,12 @@ export default function DetailUpdateForm({id_product}: Props) {
   let id = ""
   let amount_supply = 0
   let supply =""
-    Array.isArray(details) && details.map((detail) => (
+    if(Array.isArray(details)) {details.forEach((detail) => (
       id = detail.id,
       amount_supply = detail.amount_supply,
       supply = detail.supply
     ))
+    }
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
