@@ -1,12 +1,11 @@
 'use client'
-import { Chart as ChartJS, LinearScale,PointElement,ArcElement, Tooltip, Legend, LineElement, Title, CategoryScale } from "chart.js";
+import { Chart as ChartJS, LinearScale,PointElement, Tooltip, Legend, LineElement, Title, CategoryScale } from "chart.js";
 import { Line } from 'react-chartjs-2';
 import useSWR from 'swr'
 import { RoutesApi } from '@/models/routes.models'
 import React, { useEffect, useState, useMemo } from 'react';
 import Image from 'next/image'
 import SoffLogo from "@/public/soff.svg"
-
 
 ChartJS.register(
   CategoryScale,
@@ -40,6 +39,21 @@ export default function PieSales() {
     tension: 0.1
     }]
   })
+
+  const convertToCOP = (money: number | null) => {
+    if (money !== null && money !== undefined) {
+        const formattedMoney = new Intl.NumberFormat('es-CO', {
+            style: 'currency',
+            currency: 'COP',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(money)
+  
+        return formattedMoney;
+    }
+  
+    return ''
+  }
 
   useEffect(()=>{
     if(salesMonth){
@@ -164,7 +178,7 @@ export default function PieSales() {
               minSaleMonth === maxSaleMonth && minSaleValue === maxSaleValue ? (
                 <>
                   <p className="pl-4 pt-4 text-green-500 font-bold">Valor Alto</p>
-                  <p className="pl-4 pt-4 text-black text-2xl font-bold">${maxSaleValue}</p>
+                  <p className="pl-4 pt-4 text-black text-2xl font-bold">{convertToCOP(maxSaleValue)}</p>
                   <p className="pl-9 text-gray-500 font-bold">{maxSaleMonth}</p>
                   <p className="pl-9 pb-2">Alcanza su punto máximo.</p>
                 </>
@@ -173,14 +187,14 @@ export default function PieSales() {
               (
                 <>
                   <p className="pl-4 pt-4 text-red-500 font-bold">Valor bajo</p>
-                  <p className="pl-4 pt-4 text-black text-2xl font-bold">${minSaleValue}</p>
+                  <p className="pl-4 pt-4 text-black text-2xl font-bold">{convertToCOP(minSaleValue)}</p>
                   <p className="pl-9 text-gray-500 font-bold">{minSaleMonth}</p>
                   <p className="pl-9 pr-1">Las ventas son relativamente bajas.</p>
                   <p className="pl-4 pt-4 text-green-500 font-bold">Valor Alto</p>
-                  <p className="pl-4 pt-4 text-black text-2xl font-bold">${maxSaleValue}</p>
+                  <p className="pl-4 pt-4 text-black text-2xl font-bold">{convertToCOP(maxSaleValue)}</p>
                   <p className="pl-9 text-gray-500 font-bold">{maxSaleMonth}</p>
                   <p className="pl-9">Alcanza su punto máximo.</p>
-                  <p className="text-blue-700 text-1xl pl-4 font-bold pt-4 pb-2">Diferencia: ${differenceSale}</p>
+                  <p className="text-blue-700 text-1xl pl-4 font-bold pt-4 pb-2">Diferencia: {convertToCOP(differenceSale)}</p>
                 </>
               )
             } 

@@ -17,12 +17,7 @@ export default function page() {
           <HeaderModule />
           <ContentTargets />
           <div className="my-10 gap-4 grid grid-cols-1">
-            {/* <div className="col-span-6 bg-neutral-100 rounded p-4"> */}
               <PieSales />
-            {/* </div> */}
-            {/* <div className="col-span-6"> */}
-              {/* <PieSales /> */}
-            {/* </div> */}
           </div>
         </main>
     )
