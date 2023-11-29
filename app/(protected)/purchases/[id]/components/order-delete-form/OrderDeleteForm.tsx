@@ -5,12 +5,12 @@ import {AlertDialog, AlertDialogAction,AlertDialogCancel,AlertDialogContent, Ale
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "@heroicons/react/24/outline";
 import { Order } from "@/app/(protected)/purchases/models/purchase.models";
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { fetcherDelete } from "@/context/swr-context-provider/SwrContextProvider";
 import useSWR, {mutate} from 'swr'
 import { RoutesApi } from "@/models/routes.models";
+import {
+  Tooltip
+} from "@mui/material"
 
 const DeleteOrderFetch = async (url: string) => {
   return await fetcherDelete(url)
@@ -27,13 +27,15 @@ export default function OrderDeleteForm({ order, id_purchase }: Props) {
   return (
     <AlertDialog>
     <AlertDialogTrigger asChild>
-      <Button
-        variant="outline"
-        size="icon"
-        className="group hover:bg-red-500"
-      >
-        <TrashIcon className="w-4 h-4 group-hover:text-white" />
-      </Button>
+      <Tooltip placement="top" title="Aqui puedes eliminar la orden" arrow>
+        <Button
+          variant="outline"
+          size="icon"
+          className="group hover:bg-red-500"
+        >
+          <TrashIcon className="w-4 h-4 group-hover:text-white" />
+        </Button>
+      </Tooltip>
     </AlertDialogTrigger>
     <AlertDialogContent>
       <AlertDialogHeader>

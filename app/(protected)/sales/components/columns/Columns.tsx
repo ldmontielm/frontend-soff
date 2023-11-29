@@ -16,10 +16,13 @@ import { MoreHorizontal} from "lucide-react"
 import { ChevronUpDownIcon } from "@heroicons/react/24/outline"
 import { Receipt, UploadFile } from ".."
 import { SeeDetail } from "../see-detail"
+import {
+  Tooltip
+} from "@mui/material"
 export const columns: ColumnDef<Sale>[] = [
   {
     accessorKey: "invoice_number",
-    header: "# Factura"
+    header: "Factura"
   },
   {
     accessorKey: 'client',
@@ -170,9 +173,11 @@ export const columns: ColumnDef<Sale>[] = [
       return (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
+          <Tooltip placement="top" title="Aqui podrás ver las acciones de las ventas" arrow>
             <Button variant='ghost' size='icon'>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
+          </Tooltip>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="flex flex-col">
             <DropdownMenuLabel>Acciones</DropdownMenuLabel>
@@ -182,7 +187,7 @@ export const columns: ColumnDef<Sale>[] = [
                   <UploadFile id={sale.id} />
                 ): ""
             }
-            <SeeDetail id={sale.id}/>
+            <SeeDetail sale={sale} id={sale.id}/>
             <Receipt id={sale.id} sale={sale} />
           </DropdownMenuContent>
         </DropdownMenu>

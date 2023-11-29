@@ -4,13 +4,16 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { HeadTable } from '..'
-import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
-import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { AdjustmentsHorizontalIcon,ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
+import { Select, SelectContent,SelectItem,SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ColumnDef, flexRender, ColumnFiltersState, getFilteredRowModel, VisibilityState, getCoreRowModel, getPaginationRowModel, useReactTable, SortingState, getSortedRowModel } from "@tanstack/react-table"
-import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { DropdownMenu,DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { Checkbox } from '@mui/material'
-import { generateExcelReport } from '../../utils'
+import { Report } from '../../[id]/components/report'
 import { Sale } from '../../models/sale.models'
+import {
+  Tooltip
+} from "@mui/material"
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -52,10 +55,12 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
-                <AdjustmentsHorizontalIcon className='w-4 h-4' />
-                <span>Columnas</span>
-              </Button>
+              <Tooltip placement="top" title="Aqui podrás ocultar las columnas de la tabla." arrow>
+                <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
+                  <AdjustmentsHorizontalIcon className='w-4 h-4' />
+                  <span>Columnas</span>
+                </Button>
+              </Tooltip>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='start'>
             {table
@@ -90,10 +95,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant='outline' className='flex items-center w-full md:w-fit gap-2' onClick={() => generateExcelReport(data as Array<Sale>)}>
-            <DocumentChartBarIcon className='w-4 h-4' />
-            <span>Generar Excel</span>
-          </Button>
+          <Report data={data}/>
         </div>
         <HeadTable />
       </div>
