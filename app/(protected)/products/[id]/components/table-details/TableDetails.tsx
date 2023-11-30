@@ -39,8 +39,8 @@ const {data:DetailsContext} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
                     <TableCell>${convertToCOP(detail.supply_price)}</TableCell>
                     <TableCell>${convertToCOP(detail.subtotal)}</TableCell>
                     <TableCell className="flex items-center gap-2 justify-end">
-                      <DetailUpdateForm id_product={id}/>
-                      <DetailDeleteForm id_product={id}/> 
+                      <DetailUpdateForm detail={detail} id_product={id}/>
+                      <DetailDeleteForm detail={detail} id_product={id}/>
                     </TableCell>
                   </TableRow>
                 ))

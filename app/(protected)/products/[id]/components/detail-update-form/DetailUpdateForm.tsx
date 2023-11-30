@@ -20,6 +20,7 @@ const formSchema = z.object({
 })
 
 interface Props{
+  detail: DetailsRecipe
   id_product: string | string[]
 }
 
@@ -27,30 +28,20 @@ const UpdateAmountDetailFetch = async (url: string) => {
   return await fetcherPut(url, undefined)
 }
 
-export default function DetailUpdateForm({id_product}: Props) {
+export default function DetailUpdateForm({detail, id_product}: Props) {
   const [open, setOpen] = useState(false)
-  const {data: details} = useSWR(`${RoutesApi.PRODUCTS}/${id_product}/details`)
-
-  let id = ""
-  let amount_supply = 0
-  let supply =""
-    Array.isArray(details) && details.map((detail) => (
-      id = detail.id,
-      amount_supply = detail.amount_supply,
-      supply = detail.supply
-    ))
+  const {data} = useSWR(`${RoutesApi.PRODUCTS}/${id_product}/details`)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      id_detail:id,
-      amount_supply: amount_supply
-
+      id_detail:detail.id,
+      amount_supply: detail.amount_supply
     },
   })
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    values.id_detail = id
+    values.id_detail = detail.id
     const data = await UpdateAmountDetailFetch(`${RoutesApi.PRODUCTS}/update_detail?id_detail=${values.id_detail}&amount_supply=${values.amount_supply}`)
     mutate(`${RoutesApi.PRODUCTS}/${id_product}/details`)
     setOpen(false)
@@ -68,7 +59,7 @@ export default function DetailUpdateForm({id_product}: Props) {
         <DialogHeader>
           <DialogTitle>Editar cantidad</DialogTitle>
           <DialogDescription>
-            Puedes cambiar la cantidad del insumo <span className="capitalize font-semibold text-gray-600">{supply}</span>
+            Puedes cambiar la cantidad del insumo <span className="capitalize font-semibold text-gray-600">{detail.supply}</span>
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -80,23 +71,11 @@ export default function DetailUpdateForm({id_product}: Props) {
                 <FormItem>
                   <FormLabel>Cantidad</FormLabel>
                   <FormControl>
-                    <Input id="amount_supply" type="number" defaultValue={amount_supply} className="col-span-3" {...form.register("amount_supply", {valueAsNumber: true})} onChange={field.onChange}/>
+                    <Input id="amount_supply" type="number" defaultValue={detail.amount_supply} className="col-span-3" {...form.register("amount_supply", {valueAsNumber: true})} onChange={field.onChange} placeholder={detail.amount_supply.toString()}/>
                   </FormControl>
                   <FormDescription>
                     Digite la cantidad del insumo.
                   </FormDescription>
-                  <FormMessage />
-              </FormItem>
-              )}
-            />
-            <FormField 
-              control={form.control}
-              name="id_detail"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Input id="id_detail" type="text" placeholder="0" {...field} className="col-span-3 hidden" defaultValue={id} />
-                  </FormControl>
                   <FormMessage />
               </FormItem>
               )}
