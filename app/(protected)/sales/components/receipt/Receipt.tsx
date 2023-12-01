@@ -8,7 +8,7 @@ import { ArrowDownOnSquareIcon } from '@heroicons/react/24/outline'
 import { Order, Sale } from '../../models/sale.models'
 import { RoutesApi } from '@/models/routes.models'
 import { Button } from '@/components/ui/button'
-import { PDFViewer } from '@react-pdf/renderer';
+import { useToast } from "@/components/ui/use-toast"
 
 interface Props {
   id: string,
@@ -28,7 +28,7 @@ export default function Receipt({id, sale}:Props) {
     currency: "USD",
     maximumFractionDigits: 0
   }).format(sale.total)
-
+  const { toast } = useToast()
   const formattedDate = new Intl.DateTimeFormat(['ban', 'id']).format(Date.parse(sale.sale_date))
 
   const generateReceipt = () => {
@@ -73,7 +73,9 @@ export default function Receipt({id, sale}:Props) {
 
   return (
     <div>
-      <div onClick={() => generateReceipt()} className='flex items-center px-2 cursor-default rounded hover:bg-neutral-100 select-none text-sm py-1.5 transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50'>
+      <div onClick={() => {generateReceipt()
+      toast({variant: 'default',title: "Generando detalle",description: "Se ha generado el detalle de la venta.",})
+      }} className='flex items-center px-2 cursor-default rounded hover:bg-neutral-100 select-none text-sm py-1.5 transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50'>
           <ArrowDownOnSquareIcon className="w-4 h-4 mr-2"/> Descargar detalle
       </div>
     </div>
