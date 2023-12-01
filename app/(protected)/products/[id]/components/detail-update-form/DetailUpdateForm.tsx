@@ -30,7 +30,6 @@ const UpdateAmountDetailFetch = async (url: string) => {
 
 export default function DetailUpdateForm({detail, id_product}: Props) {
   const [open, setOpen] = useState(false)
-  const {data} = useSWR(`${RoutesApi.PRODUCTS}/${id_product}/details`)
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

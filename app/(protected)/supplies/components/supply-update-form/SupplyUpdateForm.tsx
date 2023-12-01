@@ -36,6 +36,7 @@ const formSchema = z.object({
   id_supply:z.string().optional(),
   name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}).max(50, {message: 'El nombre del insumo es demasiado largo'}),
   price: z.number({required_error: "El campo es requerido"}).min(3, {message: 'Ingrese el precio del insumo'}).max(999999, {message: 'El precio es demasiado alto'}),
+  total: z.number({required_error: "El campo es requerido"}).min(3, {message: 'Ingrese el total del insumo'}).max(999999, {message: 'El total es demasiado alto'}),
   quantity_stock: z.number({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).max(999999, {message: 'La cantidad es demasiado alta'}),
   unit_measure: z.string().refine((value) => {
     // Agrega tu lógica de validación personalizada para el campo unit_measure aquí
@@ -65,6 +66,7 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
     defaultValues: {
       id_supply:supply.id,
       name: supply.name,
+      total: supply.total,
       price: supply.price,
       quantity_stock: supply.quantity_stock,
       unit_measure: supply.unit_measure
@@ -76,7 +78,8 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
 
     if (values.unit_measure == 'Gramos'){
-      values.price = (values.price / 1000)
+      values.price = (values.total / 1000)
+     
     }
 
     values.id_supply = supply.id
@@ -127,12 +130,12 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
             />
             <FormField 
               control={form.control}
-              name="price"
+              name="total"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Precio</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ingrese el precio" type="number" step="any" {...form.register("price", {valueAsNumber: true})} />
+                    <Input placeholder="Ingrese el total" type="number" step="any" {...form.register("total", {valueAsNumber: true})} />
                   </FormControl>
                   {/* <FormDescription>
                     Digite El precio del insumo.

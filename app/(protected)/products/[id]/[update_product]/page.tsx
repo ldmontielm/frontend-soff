@@ -1,7 +1,8 @@
 
 import React from 'react'
-import { TableDetails, InfoProduct } from './components'
+import { InfoProduct } from './components'
 import { HeaderModuleDetail } from '../../components/header-module/HeaderModule'
+import { TableDetails } from '../components'
 
 export default async function Page({params}:{params: {id: string}}) {
   return (
