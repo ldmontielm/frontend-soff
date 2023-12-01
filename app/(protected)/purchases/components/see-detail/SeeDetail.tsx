@@ -1,13 +1,14 @@
 'use client'
 
 import React, {useState} from 'react'
-import { Order, Purchase } from '@/app/(protected)/purchases/models/purchase.models'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Purchase } from '@/app/(protected)/purchases/models/purchase.models'
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { QueueListIcon } from '@heroicons/react/24/outline'
 import useSWR from 'swr'
+import { convertToCOP } from '../../utils'
 import {RoutesApi} from '@/models/routes.models'
-import {Table,TableBody,TableCaption,TableCell,TableHead,TableHeader,TableRow,} from "@/components/ui/table"
-
+import {Table,TableBody,TableCell,TableHead,TableHeader,TableRow,} from "@/components/ui/table"
+import { ScrollArea } from "@/components/ui/scroll-area"
 
 interface Props {
   purchase: Purchase
@@ -58,28 +59,30 @@ const formatted = new Intl.DateTimeFormat(['ban', 'id']).format(date)
               </div>
             </div>
           <div className='relative w-full bg-white col-span-8 border rounded'>
-          <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Insumo</TableHead>
-                  <TableHead>Cantidad</TableHead>
-                  <TableHead>Precio</TableHead>
-                  <TableHead>Subtotal</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {
-                  Array.isArray(orders) && orders.map((order) => (
-                    <TableRow key={order.supply_id}>
-                      <TableCell className="font-medium capitalize">{order.supply}</TableCell>
-                      <TableCell>{order.amount_supplies}</TableCell>
-                      <TableCell>${order.price_supplies}</TableCell>
-                      <TableCell>${order.subtotal}</TableCell>
-                    </TableRow>
-                  ))
-                }
-              </TableBody>
-            </Table>
+          <ScrollArea className='h-[200px]'>
+            <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Insumo</TableHead>
+                    <TableHead>Cantidad</TableHead>
+                    <TableHead>Precio</TableHead>
+                    <TableHead>Subtotal</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {
+                    Array.isArray(orders) && orders.map((order) => (
+                      <TableRow key={order.supply_id}>
+                        <TableCell className="font-medium capitalize">{order.supply}</TableCell>
+                        <TableCell>{order.amount_supplies}</TableCell>
+                        <TableCell>${order.price_supplies}</TableCell>
+                        <TableCell>${order.subtotal}</TableCell>
+                      </TableRow>
+                    ))
+                  }
+                </TableBody>
+              </Table>
+          </ScrollArea>
           </div>
         </DialogContent>
       </Dialog>

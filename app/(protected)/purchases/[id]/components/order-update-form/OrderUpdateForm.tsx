@@ -14,12 +14,8 @@ import { useState } from 'react'
 import useSWR, { mutate} from 'swr'
 import { RoutesApi } from '@/models/routes.models'
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { useToast } from "@/components/ui/use-toast"
+  Tooltip
+} from "@mui/material"
 
 const formSchema = z.object({
   amount_supplies: z.number({invalid_type_error: "Debes ingresar un número, no un texto", required_error: "El campo es requerido"}).min(1, {message: "El valor de la cantidad debe ser diferente de 0"}),
@@ -58,18 +54,11 @@ export default function OrderUpdateForm({order, id_purchase}: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild> 
-      <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild> 
-              <Button variant='outline' size='icon' onClick={() => setOpen(true)}>
-                <PencilIcon className="h-4 w-4" />
-              </Button>
-            </TooltipTrigger>
-          <TooltipContent className="bg-gray-500">
-            <p className="text-xs font-semibold">Aquí puedes editar la cantidad del insumo.</p>
-          </TooltipContent>
-          </Tooltip>
-      </TooltipProvider>
+        <Tooltip placement="top" title="Aqui puede editar la orden" arrow>
+          <Button variant='outline' size='icon' onClick={() => setOpen(true)}>
+            <PencilIcon className="h-4 w-4" />
+          </Button>
+        </Tooltip>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

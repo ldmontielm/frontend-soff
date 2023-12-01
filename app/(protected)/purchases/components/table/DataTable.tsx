@@ -5,9 +5,9 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { HeadTable } from '..'
 import { Report } from '../report'
-import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
+import { AdjustmentsHorizontalIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import {ColumnDef,flexRender,ColumnFiltersState,getFilteredRowModel,VisibilityState,getCoreRowModel,getPaginationRowModel,useReactTable,SortingState, getSortedRowModel} from "@tanstack/react-table"
-import {DropdownMenu,DropdownMenuCheckboxItem,DropdownMenuContent,DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
+import {DropdownMenu,DropdownMenuContent,DropdownMenuTrigger,} from "@/components/ui/dropdown-menu"
 import { Checkbox } from "@mui/material"
 import {
   Tooltip
