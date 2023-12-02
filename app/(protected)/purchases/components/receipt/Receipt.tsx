@@ -48,7 +48,7 @@ export default function Receipt({id}:Props) {
     const columns = ['Insumo', 'Cantidad', 'Precio Unitario', 'Subtotal'];
     const data:any[] = [];
     Array.isArray(orders) && orders.map((order) => {
-      data.push([order.supply, order.amount_supplies, order.price_supplies, order.subtotal])
+      data.push([order.supply, order.amount_supplies, order.price_supplies, order.subtotal.toLocaleString()])
     })
 
     // Generar la tabla de productos
