@@ -54,7 +54,7 @@ export default function ReportPdf() {
     const columns = ['Factura', 'Fecha', 'Ordenes', 'Proveedor', 'Total'];
     const data:any[] = [];
     Array.isArray(purchases) && purchases.map((purchase) => {
-      data.push([purchase.invoice_number, convertDate(purchase?.purchase_date), purchase.amount_order, purchase.provider, purchase.total])
+      data.push([purchase.invoice_number, convertDate(purchase?.purchase_date), purchase.amount_order, purchase.provider, purchase.total.toLocaleString()])
     })
 
     // Generar la tabla de productos

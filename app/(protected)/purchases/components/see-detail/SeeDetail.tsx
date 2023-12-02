@@ -54,7 +54,7 @@ const formattedtotal = new Intl.NumberFormat("en-US", {
                   </div>
                   <div className='my-3 w-full text-center'>
                     <p className='font-bold text-sm'>Total</p>
-                    <p className=' text-sm text-gray-400'>${formattedtotal}</p>
+                    <p className=' text-sm text-gray-400'>{formattedtotal}</p>
                   </div>
                   <div className='my-3 w-full text-center'>
                     <p className='font-bold text-sm'>Fecha</p>
