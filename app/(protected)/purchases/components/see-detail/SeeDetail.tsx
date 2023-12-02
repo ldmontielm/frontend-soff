@@ -22,6 +22,11 @@ export default function SeeDetail({purchase,id}:Props) {
 const date = new Date(purchase.purchase_date)
 const formatted = new Intl.DateTimeFormat(['ban', 'id']).format(date)
 
+const formattedtotal = new Intl.NumberFormat("en-US", {
+  style: 'currency',
+  currency: "USD",
+  maximumFractionDigits: 0
+}).format(purchase.total)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -49,7 +54,7 @@ const formatted = new Intl.DateTimeFormat(['ban', 'id']).format(date)
                   </div>
                   <div className='my-3 w-full text-center'>
                     <p className='font-bold text-sm'>Total</p>
-                    <p className=' text-sm text-gray-400'>${purchase.total}</p>
+                    <p className=' text-sm text-gray-400'>${formattedtotal}</p>
                   </div>
                   <div className='my-3 w-full text-center'>
                     <p className='font-bold text-sm'>Fecha</p>
@@ -75,8 +80,8 @@ const formatted = new Intl.DateTimeFormat(['ban', 'id']).format(date)
                       <TableRow key={order.supply_id}>
                         <TableCell className="font-medium capitalize">{order.supply}</TableCell>
                         <TableCell>{order.amount_supplies}</TableCell>
-                        <TableCell>${order.price_supplies}</TableCell>
-                        <TableCell>${order.subtotal}</TableCell>
+                        <TableCell>${order.price_supplies.toLocaleString()}</TableCell>
+                        <TableCell>${order.subtotal.toLocaleString()}</TableCell>
                       </TableRow>
                     ))
                   }
