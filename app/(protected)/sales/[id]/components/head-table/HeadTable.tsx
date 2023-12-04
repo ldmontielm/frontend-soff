@@ -4,11 +4,11 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input"
 import { PlusIcon } from "@heroicons/react/24/outline"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useParams } from 'next/navigation'
+import { useToast } from "@/components/ui/use-toast"
+import {Tooltip} from "@mui/material"
 import { useForm } from "react-hook-form"
 import useSWR, { mutate} from 'swr'
 import * as z from 'zod'
-// import { OrderCreate } from "@/app/(protected)/roles/sales/models/sale.models"
 import { OrderCreate } from "../../../models/sale.models"
 import { useState } from "react"
 import { cn } from "@/lib/utils"
@@ -39,6 +39,7 @@ export default function HeadTable({id}: Props) {
   const {data:products} = useSWR(RoutesApi.PRODUCTS)
   const {data} = useSWR(`${RoutesApi.SALES}/${id}/orders`)
   const [open, setOpen] = useState(false)
+  const { toast } = useToast()
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -53,6 +54,7 @@ export default function HeadTable({id}: Props) {
     values.sale_id = id
     const data = await AddOrderFetch(`${RoutesApi.SALES}/${id}/add-order`, values)
     mutate(`${RoutesApi.SALES}/${id}/orders`)
+    toast({variant: 'default', title: "Agregando orden", description: "Se ha agregado la orden correctamente."})
   }
 
 
@@ -96,6 +98,7 @@ export default function HeadTable({id}: Props) {
                               key={product.id}
                               onSelect={() => {
                                 form.setValue("product_id", product.id)
+                                setOpen(!open)
                               }}
                             >
                               <Check
@@ -132,10 +135,12 @@ export default function HeadTable({id}: Props) {
           />
 
         </div>
-        <Button type="submit" className="w-full md:w-fit">
-          <PlusIcon className="w-4 h-4 mr-2" />
-          <span>Agregar</span>
-        </Button>
+        <Tooltip placement="top" title="Aqui podrás agregar ordenes a la venta" arrow>
+          <Button type="submit" className="w-full md:w-fit">
+            <PlusIcon className="w-4 h-4 mr-2" />
+            <span>Agregar</span>
+          </Button>
+        </Tooltip>
       </form>
     </Form>
   )

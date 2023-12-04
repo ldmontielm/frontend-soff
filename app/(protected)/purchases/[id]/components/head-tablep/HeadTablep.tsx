@@ -24,18 +24,6 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 
 const formSchema = z.object({
   purchase_id: z.string(),
-  // supply_id: z.string({
-  //   required_error: "Campo requerido.",
-  //   invalid_type_error: "Debe seleccionar un insumo."
-  // }).min(2, {message:'Seleccione un insumo.'}),
-  // amount_supplies: z.string({
-  //   required_error: "Campo requerido.",  
-  //   invalid_type_error: "Debe ingresar la cantidad."
-  // }).min(1, {message:'La cantidad mínima es 1.'}).max(3, {message:'Excedió el número de dígitos.'}).transform(Number),
-  // price_supplies: z.string({
-  //   required_error: "Campo requerido.", 
-  //   invalid_type_error: "Debe ingresar el precio."
-  // }).min(3, {message:'El precio mínimo es 100.'}).max(6, {message:'Excedió el número de dígitos.'}).transform(Number)
   supply_id: z.string().uuid({message: 'Debe seleccionar un insumo'}),
   amount_supplies: z.number({required_error: "Este campo es requerido", invalid_type_error: "Se espera un número"}).min(1, {message: "La cantidad mínima es 1"}).max(200, {message: "La cantidad máxima es 200"}),
   price_supplies: z.number({required_error: "Este campo es requerido", invalid_type_error: "Se espera un número"}).min(1, {message: "La cantidad mínima es 200"}).max(100000, {message: "La cantidad máxima es 100.000"})

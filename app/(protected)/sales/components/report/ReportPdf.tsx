@@ -6,7 +6,7 @@ import useSWR from 'swr'
 import { Button } from '@/components/ui/button'
 import { convertDate } from '../../utils'
 import { NewspaperIcon } from '@heroicons/react/24/outline'
-import { Purchase } from '@/app/(protected)/purchases/models/purchase.models'
+import { Sale } from '@/app/(protected)/sales/models/sale.models'
 import { RoutesApi } from '@/models/routes.models'
 import {
   Tooltip
@@ -27,7 +27,7 @@ interface PurchaseInvoice {
   total: number
 }
 export default function ReportPdf() {
-  const {data:purchases} = useSWR<Purchase[]>(`${RoutesApi.PURCHASES}`)
+  const {data:sales} = useSWR<Sale[]>(`${RoutesApi.SALES}`)
   const [currentDate, setCurrentDate] = useState('');
   const { toast } = useToast()
 
@@ -40,7 +40,7 @@ export default function ReportPdf() {
   const generateReceipt = () => {
     const doc = new jsPDF()
 
-    doc.text('REPORTE DE COMPRAS MANDISA', 60, 20)
+    doc.text('REPORTE DE VENTAS MANDISA', 60, 20)
     doc.setFontSize(10)
     doc.text('FECHA:', 15, 35)
     doc.text(currentDate, 30, 35)
@@ -51,10 +51,10 @@ export default function ReportPdf() {
 
 
     // Datos de la tabla de productos
-    const columns = ['Factura', 'Fecha', 'Ordenes', 'Proveedor', 'Total'];
+    const columns = ['Factura', 'Fecha', 'Ordenes', 'Método', 'Cliente', 'Tipo', 'Estado', 'Total'];
     const data:any[] = [];
-    Array.isArray(purchases) && purchases.map((purchase) => {
-      data.push([purchase.invoice_number, convertDate(purchase?.purchase_date), purchase.amount_order, purchase.provider, purchase.total.toLocaleString()])
+    Array.isArray(sales) && sales.map((sale) => {
+      data.push([sale.invoice_number, convertDate(sale?.sale_date), sale.amount_order, sale.payment_method, sale.client, sale.type_sale, sale.status, sale.total])
     })
 
     // Generar la tabla de productos
@@ -77,7 +77,7 @@ export default function ReportPdf() {
             className="flex items-center w-full md:w-full gap-2"
             onClick={async () => {
               generateReceipt()
-              toast({variant: 'default',title: "Generando reporte pdf",description: "Se ha generado un nuevo informe de compras.",})}}>
+              toast({variant: 'default',title: "Generando reporte pdf",description: "Se ha generado un nuevo informe de ventas.",})}}>
             <NewspaperIcon className='w-4 h-4'/>
             <span>Generar en PDF</span>
           </Button>

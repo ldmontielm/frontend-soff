@@ -15,6 +15,9 @@ import { useRouter } from 'next/navigation'
 import { useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import * as z from 'zod'
+import {
+  Tooltip
+} from "@mui/material"
 import { InfoSaleHeader } from '..'
 import { getValidationErrors } from '@/utilities'
 import {FormClient} from '../form-client'
@@ -179,22 +182,26 @@ export default function InfoSale({id}:Props) {
           </div>
           
           <div className='mt-4 space-y-2'>
-            <Button className="w-full" type='submit' >
-              Consolidar venta
-            </Button>
+            <Tooltip placement="top" title="Aqui podrás confirmar la venta" arrow>
+              <Button className="w-full" type='submit' >
+                Consolidar venta
+              </Button>
+            </Tooltip>
           </div>
 
         </form>
       </Form>
       <div className='space-y-2 px-4 pb-4'>
-        <Button className="w-full" variant='outline' onClick={async () => {
-          const res = await CancelSaleFetch(`${RoutesApi.SALES}/${id}/cancel-sale`)
-          toast({variant: 'default', title: "Venta cancelada correctamente", description: "Se ha cancelado la venta con éxito."})
-          clearLocalStorage()
-          router.push("/sales")
-        }}>
-          Cancelar venta
-        </Button>
+        <Tooltip placement="top" title="Aqui podrás cancelar la venta" arrow>
+          <Button className="w-full" variant='outline' onClick={async () => {
+            const res = await CancelSaleFetch(`${RoutesApi.SALES}/${id}/cancel-sale`)
+            toast({variant: 'default', title: "Venta cancelada correctamente", description: "Se ha cancelado la venta con éxito."})
+            clearLocalStorage()
+            router.push("/sales")
+          }}>
+            Cancelar venta
+          </Button>
+        </Tooltip>
       </div>
 
     </div>

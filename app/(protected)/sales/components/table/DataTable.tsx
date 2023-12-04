@@ -11,6 +11,11 @@ import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMe
 import { Checkbox } from '@mui/material'
 import { generateExcelReport } from '../../utils'
 import { Sale } from '../../models/sale.models'
+import { Report } from '../report'
+import {
+  Tooltip
+} from "@mui/material"
+
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -52,10 +57,12 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
-                <AdjustmentsHorizontalIcon className='w-4 h-4' />
-                <span>Columnas</span>
-              </Button>
+              <Tooltip placement="top" title="Aqui podrás ocultar las columnas de la tabla." arrow>
+                <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
+                  <AdjustmentsHorizontalIcon className='w-4 h-4' />
+                  <span>Columnas</span>
+                </Button>
+              </Tooltip>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='start'>
             {table
@@ -90,17 +97,14 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                 })}
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button variant='outline' className='flex items-center w-full md:w-fit gap-2' onClick={() => generateExcelReport(data as Array<Sale>)}>
-            <DocumentChartBarIcon className='w-4 h-4' />
-            <span>Generar Excel</span>
-          </Button>
+          <Report data={data}/>
         </div>
         <HeadTable />
       </div>
 
-      <div className='rounded-md border'>
+      <div className='w-full rounded-md border'>
         <Table>
-          <TableHeader>
+          <TableHeader className='w-full'>
             {
               table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
@@ -122,7 +126,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
               ))
             }
           </TableHeader>
-          <TableBody>
+          <TableBody className='w-full'>
             {
               data.length === 0 ? (
                   <TableRow>

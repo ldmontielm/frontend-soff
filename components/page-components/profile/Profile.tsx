@@ -9,6 +9,8 @@ import { UserCircleIcon, ArrowLeftOnRectangleIcon } from '@heroicons/react/24/ou
 import { useRouter } from 'next/navigation'
 import { signOut, useSession } from 'next-auth/react'
 import { deleteCookie } from 'cookies-next'
+import { Separator } from '@/components/ui/separator'
+
 
 export default function Profile() {
   const {data: session} = useSession()
@@ -17,36 +19,35 @@ export default function Profile() {
   return (
     <Popover>
         <PopoverTrigger>
-            <div className='flex items-center gap-2 hover:bg-neutral-100 p-2 rounded relative'>
+            <div className='flex items-center gap-2 p-2 rounded'>
                 <Image src={ImageProfile} alt='image profile' width={32} height={32}/>
-                <div className='w-3 h-3 bg-green-500 rounded-full absolute bottom-1 right-2 ring ring-white'></div>
             </div>
         </PopoverTrigger>
-        <PopoverContent align='end' className='dark:bg-neutral-900 sm:w-96 mt-2 text-sm pt-6'>
+        <PopoverContent align='end' className='dark:bg-neutral-900 sm:w-64 mt-4 text-sm pt-4'>
             <div className='flex items-center gap-4'>
-              <div className='flex items-center gap-2 w-fit py-2 rounded relative'>
-                  <Image src={ImageProfile} alt='image profile' width={46} height={46}/>
-                  <div className='w-3 h-3 bg-green-500 rounded-full absolute bottom-1 right-2 ring ring-white'></div>
-              </div>
               <div>
                 <p className='font-semibold capitalize'>{session?.user?.name}</p>
-                <p className='text-neutral-700'>{session?.user?.email}</p>
+                <p className='text-neutral-700'>@Administrador</p>
               </div>
             </div>
             <div className='mt-4'>
               <Link href={'/profile'}>
-                <span className={`flex w-full items-center gap-2 rounded cursor-pointer px-3 py-3 hover:bg-gray-100 dark:hover:bg-neutral-700`}>
-                  <UserCircleIcon className='w-5 h-5 stroke-gray-700' />
+                <span className={`flex w-full items-center gap-2 rounded cursor-pointer py-3 hover:text-gray-500`}>
                   <p>Perfil</p>
                 </span>
               </Link>
+              <Link href={'/help-center'}>
+                <span className={`flex w-full items-center gap-2 rounded cursor-pointer py-3 hover:text-gray-500`}>
+                  <p>Centro de Ayuda</p>
+                </span>
+              </Link>
+              <Separator className='my-2' orientation='horizontal'/>
               <div onClick={() => {
                 signOut()
                 deleteCookie("token")
                 router.push('/api/auth/signin')
               }}>
-                <span className={`flex w-full items-center gap-2 rounded cursor-pointer px-3 py-3 hover:bg-gray-100 dark:hover:bg-neutral-700`}>
-                  <ArrowLeftOnRectangleIcon className='w-5 h-5 stroke-gray-700' />
+                <span className={`flex w-full items-center gap-2 rounded cursor-pointer py-3 hover:text-gray-500`}>
                   <p>Cerrar sesión</p>
                 </span>
               </div>

@@ -3,10 +3,10 @@ import { ContentTargets, BarSales, PieSales } from "./components"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/utilities/authOptions"
 import { redirect } from "next/navigation"
+import { ChartSales } from "./components/chart-sales"
 
-
-export default function page() {
-  const session = getServerSession(authOptions)
+export default async function page() {
+  const session = await getServerSession(authOptions)
 
   if(!session){
     redirect('/auth/login')
@@ -18,6 +18,7 @@ export default function page() {
           <ContentTargets />
           <div className="my-10 gap-4 grid grid-cols-1">
               <PieSales />
+              <ChartSales/>
           </div>
         </main>
     )

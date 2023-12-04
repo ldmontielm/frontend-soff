@@ -9,7 +9,7 @@ import { getCookie } from "cookies-next"
 
 export const AxiosInterceptors = () => {
     const { toast } = useToast()
-    
+
     axios.interceptors.request.use((request) => { 
         const token = getCookie('token')
         request.headers['Authorization']  = `Bearer ${token}`

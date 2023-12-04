@@ -19,7 +19,7 @@ import { SeeDetail } from "../see-detail"
 export const columns: ColumnDef<Sale>[] = [
   {
     accessorKey: "invoice_number",
-    header: "# Factura"
+    header: "Factura"
   },
   {
     accessorKey: 'client',
@@ -182,7 +182,7 @@ export const columns: ColumnDef<Sale>[] = [
                   <UploadFile id={sale.id} />
                 ): ""
             }
-            <SeeDetail id={sale.id}/>
+            <SeeDetail sale={sale} id={sale.id}/>
             <Receipt id={sale.id} sale={sale} />
           </DropdownMenuContent>
         </DropdownMenu>
