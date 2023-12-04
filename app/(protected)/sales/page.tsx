@@ -14,7 +14,7 @@ export default async function Page(){
     redirect('/dashboard')
   }
   return (
-    <main className="mx-auto max-w-7xl p-4">
+    <main className="mx-auto lg:max-w-7xl p-4">
       <HeaderModule />
       <TableComponent />
     </main>

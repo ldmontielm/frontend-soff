@@ -5,8 +5,8 @@ import { authOptions } from "@/utilities/authOptions"
 import { redirect } from "next/navigation"
 
 
-export default function page() {
-  const session = getServerSession(authOptions)
+export default async function page() {
+  const session = await getServerSession(authOptions)
 
   if(!session){
     redirect('/auth/login')

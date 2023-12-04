@@ -12,8 +12,8 @@ export default function CardComponent() {
     const {data: session} = useSession()
 
     return (
-        <Card>
-            <div className='h-44 relative rounded bg-gradient-to-r from-violet-700 to-indigo-700'>
+        <div>
+            <div className='h-52 relative rounded bg-gradient-to-r from-violet-700 to-indigo-700'>
                 <div className='w-28 absolute h-28 rounded-full -bottom-10 ring-4 left-5 ring-white overflow-hidden'>
                     <Image width='700' height='700' src={ImageProfile} alt='foto de perfil' />
                 </div>
@@ -30,7 +30,7 @@ export default function CardComponent() {
                       </div>
                     ) : (
                         <>
-                            <CardContent className='mt-14 space-y-1'>
+                            <div className='mt-14 space-y-1'>
                                 <div className='flex items-center gap-2'>
                                     <h2 className='font-bold text-2xl'>{session.user.name}</h2>
                                     <CheckBadgeIcon className="w-5 h-5 text-blue-500" />
@@ -40,10 +40,10 @@ export default function CardComponent() {
                                     <p className="text-neutral-700">{session.user.email}</p>
                                 </div>
                                 <div>
-                                    <p className='italic text-sm text-neutral-600'>@{session.user.email}</p>
+                                    <p className='italic text-sm text-neutral-600'>@Administrador</p>
                                 </div>
-                            </CardContent>
-                            <CardContent>
+                            </div>
+                            <div>
                                 <div className="flex items-center gap-2 text-sm">
                                     <BoltIcon className="w-4 h-4" />
                                     <p className="font-semibold capitalize ">Permisos asignados</p>
@@ -55,12 +55,12 @@ export default function CardComponent() {
                                             ))
                                         }
                                 </div>
-                            </CardContent>
+                            </div>
                         </>
                     )
                 }
                 
             </div>
-        </Card>
+        </div>
     )
 }

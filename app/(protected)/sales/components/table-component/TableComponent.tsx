@@ -12,8 +12,6 @@ export default function TableComponent() {
   const {data: sales, isLoading, error } = useSWR(RoutesApi.SALES)
 
   return (
-    <div> 
       <DataTable columns={columns}  data={sales || []} isLoading={isLoading} error={error}/>  
-    </div>
   )
 }

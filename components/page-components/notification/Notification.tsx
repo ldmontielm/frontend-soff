@@ -21,22 +21,17 @@ export default function Profile() {
   return (
     <Popover>
         <PopoverTrigger asChild>
-            <Button variant='ghost' size='icon'>
+            <Button variant='outline' size='icon'>
                 <BellIcon className='w-4 h-4' />
             </Button>
         </PopoverTrigger>
-        <PopoverContent align='end' className='dark:bg-neutral-900 sm:w-96 mt-3 text-sm'>
-            <div className='flex items-center gap-4'>
-              <div className='flex items-center gap-2 w-fit py-2 rounded relative'>
-                  <BellAlertIcon className='w-6 h-6'/>
-              </div>
-              <div>
-                <p className='font-semibold capitalize'>Notificaciones del sistema</p>
-              </div>
+        <PopoverContent align='end' className='dark:bg-neutral-900 sm:w-96 mt-6 text-sm pt-4'>
+            <div className='flex items-center justify-between gap-4'>
+                <p className='font-semibold capitalize'>Notificaciones</p>
+                <span>0</span>
             </div>
-            <hr className='mt-4' />
             <div className='my-2'>
-                <ScrollArea className={`h-[200px] ${open ? 'open' : ''} `}>
+                {/* <ScrollArea className={`h-[200px] ${open ? 'open' : ''} `}>
                 {
                 Array.isArray(supplies) && supplies.map((supply) => {
                     if (supply.quantity_stock <= 5000 && supply.quantity_stock >0 &&supply.unit_measure == 'Gramos' && supply.status == true) {
@@ -65,7 +60,10 @@ export default function Profile() {
                     }
                 })
                 }
-                </ScrollArea>
+                </ScrollArea> */}
+                <div className='text-center py-10'>
+                    <p>No hay notificaciones por el momento.</p>
+                </div>
             </div>
         </PopoverContent>
     </Popover>

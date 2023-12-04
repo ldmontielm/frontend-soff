@@ -4,14 +4,13 @@ import React, {useState} from 'react'
 import { Bars3BottomLeftIcon } from '@heroicons/react/24/outline'
 import { Button } from "@/components/ui/button"
 import { Routes } from '@/models/routes.models'
-import SoffLogo from "@/public/soff.svg"
+import SoffLogo from "@/public/logo.svg"
 import Image from 'next/image'
 import { Sheet, SheetContent,  SheetHeader, SheetTrigger } from "@/components/ui/sheet"
-import {ChartPieIcon, BanknotesIcon, Cog6ToothIcon,  LockClosedIcon,  ChevronDownIcon,BriefcaseIcon, UserGroupIcon, SwatchIcon, ShoppingBagIcon, CakeIcon} from '@heroicons/react/24/outline'
+import {ChartPieIcon, BanknotesIcon, Cog6ToothIcon,  LockClosedIcon, ArrowLongRightIcon, ChevronDownIcon,BriefcaseIcon, UserGroupIcon, SwatchIcon, ShoppingBagIcon, CakeIcon} from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import { useSession } from 'next-auth/react'
-
 
 const menuItems = [
   {
@@ -54,63 +53,67 @@ const menuItems = [
 
 export default function SheetNavbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [drawer, setDrawer] = useState(false)
   const {data: session} = useSession()
 
   return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant='outline' size='icon'>
-          <Bars3BottomLeftIcon className='w-4 h-4' />
-        </Button>
-      </SheetTrigger>
-      <SheetContent side='left'>
-        <SheetHeader className='flex flex-row items-end gap-4 text-white'>
-          <div>
+    <div className={`bg-blue-600 px-4 relative transition ${isOpen ? 'w-[500px]': ''} hidden md:block`}>
+         <div className='flex flex-row items-start gap-4 text-white pt-5'>
             <Image src={SoffLogo} alt='logo soff'/>
-          </div>
-          <div className='flex flex-col sm:items-start'>
-            <p className='text-2xl font-bold'>SOFF</p>
-            <p className='text-sm font-semibold'>Systematization Of Fast Food</p>
-          </div>
-        </SheetHeader>
-        <div className='flex flex-col w-full text-white mt-5'>
-        <Link href={Routes.DASHBOARD} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'><ChartPieIcon className='w-6 h-6' /><p>Dashboard</p></Link>
-          {
-            menuItems.map((item) => {
-              if(session && session.user && session?.user.permissions.includes(item.permission)){
-                return (
-                  <Link key={item.id} href={item.url} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'>{item.icon}<p>{item.name}</p></Link>
-                )
-              }
-              return null
-            })
-          }
-          {
-            session && session.user && session?.user.permissions.includes("configuraciones") ? (
-              <Collapsible
-                open={isOpen}
-                onOpenChange={setIsOpen}
-                className="w-full space-y-2"
-              >
-                <CollapsibleTrigger asChild>
-                    <div className='w-full cursor-pointer flex items-center justify-between gap-4 p-3 rounded hover:bg-blue-800'>
-                      <div className='flex items-center gap-4'>
-                        <Cog6ToothIcon className='w-6 h-6' />
-                        <p>Configuración</p>
-                      </div>
-                      <ChevronDownIcon className={`transition ease-in-out w-4 h-4 ${isOpen ?  'rotate-180': 'rotate-0'}`} />
-                    </div>
-                  </CollapsibleTrigger>
-                <CollapsibleContent className="space-y-2">
-                  <Link href={Routes.ROLES} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'><LockClosedIcon className='ml-6 w-6 h-6' /><p>Roles</p></Link>
-                  <Link href={Routes.USERS} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'><UserGroupIcon className='ml-6 w-6 h-6' /><p>Usuarios</p></Link>
-                </CollapsibleContent>
-              </Collapsible>
-            ) : ""
-          }
-          
+            <div>
+               <p className={`text-1xl font-bold ${isOpen ? 'block': 'hidden'}`}>SOFF</p>
+               <p className={`text-[12px] ${isOpen ? 'block': 'hidden'}`}>Systematization Of Fast Food</p>
+            </div>
         </div>
-      </SheetContent>
-    </Sheet>
+        <Button variant='outline' size='icon' className='absolute top-4 -right-4 w-8 h-8 rounded-full shadow-md border-none' onClick={() => setIsOpen(!isOpen)}>
+            <ArrowLongRightIcon className={`transition-all w-4 ${isOpen ? 'rotate-180': ''}`} />
+        </Button>
+        <div className='flex flex-col justify-between w-full text-white mt-6'>
+         {
+            session && session.user ? (
+               <Link href={Routes.DASHBOARD} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'>
+                  <ChartPieIcon className='w-6 h-6' />
+                  <p className={`${isOpen ? 'block': 'hidden'}`}>Dashboard</p>
+               </Link>
+            ): ""
+         }
+            {
+              menuItems.map((item) => {
+                if(session && session.user && session?.user.permissions.includes(item.permission)){
+                  return (
+                     <Link key={item.id} href={item.url} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'>
+                        {item.icon}
+                        <p className={`${isOpen ? 'block': 'hidden'}`}>{item.name}</p>
+                     </Link>
+                  )
+                }
+                return null
+              })
+            }
+            {
+              session && session.user && session?.user.permissions.includes("configuraciones") ? (
+                <Collapsible
+                  open={drawer}
+                  onOpenChange={setDrawer}
+                  className="w-full space-y-2"
+                >
+                  <CollapsibleTrigger asChild>
+                      <div className='w-full cursor-pointer flex items-center justify-between gap-4 p-3 rounded hover:bg-blue-800'>
+                        <div className='flex items-center gap-4'>
+                          <Cog6ToothIcon className='w-6 h-6' />
+                          <p className={`${isOpen ? 'block': 'hidden'}`}>Configuración</p>
+                        </div>
+                        <ChevronDownIcon className={`transition ease-in-out w-4 h-4 ${isOpen ?  'rotate-180': 'rotate-0 hidden'}`} />
+                      </div>
+                    </CollapsibleTrigger>
+                  <CollapsibleContent className="space-y-2">
+                    <Link href={Routes.ROLES} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'><LockClosedIcon className={`${isOpen ? 'ml-6': ''} w-6 h-6`} /><p className={`${isOpen ? 'block': 'hidden'}`}>Roles</p></Link>
+                    <Link href={Routes.USERS} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'><UserGroupIcon className={`${isOpen ? 'ml-6': ''} w-6 h-6`} /><p className={`${isOpen ? 'block': 'hidden'}`}>Usuarios</p></Link>
+                  </CollapsibleContent>
+                </Collapsible>
+              ) : ""
+            }
+        </div>
+    </div>
   )
 }
