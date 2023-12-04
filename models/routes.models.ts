@@ -20,14 +20,14 @@ export enum RoutesApi {
   // PERMISSIONS = 'http://localhost:8000/permissions',
   // AUTH='http://localhost:8000/auth',
   // DASHBOARD='http://localhost:8000/dashboard'
-  SALES = 'http://52.91.178.66/sales',
-  PURCHASES = 'http://52.91.178.66/purchases',
-  PRODUCTS = 'http://52.91.178.66/products',
-  PROVIDERS= 'http://52.91.178.66/providers',
-  ROLES = 'http://52.91.178.66/roles',
-  SUPPLIES = 'http://52.91.178.66/supplies',
-  USERS = 'http://52.91.178.66/users',
-  PERMISSIONS = 'http://52.91.178.66/permissions',
-  AUTH='http://52.91.178.66/auth',
-  DASHBOARD='http://52.91.178.66/dashboard'
+  SALES = 'http://34.239.207.131/sales',
+  PURCHASES = 'http://34.239.207.131/purchases',
+  PRODUCTS = 'http://34.239.207.131/products',
+  PROVIDERS= 'http://34.239.207.131/providers',
+  ROLES = 'http://34.239.207.131/roles',
+  SUPPLIES = 'http://34.239.207.131/supplies',
+  USERS = 'http://34.239.207.131/users',
+  PERMISSIONS = 'http://34.239.207.131/permissions',
+  AUTH='http://34.239.207.131/auth',
+  DASHBOARD='http://34.239.207.131/dashboard'
 }
