@@ -2,6 +2,10 @@ import { FormLogin } from "./components"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/utilities/authOptions"
 import { redirect } from "next/navigation"
+import { Tooltip } from "@mui/material"
+import Link from "next/link"
+import { Button } from '@/components/ui/button'
+import { BookOpenIcon} from "@heroicons/react/24/outline"
 
 export default async function page() {
   const session = await getServerSession(authOptions)
@@ -11,6 +15,7 @@ export default async function page() {
   }
 
   return (
+    <>
     <div className="flex items-center justify-center py-10">
         <div className="w-full md:w-[400px] p-4">
             <div className="space-y-3">
@@ -20,5 +25,15 @@ export default async function page() {
             <FormLogin />
         </div>
     </div>
+     <div className="flex items-end justify-end mt-0">
+     <Tooltip placement="top" title="Ver manual de usuario." arrow>
+         <Link href='/api/auth/signin/manual'>
+             <Button variant='outline' className="mr-10">
+                 <BookOpenIcon className=" h-4 w-4"/>
+             </Button>
+         </Link>
+     </Tooltip>
+ </div>
+ </>
   )
 }
