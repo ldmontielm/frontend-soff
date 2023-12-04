@@ -5,8 +5,8 @@ import { authOptions } from "@/utilities/authOptions"
 import { redirect } from "next/navigation"
 import { ChartSales } from "./components/chart-sales"
 
-export default function page() {
-  const session = getServerSession(authOptions)
+export default async function page() {
+  const session = await getServerSession(authOptions)
 
   if(!session){
     redirect('/auth/login')

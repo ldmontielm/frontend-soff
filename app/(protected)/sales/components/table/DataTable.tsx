@@ -102,9 +102,9 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
         <HeadTable />
       </div>
 
-      <div className='rounded-md border'>
+      <div className='w-full rounded-md border'>
         <Table>
-          <TableHeader>
+          <TableHeader className='w-full'>
             {
               table.getHeaderGroups().map((headerGroup) => (
                 <TableRow key={headerGroup.id}>
@@ -126,7 +126,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
               ))
             }
           </TableHeader>
-          <TableBody>
+          <TableBody className='w-full'>
             {
               data.length === 0 ? (
                   <TableRow>
