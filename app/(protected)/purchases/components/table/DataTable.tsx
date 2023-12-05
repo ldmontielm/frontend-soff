@@ -86,7 +86,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                         onChange={(event) =>{
                           column.toggleVisibility(event.target.checked);
                         }}
-                        color="default"
+                        color="primary"
                         />
                       {
                         column.id === 'invoice_number' ? 'Factura':
