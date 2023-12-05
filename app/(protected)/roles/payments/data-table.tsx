@@ -32,9 +32,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import HeadTable from "../components/head-table/HeadTable"
 import { Checkbox } from "@mui/material"
-import { AdjustmentsHorizontalIcon} from "@heroicons/react/24/outline"
+import { AdjustmentsHorizontalIcon, BookOpenIcon} from "@heroicons/react/24/outline"
 import { Tooltip } from "@mui/material"
-
+import Link from "next/link"
+import { Routes } from "@/models/routes.models";
 // import PermissionTable from "../components/permissions/PermissionsTable"
 
 
@@ -92,7 +93,13 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-
+        <Tooltip placement="top" title="Ver manual de usuario." arrow>
+              <Link href={`${Routes.ROLES}/manual`} >
+                  <Button variant='outline' className="w-full md:w-fit ml-auto flex items-center gap-2 ml-2">
+                      <BookOpenIcon className=" h-4 w-4"/>
+                  </Button>
+              </Link>
+        </Tooltip>
 <DropdownMenu>
           <DropdownMenuTrigger asChild>
           <Tooltip title="Quitar columnas de la tabla" arrow placement="top">
@@ -101,7 +108,6 @@ export function DataTable<TData, TValue>({
                 Columnas
               </Button>
           </Tooltip>
-
           </DropdownMenuTrigger>
           <DropdownMenuContent align="center">
             {table
@@ -125,6 +131,7 @@ export function DataTable<TData, TValue>({
               })}
           </DropdownMenuContent>
         </DropdownMenu>
+
         <Tooltip title={`Ver roles ${consult === true ? 'Inactivos' : 'Activos'}`} arrow placement="top">
           <Button
           variant="outline" className="text-sm gb-white hover:bg-gray-100 mr-2"
@@ -134,6 +141,7 @@ export function DataTable<TData, TValue>({
 
         </Tooltip>
 
+        
 
       <HeadTable/>
       </div>
