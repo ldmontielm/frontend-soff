@@ -18,7 +18,7 @@ import { Provider } from "../../models/provider.models"
 import { Checkbox } from "@mui/material"
 
 import { HeadTable } from ".."
-import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
+import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon, BookOpenIcon } from "@heroicons/react/24/outline"
 import {Tooltip} from "@mui/material"
 
 
@@ -90,10 +90,21 @@ export function DataTable<TData, TValue>({columns, data,isLoading, error, setAct
 
             <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
-                    <AdjustmentsHorizontalIcon className="w-4 h-4"/>
-                    <span>Columnas</span>
-                </Button>
+              <>
+              <Tooltip placement="top" title="Ver manual de usuario." arrow>
+              <Link href={`${Routes.SUPPLIES}/manual`} >
+                  <Button variant='outline' className="w-full md:w-fit ml-auto flex items-center gap-2">
+                      <BookOpenIcon className=" h-4 w-4"/>
+                  </Button>
+              </Link>
+            </Tooltip>
+              <Tooltip placement="top" title="Ocultar columnas" arrow>
+              <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
+                <AdjustmentsHorizontalIcon className='w-4 h-4' />
+                <span>Columnas</span>
+              </Button>
+              </Tooltip>
+              </>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="center">
                 {table
