@@ -158,6 +158,21 @@ async function  onSubmit (){
                         Registrar
                 </Button>
 
+
+                <Button
+                variant={"outline"}
+                className={
+                    cn("mt-4 w-full",{hidden: formStep == 1,})
+                } type="button" 
+                onClick={() => {
+                    setFormStep(0)
+                    setOpen(false)
+                    setRolenameInput("")
+                }}
+                >
+                Cancelar
+            </Button>
+
                 <Button className={
                     cn("mt-4 w-full",{hidden: formStep == 1,})
                 } type="button" 
