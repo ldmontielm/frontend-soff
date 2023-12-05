@@ -32,9 +32,10 @@ import { HeadTable } from "../components"
 import UpdateTable from "../components/update-table/UpdateTable"
 import {  ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
 import { Checkbox } from "@mui/material"
-import { AdjustmentsHorizontalIcon} from "@heroicons/react/24/outline"
+import { AdjustmentsHorizontalIcon,BookOpenIcon} from "@heroicons/react/24/outline"
 import { Tooltip } from "@mui/material"
-
+import Link from "next/link"
+import { Routes } from "@/models/routes.models";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -88,6 +89,13 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
+        <Tooltip placement="top" title="Ver manual de usuario." arrow>
+              <Link href={`${Routes.USERS}/manual`} >
+                  <Button variant='outline' className="w-full md:w-fit ml-auto flex items-center gap-2 ml-2">
+                      <BookOpenIcon className=" h-4 w-4"/>
+                  </Button>
+              </Link>
+        </Tooltip>
 
 <DropdownMenu>
           <DropdownMenuTrigger asChild>
