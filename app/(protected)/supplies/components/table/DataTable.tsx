@@ -18,7 +18,7 @@ import { Supply } from "../../models/supply.models"
 import { createSupply } from "../../services/supply.services"
 // import HeadTable from "@/app/users/components/head-table/HeadTable"
 import { HeadTable } from ".."
-import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
+import { AdjustmentsHorizontalIcon, BookOpenIcon, DocumentChartBarIcon, ChevronDoubleRightIcon, ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline"
 import { Checkbox } from "@mui/material"
 import {Tooltip} from "@mui/material"
 
@@ -90,10 +90,24 @@ export function DataTable<TData, TValue>({columns, data,isLoading, error, setAct
 
             <DropdownMenu>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
-                    <AdjustmentsHorizontalIcon className="w-4 h-4"/>
-                    <span>Columnas</span>
-                </Button>
+              <>
+              <Tooltip placement="top" title="Ver manual de usuario." arrow>
+              <Link href={`${Routes.SUPPLIES}/manual`} >
+                  <Button variant='outline' className="w-full md:w-fit ml-auto flex items-center gap-2">
+                      <BookOpenIcon className=" h-4 w-4"/>
+                  </Button>
+              </Link>
+            </Tooltip>
+              </>
+            </DropdownMenuTrigger>
+            <DropdownMenuTrigger asChild>
+
+              <Tooltip placement="top" title="Ocultar columnas" arrow>
+              <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
+                <AdjustmentsHorizontalIcon className='w-4 h-4' />
+                <span>Columnas</span>
+              </Button>
+              </Tooltip>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="center">
                 {table
