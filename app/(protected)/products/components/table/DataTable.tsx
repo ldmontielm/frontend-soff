@@ -58,7 +58,27 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error, setAc
             className="w-full md:max-w-sm"
           />
           <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+              <>
+              <Tooltip placement="top" title="Ver manual de usuario." arrow>
+              <Link href={`${Routes.CREATEPRODUCT}/manual`} >
+                  <Button variant='outline' className="w-full md:w-fit ml-auto flex items-center gap-2">
+                      <BookOpenIcon className=" h-4 w-4"/>
+                  </Button>
+              </Link>
+            </Tooltip>
+              </>
+            </DropdownMenuTrigger>
             <DropdownMenuTrigger asChild>
+
+              <Tooltip placement="top" title="Ocultar columnas" arrow>
+              <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
+                <AdjustmentsHorizontalIcon className='w-4 h-4' />
+                <span>Columnas</span>
+              </Button>
+              </Tooltip>
+            </DropdownMenuTrigger>
+            {/* <DropdownMenuTrigger asChild>
               <>
               <Tooltip placement="top" title="Ver manual de usuario." arrow>
               <Link href={`${Routes.CREATEPRODUCT}/manual`} >
@@ -74,7 +94,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error, setAc
               </Button>
               </Tooltip>
               </>
-            </DropdownMenuTrigger>
+            </DropdownMenuTrigger> */}
             <DropdownMenuContent align='start'>
             {table
                 .getAllColumns()
