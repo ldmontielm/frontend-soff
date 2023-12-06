@@ -35,9 +35,9 @@ const UpdateSupplyFetch = async (url: string, body: SupplyUpdate) => {
 const formSchema = z.object({
   id_supply:z.string().optional(),
   name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}).max(50, {message: 'El nombre del insumo es demasiado largo'}),
-  price: z.number({required_error: "El campo es requerido"}).min(3, {message: 'Ingrese el precio del insumo'}).max(999999, {message: 'El precio es demasiado alto'}),
-  total: z.number({required_error: "El campo es requerido"}).min(3, {message: 'Ingrese el total del insumo'}).max(999999, {message: 'El total es demasiado alto'}),
-  quantity_stock: z.number({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).max(999999, {message: 'La cantidad es demasiado alta'}),
+  price: z.number({required_error: "El campo es requerido"}).min(3, {message: 'Ingrese el precio del insumo'}).max(9999999, {message: 'El precio es demasiado alto'}),
+  total: z.number({required_error: "El campo es requerido"}).min(3, {message: 'Ingrese el total del insumo'}).max(9999999, {message: 'El total es demasiado alto'}),
+  quantity_stock: z.number({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).max(50, {message: 'La cantidad es demasiado alta'}),
   unit_measure: z.string().refine((value) => {
     // Agrega tu lógica de validación personalizada para el campo unit_measure aquí
     // Por ejemplo, puedes verificar si el valor seleccionado es válido.
