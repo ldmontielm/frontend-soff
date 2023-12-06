@@ -80,8 +80,8 @@ const formattedtotal = new Intl.NumberFormat("en-US", {
                       <TableRow key={order.supply_id}>
                         <TableCell className="font-medium capitalize">{order.supply}</TableCell>
                         <TableCell>{order.amount_supplies}</TableCell>
-                        <TableCell>${order.price_supplies.toLocaleString()}</TableCell>
-                        <TableCell>${order.subtotal.toLocaleString()}</TableCell>
+                        <TableCell>${convertToCOP(order.price_supplies)}</TableCell>
+                        <TableCell>${convertToCOP(order.subtotal)}</TableCell>
                       </TableRow>
                     ))
                   }
