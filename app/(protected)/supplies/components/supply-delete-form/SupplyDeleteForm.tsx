@@ -20,7 +20,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormField, Form, FormItem, FormControl } from "@/components/ui/form";
 import toast from "react-hot-toast";
-
 import { useToast } from "@/components/ui/use-toast"
 import { Routes, RoutesApi } from "@/models/routes.models";
 // import { deleteSupply } from "../../services/supply.services";
@@ -45,10 +44,9 @@ interface Props {
   id_supply: string
 }
 
-export default function SupplyDeleteForm({ supply, id_supply }: Props) {
+export default function ProviderDeleteForm({ supply, id_supply }: Props) {
   const {data} = useSWR(`${RoutesApi.SUPPLIES}/${id_supply}`)
-  const { toast } = useToast()
-
+  const [active, setActive] = useState(true)
 
   // // Manejar la eliminación del proveedor
   // const handleDeleteSupply = async () => {
@@ -90,9 +88,7 @@ export default function SupplyDeleteForm({ supply, id_supply }: Props) {
           <AlertDialogCancel>Cancelar</AlertDialogCancel> {/* Cerrar el diálogo de alerta */}
           <AlertDialogAction type="button" onClick={async () => {
             await DeleteSupplyFetch(`${RoutesApi.SUPPLIES}/delete_supply/${id_supply}`)
-            toast({variant: 'default', title: "Insumo eliminado correctamente", description: "Se ha eliminado correctamente el insumo."})
-            mutate(`${RoutesApi.SUPPLIES}?status=${true}`)
-
+            mutate(`${RoutesApi.SUPPLIES}?status=${active}`)
           }} 
           className="bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90">
           Eliminar

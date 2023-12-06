@@ -86,18 +86,15 @@ export const columns: ColumnDef<Supply>[] = [
       </Button>
     );
   },
-  cell: ({ row }) => {
-    const price: number = row.getValue('price'); // Suponiendo que 'price' es un número
+  cell: ({row}) => {
+    const price: number = row.getValue('price'); // Especifica el tipo como número
+    const formattedPrice = parseFloat(price.toFixed(2)).toLocaleString('es-ES',{
 
-    // Limita el número a 2 decimales y aplica el formato de moneda
-    const formattedPrice = parseFloat(price.toFixed(2)).toLocaleString('es-ES', {
-      // style: 'currency',
-      // currency: '', // Cambia a tu moneda deseada
     });
 
-    return <div>{formattedPrice}</div>;
-    }
-  },
+    return <div>{formattedPrice}</div>
+  }
+},
   {
     accessorKey: 'quantity_stock',
     header: ({ column }) => {
@@ -151,18 +148,28 @@ export const columns: ColumnDef<Supply>[] = [
       </Button>
     );
   },
-  cell: ({ row }) => {
-    const total: number = row.getValue('total'); // Suponiendo que 'total' es un número
-
-    // Limita el número a 2 decimales y aplica el formato de moneda
-    const formattedTotal = parseFloat(total.toFixed(2)).toLocaleString('es-ES', {
+  cell: ({row}) => {
+    const total = parseFloat(row.getValue("total"))
+    const formatted = new Intl.NumberFormat("en-US", {
       style: 'currency',
-      currency: 'COP', // Cambia a tu moneda deseada
-    });
+      currency: "USD",
+      maximumFractionDigits: 0
+    }).format(total)
 
-    return <div className="font-medium">{formattedTotal}</div>;
-    }
+    return <div className="text-left font-medium">{formatted}</div>
+  }
   },
+//   cell: ({row}) => {
+//     const total: number = row.getValue('total'); // Especifica el tipo como número
+
+//     const formattedTotal = parseFloat(total.toFixed(2)).toLocaleString('es-ES', {
+//       style: 'currency',
+//       currency: 'COP',
+//     });
+
+//     return <div className="font-medium">{formattedTotal}</div>
+//   }
+// },
   
   {
     accessorKey: "status",

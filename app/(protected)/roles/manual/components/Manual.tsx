@@ -1,29 +1,15 @@
-import React from "react";
+import React from 'react'
 import Image from 'next/image'
 
+export default function Manual() {
+    return (
+      <div className="mx-auto max-w-7xl p-4">
+        <div className="flex justify-between flex-col md:flex-row items-center mb-9 p-5 border rounded bg-gray-100">
+          <div className="w-full p-4 ">
+            <p className="p-5 pl-0 text-black text-2xl font-bold">1. Ingreso a proveedores</p>
+            <p className="text-justify text-md mr-9 mb-9">Primero debe Deslizar el puntero del mouse sobre el menú de opciones, luego debe pulsar con el botón izquierdo del mouse sobre el recuadro del menú ubicado en la parte superior izquierda de la pantalla como se muestra en la imagen.</p>
+          </div>
 
-
-
-const Manual = () => {
-  return (
-    <div className="mx-auto max-w-7xl p-4">
-      <div className="flex justify-between flex-col md:flex-row items-center mb-9 p-5 border rounded bg-gray-100">
-        <div className="w-full p-4">
-          <p className="p-5 pl-0 text-black text-2xl font-bold">
-            1. Para ir al Modulo de Roles o Usuarios
-          </p>
-          <p className="text-justify text-md mr-9 mb-9">
-            Para acceder al Módulo de Roles o Usuarios, simplemente debes
-            dirigirte al menú.
-          </p>
-          <p></p>
-          <p>
-            <strong>Nota:</strong> La visualización de los módulos de Roles y
-            Usuarios en el menú está sujeta a los permisos asignados a tu cuenta
-            de usuario. Dependiendo de tus privilegios, podrían o no aparecer en
-            el menú.
-          </p>
-        </div>
         <div className="w-auto">
           <Image
             src="https://images.tango.us/workflows/6e757d99-dd27-4488-bc5e-9141dcdba9b6/steps/54d1993a-656e-4f53-92c5-83c6673d4b85/55aa9eb8-26f3-4ef0-b7bc-adeba97f5866.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.0225&fp-y=0.0337&fp-z=2.8990&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=29&mark-y=25&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz05OCZoPTk4JmZpdD1jcm9wJmNvcm5lci1yYWRpdXM9MTA%3D"
@@ -392,8 +378,7 @@ const Manual = () => {
             <p className="text-justify text-md"><strong>Siguiente:</strong> Un botón que, al hacer clic, guarda los cambios realizados en el nombre del rol 
             y transfiere al usuario al segundo paso, que es la edición de permisos.</p>
           </div>
-</div>
-
+        </div>
 
 <div className="flex justify-between flex-col md:flex-row items-center mb-9 p-5 border rounded bg-gray-100">
   <div className="w-full p-4">
@@ -436,8 +421,6 @@ const Manual = () => {
 </div>
 </div>
 
-
-
 <div className="flex justify-between flex-col md:flex-row items-center mb-9 p-5 border rounded bg-gray-100">
   <div className="w-full p-4 ">
     <p className="p-5 pl-0 text-black text-2xl font-bold" >25. Botón {`"Registro de Rol"`} para agregar un nuevo rol al sistema</p>
@@ -465,10 +448,7 @@ const Manual = () => {
          Esto sirve como recordatorio para garantizar que el usuario complete la información necesaria.</p><p></p><p><strong>
           Botón siguiente</strong></p><p>Un botón que, al hacer clic, permite avanzar al segundo paso para la asignación de permisos.</p>
   </div>
-
 </div>
-
-
 
 
 <div className="flex justify-between flex-col md:flex-row items-center mb-9 p-5 border rounded bg-gray-100">
@@ -526,10 +506,7 @@ const Manual = () => {
   </div>
 </div>
 
-
-
     </div>
   );
-};
+}
 
-export default Manual;

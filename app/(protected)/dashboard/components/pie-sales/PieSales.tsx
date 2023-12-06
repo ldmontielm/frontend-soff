@@ -19,8 +19,8 @@ ChartJS.register(
 export default function PieSales() {
   const {data: salesMonth, error } = useSWR(`${RoutesApi.DASHBOARD}/grafic_sales`)
   const allMonths = useMemo(() => [
-    'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
-    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'
+    'Ene.', 'Feb.', 'Mar.', 'Abr.', 'May.', 'Jun.',
+    'Jul.', 'Ago.', 'Sep.', 'Oct.', 'Nov.', 'Dic.'
   ], []);
   const [maxSaleMonth, setMaxSaleMonth] = useState<string | null>(null)
   const [maxSaleValue, setMaxSaleValue] = useState<number | null>(null)

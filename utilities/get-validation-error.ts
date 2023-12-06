@@ -178,8 +178,8 @@ export const getValidationErrors = (errorCode: string) => {
             title: "Informacion requerida.",
             message:"La informacion del usuario es requerida."
         },
-        //Provider - Supply EXCEPTIONS
-        SUPPLY_ALREADY_EXISTS:{
+         //Provider - Supply EXCEPTIONS
+         SUPPLY_ALREADY_EXISTS:{
             title: "Nombre existente.",
             message:"El nombre del insumo ya está registrado."
         },
@@ -194,6 +194,10 @@ export const getValidationErrors = (errorCode: string) => {
         PROVIDER_ASSOCIATED:{
             title: "proveedor asociado.",
             message:"El proveedor está asociado con una compra."
+        },
+        SUPPLY_CHANGEUNIT:{
+            title: "Unidad de medida del insumo.",
+            message: "Para cambiar la unidad de medida del insumo, debe cambiar el total y la cantidad."
         }
     }
 
