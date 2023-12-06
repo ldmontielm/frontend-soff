@@ -25,6 +25,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/f2216051-3d86-4ab3-b9f9-13829fe0a7a5/83511c46-3804-4a0d-9853-dfe7fdc9094a.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.0225&fp-y=0.0337&fp-z=2.8990&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=29&mark-y=25&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz05OCZoPTk4JmZpdD1jcm9wJmNvcm5lci1yYWRpdXM9MTA%3D"
                 width={1500}
+                height={0}
                 alt="Botón Menú"
             />
             </div>
@@ -35,6 +36,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/e9a62256-1dc2-4b62-9807-a34ddd1f75f4/5c620eaf-9405-4827-8728-e0d906f71529.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.1286&fp-y=0.5000&fp-z=1.0041&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=3&mark-y=2&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz0zMDQmaD03NTImZml0PWNyb3AmY29ybmVyLXJhZGl1cz0xMA%3D%3D"
                 width={1500}
+                height={0}
                 alt="Ingresas a la opción de configuración"
             />
             </div>
@@ -67,6 +69,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/69a0bfce-c702-4142-b50d-73282b372255/4ba35a07-6dd6-452a-a5a9-804f5d2ce6be.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.1232&fp-y=0.5393&fp-z=1.9209&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=30&mark-y=336&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz01MDgmaD04MyZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw"
                 width={1500}
+                height={0}
                 alt='Buscar el modulo  Usuarios.'
             />
             </div>
@@ -77,6 +80,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/d4f2047d-a1ce-4533-bdf6-b36b179fa0bb/56dedf93-c842-44ae-89a2-ad77eb7fd0fc.png?fm=png&crop=focalpoint&fit=crop&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n"
                 width={1500}
+                height={0}
                 alt='Lo primero que encontrarás al acceder al módulo  es la "Tabla de Usuarios Registrados". Esta tabla presenta una visión general de todos los Usuarios existentes en el sistema. Cada fila representa un Usuario único, y las columnas muestran información relevante sobre cada uno.'
             />
             </div>
@@ -111,6 +115,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/48e94acc-86ce-47d2-a936-81d4af40b3dc/221d4f14-49fb-4b2f-bdc1-9e4392d1eeb3.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.7356&fp-y=0.2408&fp-z=2.8994&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=454&mark-y=343&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz0yOTEmaD0xMDMmZml0PWNyb3AmY29ybmVyLXJhZGl1cz0xMA%3D%3D"
                 width={1500}
+                height={0}
                 alt="Opciones de Visualización de Columnas en la tabla de Usuarios "
             />
             </div>
@@ -121,6 +126,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/e1defa93-282b-4584-81f8-0de0839a7bcc/3ebece8e-7cf0-44bb-8d02-814493b28325.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.7356&fp-y=0.4184&fp-z=1.6172&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=591&mark-y=191&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz0xOTEmaD00MDYmZml0PWNyb3AmY29ybmVyLXJhZGl1cz0xMA%3D%3D"
                 width={1500}
+                height={0}
                 alt="Quitar Columnas de la tabla de usuarios"
             />
             </div>
@@ -167,6 +173,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/b4e37ae8-dbe9-4acc-8883-787488962613/d6350dfd-f02f-4dfd-820d-ba80d5c6371f.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.0948&fp-y=0.3133&fp-z=2.6426&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=176&mark-y=347&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz0yNDkmaD05NCZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw"
                 width={1500}
+                height={0}
                 alt="Filtro por nombre y organizar en orden alfabético"
             />
             </div>
@@ -177,6 +184,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/bd4e67f4-a3b4-4521-8e94-9617af44836f/f64973fb-36bf-4d06-b04c-547c59401177.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.8184&fp-y=0.3556&fp-z=2.9969&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=511&mark-y=354&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz0xNzgmaD04MCZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw"
                 width={1500}
+                height={0}
                 alt="Botón cambio de estado en la tabla de usuarios"
             />
             </div>
@@ -212,6 +220,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/b5f3bfaf-ca6f-469b-aea4-565c45e4cb03/c6f44fbc-8cb5-4de8-822c-c0bcae4d9eb4.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.8981&fp-y=0.2408&fp-z=2.8994&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=664&mark-y=343&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz0zNjQmaD0xMDMmZml0PWNyb3AmY29ybmVyLXJhZGl1cz0xMA%3D%3D"
                 width={1500}
+                height={0}
                 alt="Botón Registrar un usuario"
             />
             </div>
@@ -222,6 +231,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/47ea2997-b474-4eb4-97ef-2f1fbc09ed2c/221b0e1a-167c-44f6-b336-4dff3e488fe7.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.5000&fp-y=0.3122&fp-z=1.6260&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=293&mark-y=365&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz02MTUmaD01OCZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw"
                 width={1500}
+                height={0}
                 alt="Formulario para poder registrar un usuario"
             />
             </div>
@@ -263,6 +273,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/73cf54d4-128e-4dcb-9d6d-fdae11a75ca5/95fe03bb-36b6-4e02-8cea-d366342043e8.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.5000&fp-y=0.7857&fp-z=1.6260&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=293&mark-y=485&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz02MTUmaD01OCZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw"
                 width={1500}
+                height={0}
                 alt="Botón siguiente en formulario"
             />
             </div>
@@ -273,6 +284,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/38dad150-5df0-49db-96c6-692805770780/17dea41c-dfbe-4456-8451-db497bbe0954.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.5000&fp-y=0.4878&fp-z=1.6260&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=293&mark-y=365&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz02MTUmaD01OCZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw"
                 width={1500}
+                height={0}
                 alt="Formulario capos contraseña"
             />
             </div>
@@ -322,6 +334,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/a68ca6be-9d45-483e-b72e-c048d4da68ab/9088b90e-6a6e-47d5-91d0-e52df4d50f7f.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.4229&fp-y=0.6273&fp-z=2.1858&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=389&mark-y=347&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz00MTMmaD03NyZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw"
                 width={1500}
+                height={0}
                 alt="Botón registrar y Volver"
             />
             </div>
@@ -332,6 +345,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/1590cfb1-7f2d-4147-82cf-5909e1fef4da/18d81b9d-af83-4896-b621-5c702a2e4d88.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.8592&fp-y=0.0541&fp-z=2.6064&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=345&mark-y=25&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz04MzAmaD0xNzImZml0PWNyb3AmY29ybmVyLXJhZGl1cz0xMA%3D%3D"
                 width={1500}
+                height={0}
                 alt="Alerta de usuario Registrado"
             />
             </div>
@@ -366,6 +380,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/e3934305-c014-47b8-ab6e-c2132d307d98/dd25f3cc-7394-41dd-86bf-d459800b4537.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.9109&fp-y=0.3551&fp-z=3.0435&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=752&mark-y=360&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz0yNDUmaD02OSZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw"
                 width={1500}
+                height={0}
                 alt="Botón de Acciones para Usuarios"
             />
             </div>
@@ -376,6 +391,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/39ad1044-69d8-427f-96f0-ace96a1a0e26/f5827b2f-85e0-415b-9ba7-5311218a7fc8.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.8887&fp-y=0.4255&fp-z=2.8994&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=762&mark-y=343&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz0xMDMmaD0xMDMmZml0PWNyb3AmY29ybmVyLXJhZGl1cz0xMA%3D%3D"
                 width={1500}
+                height={0}
                 alt="Botón para editar un Usuario"
             />
             </div>
@@ -417,6 +433,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/287e8529-ed3d-46c8-acb6-facba804a109/37dfab5d-7ffc-43dd-bec4-ae03a21e56a4.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.5003&fp-y=0.5000&fp-z=1.2204&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=387&mark-y=87&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz00MjUmaD02MTQmZml0PWNyb3AmY29ybmVyLXJhZGl1cz0xMA%3D%3D"
                 width={1500}
+                height={0}
                 alt="formulario para editar un usuario."
             />
             </div>
@@ -427,6 +444,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/ef8f4f30-9a54-4d75-ad3c-2c169ae5274f/55e5b8e8-c972-45e4-bfd4-471855f437fa.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.5003&fp-y=0.7714&fp-z=1.7963&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=323&mark-y=433&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz01NTMmaD02NCZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw"
                 width={1500}
+                height={0}
                 alt="Botón Actualizar en la tabla de usuarios."
             />
             </div>
@@ -460,6 +478,7 @@ const Manual = () => {
             <Image
                 src="https://images.tango.us/workflows/18bff6bc-a3ba-4c10-989c-4a14426b2b48/steps/46175506-73db-489f-9cba-72e373b6cfc4/26c4d780-651d-4347-b54d-50dca90b9a25.png?fm=png&crop=focalpoint&fit=crop&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n"
                 width={1500}
+                height={0}
                 alt="Modulo usuarios."
             />
             </div>
