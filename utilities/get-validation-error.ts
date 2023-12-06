@@ -79,7 +79,10 @@ export const getValidationErrors = (errorCode: string) => {
             title:"Precio de venta bajo",
             message:"El precio de venta debe ser superior al costo."
         },
-
+        AMOUNT_SUPPLY_MAX:{
+            title:"Cantidad de insumo en gramos",
+            message:"La cantidad para los gramos debe ser mayor o igual a 20."
+        },
         PRODUCT_NOT_FOUND: {
             title: "Producto no encontrado",
             message: "Lo sentimos, el producto no pudo ser encontrado."
