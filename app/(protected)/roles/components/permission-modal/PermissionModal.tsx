@@ -35,7 +35,7 @@ export default function PermissionModal({ id_role, role }: Props) {
     
 
   return (
-    <AlertDialog>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
       <Tooltip title="Ver los permisos asociados a este rol" arrow placement="top">
           <Button variant="outline">Permisos</Button>

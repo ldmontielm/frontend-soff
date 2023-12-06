@@ -6,7 +6,7 @@ export default function Manual() {
       <div className="mx-auto max-w-7xl p-4">
         <div className="flex justify-between flex-col md:flex-row items-center mb-9 p-5 border rounded bg-gray-100">
           <div className="w-full p-4 ">
-            <p className="p-5 pl-0 text-black text-2xl font-bold">1. Ingreso a proveedores</p>
+            <p className="p-5 pl-0 text-black text-2xl font-bold">1. Ingreso a el menu</p>
             <p className="text-justify text-md mr-9 mb-9">Primero debe Deslizar el puntero del mouse sobre el menú de opciones, luego debe pulsar con el botón izquierdo del mouse sobre el recuadro del menú ubicado en la parte superior izquierda de la pantalla como se muestra en la imagen.</p>
           </div>
 

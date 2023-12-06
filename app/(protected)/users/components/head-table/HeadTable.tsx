@@ -294,7 +294,8 @@ export default function HeadTable() {
               className={
                 cn("mt-4 w-full",{hidden: formStep == 0,})} 
                 >
-                Volver <ArrowLeft className="h-4 w-4 ml-2"/>
+                <ArrowLeft className="h-4 w-4 ml-2"/>
+                Volver
               </Button>
               
               <Button className={
