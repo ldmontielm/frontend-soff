@@ -36,12 +36,12 @@ const formSchema = z.object({
   product_id: z.string(),
   supply_id: z.string().uuid({message: 'Debe seleccionar un insumo'}),
   amount_supply: z.number({required_error: "Este campo es requerido", 
-  invalid_type_error: "Se espera un número"})
+  invalid_type_error: "Se espera un número"}).max(999, { message: "El número es muy largo" })
   .refine(value => value !== 0, { message: "El valor de la cantidad no puede ser igual a 0" })
   .refine(value => value > 0, { message: "La cantidad debe ser mayor a 0" })
   .refine(value => !Number.isNaN(value), { message: "Debe ingresar un valor numérico" })
   .refine(value => value >= 20, { message: "El valor de la cantidad debe ser mayor o igual a 20" })
-  .refine(value => value > 999, { message: "El número es muy largo" })
+  // .refine(value => value > 999, { message: "El número es muy largo" })
 })
 
 const AddDetailFetch = async (url: string, body: DetailCreate) => {
