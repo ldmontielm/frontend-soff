@@ -45,7 +45,7 @@ const formattedtotal = new Intl.NumberFormat("en-US", {
               <div className='w-full'>
                 <div className='grid grid-cols-1 lg:grid-cols-4 gap-4 mt-2'>
                   <div className='my-3 w-full text-center'>
-                    <p className='font-bold text-sm '>Factura</p>
+                    <p className='font-bold text-sm '>Recibo</p>
                     <p className='text-sm text-gray-400'>{purchase.invoice_number}</p> 
                   </div>
                   <div className='my-3 w-full text-center'>
