@@ -14,7 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useState } from "react"
 import { useToast } from "@/components/ui/use-toast"
 import { RoutesApi } from '@/models/routes.models'
-
+import axios from 'axios'
 
 const formSchema = z.object({
     password: z.string({required_error: 'La contraseña es requerida'}).min(8, {message: 'La contraseña debe tener al menos 8 caracteres'}).max(20,{message:'No puede contener mas de 20 caracteres'}),
@@ -24,7 +24,7 @@ const formSchema = z.object({
     path: ['confirmpassword']
 })
 const recoverFetch = async (url: string, password: string) => {
-    const res = await fetcherPost(url, {
+    const res = await axios.post(url, {
         password: password
     }, {
         headers: {
@@ -59,7 +59,7 @@ export default function FormChange() {
         toast({variant: "default", title: "¡Contraseña cambiada con éxito!", description: `Dentro de poco nos veremos adentro.`})
         setTimeout(() => {
             routes.push('/api/auth/signin')
-        }, 3000)
+        }, 5000)
     }
   return (
     <Form {...form}>
