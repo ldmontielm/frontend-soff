@@ -14,7 +14,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { useState } from "react"
 import { useToast } from "@/components/ui/use-toast"
 import { RoutesApi } from '@/models/routes.models'
-
+import axios from 'axios'
 
 const formSchema = z.object({
     password: z.string({required_error: 'La contraseña es requerida'}).min(8, {message: 'La contraseña debe tener al menos 8 caracteres'}).max(20,{message:'No puede contener mas de 20 caracteres'}),
@@ -23,16 +23,13 @@ const formSchema = z.object({
     message: 'Las contraseñas no coinciden.',
     path: ['confirmpassword']
 })
-const recoverFetch = async (url: string, apikey: string, password: string) => {
-    const res = await fetcherPost(url, {
+const recoverFetch = async (url: string, password: string) => {
+    const res = await axios.post(url, {
         password: password
     }, {
         headers: {
             Accept: 'application/json',
             "Content-Type": 'application/x-www-form-urlencoded'
-        },
-        params: {
-            apikey: apikey
         }
     })
     return res
@@ -57,7 +54,7 @@ export default function FormChange() {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const apikey =  getCookie('apikey')
-        const res = await recoverFetch(`${RoutesApi.AUTH}/change-password`, apikey!, values.password)
+        const res = await recoverFetch(`${RoutesApi.AUTH}/change-password?apikey=${apikey!}`, values.password)
         deleteCookie('apikey')
         toast({variant: "default", title: "¡Contraseña cambiada con éxito!", description: `Dentro de poco nos veremos adentro.`})
         setTimeout(() => {
