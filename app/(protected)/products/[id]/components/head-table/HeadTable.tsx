@@ -38,7 +38,6 @@ const formSchema = z.object({
   amount_supply: z.number({required_error: "Este campo es requerido", 
   invalid_type_error: "Se espera un número"})
   .max(999, { message: "El número es muy largo" })
-  .min(1, {message:"Ingrese al menos un número"})
   .refine(value => value !== 0, { message: "La cantidad no puede ser igual 0" })
   .refine(value => value > 0, { message: "No se aceptan números negativos" })
 })
