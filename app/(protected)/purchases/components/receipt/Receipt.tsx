@@ -30,28 +30,28 @@ export default function Receipt({id}:Props) {
   
   const generateReceipt = () => {
     const doc = new jsPDF()
-    doc.text('RECIBO DE FACTURA - MANDISA', 60, 20)
+    doc.text('DETALLE COMPRA - MANDISA', 60, 20)
     doc.setFontSize(10)
-    doc.text('NÚMERO DE FACTURA: ', 15, 35)
+    doc.text('NÚMERO DE RECIBO: ', 15, 35)
     doc.text(purchase.invoice_number, 57, 35)
     doc.text('TOTAL:', 15, 40)
     doc.text(formatted, 30, 40)
     doc.text('CANTIDAD DE ORDENES:', 15, 45)
     doc.text(purchase.amount_order.toString(), 60, 45)
 
-    // Datos del cliente y fecha
+    // Datos del proveedor y fecha
     doc.text('PROVEEDOR:', 130, 35)
     doc.text(purchase.provider.toUpperCase(), 155, 35);
     doc.text('FECHA:', 130, 40 )
     doc.text(`${convertDate(purchase?.purchase_date)}`, 145, 40);
-    // Datos de la tabla de productos
+    // Datos de la tabla de insumos
     const columns = ['Insumo', 'Cantidad', 'Precio Unitario', 'Subtotal'];
     const data:any[] = [];
     Array.isArray(orders) && orders.map((order) => {
       data.push([order.supply, order.amount_supplies, order.price_supplies, order.subtotal])
     })
 
-    // Generar la tabla de productos
+    // Generar la tabla de insumos
     autoTable(doc, {
       head: [columns],
       body: data,
@@ -62,7 +62,7 @@ export default function Receipt({id}:Props) {
     // const total = data.reduce((sum, [, , , total]) => sum + total, 0);
 
     // Guardar o mostrar el PDF (puedes personalizar esta parte según tus necesidades)
-    doc.save(`factura-${id}.pdf`);
+    doc.save(`detalle-${id}.pdf`);
   }
 
   return (

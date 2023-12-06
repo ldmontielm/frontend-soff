@@ -152,9 +152,9 @@ export default function InfoPurchase({id}:Props) {
             name="invoice_number"
             render ={({field}) => (
               <FormItem>
-                <FormLabel>Número de Factura:</FormLabel>
+                <FormLabel>Número de Recibo:</FormLabel>
                 <FormControl >
-                    <Input type='text' placeholder='Número de factura'{...field}/>
+                    <Input type='text' placeholder='Número de recibo'{...field}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>
