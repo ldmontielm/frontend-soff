@@ -75,6 +75,10 @@ export const getValidationErrors = (errorCode: string) => {
         },
 
         // EXCEPTIONS PRODUCTS
+        LOW_SALE_PRICE:{
+            title:"Precio de venta bajo",
+            message:"El precio de venta debe ser superior al costo."
+        },
 
         PRODUCT_NOT_FOUND: {
             title: "Producto no encontrado",
