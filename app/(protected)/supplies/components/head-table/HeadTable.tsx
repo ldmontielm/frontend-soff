@@ -55,7 +55,7 @@ const fromSchema = z.object({
   name: z.string({required_error: "El campo es requerido"}).min(2, {message: 'Ingrese el nombre del Insumo'}).max(50, {message: 'El nombre del insumo es demasiado largo'}),
   price: z.number({required_error: "El campo es requerido"}).min(3, {message: 'Ingrese el precio del insumo'}).max(9999999, {message: 'El precio es demasiado alto'}), 
   quantity_stock: z.number({required_error: "El campo es requerido"}).min(1, {message: 'Ingrese la cantidad'}).max(9999999, {message: 'La cantidad es demasiado alta'}),
-  unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccione una opción'}).max(50, {message: 'La unidad de medida es demasiado larga'}),
+  unit_measure: z.string({required_error: "El campo es requerido"}).min(1, {message: 'Seleccione una opción'}).max(9999999, {message: 'La unidad de medida es demasiado larga'}),
 });
 
 interface Props {
