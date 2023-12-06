@@ -20,9 +20,10 @@ const formProductSchema = z.object({
   .max(40, {message: 'El nombre es demasiado largo'}),
   sale_price: z.number({required_error: "El campo es requerido",
   invalid_type_error: "Se espera un número"})
-  .refine(value => value !== 0, { message: "El precio de venta no puede ser cero" })
-  .refine(value => value >= 111, {message: "Ingrese mínimo 3 números"})
-  .refine(value => value <= 99999999999,  {message: 'El precio es demasiado largo'})
+  .max(9999999, {message: 'El precio es demasiado largo'})
+  .refine(value => value !== 0, { message: "El precio no puede ser igual 0" })
+  .refine(value => value > 0, { message: "No se aceptan números negativos" })
+  .refine(value => value >= 50, { message: "El precio debe ser mayor o igual a $50" })
 });
 
 interface Props{
