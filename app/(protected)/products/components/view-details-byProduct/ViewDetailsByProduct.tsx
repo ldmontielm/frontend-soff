@@ -40,11 +40,11 @@ export default function ViewDetailsByProduct({id}: Props) {
               </div>
               <div className=' w-full text-center'>
                 <p className='font-bold text-sm'>Costo</p>
-                <p className=' text-sm text-gray-400'>${product?.price}</p>
+                <p className=' text-sm text-gray-400'>${convertToCOP(product?.price)}</p>
               </div>
               <div className=' w-full text-center'>
                 <p className='font-bold text-sm'>Precio de venta</p>
-                <p className=' text-sm text-gray-400'>${product?.sale_price}</p>
+                <p className=' text-sm text-gray-400'>${convertToCOP(product?.sale_price)}</p>
               </div>
             </div>
           </div>
