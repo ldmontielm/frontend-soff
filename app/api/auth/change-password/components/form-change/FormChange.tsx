@@ -23,16 +23,13 @@ const formSchema = z.object({
     message: 'Las contraseñas no coinciden.',
     path: ['confirmpassword']
 })
-const recoverFetch = async (url: string, apikey: string, password: string) => {
+const recoverFetch = async (url: string, password: string) => {
     const res = await fetcherPost(url, {
         password: password
     }, {
         headers: {
             Accept: 'application/json',
             "Content-Type": 'application/x-www-form-urlencoded'
-        },
-        params: {
-            apikey: apikey
         }
     })
     return res
@@ -57,12 +54,12 @@ export default function FormChange() {
 
     async function onSubmit(values: z.infer<typeof formSchema>) {
         const apikey =  getCookie('apikey')
-        const res = await recoverFetch(`${RoutesApi.AUTH}/change-password`, apikey!, values.password)
+        const res = await recoverFetch(`${RoutesApi.AUTH}/change-password?apikey=${apikey!}`, values.password)
         deleteCookie('apikey')
         toast({variant: "default", title: "¡Contraseña cambiada con éxito!", description: `Dentro de poco nos veremos adentro.`})
         setTimeout(() => {
             routes.push('/api/auth/signin')
-        }, 5000)
+        }, 3000)
     }
   return (
     <Form {...form}>
