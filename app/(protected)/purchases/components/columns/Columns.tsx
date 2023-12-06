@@ -15,7 +15,7 @@ import {
 export const columns: ColumnDef<Purchase>[] = [
     {
       accessorKey: 'invoice_number',
-      header: 'Factura',
+      header: 'Recibo',
       cell: ({row}) => {
         return <div>{row.getValue('invoice_number')}</div>
       }

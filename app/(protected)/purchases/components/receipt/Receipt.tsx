@@ -32,7 +32,7 @@ export default function Receipt({id}:Props) {
     const doc = new jsPDF()
     doc.text('COMPROBANTE DE COMPRA - MANDISA', 60, 20)
     doc.setFontSize(10)
-    doc.text('NÚMERO DE FACTURA: ', 15, 35)
+    doc.text('NÚMERO DE RECIBO: ', 15, 35)
     doc.text(purchase.invoice_number, 57, 35)
     doc.text('TOTAL:', 15, 40)
     doc.text(formatted, 30, 40)

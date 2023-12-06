@@ -4,7 +4,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { HeadTable } from '..'
-import { AdjustmentsHorizontalIcon, DocumentChartBarIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
+import { AdjustmentsHorizontalIcon, DocumentChartBarIcon,BookOpenIcon, ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/outline'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ColumnDef, flexRender, ColumnFiltersState, getFilteredRowModel, VisibilityState, getCoreRowModel, getPaginationRowModel, useReactTable, SortingState, getSortedRowModel } from "@tanstack/react-table"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
@@ -15,6 +15,8 @@ import { Report } from '../report'
 import {
   Tooltip
 } from "@mui/material"
+import Link from 'next/link'
+import { Routes } from "@/models/routes.models";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -56,6 +58,17 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
             className="w-full md:max-w-sm"
           />
           <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <>
+                <Tooltip placement="top" title="Ver manual de usuario." arrow>
+                  <Link href={`${Routes.CREATESALE}/manual`} >
+                      <Button variant='outline' className="w-full md:w-fit ml-auto flex items-center gap-2">
+                          <BookOpenIcon className=" h-4 w-4"/>
+                      </Button>
+                  </Link>
+                </Tooltip>
+              </>
+            </DropdownMenuTrigger>
             <DropdownMenuTrigger asChild>
               <Tooltip placement="top" title="Aqui podrás ocultar las columnas de la tabla." arrow>
                 <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
