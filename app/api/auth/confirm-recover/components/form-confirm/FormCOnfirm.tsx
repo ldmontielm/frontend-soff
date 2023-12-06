@@ -33,15 +33,11 @@ interface RecoverPasswordResponse {
 
 const formRequired = formSchema.required();
 
-const recoverFetch = async (url: string, email: string, code: string) => {
+const recoverFetch = async (url: string) => {
   const res = await fetcherPost(url, undefined, {
     headers: {
       Accept: "application/json",
-    },
-    params: {
-      email: email,
-      code: code,
-    },
+    }
   });
   return res;
 };
@@ -61,9 +57,7 @@ export default function FormCOnfirm() {
   async function onSubmit(values: z.infer<typeof formRequired>) {
     const email = getCookie("email");
     const res: RecoverPasswordResponse = await recoverFetch(
-      `${RoutesApi.AUTH}/confirm-recover`,
-      email!,
-      values.code
+      `${RoutesApi.AUTH}/confirm-recover?code=${values.code}&email=${email!}`,
     );
     setCookie("apikey", res.apikey);
     deleteCookie("email");
