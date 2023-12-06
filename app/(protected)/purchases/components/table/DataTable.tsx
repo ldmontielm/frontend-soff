@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
           />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-            <>
+              <>
                 <Tooltip placement="top" title="Ver manual de usuario." arrow>
                   <Link href={`${Routes.CREATEPURCHASE}/manual`} >
                       <Button variant='outline' className="w-full md:w-fit ml-auto flex items-center gap-2">
@@ -64,13 +64,15 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                       </Button>
                   </Link>
                 </Tooltip>
-            <Tooltip placement="top" title="Aqui podrás ocultar las columnas de la tabla." arrow>
+              </>
+            </DropdownMenuTrigger>
+            <DropdownMenuTrigger asChild>
+              <Tooltip placement="top" title="Aqui podrás ocultar las columnas de la tabla." arrow>
                 <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
                   <AdjustmentsHorizontalIcon className='w-4 h-4' />
                   <span>Columnas</span>
                 </Button>
               </Tooltip>
-              </>
             </DropdownMenuTrigger>
             <DropdownMenuContent align='start'>
             {table
@@ -89,7 +91,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                         color="primary"
                         />
                       {
-                        column.id === 'invoice_number' ? 'Factura':
+                        column.id === 'invoice_number' ? 'Recibo':
                         column.id === 'purchase_date' ? 'Fecha' :
                         column.id === 'amount_order' ? 'Ordenes' :
                         column.id === 'provider' ? 'Proveedor' :

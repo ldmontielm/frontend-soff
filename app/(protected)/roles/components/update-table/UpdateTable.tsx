@@ -156,6 +156,23 @@ export default function  UpdateTable({id_role,role}:Props) {
 
 
             <div className="flex gap-2">
+
+
+            <Button 
+                type="button"
+                onClick={()=>{
+                    setFormStep(0)
+                }}
+                className={
+                    cn("mt-4 w-full",{hidden: formStep == 0,})
+                } 
+                    >
+                    <ArrowLeft className="h-4 w-4 ml-2"/>
+                    Volver 
+                </Button>
+
+
+                
                 <Button 
                     disabled={assingPermissions.length === 0}
                     onClick={()=> {
@@ -168,6 +185,22 @@ export default function  UpdateTable({id_role,role}:Props) {
                     
                         Editar
                 </Button>
+
+
+
+            <Button
+                variant={"outline"}
+                className={
+                    cn("mt-4 w-full",{hidden: formStep == 1,})
+                } type="button" 
+                onClick={() => {
+                    setFormStep(0)
+                    setOpen(false)
+                    setRolenameInput(role.name)
+                }}
+                >
+                Cancelar
+            </Button>
 
                 <Button className={
                     cn("mt-4 w-full",{hidden: formStep == 1,})
@@ -193,17 +226,7 @@ export default function  UpdateTable({id_role,role}:Props) {
                     <ArrowRight className="w-4 h-4 ml-2"/>
                 </Button>
 
-                <Button 
-                type="button"
-                onClick={()=>{
-                    setFormStep(0)
-                }}
-                className={
-                    cn("mt-4 w-full",{hidden: formStep == 0,})
-                } 
-                    >
-                    Volver <ArrowLeft className="h-4 w-4 ml-2"/>
-                </Button>
+            
             </div>
         </DialogContent>
     </Dialog>

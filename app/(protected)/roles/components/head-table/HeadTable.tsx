@@ -146,6 +146,19 @@ async function  onSubmit (){
 
 
             <div className="flex gap-2">
+            <Button 
+                type="button"
+                onClick={()=>{
+                    setFormStep(0)
+                }}
+                className={
+                    cn("mt-4 w-full",{hidden: formStep == 0,})
+                } 
+                    >
+                    <ArrowLeft className="h-4 w-4 ml-2"/>
+                    Volver 
+                </Button>
+
                 <Button 
                     disabled={assingPermissions.length === 0}
                     onClick={()=> {
@@ -186,17 +199,7 @@ async function  onSubmit (){
                     <ArrowRight className="w-4 h-4 ml-2"/>
                 </Button>
 
-                <Button 
-                type="button"
-                onClick={()=>{
-                    setFormStep(0)
-                }}
-                className={
-                    cn("mt-4 w-full",{hidden: formStep == 0,})
-                } 
-                    >
-                    Volver <ArrowLeft className="h-4 w-4 ml-2"/>
-                </Button>
+                
             </div>
         </DialogContent>
     </Dialog>
