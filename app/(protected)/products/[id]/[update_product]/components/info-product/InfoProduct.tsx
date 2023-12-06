@@ -85,7 +85,7 @@ export default function InfoProduct({id}:Props) {
                     <FormItem>
                       <FormLabel>Nombre</FormLabel>
                       <FormControl >
-                         <Input id="name" type="string" defaultValue={product?.name} />
+                         <Input id="name" type="string" defaultValue={product?.name} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
