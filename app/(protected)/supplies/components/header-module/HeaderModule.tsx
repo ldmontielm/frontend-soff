@@ -28,7 +28,7 @@ export function HeaderModuleManual() {
         <p className="leading-7 [&:not(:first-child)]:mt-1 text-gray-500">Este manual le guiará en la navegación del módulo de Insumos.</p>
       </div>
       <div className='flex justify-end mr-5'>
-        <Tooltip placement="top" title="Volver a Proveedores." arrow>
+        <Tooltip placement="top" title="Volver a Insumos." arrow>
           <Link href={`${Routes.SUPPLIES}`} >  
             <Button variant="outline">
               <ArrowSmallLeftIcon className='w-5 h-5'/>

@@ -36,7 +36,7 @@ const formPurchaseSchema = z.object({
   }),
   invoice_number: z.string({
     required_error: "El campo es requerido"
-  }).min(2, {message: 'Ingrese el número de factura.'}).max(20, {message:'Excedio el limite de caracteres.'}),
+  }).min(2, {message: 'Ingrese el número de recibo.'}).max(20, {message:'Excedio el limite de caracteres.'}),
   provider_id: z.string({
     required_error: "El campo es requerido"
   }).min(2, {message: 'Ingrese el nombre del proveedor.'})
@@ -153,9 +153,9 @@ export default function InfoPurchase({id}:Props) {
             name="invoice_number"
             render ={({field}) => (
               <FormItem>
-                <FormLabel>Número de Factura:</FormLabel>
+                <FormLabel>Número de Recibo:</FormLabel>
                 <FormControl >
-                    <Input type='text' placeholder='Número de factura'{...field}/>
+                    <Input type='text' placeholder='Número de recibo'{...field}/>
                 </FormControl>
                 <FormMessage />
               </FormItem>

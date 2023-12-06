@@ -22,13 +22,10 @@ const formSchema = z.object({
 
 
 
-const recoverFetch = async (url: string, email: string) => {
+const recoverFetch = async (url: string) => {
     const res = await fetcherPost(url, undefined, {
         headers: {
             Accept: 'application/json'
-        },
-        params: {
-            email: email
         }
     })
     return res
@@ -48,7 +45,7 @@ export default function FormREcovery() {
     })
     
     async function onSubmit(values: z.infer<typeof formSchema>) {
-        const res = await recoverFetch(`${RoutesApi.AUTH}/recover-password`, values.email)
+        const res = await recoverFetch(`${RoutesApi.AUTH}/recover-password?email=${values.email}`)
         setCookie('email', values.email)
         toast({variant: "default", title: "¡Código de confirmación enviado!", description: <p>Hemos enviado un código de confirmación al correo <span className="font-semibold">{values.email}</span></p>})
         routes.push('/api/auth/confirm-recover')
