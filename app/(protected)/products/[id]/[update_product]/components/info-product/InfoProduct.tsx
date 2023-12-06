@@ -17,7 +17,12 @@ import { useEffect } from "react"
 const formProductSchema = z.object({
     id_product:z.string().optional(),
     name: z.string({required_error: "El campo es requerido"}).min(3, {message: "Ingrese mínimo 3 caracteres"}).max(50, {message: 'El nombre del producto es demasiado largo'}),
-    sale_price: z.number({required_error: "El campo es requerido", invalid_type_error: "Se espera un número"}).min(111, {message: "Ingrese mínimo 3 caracter"}).max(9999999, {message: 'El precio es demasiado largo'})
+    sale_price: z.number({required_error: "El campo es requerido",
+    invalid_type_error: "Se espera un número"})
+    .max(9999999, {message: 'El precio es demasiado largo'})
+    .refine(value => value !== 0, { message: "El precio no puede ser igual 0" })
+    .refine(value => value > 0, { message: "No se aceptan números negativos" })
+    .refine(value => value >= 50, { message: "El precio debe ser mayor o igual a $50" })
 });
 
 interface Props{
