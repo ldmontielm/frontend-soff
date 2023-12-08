@@ -40,6 +40,7 @@ export default function  HeadTable() {
     const [open, setOpen] = useState(false)
     const [rolenameInput, setRolenameInput] = useState("");
     const [active, setActive] = useState(true)
+    const [error, setError] = useState('');
 
 async function  onSubmit (){
     const res = await AddRoleFecher(`${RoutesApi.ROLES}/create_role/${rolenameInput}`, assingPermissions)
@@ -52,6 +53,24 @@ async function  onSubmit (){
     mutate(`${RoutesApi.ROLES}?status=${active}`)
 }
 
+
+
+const handleInputChange = (e : any) => {
+    const value = e.target.value;
+    setRolenameInput(value);
+
+    // Validación simple: Verificar si el nombre no está vacío
+        if (value.trim() === '') {
+            setError('El nombre es requerido');
+        } 
+        
+        else if(value.length > 60) {
+            setError('El nombre no debe de tener mas de 60 caracteres')
+        }
+        else {
+        setError('');
+        }
+    };
 
 
 
@@ -93,7 +112,17 @@ async function  onSubmit (){
 
         >
             <div>
-                <Input placeholder="Nombre " value={rolenameInput} onChange={(e) => setRolenameInput(e.target.value)}/>
+                <Input
+                placeholder="Nombre"
+                id="name"
+                value={rolenameInput}
+                onChange={handleInputChange}
+                />
+                {error && (
+                <div style={{ color: 'red', marginTop: '5px' }}>
+                    {error}
+                    </div>
+                )}
             </div>
 
         </motion.div>
@@ -146,7 +175,8 @@ async function  onSubmit (){
 
 
             <div className="flex gap-2">
-            <Button 
+            <Button
+            variant={"outline"}
                 type="button"
                 onClick={()=>{
                     setFormStep(0)

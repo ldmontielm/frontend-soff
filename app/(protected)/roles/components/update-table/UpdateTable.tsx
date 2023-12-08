@@ -43,27 +43,61 @@ export default function  UpdateTable({id_role,role}:Props) {
     const { data: permissionsroles} = useSWR(`${RoutesApi.ROLES}/permissionrole_get/${id_role}`); 
     const [formStep, setFormStep] = React.useState(0)
     const [assingPermissions, setAssingPermission] = useState<any[]>([])
-    const {data:Permissions}= useSWR(`${RoutesApi.PERMISSIONS}/`)
+    const {data:Permissions}= useSWR(`${RoutesApi.PERMISSIONS}`)
     const {toast} = useToast()
     const [open, setOpen] = useState(false)
     const [rolename, setRolname] = useState("")
     const [rolenameInput, setRolenameInput] = useState(role.name);
     const [Active, setActive] = useState(true)
+    const [error, setError] = useState('');
 
     const onSubmit = async(role:any, rolename:string ,assingPermissions: any[])=>{
+        try {
+            
+            const datos={
+                "name": rolename,
+                "permissions": assingPermissions
+            }
 
-        const datos={
-            "name": rolename,
-            "permissions": assingPermissions
+            console.log(permissionsroles)
+            console.log(assingPermissions)
+    
+            id_role = role.id
+            const res = await fetcherPut(`${RoutesApi.ROLES}/update_role/${id_role}`, datos)
+            toast({variant: "default", title: "Rol Editado",
+            description:"Se ha Editado el rol con exito"})
+            setOpen(false)
+            mutate(`${RoutesApi.ROLES}?status=${Active}`)
+        } catch (error) {
+            
+            toast({variant: "destructive", title: "ERROR",
+            description:"Error en la solicitud"})
+
         }
 
-        id_role = role.id
-        const res = await fetcherPut(`${RoutesApi.ROLES}/update_role/${id_role}`, datos)
-        toast({variant: "default", title: "Rol Editado",
-        description:"Se ha Editado el rol con exito"})
-        setOpen(false)
-        mutate(`${RoutesApi.ROLES}?status=${Active}`)
 }
+
+
+
+
+
+const handleInputChange = (e : any) => {
+    const value = e.target.value;
+    setRolenameInput(value);
+
+    // Validación simple: Verificar si el nombre no está vacío
+        if (value.trim() === '') {
+            setError('El nombre es requerido');
+        } 
+        
+        else if(value.length > 60) {
+            setError('El nombre no debe de tener mas de 60 caracteres')
+        }
+        else {
+        setError('');
+        }
+    };
+
 
 
     return (
@@ -104,7 +138,17 @@ export default function  UpdateTable({id_role,role}:Props) {
 
         >
             <div>
-                <Input placeholder="Nombre " value={rolenameInput} onChange={(e) => setRolenameInput(e.target.value)}/>
+                <Input
+                placeholder="Nombre"
+                id="name"
+                value={rolenameInput}
+                onChange={handleInputChange}
+                />
+                {error && (
+                <div style={{ color: 'red', marginTop: '5px' }}>
+                    {error}
+                    </div>
+                )}
             </div>
         </motion.div>
 
@@ -135,7 +179,6 @@ export default function  UpdateTable({id_role,role}:Props) {
                             <Switch 
                             defaultChecked={permissionsroles.map((per) => per.id_permission).includes(permission.name)}
                             onCheckedChange={(e) => {
-                            
                                 if(e === true){
                                     setAssingPermission([...assingPermissions, {
                                         id_permission: permission.id
@@ -144,9 +187,8 @@ export default function  UpdateTable({id_role,role}:Props) {
                                     let listaNewPermissions = assingPermissions.filter((id) => id.id_permission !== permission.id)
                                 setAssingPermission(listaNewPermissions)
                                         }
-                                        }}
+                            }}
                             />
-
                         </div>
                     </div>
                     ))
@@ -159,6 +201,7 @@ export default function  UpdateTable({id_role,role}:Props) {
 
 
             <Button 
+                variant={"outline"}
                 type="button"
                 onClick={()=>{
                     setFormStep(0)
@@ -202,29 +245,28 @@ export default function  UpdateTable({id_role,role}:Props) {
                 Cancelar
             </Button>
 
-                <Button className={
-                    cn("mt-4 w-full",{hidden: formStep == 1,})
-                } 
-                type="button" 
-                // variant={"ghost"} 
-                onClick={()=>{
 
-                    // Array.isArray(Permissions) && Array.isArray(permissionsroles) && Permissions.map((permission) => {
-                    //     if (permissionsroles.map((per) => per.id_permission).includes(permission.name)) {
-                    //         setAssingPermission([...assingPermissions, {
-                    //             id_permission: permission.id
-                    //         }]);
-                    //         console.log(permission.id_permission)
-                    //     }
-                    // });
-                    
-                    setRolname(rolenameInput);
-                    setFormStep(1)
-                    }}
-                    >
-                    Siguiente
-                    <ArrowRight className="w-4 h-4 ml-2"/>
-                </Button>
+            <Button
+    className={cn("mt-4 w-full", { hidden: formStep === 1 })}
+    type="button"
+    onClick={() => {
+        if (Array.isArray(permissionsroles) && permissionsroles.length > 0) {
+            // Utiliza la función de actualización del estado para garantizar la última versión del estado
+            setAssingPermission((prevState) => [
+                ...prevState,
+                ...permissionsroles.map((per) => ({
+                    id_role: per.id_role // Ajusta esto según la estructura real de tu objeto
+                })),
+            ]);
+        }
+        setRolname(rolenameInput);
+        setFormStep(1);
+    }}
+>
+    Siguiente
+    <ArrowRight className="w-4 h-4 ml-2" />
+</Button>
+
 
             
             </div>
