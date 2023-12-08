@@ -2,7 +2,6 @@
 
 import { RoutesApi } from '@/models/routes.models'
 import { fetcherPut, fetcherDelete } from '@/context/swr-context-provider/SwrContextProvider'
-import { convertToCOP } from '../../../utils'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -13,7 +12,7 @@ import * as z from 'zod'
 import { Input } from '@/components/ui/input'
 import { DetailsRecipe, Product, ProductConfim } from '../../../models/product.models'
 import { useToast } from "@/components/ui/use-toast"
-
+import { formattedNumber } from '../../../utils'
 const formProductSchema = z.object({
   name: z.string({required_error: "El campo es requerido"})
   .min(3, {message: "Ingrese mínimo 3 caracteres"})
@@ -112,7 +111,7 @@ export default function InfoProduct({id}:Props) {
                 />
           </div>
             <div className='my-3 w-full text-center'>
-              <p className='font-bold text-4xl'>${convertToCOP(calculateSubtotal(details !== undefined ? details : []))}</p>
+              <p className='font-bold text-4xl'>{formattedNumber(calculateSubtotal(details !== undefined ? details : []))}</p>
               <p className='text-sm text-gray-400'>Costo</p>
             </div>
           </div>

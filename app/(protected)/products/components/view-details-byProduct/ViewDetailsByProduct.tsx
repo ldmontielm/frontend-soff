@@ -4,11 +4,10 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
 import { QueueListIcon } from '@heroicons/react/24/outline'
 import { useState } from 'react'
 import useSWR from 'swr'
-import { convertToCOP } from '../../utils'
 import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table"
 import { RoutesApi } from '@/models/routes.models'
 import { ScrollArea } from "@/components/ui/scroll-area"
-
+import { formattedNumber, formattedPriceSupply } from '../../utils'
   interface Props {
     id: string
   }
@@ -40,11 +39,11 @@ export default function ViewDetailsByProduct({id}: Props) {
               </div>
               <div className=' w-full text-center'>
                 <p className='font-bold text-sm'>Costo</p>
-                <p className=' text-sm text-gray-400'>${convertToCOP(product?.price)}</p>
+                <p className=' text-sm text-gray-400'>{formattedNumber(product?.price)}</p>
               </div>
               <div className=' w-full text-center'>
                 <p className='font-bold text-sm'>Precio de venta</p>
-                <p className=' text-sm text-gray-400'>${convertToCOP(product?.sale_price)}</p>
+                <p className=' text-sm text-gray-400'>{formattedNumber(product?.sale_price)}</p>
               </div>
             </div>
           </div>
@@ -69,8 +68,8 @@ export default function ViewDetailsByProduct({id}: Props) {
                     <TableCell className="font-medium capitalize">{detail.supply}</TableCell>
                     <TableCell>{detail.amount_supply}</TableCell>
                     <TableCell>{detail.unit_measure}</TableCell>
-                    <TableCell>${convertToCOP(detail.supply_price)}</TableCell>
-                    <TableCell>${convertToCOP(detail.subtotal)}</TableCell>
+                    <TableCell>{formattedPriceSupply(detail.supply_price)}</TableCell>
+                    <TableCell>{formattedNumber(detail.subtotal)}</TableCell>
                   </TableRow>
                 ))
               }
