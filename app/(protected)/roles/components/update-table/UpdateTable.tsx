@@ -10,12 +10,8 @@ import {
 } from "@/components/ui/dialog"; // import Dioalog
 import { Button } from "@/components/ui/button";
 // import form
-import * as z from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 // import switch
-import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { RoutesApi } from "@/models/routes.models";
 import useSWR from "swr";
@@ -36,19 +32,38 @@ interface Props{
     id_role:string,
     role:Role
 }
-
+interface Permission {
+    id_permission: string;
+}
+interface AssingPermission {
+    id_permission: string;
+    // Add other properties if needed
+}
 
 
 export default function  UpdateTable({id_role,role}:Props) {
-    const { data: permissionsroles} = useSWR(`${RoutesApi.ROLES}/permissionrole_get/${id_role}`); 
+    const { data: permissionsroles} = useSWR<Permission[]>(`${RoutesApi.ROLES}/permissionrole_get/${id_role}`); 
     const [formStep, setFormStep] = React.useState(0)
-    const [assingPermissions, setAssingPermission] = useState<any[]>([])
+    // const [assingPermissions, setAssingPermission] = useState<any[]>([])
+    const [assingPermissions, setAssingPermission] = useState<AssingPermission[]>([]);
     const {data:Permissions}= useSWR(`${RoutesApi.PERMISSIONS}/`)
     const {toast} = useToast()
     const [open, setOpen] = useState(false)
     const [rolename, setRolname] = useState("")
     const [rolenameInput, setRolenameInput] = useState(role.name);
-    const [Active, setActive] = useState(true)
+    const [active, setActive] = useState(true)
+
+
+
+
+
+
+
+
+
+
+
+
 
     const onSubmit = async(role:any, rolename:string ,assingPermissions: any[])=>{
 
@@ -56,14 +71,43 @@ export default function  UpdateTable({id_role,role}:Props) {
             "name": rolename,
             "permissions": assingPermissions
         }
+        console.log(assingPermissions)
+        console.log(permissionsroles)
 
         id_role = role.id
         const res = await fetcherPut(`${RoutesApi.ROLES}/update_role/${id_role}`, datos)
         toast({variant: "default", title: "Rol Editado",
         description:"Se ha Editado el rol con exito"})
         setOpen(false)
-        mutate(`${RoutesApi.ROLES}?status=${Active}`)
+        setFormStep(0)
+        mutate(`${RoutesApi.ROLES}?status=${active}`)
 }
+
+
+
+    const ingresar = () => {
+        // Check if permissionsroles is defined
+        if (permissionsroles) {
+            // Iterate over permissionsroles array
+            permissionsroles.forEach(permission => {
+                // Check if permission.id_permission is not already present in assingPermissions
+                const isPermissionPresent = assingPermissions.some(
+                    item => item.id_permission === permission.id_permission
+                );
+
+                // If not present, add it to assingPermissions
+                if (!isPermissionPresent) {
+                    setAssingPermission(prevPermissions => [
+                        ...prevPermissions,
+                        { id_permission: permission.id_permission }
+                    ]);
+                }
+            });
+        }
+    };
+
+
+
 
 
     return (
@@ -133,7 +177,7 @@ export default function  UpdateTable({id_role,role}:Props) {
                         <div className='flex justify-end mr-4'>
                             
                             <Switch 
-                            defaultChecked={permissionsroles.map((per) => per.id_permission).includes(permission.name)}
+                            defaultChecked={permissionsroles.map((per) => per.id_permission).includes(permission.id)}
                             onCheckedChange={(e) => {
                             
                                 if(e === true){
@@ -146,7 +190,6 @@ export default function  UpdateTable({id_role,role}:Props) {
                                         }
                                         }}
                             />
-
                         </div>
                     </div>
                     ))
@@ -208,16 +251,7 @@ export default function  UpdateTable({id_role,role}:Props) {
                 type="button" 
                 // variant={"ghost"} 
                 onClick={()=>{
-
-                    // Array.isArray(Permissions) && Array.isArray(permissionsroles) && Permissions.map((permission) => {
-                    //     if (permissionsroles.map((per) => per.id_permission).includes(permission.name)) {
-                    //         setAssingPermission([...assingPermissions, {
-                    //             id_permission: permission.id
-                    //         }]);
-                    //         console.log(permission.id_permission)
-                    //     }
-                    // });
-                    
+                    ingresar();
                     setRolname(rolenameInput);
                     setFormStep(1)
                     }}

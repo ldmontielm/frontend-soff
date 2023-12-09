@@ -12,6 +12,7 @@ export interface createRole{
 export interface PermissionRole{
   id_role: string;
   id_permission: string;
+  name: string;
 }
   
 export interface createPermissionRole{
