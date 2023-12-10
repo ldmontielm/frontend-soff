@@ -20,7 +20,7 @@ export default async function page() {
         <div className="col-span-2">
           <PieSales />
         </div>
-        <div className="flex">
+        <div className="flex w-full">
           <ChartSales />
           <ChartSales2 />
         </div>
