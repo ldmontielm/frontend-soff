@@ -1,19 +1,19 @@
 'use client'
 
-import { convertToCOP } from "../../../utils"
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { HeadTable } from ".."
 import useSWR from 'swr'
 import DetailUpdateForm from "../detail-update-form/DetailUpdateForm"
 import DetailDeleteForm from "../datails-delete-form/DetailsDeleteForm"
 import { RoutesApi } from "@/models/routes.models"
+import { formattedNumber, formattedPriceSupply } from "../../../utils"
 
 interface Props {
   id:string
 }
 
 export default function TableDetails({id}:Props) {
-const {data:DetailsContext} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
+  const {data:DetailsContext} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
   return (
     <div>
       <HeadTable id={id} />
@@ -36,8 +36,8 @@ const {data:DetailsContext} = useSWR(`${RoutesApi.PRODUCTS}/${id}/details`)
                     <TableCell className="font-medium capitalize">{detail.supply}</TableCell>
                     <TableCell>{detail.amount_supply}</TableCell>
                     <TableCell>{detail.unit_measure}</TableCell>
-                    <TableCell>${convertToCOP(detail.supply_price)}</TableCell>
-                    <TableCell>${convertToCOP(detail.subtotal)}</TableCell>
+                    <TableCell>{formattedPriceSupply(detail.supply_price)}</TableCell>
+                    <TableCell>{formattedNumber(detail.subtotal)}</TableCell>
                     <TableCell className="flex items-center gap-2 justify-end">
                     <DetailUpdateForm detail={detail} id_product={id}/>
                       <DetailDeleteForm detail={detail} id_product={id}/>

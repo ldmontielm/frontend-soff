@@ -1,7 +1,6 @@
 'use client'
 import { Routes, RoutesApi } from '@/models/routes.models'
 import { fetcherPut } from '@/context/swr-context-provider/SwrContextProvider'
-import { convertToCOP } from '@/app/(protected)/products/utils'
 import { Button } from '@/components/ui/button'
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -13,6 +12,7 @@ import { Input } from '@/components/ui/input'
 import { DetailsRecipe, ProductCreate, Product } from '@/app/(protected)/products/models/product.models'
 import { useToast } from "@/components/ui/use-toast"
 import { useEffect } from "react"
+import { formattedNumber } from '@/app/(protected)/products/utils'
 
 const formProductSchema = z.object({
     id_product:z.string().optional(),
@@ -111,7 +111,7 @@ export default function InfoProduct({id}:Props) {
                 />
           </div>
             <div className='my-3 w-full text-center'>
-              <p className='font-bold text-4xl'>${convertToCOP(calculateSubtotal(details !== undefined ? details : []))}</p>
+              <p className='font-bold text-4xl'>{formattedNumber(calculateSubtotal(details !== undefined ? details : []))}</p>
               <p className='text-sm text-gray-400'>Costo</p>
             </div>
           </div>
