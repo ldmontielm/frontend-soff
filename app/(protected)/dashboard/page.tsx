@@ -4,22 +4,25 @@ import { getServerSession } from "next-auth"
 import { authOptions } from "@/utilities/authOptions"
 import { redirect } from "next/navigation"
 import { ChartSales } from "./components/chart-sales"
+import ChartSales2 from "./components/chart-products/ChartProducts"
 
 export default async function page() {
   const session = await getServerSession(authOptions)
 
-  if(!session){
+  if (!session) {
     redirect('/auth/login')
   }
-
   return (
-        <main className="w-full mx-auto max-w-7xl p-4">
-          <HeaderModule />
-          <ContentTargets />
-          <div className="my-10 gap-4 grid grid-cols-1">
-              <PieSales />
-              <ChartSales/>
-          </div>
-        </main>
-    )
+    <main className="w-full mx-auto max-w-7xl p-4">
+      <HeaderModule />
+      <ContentTargets />
+      <div className="my-10 gap-4 grid grid-cols-1 sm:grid-cols-2">
+        <PieSales />
+        <div className="flex">
+          <ChartSales />
+          <ChartSales2 />
+        </div>
+      </div>
+    </main>
+  )
 }
