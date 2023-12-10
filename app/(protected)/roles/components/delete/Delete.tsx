@@ -50,10 +50,11 @@ export default function Delete({ id_role }: Props) {
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger asChild>
                 <Button 
-                variant="outline"
-                className="border-none">
-                <TrashIcon className="w-4 h-4 group-hover:text-white" />
-                <span className="ml-4">Eliminar</span>
+                variant="ghost"
+                className="w-full"
+                >
+                <TrashIcon className="w-4 h-4 group-hover:text-white mr-2" />
+                <span className="mr-4">Eliminar</span>
                 </Button>
                 
             </AlertDialogTrigger>

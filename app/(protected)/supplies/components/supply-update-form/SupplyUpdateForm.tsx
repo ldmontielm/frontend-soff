@@ -100,8 +100,9 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>  
-        <Button variant='ghost'>
-          <PencilIcon className="h-4 w-4 mr-2" onClick={() => setOpen(true)}/><span>Editar</span>
+        <Button variant='ghost' className="w-full">
+          <PencilIcon className="h-4 w-4 mr-2" onClick={() => setOpen(true)}/>
+          <span className="mr-8">Editar</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

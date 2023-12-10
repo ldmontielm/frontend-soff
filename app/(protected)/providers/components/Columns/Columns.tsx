@@ -221,7 +221,7 @@ export const columns: ColumnDef<Provider>[] = [
                       </Button>
                       </Tooltip>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="flex flex-col items-start">
+                      <DropdownMenuContent align="end" className="flex flex-col">
                       <DropdownMenuLabel >Acciones</DropdownMenuLabel>
                           <ProviderUpdateForm provider={provider} id_provider={provider.id} />
                           <ProviderDeleteForm provider={provider} id_provider={provider.id}/>

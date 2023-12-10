@@ -40,10 +40,10 @@ export function MenuRoles({role}:Props){
                 {
                     role.status === true ?(
                     <div>
-                        <div key="update" className=" flex items-center justify-left mb-2">
+                        <div key="update" className=" flex items-center justify-left">
                         <UpdateTable id_role={role.id} role={role}/>
                         </div>
-                        <div key="delete" className=" flex items-center justify-left mb-2">
+                        <div key="delete" className=" flex items-center justify-left">
                         <Delete id_role={role.id}/>
                         </div>
                     </div>

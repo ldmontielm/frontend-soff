@@ -20,8 +20,9 @@ export default function ViewDetailsByProduct({id}: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>  
-      <Button variant='ghost'>
-        <QueueListIcon className="w-4 h-4 mr-2 " onClick={() => setOpen(true)}/><span>Ver detalle</span>
+      <Button variant='ghost' className='w-full'>
+        <QueueListIcon className="w-4 h-4 mr-2" onClick={() => setOpen(true)}/>
+        <span>Ver detalle</span>
       </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[600px] sm:max-h-[500px]">

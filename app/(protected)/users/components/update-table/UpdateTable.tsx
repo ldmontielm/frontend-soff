@@ -35,13 +35,12 @@ import { Value } from "@radix-ui/react-select"
 import useSWR, {useSWRConfig} from 'swr'
 import { mutate } from "swr"
 import { useRouter } from "next/navigation"
-import { Pencil } from "lucide-react"
 import { UserCre } from "../../models/users.models"
 import { RoutesApi, Routes } from "@/models/routes.models"
 import { updateUser } from "../../models/users.models"
 import { fetcherPut} from "@/context/swr-context-provider/SwrContextProvider"
 import { useToast } from "@/components/ui/use-toast"
-
+import {PencilIcon } from "@heroicons/react/24/outline"
 
 
 const formSchema = z.object({
@@ -101,7 +100,10 @@ const {data: role} = useSWR(`${RoutesApi.ROLES}?status=${true}`)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>  
-      <Button className="ml-2" variant='outline' size='icon'><Pencil className="w-4 h-4"/></Button>
+      <Button className="w-full" variant='ghost' >
+        <PencilIcon className="w-4 h-4 mr-2"/>
+        <span className="mr-8">Editar</span>
+      </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

@@ -73,9 +73,10 @@ export default function SupplyDeleteForm({ supply, id_supply }: Props) {
       <AlertDialogTrigger asChild>
         <Button
           variant="ghost"
-
+          className="w-full"
         >
-          <TrashIcon className="w-4 h-4 mr-2 group-hover:text-white" /><span>Eliminar</span>
+          <TrashIcon className="w-4 h-4 mr-2 group-hover:text-white" />
+          <span className="mr-4">Eliminar</span>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

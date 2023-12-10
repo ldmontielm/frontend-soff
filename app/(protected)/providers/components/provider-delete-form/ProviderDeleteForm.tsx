@@ -53,10 +53,11 @@ export default function ProviderDeleteForm({ provider, id_provider }: Props) {
       <AlertDialogTrigger asChild>
         <Button
           variant="ghost"
-          
+          className="w-full"
           // onClick={() => setOpen(true)} // Abrir el diálogo de alerta al hacer clic en el botón
         >
-          <TrashIcon className="w-4 h-4 mr-2 group-hover:text-white" /><span>Eliminar</span>
+          <TrashIcon className="w-4 h-4 mr-2 group-hover:text-white" />
+          <span className="mr-4">Eliminar</span>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

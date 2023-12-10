@@ -205,7 +205,7 @@ export const columns: ColumnDef<Supply>[] = [
                         </Button>
                         </Tooltip>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="flex flex-col items-start">
+                        <DropdownMenuContent align="end" className="flex flex-col">
                         <DropdownMenuLabel >Acciones</DropdownMenuLabel>
                             
                         <SupplyUpdateForm supply={supply} id_supply={supply.id} />
