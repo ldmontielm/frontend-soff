@@ -21,7 +21,7 @@ interface Sale {
 }
 
 export default function ChartSales()  {
-    const {data: salesMonth, error } = useSWR(`${RoutesApi.DASHBOARD}/grafic_payment2`) 
+    const {data: salesMonth, error } = useSWR(`${RoutesApi.DASHBOARD}/grafic_payment`) 
     if (!salesMonth) {
         return <div>Loading...</div>;
     }

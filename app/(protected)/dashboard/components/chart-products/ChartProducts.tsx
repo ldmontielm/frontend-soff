@@ -15,7 +15,7 @@ interface Sale {
 }
 
     export default function ChartSales2()  {
-    const { data: topProducts, error } = useSWR(`${RoutesApi.DASHBOARD}/top_products`);
+    const { data: topProducts, error } = useSWR(`${RoutesApi.DASHBOARD}/grafic_payment2`);
     if (!topProducts) {
         return <div>Loading...</div>;
     }
