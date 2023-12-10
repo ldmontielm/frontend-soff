@@ -219,7 +219,16 @@ const {data: role} = useSWR(`${RoutesApi.ROLES}?status=${true}`)
         />
         
             
-            <DialogFooter>
+            <DialogFooter className="">
+              <Button 
+              variant={"outline"}
+              type="button"
+              className="w-full mt-4"
+              onClick={() => {
+                setOpen(false)
+              }}
+              >Cancelar</Button>
+              
               <Button className="mt-4 w-full" type="submit">Actualizar</Button>
 
             </DialogFooter>
