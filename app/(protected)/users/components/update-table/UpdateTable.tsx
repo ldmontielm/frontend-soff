@@ -101,7 +101,11 @@ const {data: role} = useSWR(`${RoutesApi.ROLES}?status=${true}`)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>  
-      <Button className="ml-2" variant='outline' size='icon'><Pencil className="w-4 h-4"/></Button>
+      <Button className="ml-2 border-none" variant='outline' >
+        <Pencil className="w-4 h-4"/>
+        <span className="ml-4">Editar</span>
+
+      </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
@@ -217,7 +221,16 @@ const {data: role} = useSWR(`${RoutesApi.ROLES}?status=${true}`)
         />
         
             
-            <DialogFooter>
+            <DialogFooter className="">
+              <Button 
+              variant={"outline"}
+              type="button"
+              className="w-full mt-4"
+              onClick={() => {
+                setOpen(false)
+              }}
+              >Cancelar</Button>
+              
               <Button className="mt-4 w-full" type="submit">Actualizar</Button>
 
             </DialogFooter>
