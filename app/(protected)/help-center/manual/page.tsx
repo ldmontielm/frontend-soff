@@ -9,20 +9,20 @@ export default function Manual() {
     return (
       <div className="mx-auto max-w-7xl p-4">
         <div className='w-full flex justify-between items-center'>
-      <div className='mb-5'>
-        <p className='scroll-m-20 text-3xl font-extrabold tracking-tight transition-colors first:mt-0'>Manual de usuario</p>
-        <p className="leading-7 [&:not(:first-child)]:mt-1 text-gray-500">Este manual le guiará en la navegación del inicio de sesión y recuperación de contraseña.</p>
-      </div>
-      <div className='flex justify-end mr-5'>
-        <Tooltip placement="top" title="Volver a inicio de sesión" arrow>
-          <Link href='/api/auth/signin'>  
-            <Button variant="outline">
-              <ArrowSmallLeftIcon className='w-5 h-5'/>
-            </Button>
-          </Link>
-        </Tooltip>
-      </div>
-    </div>
+          <div className='mb-5'>
+            <p className='scroll-m-20 text-3xl font-extrabold tracking-tight transition-colors first:mt-0'>Manual de usuario</p>
+            <p className="leading-7 [&:not(:first-child)]:mt-1 text-gray-500">Este manual le guiará en la navegación del inicio de sesión y recuperación de contraseña.</p>
+          </div>
+          <div className='flex justify-end mr-5'>
+            <Tooltip placement="top" title="Volver al centro de ayuda" arrow>
+              <Link href='/help-center'>  
+                <Button variant="outline">
+                  <ArrowSmallLeftIcon className='w-5 h-5'/>
+                </Button>
+              </Link>
+            </Tooltip>
+          </div>
+        </div>
         <div className="flex justify-between flex-col md:flex-row items-center mb-9 p-5 border rounded bg-gray-100">
           <div className="w-full p-4 ">
             <p className="p-5 pl-0 text-black text-2xl font-bold">1. Inicio de sesión</p>
@@ -71,7 +71,7 @@ export default function Manual() {
         <div className="flex justify-between flex-col md:flex-row items-center mb-9 p-5 border rounded bg-gray-100">
           <div className="w-full p-4">
             <p className="p-5 pl-0 text-black text-2xl font-bold">5. ¿Has olvidado tu contraseña?</p>
-            <p className="text-justify pr-7 text-md">Si se le olvido la contraseña, puede dirigirse a la parte que dice, <strong><em>¿Has olvidado tu contraseña?</em></strong> y recuperarla pulsando sobre <strong>{`"contraseña"`}</strong> con el botón izquierdo del mouse, como se muestra en la imagen.</p>
+            <p className="text-justify pr-7 text-md">Si se le olvidó la contraseña, puede dirigirse a la parte que dice, <strong><em>¿Has olvidado tu contraseña?</em></strong> y recuperarla pulsando sobre ella con el botón izquierdo del mouse, como se muestra en la imagen.</p>
           </div>
           <div className="w-auto">
             <Image src="https://images.tango.us/workflows/255773f0-dffb-46da-9aec-669b6d5404be/steps/8824d34e-76d0-4928-ac86-4de7749703ab/046b3508-b16a-4886-9384-9294ad8ed5ff.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.5831&fp-y=0.7125&fp-z=2.0453&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=368&mark-y=327&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz00NjQmaD02NiZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw"
@@ -86,7 +86,7 @@ export default function Manual() {
           </div>
           <div className="w-full p-4">
             <p className="p-5 pl-0 text-black text-2xl font-bold">6. Recuperar contraseña</p>
-            <p className="text-justify text-md"> Al pulsar sobre <strong>{`"contraseña"`}</strong> se dirigirá a esta vista, donde debe ingresar su correo electrónico, para enviarle un código de verificación y pueda continuar con la recuperación.</p>
+            <p className="text-justify text-md"> Al pulsar sobre <strong>{`"¿Has olvidado tu contraseña?"`}</strong> se dirigirá a esta vista, donde debe ingresar su correo electrónico, para enviarle un código de verificación y pueda continuar con la recuperación.</p>
           </div>
         </div>
 
@@ -109,7 +109,7 @@ export default function Manual() {
           </div>
           <div className="w-full p-4">
             <p className="p-5 pl-0 text-black text-2xl font-bold">8. Regresar a Inicio de sesión</p>
-            <p className="text-justify text-md">Si ya no desea recuperar la contraseña, puede regresar al inicio de sesión dirigiendose a, <strong><em>¡Ya me acuerdo!</em></strong> pulsando sobre <strong>{`"Iniciar sesión"`}</strong> con el botón izquierdo del mouse.</p>
+            <p className="text-justify text-md">Si ya no desea recuperar la contraseña, puede regresar al inicio de sesión pulsando sobre, <strong>{`"¡Ya me acuerdo! Iniciar sesión"`}</strong> con el botón izquierdo del mouse.</p>
           </div>    
         </div>
 
@@ -139,7 +139,8 @@ export default function Manual() {
         <div className="flex justify-between flex-col md:flex-row items-center mb-9 p-5 border rounded bg-gray-100">
           <div className="w-full p-4">
             <p className="p-5 pl-0 text-black text-2xl font-bold">11. Reenviar código</p>
-            <p className="text-justify pr-7 text-md">Si por alguna razón no recibe el código de verificación, puede reenviarlo dirigiendose a, <strong><em>¡No me ha llegado un código!</em></strong> pulsando sobre <strong>{`"Volver a intentar"`}</strong> con el botón izquierdo del mouse.</p>
+            <p className="text-justify pr-7 text-md">Si por alguna razón no recibe el código de verificación, puede reenviarlo pulsando sobre, <strong>{`"¡No me ha llegado un código! Volver a intentar"`}</strong> con el botón izquierdo del mouse.</p>
+            <p><strong>NOTA:</strong>Esta acción lo devolverá al inicio de sesión, por lo tanto, debe repetir los pasos 5, 6 y 7</p>
           </div>
           <div className="w-auto">
             <Image src="https://images.tango.us/workflows/255773f0-dffb-46da-9aec-669b6d5404be/steps/e701e1e2-ccbd-4dff-bcc6-80a124fb5e46/ac27f926-7854-4665-93b5-e92e90492a5a.png?fm=png&crop=focalpoint&fit=crop&fp-x=0.5000&fp-y=0.6071&fp-z=1.6730&w=1200&border=2%2CF4F2F7&border-radius=8%2C8%2C8%2C8&border-radius-inner=8%2C8%2C8%2C8&blend-align=bottom&blend-mode=normal&blend-x=0&blend-w=1200&blend64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL21hZGUtd2l0aC10YW5nby13YXRlcm1hcmstdjIucG5n&mark-x=301&mark-y=333&m64=aHR0cHM6Ly9pbWFnZXMudGFuZ28udXMvc3RhdGljL2JsYW5rLnBuZz9tYXNrPWNvcm5lcnMmYm9yZGVyPTQlMkNGRjc0NDImdz01OTgmaD01NCZmaXQ9Y3JvcCZjb3JuZXItcmFkaXVzPTEw"
@@ -154,7 +155,7 @@ export default function Manual() {
           </div>
           <div className="w-full p-4">
             <p className="p-5 pl-0 text-black text-2xl font-bold">12. Contraseña nueva</p>
-            <p className="text-justify text-md">Cuando se confirme el código, podrá ingresar la contraseña nueva, como se muestra en la imagen y también debe confirmar la contraseña.</p>           
+            <p className="text-justify text-md">Cuando se confirme el código enviado al correo, podrá ingresar la contraseña nueva, como se muestra en la imagen y también debe confirmar la contraseña.</p>           
           </div>
         </div>
  
