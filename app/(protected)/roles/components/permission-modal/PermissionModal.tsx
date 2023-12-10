@@ -17,6 +17,7 @@ import { RoutesApi } from '@/models/routes.models'
 import { Role } from '../../models/roles.models'
 import { Tooltip } from "@mui/material"
 import { mutate } from 'swr'
+
 interface Props {
   id_role: string
   role:Role
@@ -24,7 +25,15 @@ interface Props {
 
 export default function PermissionModal({ id_role, role }: Props) {
   const [open, setOpen]= useState(false)
-  const { data: permissionsroles} = useSWR(`${RoutesApi.ROLES}/permissionrole_get/${id_role}`);  
+  const { data: permissionsroles, error} = useSWR(`${RoutesApi.ROLES}/permissionrole_get/${id_role}`); 
+
+  if(error){
+    return(
+      <div>
+        Cargando
+      </div>
+    )
+  }
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
