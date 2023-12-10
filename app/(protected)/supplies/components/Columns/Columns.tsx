@@ -87,34 +87,37 @@ export const columns: ColumnDef<Supply>[] = [
     );
   },
   cell: ({row}) => {
-    const price: number = row.getValue('price'); // Especifica el tipo como número
-    const formattedPrice = parseFloat(price.toFixed(2)).toLocaleString('es-ES',{
+  const costo = parseFloat(row.getValue("price"))
+  const formatted = new Intl.NumberFormat("en-US", {
+      style: 'currency',
+      currency: "USD",
+      maximumFractionDigits: 0
+  }).format(costo)
 
-    });
-
-    return <div>{formattedPrice}</div>
+  return <div className="text-left font-medium">{formatted}</div>
   }
 },
-  {
-    accessorKey: 'quantity_stock',
-    header: ({ column }) => {
-      return (
-        <Button className="w-fit"
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Cantidad
-          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => {
-      const quantity: number = row.getValue('quantity_stock');
-      // Limitar la cantidad de decimales a 2
-      const formattedQuantity = quantity.toFixed(0);
-      return <div>{formattedQuantity}</div>;
-    }
-  },
+{
+  accessorKey: 'quantity_stock',
+  header: ({ column }) => (
+    <Button
+      className="w-fit"
+      variant="ghost"
+      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    >
+      Cantidad
+      <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+    </Button>
+  ),
+  cell: ({ row }) => {
+    const quantity: number = row.getValue('quantity_stock');
+    
+    // Formatear la cantidad con separador de miles
+    const formattedQuantity = quantity.toLocaleString();
+
+    return <div>{formattedQuantity}</div>;
+  }
+},
   {
     accessorKey: 'unit_measure',
     header: ({ column }) => {
