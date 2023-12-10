@@ -113,8 +113,9 @@ export default function  UpdateTable({id_role,role}:Props) {
     return (
         <Dialog  open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-            <Button variant="outline" size='icon'>
+            <Button variant="outline" className="border-none">
                 <Pencil className="w-4 h-4"/>
+                <span className="ml-4">Editar</span>
             </Button>
         </DialogTrigger>
         <DialogContent>
@@ -203,6 +204,7 @@ export default function  UpdateTable({id_role,role}:Props) {
 
             <Button 
                 type="button"
+                variant={"outline"}
                 onClick={()=>{
                     setFormStep(0)
                 }}
