@@ -51,6 +51,15 @@ const updateSupplyStatus = (id_supply:string, newStatus:boolean) =>{
 }
 }
 
+// Función para formatear el número con separadores de miles y decimales
+function formatNumber(number: number, decimals: number): string {
+  const fixedNumber = number.toFixed(decimals);
+  const parts = fixedNumber.split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  return parts.join('.');
+}
+
 
 export const columns: ColumnDef<Supply>[] = [
   
@@ -75,51 +84,48 @@ export const columns: ColumnDef<Supply>[] = [
   },
   {
     accessorKey: 'price',
-    header: ({ column }) => (
-      <Button
-        className="w-fit"
+  header: ({ column }) => {
+    return (
+      <Button className="w-fit"
         variant="ghost"
         onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
       >
         Precio
         <ChevronUpDownIcon className="ml-2 h-4 w-4" />
       </Button>
-    ),
-    cell: ({ row }) => {
-      const price = parseFloat(row.getValue('price'));
-  
-      // Formatear el precio con separador de miles y mostrar dos decimales
-      const formattedPrice = new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }).format(price);
-  
-      return <div className="text-left font-medium">{formattedPrice}</div>;
-    },
+    );
   },
-{
-  accessorKey: 'quantity_stock',
-  header: ({ column }) => (
-    <Button
-      className="w-fit"
-      variant="ghost"
-      onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-    >
-      Cantidad
-      <ChevronUpDownIcon className="ml-2 h-4 w-4" />
-    </Button>
-  ),
-  cell: ({ row }) => {
-    const quantity: number = row.getValue('quantity_stock');
+  cell: ({row}) => {
+    const price: number = row.getValue('price'); // Especifica el tipo como número
+    const formattedPrice = parseFloat(price.toFixed(2)).toLocaleString('es-ES',{
 
-    // Formatear la cantidad con separador de miles
-    const formattedQuantity = new Intl.NumberFormat().format(quantity);
+    });
 
-    return <div>{formattedQuantity}</div>;
+    return <div>{formattedPrice}</div>
   }
 },
+  {
+    accessorKey: 'quantity_stock',
+    header: ({ column }) => {
+      return (
+        <Button className="w-fit"
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Cantidad
+          <ChevronUpDownIcon className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const quantity: number = row.getValue('quantity_stock');
+    
+      const formattedQuantity = formatNumber(quantity, 0);
+    
+      return <div>{formattedQuantity}</div>;
+    }
+    
+  },
   {
     accessorKey: 'unit_measure',
     header: ({ column }) => {
@@ -210,7 +216,7 @@ export const columns: ColumnDef<Supply>[] = [
                         </Button>
                         </Tooltip>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="flex flex-col">
+                        <DropdownMenuContent align="end" className="flex flex-col items-start">
                         <DropdownMenuLabel >Acciones</DropdownMenuLabel>
                             
                         <SupplyUpdateForm supply={supply} id_supply={supply.id} />
