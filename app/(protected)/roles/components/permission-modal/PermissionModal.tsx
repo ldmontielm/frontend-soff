@@ -16,6 +16,7 @@ import { useState } from 'react'
 import { RoutesApi } from '@/models/routes.models'
 import { Role } from '../../models/roles.models'
 import { Tooltip } from "@mui/material"
+import { mutate } from 'swr'
 interface Props {
   id_role: string
   role:Role
@@ -23,16 +24,7 @@ interface Props {
 
 export default function PermissionModal({ id_role, role }: Props) {
   const [open, setOpen]= useState(false)
-    const { data: permissionsroles, isValidating, error } = useSWR(`${RoutesApi.ROLES}/permissionrole_get/${id_role}`); 
-    if (error) {
-      return <p>ERROR</p>;
-    }
-  
-  
-    if (isValidating) {
-      return <div>Cargando...</div>;
-    }
-    
+  const { data: permissionsroles} = useSWR(`${RoutesApi.ROLES}/permissionrole_get/${id_role}`);  
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
@@ -49,8 +41,8 @@ export default function PermissionModal({ id_role, role }: Props) {
             A continuación, se presentan los permisos relacionados con el rol
           </AlertDialogDescription>
             {
-              Array.isArray(permissionsroles) && permissionsroles.map((permissions) => (
-                <span className='flex' key={permissions.id_permission}>{permissions.id_permission}</span>
+              Array.isArray(permissionsroles) && permissionsroles.map((permissions, indexx) => (
+                <span className='flex' key={indexx}>{permissions.name_permission}</span>
               ))
               
             }
