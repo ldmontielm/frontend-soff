@@ -17,7 +17,9 @@ export default async function page() {
       <HeaderModule />
       <ContentTargets />
       <div className="my-10 gap-4 grid grid-cols-1 sm:grid-cols-2">
-        <PieSales />
+        <div className="col-span-2">
+          <PieSales />
+        </div>
         <div className="flex">
           <ChartSales />
           <ChartSales2 />
