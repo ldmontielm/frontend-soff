@@ -19,9 +19,9 @@ import { useState, useEffect } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { mutate } from "swr";
 import { fetcherPost, fetcherPut } from "@/context/swr-context-provider/SwrContextProvider";
-
+import {PencilIcon } from "@heroicons/react/24/outline"
 import { cn } from "@/lib/utils"
-import { ArrowRight, Pencil } from "lucide-react"
+import { ArrowRight } from "lucide-react"
 import { ArrowLeft } from "lucide-react"
 import { motion } from "framer-motion"
 import { Value } from "@radix-ui/react-select";
@@ -113,8 +113,9 @@ export default function  UpdateTable({id_role,role}:Props) {
     return (
         <Dialog  open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-            <Button variant="outline" size='icon'>
-                <Pencil className="w-4 h-4"/>
+            <Button variant="ghost" className="w-full">
+                <PencilIcon className="w-4 h-4 mr-2"/>
+                <span className="mr-8">Editar</span>
             </Button>
         </DialogTrigger>
         <DialogContent>
@@ -203,6 +204,7 @@ export default function  UpdateTable({id_role,role}:Props) {
 
             <Button 
                 type="button"
+                variant={"outline"}
                 onClick={()=>{
                     setFormStep(0)
                 }}

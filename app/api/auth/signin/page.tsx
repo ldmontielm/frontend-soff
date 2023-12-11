@@ -16,7 +16,6 @@ export default async function page({error}: Params) {
   }
 
   return (
-    <>
     <div className="flex items-center justify-center py-10">
         <div className="w-full md:w-[400px] p-4">
             <div className="space-y-3">
@@ -30,6 +29,5 @@ export default async function page({error}: Params) {
             </div>
         </div>
     </div>
- </>
   )
 }

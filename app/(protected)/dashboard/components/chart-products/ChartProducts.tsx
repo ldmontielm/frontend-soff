@@ -35,7 +35,7 @@ const options = {
     plugins: {
         title: {
             display: true,
-            text: 'Top 3 Productos Más Vendidos',
+            text: 'Los 3 Productos Más Vendidos',
             color:'black',
             font: {
                 size:24

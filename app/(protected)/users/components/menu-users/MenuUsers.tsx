@@ -16,7 +16,6 @@ interface Props {
   id_user: string;
   user: User;
 }
-
 export function MenuUsers({ id_user, user }: Props) {
   return (
     <DropdownMenu>

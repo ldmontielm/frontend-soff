@@ -148,6 +148,7 @@ async function  onSubmit (){
             <div className="flex gap-2">
             <Button 
                 type="button"
+                variant={"outline"}
                 onClick={()=>{
                     setFormStep(0)
                 }}

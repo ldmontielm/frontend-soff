@@ -35,13 +35,12 @@ import { Value } from "@radix-ui/react-select"
 import useSWR, {useSWRConfig} from 'swr'
 import { mutate } from "swr"
 import { useRouter } from "next/navigation"
-import { Pencil } from "lucide-react"
 import { UserCre } from "../../models/users.models"
 import { RoutesApi, Routes } from "@/models/routes.models"
 import { updateUser } from "../../models/users.models"
 import { fetcherPut} from "@/context/swr-context-provider/SwrContextProvider"
 import { useToast } from "@/components/ui/use-toast"
-
+import {PencilIcon } from "@heroicons/react/24/outline"
 
 
 const formSchema = z.object({
@@ -217,7 +216,16 @@ const {data: role} = useSWR(`${RoutesApi.ROLES}?status=${true}`)
         />
         
             
-            <DialogFooter>
+            <DialogFooter className="">
+              <Button 
+              variant={"outline"}
+              type="button"
+              className="w-full mt-4"
+              onClick={() => {
+                setOpen(false)
+              }}
+              >Cancelar</Button>
+              
               <Button className="mt-4 w-full" type="submit">Actualizar</Button>
 
             </DialogFooter>

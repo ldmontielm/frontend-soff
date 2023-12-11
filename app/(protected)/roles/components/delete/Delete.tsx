@@ -26,13 +26,17 @@ interface Props {
 
 
 export default function Delete({ id_role }: Props) {
+
     const [open, setOpen]= useState(false)
     const { toast } = useToast()
+    const [active, setActive] = useState(true)
     
+
     const  DeleteRoleFecht = async(url:string)=>{
         const res = await fetcherDelete(url)
-        mutate(`${RoutesApi.ROLES}?status=${true}`)
+        mutate(`${RoutesApi.ROLES}?status=${active}`)
     }
+
 
     const  onSubmit = async(id_role:string)=>{
         const res = await DeleteRoleFecht(`${RoutesApi.ROLES}/delete_role/${id_role}`)
@@ -46,10 +50,11 @@ export default function Delete({ id_role }: Props) {
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger asChild>
                 <Button 
-                variant="outline"
-                size="icon"
-                className="group hover:bg-red-500">
-                <TrashIcon className="w-4 h-4 group-hover:text-white" />
+                variant="ghost"
+                className="w-full"
+                >
+                <TrashIcon className="w-4 h-4 group-hover:text-white mr-2" />
+                <span className="mr-4">Eliminar</span>
                 </Button>
                 
             </AlertDialogTrigger>

@@ -51,6 +51,15 @@ const updateSupplyStatus = (id_supply:string, newStatus:boolean) =>{
 }
 }
 
+// Función para formatear el número con separadores de miles y decimales
+function formatNumber(number: number, decimals: number): string {
+  const fixedNumber = number.toFixed(decimals);
+  const parts = fixedNumber.split('.');
+  parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+
+  return parts.join('.');
+}
+
 
 export const columns: ColumnDef<Supply>[] = [
   
@@ -110,10 +119,12 @@ export const columns: ColumnDef<Supply>[] = [
     },
     cell: ({ row }) => {
       const quantity: number = row.getValue('quantity_stock');
-      // Limitar la cantidad de decimales a 2
-      const formattedQuantity = quantity.toFixed(0);
+    
+      const formattedQuantity = formatNumber(quantity, 0);
+    
       return <div>{formattedQuantity}</div>;
     }
+    
   },
   {
     accessorKey: 'unit_measure',
