@@ -22,12 +22,11 @@ export default async function page() {
           <PieSales />
         </div>
         <div className="flex w-full space-x-4">
-          {/* Aplicamos la clase directamente a ChartSales */}
-          <div className="w-1/2 h-full">
+          {/* Ajustamos el ancho a 80% */}
+          <div className="w-4/5 h-full">
             {ChartSales()}
           </div>
-          {/* Aplicamos la clase directamente a ChartSales2 */}
-          <div className="w-1/2 h-full">
+          <div className="w-1/5 h-full">
             {ChartSales2()}
           </div>
         </div>
