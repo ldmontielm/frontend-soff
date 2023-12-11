@@ -26,7 +26,7 @@ export default async function page() {
             <ChartSales />
           </div>
           {/* Ajustamos el ancho a 50% */}
-          <div className="w-1/2">
+          <div className="w-4/5">
             <ChartSales2 />
           </div>
         </div>
