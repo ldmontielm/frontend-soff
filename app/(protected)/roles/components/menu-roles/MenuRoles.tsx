@@ -50,7 +50,7 @@ export function MenuRoles({role}:Props){
                     ): <h4 key="no-actions" className="flex justify-center items-center m-2">...</h4>
                 }
                 </div>
-        ) : <span className="flex justify-center items-center m-2">...</span>
+        ) : <></>
         }
         </DropdownMenuContent>
     </DropdownMenu>

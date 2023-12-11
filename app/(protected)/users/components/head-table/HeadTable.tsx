@@ -98,8 +98,8 @@ export default function HeadTable() {
       <Dialog open={open} onOpenChange={setOpen} >
         <DialogTrigger asChild>
         <Tooltip title="Agregar un nuevo usuario" arrow placement="top">
-            <Button>
-              Registrar Usuario
+            <Button className="w-full md:w-fit">
+              Registrar
             </Button>
         </Tooltip>
 

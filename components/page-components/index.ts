@@ -1,4 +1,5 @@
 export * from './button-home';
+export * from './clock';
 export * from './footer';
 export * from './header-module';
 export * from './navbar';

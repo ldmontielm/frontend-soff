@@ -14,6 +14,9 @@ import {
 } from "@mui/material"
 import Link from 'next/link'
 import { Routes } from "@/models/routes.models";
+import {Columns, BookOpen} from "lucide-react"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -59,8 +62,8 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
               <>
                 <Tooltip placement="top" title="Ver manual de usuario." arrow>
                   <Link href={`${Routes.CREATEPURCHASE}/manual`} >
-                      <Button variant='outline' className="w-full md:w-fit ml-auto flex items-center gap-2">
-                          <BookOpenIcon className=" h-4 w-4"/>
+                      <Button variant='outline' size='icon'>
+                        <BookOpen size={16} color='#6f6f6f'  />
                       </Button>
                   </Link>
                 </Tooltip>
@@ -69,7 +72,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
             <DropdownMenuTrigger asChild>
               <Tooltip placement="top" title="Aqui podrás ocultar las columnas de la tabla." arrow>
                 <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
-                  <AdjustmentsHorizontalIcon className='w-4 h-4' />
+                  <Columns size={16} color='#6f6f6f'  />
                   <span>Columnas</span>
                 </Button>
               </Tooltip>
@@ -185,20 +188,19 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
           <span>Próxima</span>
           <ChevronRightIcon className='w-4 h-4' />
         </Button>
-        <select
-          className='w-fit flex h-9 items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 '
-          value={table.getState().pagination.pageSize}
-          onChange={e => {
-            table.setPageSize(Number(e.target.value))
-          }}
-        >
-          {[10, 20, 30, 40, 50].map(pageSize => (
-            <option key={pageSize} value={pageSize}>
-              Mostrar {pageSize}
-            </option>
-          ))}
-        </select>
-        <p>Página {table.getState().pagination.pageIndex + 1} de {table.getPageCount()}</p>
+        <Select 
+          defaultValue={table.getState().pagination.pageSize.toString()}
+          onValueChange={(e) => table.setPageSize(Number(e))}
+          >
+          <SelectTrigger className="w-fit">
+            <SelectValue placeholder="Select a fruit" />
+          </SelectTrigger>
+          <SelectContent>
+            {[10, 20, 30, 40, 50].map(pageSize => (
+              <SelectItem key={pageSize} value={pageSize.toString()}>Mostrar {pageSize}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
     </div>
   )

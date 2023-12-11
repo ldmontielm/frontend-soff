@@ -23,7 +23,7 @@ interface Sale {
 export default function ChartSales()  {
     const {data: salesMonth, error } = useSWR(`${RoutesApi.DASHBOARD}/grafic_payment`) 
     if (!salesMonth) {
-        return <div>Loading...</div>;
+        return <div>Cargando Gráficas</div>;
     }
 
     const cashSales = salesMonth.map((item: Sale) => item.Ventas_Efectivo);

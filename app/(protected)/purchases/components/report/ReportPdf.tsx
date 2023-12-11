@@ -12,6 +12,9 @@ import {
   Tooltip
 } from "@mui/material"
 import { useToast } from "@/components/ui/use-toast"
+import { FileDigit } from 'lucide-react'
+
+
 
 export function getCurrentDate() {
     const currentDate = new Date();
@@ -26,6 +29,7 @@ interface PurchaseInvoice {
   provider: string
   total: number
 }
+
 export default function ReportPdf() {
   const {data:purchases} = useSWR<Purchase[]>(`${RoutesApi.PURCHASES}`)
   const [currentDate, setCurrentDate] = useState('');
@@ -78,7 +82,7 @@ export default function ReportPdf() {
             onClick={async () => {
               generateReceipt()
               toast({variant: 'default',title: "Generando reporte pdf",description: "Se ha generado un nuevo informe de compras.",})}}>
-            <NewspaperIcon className='w-4 h-4'/>
+            <FileDigit size={16} color='#6f6f6f' />
             <span>Generar en PDF</span>
           </Button>
         </Tooltip>

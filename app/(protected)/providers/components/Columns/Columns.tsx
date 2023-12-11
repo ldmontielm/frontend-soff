@@ -221,8 +221,8 @@ export const columns: ColumnDef<Provider>[] = [
                       </Button>
                       </Tooltip>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="flex flex-col">
-                      <DropdownMenuLabel >Acciones</DropdownMenuLabel>
+                      <DropdownMenuContent align="end" className="flex flex-col items-start p-2 space-y-2">
+                          <DropdownMenuLabel >Acciones</DropdownMenuLabel>
                           <ProviderUpdateForm provider={provider} id_provider={provider.id} />
                           <ProviderDeleteForm provider={provider} id_provider={provider.id}/>
                       </DropdownMenuContent>
@@ -231,18 +231,6 @@ export const columns: ColumnDef<Provider>[] = [
           ):
           (
               <>
-                  <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                      <Button variant='ghost' size='icon' className="ml-2">
-                          <MoreHorizontal className="h-4 w-4" />
-                      </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="flex flex-col">
-                      <DropdownMenuLabel>Sin acciones</DropdownMenuLabel>
-                      <span className="p-2 text-center">...</span>
-                      {/* <DisableProduct id={product.id} product={product}/> */}
-                      </DropdownMenuContent>
-                  </DropdownMenu>
               </>
           ) 
       }

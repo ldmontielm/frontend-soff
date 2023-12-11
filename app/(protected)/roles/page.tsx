@@ -13,9 +13,11 @@ export default  function DemoPage() {
 
     
   return (
-    <div className="container mx-auto py-10">
+    <div className="mx-auto lg:max-w-7xl p-4">
       <HeaderModule/>
-      <DataTable  columns={columns} data={roles || []} consult={active} setActive={setActive} />
+      <div>
+        <DataTable  columns={columns} data={roles || []} consult={active} setActive={setActive} />
+      </div>
     </div>
   );
 }

@@ -210,38 +210,22 @@ export const columns: ColumnDef<Supply>[] = [
                 <>
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                        <Tooltip placement="top" title="Acciones para el insumo." arrow>
-                        <Button variant='ghost' size='icon' className="ml-2">
-                            <MoreHorizontal className="h-4 w-4 " />
-                        </Button>
-                        </Tooltip>
+                          <Tooltip placement="top" title="Acciones para el insumo." arrow>
+                            <Button variant='ghost' size='icon' className="ml-2">
+                                <MoreHorizontal className="h-4 w-4 " />
+                            </Button>
+                          </Tooltip>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="flex flex-col items-start">
-                        <DropdownMenuLabel >Acciones</DropdownMenuLabel>
-                            
-                        <SupplyUpdateForm supply={supply} id_supply={supply.id} />
-                          
-  
-                        <SupplyDeleteForm supply={supply} id_supply={supply.id}/>
-                        {/* <DisableProduct id={product.id} product={product}/> */}
+                        <DropdownMenuContent align="end" className="flex flex-col items-start p-2 space-y-2">
+                          <DropdownMenuLabel >Acciones</DropdownMenuLabel>
+                          <SupplyUpdateForm supply={supply} id_supply={supply.id} />
+                          <SupplyDeleteForm supply={supply} id_supply={supply.id}/>
                         </DropdownMenuContent>
                     </DropdownMenu>
                 </>
             ):
             (
                 <>
-                    <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                        <Button variant='ghost' size='icon' className="ml-2">
-                            <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="flex flex-col">
-                        <DropdownMenuLabel>Sin acciones</DropdownMenuLabel>
-                        <span className="p-2 text-center">...</span>
-                        {/* <DisableProduct id={product.id} product={product}/> */}
-                        </DropdownMenuContent>
-                    </DropdownMenu>
                 </>
             ) 
         }

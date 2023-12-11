@@ -60,7 +60,7 @@ async function  onSubmit (){
     <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
             <Tooltip title="Agregar un nuevo rol" arrow placement="top" >
-                <Button>Registrar Rol</Button>
+                <Button className="w-full md:w-fit">Registrar</Button>
             </Tooltip>
         </DialogTrigger>
         <DialogContent>

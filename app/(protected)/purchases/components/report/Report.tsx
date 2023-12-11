@@ -12,6 +12,10 @@ import ReportPdf from './ReportPdf'
 import { generateExcelReport } from '../../utils'
 import { ColumnDef, flexRender, ColumnFiltersState, getFilteredRowModel, VisibilityState, getCoreRowModel, getPaginationRowModel, useReactTable, SortingState, getSortedRowModel } from "@tanstack/react-table"
 import { Purchase } from '../../models/purchase.models'
+import { Presentation, FileSpreadsheet } from 'lucide-react'
+
+
+
 interface DataTableProps<TData, TValue> {
   data: TData[]
 }
@@ -26,7 +30,7 @@ export default function Report<TData, TValue>({data}: DataTableProps<TData, TVal
            <Button
             variant='outline'
             className="flex items-center w-full md:w-fit gap-2">
-             <DocumentChartBarIcon className='w-4 h-4' />
+             <Presentation size={16} color='#6f6f6f' />
              <span>Reporte</span>
            </Button>
          </Tooltip>
@@ -42,7 +46,7 @@ export default function Report<TData, TValue>({data}: DataTableProps<TData, TVal
                   onClick={() => {generateExcelReport(data as Array<Purchase>)
                       toast({variant: 'default', title: "Generando reporte excel", description: "Se ha generado un nuevo informe de compras."})
                   }}>
-                    <ChartBarIcon className='w-4 h-4'/>
+                    <FileSpreadsheet size={16} color='#6f6f6f' />
                     <span>Generar en Excel</span>
                   </Button>
                 </Tooltip>

@@ -5,12 +5,10 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { useAuth } from '@/context/auth-context/AuthContextProvider'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
-import { BellIcon, BellAlertIcon } from '@heroicons/react/24/outline'
-import {ExclamationCircleIcon, XMarkIcon} from '@heroicons/react/24/outline'
 import { RoutesApi } from '@/models/routes.models'
 import useSWR from 'swr'
 import { ScrollArea } from "@/components/ui/scroll-area"
-
+import { Bell } from 'lucide-react'
 
 export default function Profile() {
   const {user, logout} = useAuth()
@@ -22,7 +20,7 @@ export default function Profile() {
     <Popover>
         <PopoverTrigger asChild>
             <Button variant='outline' size='icon'>
-                <BellIcon className='w-4 h-4' />
+                <Bell size={16} color='#6f6f6f' />
             </Button>
         </PopoverTrigger>
         <PopoverContent align='end' className='dark:bg-neutral-900 sm:w-96 mt-6 text-sm pt-4'>

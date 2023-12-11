@@ -33,8 +33,6 @@ export const authOptions: NextAuthOptions = {
             
                 })
 
-
-
                 const user:User = await res.json()
 
                 if(res.status === 200){

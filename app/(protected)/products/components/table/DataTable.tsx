@@ -12,6 +12,8 @@ import { Checkbox } from "@mui/material"
 import {Tooltip} from "@mui/material"
 import { Routes } from "@/models/routes.models";
 import Link from 'next/link'
+import {BookOpen, Columns} from 'lucide-react'
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[],
@@ -62,8 +64,8 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error, setAc
               <>
               <Tooltip placement="top" title="Ver manual de usuario." arrow>
               <Link href={`${Routes.CREATEPRODUCT}/manual`} >
-                  <Button variant='outline' className="w-full md:w-fit ml-auto flex items-center gap-2">
-                      <BookOpenIcon className=" h-4 w-4"/>
+                  <Button variant='outline' size='icon'>
+                      <BookOpen size={16} color='#6f6f6f'/>
                   </Button>
               </Link>
             </Tooltip>
@@ -73,7 +75,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error, setAc
 
               <Tooltip placement="top" title="Ocultar columnas" arrow>
               <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
-                <AdjustmentsHorizontalIcon className='w-4 h-4' />
+              <Columns size={16} color='#6f6f6f'  />
                 <span>Columnas</span>
               </Button>
               </Tooltip>

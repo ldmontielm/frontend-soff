@@ -100,10 +100,7 @@ const {data: role} = useSWR(`${RoutesApi.ROLES}?status=${true}`)
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>  
-      <Button className="w-full" variant='ghost' >
-        <PencilIcon className="w-4 h-4 mr-2"/>
-        <span className="mr-8">Editar</span>
-      </Button>
+        <Button variant='outline'><Pencil size={16} color="#6f6f6f" className="mr-2 w-full"/>Editar</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

@@ -108,16 +108,16 @@ export default function HeadTable({location}: Props) {
 
 
 return (
-  <div>
+
          
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
     <Tooltip placement="top" title="Aquí puedes registrar un proveedor." arrow>
-      <Button variant={`${location === 'purchases' ? 'outline' : 'default'}`} size={`${location === 'purchases' ? 'icon' : 'default'}`} className={`${location === 'purchases' ? '' : 'w-full md:w-[180px]'}`}>
+      <Button variant={`${location === 'purchases' ? 'outline' : 'default'}`} size={`${location === 'purchases' ? 'icon' : 'default'}`} className={`${location === 'purchases' ? '' : 'w-full md:w-fit'}`}>
         {
           location === 'purchases' ? (
             <UserPlusIcon className="w-4 h-4" />
-            ): "Registrar Proveedor"
+            ): "Registrar"
           }
       </Button>
       </Tooltip>
@@ -242,7 +242,6 @@ return (
         </Form>
       </DialogContent>
     </Dialog>
-  </div>
 )
 
 

@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { RoutesApi } from '@/models/routes.models'
 import { signIn } from 'next-auth/react'
-
+import { EyeOff, Eye } from 'lucide-react'
 
 const formSchema = z.object({
     username: z.string().email({message: "Ingresa una dirección de correo electrónico válida."}),
@@ -79,7 +79,7 @@ export default function FormLogin() {
                 render={({ field }) => (
                     <FormItem>
                     <FormLabel>Contraseña</FormLabel>
-                    <FormControl>
+                    <FormControl className='flex w-full max-w-sm items-center space-x-2'>
                         <Input placeholder="Ingrese su contraseña" type="password" {...field} />
                     </FormControl>
                     <FormMessage />
