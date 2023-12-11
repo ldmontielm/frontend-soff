@@ -7,10 +7,11 @@ import ImageProfile from '@/public/profile.png'
 import { CheckBadgeIcon } from '@heroicons/react/24/solid'
 import { BoltIcon, EnvelopeIcon } from '@heroicons/react/24/outline'
 import { useSession } from 'next-auth/react'
+import useSWR from 'swr'
+import { RoutesApi } from '@/models/routes.models'
 
 export default function CardComponent() {
-    const {data: session} = useSession()
-
+    const {data: user, isLoading} = useSWR(`${RoutesApi.AUTH}/user/me`)
     return (
         <div>
             <div className='h-52 relative rounded bg-gradient-to-r from-violet-700 to-indigo-700'>
@@ -20,7 +21,7 @@ export default function CardComponent() {
             </div>
             <div>
                 {
-                    session?.user === undefined ? (
+                    isLoading ? (
                       <div className='w-full h-28 flex  gap-4 items-center flex-col justify-center'> 
                         <svg aria-hidden="true" className="inline w-5 h-5 mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -32,15 +33,15 @@ export default function CardComponent() {
                         <>
                             <div className='mt-14 space-y-1'>
                                 <div className='flex items-center gap-2'>
-                                    <h2 className='font-bold text-2xl'>{session.user.name}</h2>
+                                    <h2 className='font-bold text-2xl'>{user.name}</h2>
                                     <CheckBadgeIcon className="w-5 h-5 text-blue-500" />
                                 </div>
                                 <div className="flex items-center gap-2">
                                     <EnvelopeIcon className="w-4 h-4" />
-                                    <p className="text-neutral-700">{session.user.email}</p>
+                                    <p className="text-neutral-700">{user.email}</p>
                                 </div>
                                 <div>
-                                    <p className='italic text-sm text-neutral-600'>@Administrador</p>
+                                    <p className='italic text-sm text-neutral-600'>@{user.role}</p>
                                 </div>
                             </div>
                             <div>
@@ -50,7 +51,7 @@ export default function CardComponent() {
                                 </div>
                                 <div className='my-4 gap-2 flex text-sm flex-wrap'>
                                     {
-                                        session.user.permissions.map((permission, i) => (
+                                        user.permissions.map((permission: string, i: number) => (
                                             <p key={i} className='px-3 w py-2 font-medium text-neutral-700 capitalize rounded-full bg-neutral-100'>{permission}</p>
                                             ))
                                         }

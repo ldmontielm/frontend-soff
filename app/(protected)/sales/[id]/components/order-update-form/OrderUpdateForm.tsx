@@ -16,7 +16,7 @@ import { RoutesApi } from '@/models/routes.models'
 import {
   Tooltip
 } from "@mui/material"
-
+import { Pencil } from 'lucide-react'
 const formSchema = z.object({
   amount_product: z.number({invalid_type_error: "Debes ingresar un número, no un texto", required_error: "El campo es requerido"}).min(1, {message: "El valor de la cantidad debe ser diferente de 0"}),
   id_order:z.string().optional(),
@@ -56,7 +56,7 @@ export default function OrderUpdateForm({order, id_sale}: Props) {
       <DialogTrigger asChild>  
         <Tooltip placement="top" title="Aqui puedes editar la orden" arrow>
           <Button variant='outline' size='icon' onClick={() => setOpen(true)}>
-            <PencilIcon className="h-4 w-4" />
+            <Pencil size={16} color='#6f6f6f'/>
           </Button>
         </Tooltip>
       </DialogTrigger>

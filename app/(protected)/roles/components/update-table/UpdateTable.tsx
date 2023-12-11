@@ -47,6 +47,7 @@ export default function  UpdateTable({id_role,role}:Props) {
     // const [assingPermissions, setAssingPermission] = useState<any[]>([])
     const [assingPermissions, setAssingPermission] = useState<AssingPermission[]>([]);
     const {data:Permissions}= useSWR(`${RoutesApi.PERMISSIONS}/`)
+    
     const {toast} = useToast()
     const [open, setOpen] = useState(false)
     const [rolename, setRolname] = useState("")
@@ -81,6 +82,7 @@ export default function  UpdateTable({id_role,role}:Props) {
         setOpen(false)
         setFormStep(0)
         mutate(`${RoutesApi.ROLES}?status=${active}`)
+        mutate(`${RoutesApi.ROLES}/permissionrole_get/${id_role}`)
 }
 
 

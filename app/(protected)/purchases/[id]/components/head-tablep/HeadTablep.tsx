@@ -133,7 +133,7 @@ export default function HeadTablep({id}: Props) {
             control={form.control}
             name="amount_supplies"
             render={({ field }) => (
-              <FormItem className="w-full md:w-[200px]">
+              <FormItem className="w-full md:w-fit">
                 <FormLabel>Cantidad</FormLabel>
                 <FormControl>
                   <Input type="number" placeholder="Cantidad del insumo" {...form.register('amount_supplies', {valueAsNumber: true})} className="lg:w-fit"/>
@@ -147,7 +147,7 @@ export default function HeadTablep({id}: Props) {
             control={form.control}
             name="price_supplies"
             render={({ field }) => (
-              <FormItem className="w-full md:w-[200px] ml-4">
+              <FormItem className="w-full md:w-fit">
                 <FormLabel>Precio</FormLabel>
                 <FormControl>
                   <Input type="number" placeholder="Precio del insumo" {...form.register('price_supplies', {valueAsNumber: true})} className="lg:w-fit"/>
@@ -161,7 +161,6 @@ export default function HeadTablep({id}: Props) {
         </div>
         <Tooltip placement="top" title="Aqui podrás agregar ordenes a la compra" arrow>
           <Button type="submit" className="w-full md:w-fit">
-            <PlusIcon className="w-4 h-4 mr-2" />
             <span>Agregar</span>
           </Button>
         </Tooltip>

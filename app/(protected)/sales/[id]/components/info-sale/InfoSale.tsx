@@ -101,7 +101,7 @@ export default function InfoSale({id}:Props) {
       <div className='p-4'>
         <Alert>
           <HashtagIcon className="h-4 w-4" />
-          <AlertTitle>Factura</AlertTitle>
+          <AlertTitle>Recibo</AlertTitle>
           <AlertDescription>
             {sale?.invoice_number}
           </AlertDescription>

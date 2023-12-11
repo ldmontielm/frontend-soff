@@ -60,7 +60,7 @@ export default function HeadTable({id}: Props) {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-wrap lg:flex-nowrap items-center  justify-between gap-2">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-wrap lg:flex-nowrap items-end  justify-between gap-2">
         <div className="w-full flex flex-wrap lg:flex-nowrap items-start gap-2">
           <FormField 
             control={form.control}
@@ -133,11 +133,9 @@ export default function HeadTable({id}: Props) {
             )
           }
           />
-
         </div>
         <Tooltip placement="top" title="Aqui podrás agregar ordenes a la venta" arrow>
           <Button type="submit" className="w-full md:w-fit">
-            <PlusIcon className="w-4 h-4 mr-2" />
             <span>Agregar</span>
           </Button>
         </Tooltip>

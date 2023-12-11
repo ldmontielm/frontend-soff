@@ -27,7 +27,7 @@ export default function Profile() {
             <div className='flex items-center gap-4'>
               <div>
                 <p className='font-semibold capitalize'>{session?.user?.name}</p>
-                <p className='text-neutral-700'>@Administrador</p>
+                <p className='text-neutral-700'>{session?.user?.email}</p>
               </div>
             </div>
             <div className='mt-4'>

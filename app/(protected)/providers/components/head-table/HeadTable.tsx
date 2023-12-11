@@ -47,7 +47,7 @@ import { UserPlusIcon } from "@heroicons/react/24/outline";
 const AddProviderFetch = async (url: string, body: ProviderCreate) => {
   return await fetcherPost<ProviderCreate>(url, body)
 }
-
+import { UserPlus } from "lucide-react";
 
 
 const fromSchema = z.object({
@@ -112,15 +112,15 @@ return (
          
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-    <Tooltip placement="top" title="Aquí puedes registrar un proveedor." arrow>
-      <Button variant={`${location === 'purchases' ? 'outline' : 'default'}`} size={`${location === 'purchases' ? 'icon' : 'default'}`} className={`${location === 'purchases' ? '' : 'w-full md:w-fit'}`}>
-        {
-          location === 'purchases' ? (
-            <UserPlusIcon className="w-4 h-4" />
-            ): "Registrar"
-          }
-      </Button>
-      </Tooltip>
+        <Tooltip placement="top" title="Aquí puedes registrar un proveedor." arrow>
+          <Button variant={`${location === 'purchases' ? 'outline' : 'default'}`} size={`${location === 'purchases' ? 'icon' : 'default'}`} className={`${location === 'purchases' ? '' : 'w-full md:w-fit'}`}>
+            {
+              location === 'purchases' ? (
+                <UserPlus  size={16} color="#6f6f6f" />
+                ): "Registrar Proveedor"
+              }
+          </Button>
+        </Tooltip>
       </DialogTrigger>
       <DialogContent >
       

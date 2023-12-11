@@ -149,25 +149,9 @@ export default function HeadTable({id}:Props) {
             )
           }
           />
-           {/* <FormField
-            control={form.control}
-            name="unit_measure"
-            render={({ field }) => (
-              <FormItem className="w-full md:w-[200px]">
-                <FormLabel className="ml-6">Unidad de medida</FormLabel>
-                <FormControl>
-                  <Input placeholder="Unidad de medida" {...field} className="ml-6 lg:w-fit"/>
-                </FormControl>
-                <FormMessage />
-              </FormItem> */}
-            {/* ) */}
-          {/* } */}
-          {/* /> */}
-
         </div>
         <Tooltip placement="top" title="Agregar detalles al producto" arrow>
           <Button type="submit" className="w-full md:w-fit">
-            <PlusIcon className="w-4 h-4 mr-2" />
             <span>Agregar</span>
           </Button>
         </Tooltip>

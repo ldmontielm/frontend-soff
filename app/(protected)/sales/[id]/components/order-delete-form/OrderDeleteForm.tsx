@@ -11,6 +11,8 @@ import { RoutesApi } from "@/models/routes.models";
 import {
   Tooltip
 } from "@mui/material"
+import { Trash2 } from "lucide-react";
+
 
 const DeleteOrderFetch = async (url: string) => {
   return await fetcherDelete(url)
@@ -33,7 +35,7 @@ export default function OrderDeleteForm({ order, id_sale }: Props) {
           size="icon"
           className="group hover:bg-red-500"
         >
-          <TrashIcon className="w-4 h-4 group-hover:text-white" />
+          <Trash2 size={16} color="#6f6f6f" className="group-hover:text-white" />
         </Button>
       </Tooltip>
     </AlertDialogTrigger>
