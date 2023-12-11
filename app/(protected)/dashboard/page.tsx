@@ -1,17 +1,18 @@
-import { HeaderModule } from "@/components/page-components"
-import { ContentTargets, BarSales, PieSales } from "./components"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/utilities/authOptions"
-import { redirect } from "next/navigation"
-import { ChartSales } from "./components/chart-sales"
-import ChartSales2 from "./components/chart-products/ChartProducts"
+import { HeaderModule } from "@/components/page-components";
+import { ContentTargets, BarSales, PieSales } from "./components";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/utilities/authOptions";
+import { redirect } from "next/navigation";
+import { ChartSales } from "./components/chart-sales";
+import ChartSales2 from "./components/chart-products/ChartProducts";
 
 export default async function page() {
-  const session = await getServerSession(authOptions)
+  const session = await getServerSession(authOptions);
 
   if (!session) {
-    redirect('/auth/login')
+    redirect('/auth/login');
   }
+
   return (
     <main className="w-full mx-auto max-w-7xl p-4">
       <HeaderModule />
@@ -20,11 +21,17 @@ export default async function page() {
         <div className="col-span-2">
           <PieSales />
         </div>
-        <div className="flex w-full">
-          <ChartSales />
-          <ChartSales2 />
+        <div className="flex w-full space-x-4">
+          {/* Aplicamos la clase directamente a ChartSales */}
+          <div className="w-1/2 h-full">
+            {ChartSales()}
+          </div>
+          {/* Aplicamos la clase directamente a ChartSales2 */}
+          <div className="w-1/2 h-full">
+            {ChartSales2()}
+          </div>
         </div>
       </div>
     </main>
-  )
+  );
 }
