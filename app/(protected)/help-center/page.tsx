@@ -75,7 +75,7 @@ export default function page() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 py-10">
         {
           listManuales.map(manual => (
-            <div>
+            <div key={manual.id}>
               <Link href={`${Routes.CREATESALE}/manual`}
               className="flex flex-col space-y-2 justify-between border rounded bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary shadow-md [&:has([data-state=checked])]:border-primary"
               >

@@ -54,18 +54,6 @@ export default function  UpdateTable({id_role,role}:Props) {
     const [rolenameInput, setRolenameInput] = useState(role.name);
     const [active, setActive] = useState(true)
 
-
-
-
-
-
-
-
-
-
-
-
-
     const onSubmit = async(role:any, rolename:string ,assingPermissions: any[])=>{
 
         const datos={

@@ -84,7 +84,7 @@ export default function SheetNavbar() {
               menuItems.map((item) => {
                 if(session && session.user && session?.user.permissions.includes(item.permission)){
                   return (
-                    <Tooltip placement="right" title={item.name} arrow>
+                    <Tooltip placement="right" key={item.id} title={item.name} arrow>
                       <Link key={item.id} href={item.url} className='flex items-center gap-4 p-3 rounded hover:bg-blue-800'>
                         {item.icon}
                         <p className={`${isDrawer ? 'block': 'hidden'} text-[14px]`}>{item.name}</p>
