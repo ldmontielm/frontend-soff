@@ -25,7 +25,7 @@ import { useState } from 'react'
 import { useContext } from "react"
 import useSWR, { mutate, useSWRConfig } from "swr";
 import { useToast } from "@/components/ui/use-toast"
-
+import { Pencil } from "lucide-react";
 
 
 const UpdateSupplyFetch = async (url: string, body: SupplyUpdate) => {
@@ -100,8 +100,8 @@ export default function SupplyUpdateForm({supply, id_supply}: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>  
-        <Button variant='ghost'>
-          <PencilIcon className="h-4 w-4 mr-2" onClick={() => setOpen(true)}/><span>Editar</span>
+        <Button variant='outline' onClick={() => setOpen(true)} className="w-full">
+          <Pencil size={16} color='#6f6f6f' className="mr-2"/> Editar
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">

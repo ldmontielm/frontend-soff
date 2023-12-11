@@ -24,8 +24,8 @@ export const getValidationErrors = (errorCode: string) => {
             message: "El comprobante ya existe en la base de datos."
         },
         ERR_NETWORK: {
-            title: "Se ha rompido la red",
-            message: "Ah ocurrido un error del lado del servidor, si el error persiste, comuniquese con el equipo de desarrollo."
+            title: "Se ha roto la red",
+            message: "Ha ocurrido un error del lado del servidor, si el error persiste, comuniquese con el equipo de desarrollo."
         },
         SALE_NOT_CONTENT:{
             title: "Venta sin contenido",

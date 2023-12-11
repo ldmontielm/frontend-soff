@@ -15,6 +15,8 @@ import { Sale } from '../../models/sale.models'
 interface DataTableProps<TData, TValue> {
   data: TData[]
 }
+import { Presentation, FileSpreadsheet } from 'lucide-react'
+
 
 export default function Report<TData, TValue>({data}: DataTableProps<TData, TValue>) {
   const { toast } = useToast()
@@ -26,7 +28,7 @@ export default function Report<TData, TValue>({data}: DataTableProps<TData, TVal
            <Button
             variant='outline'
             className="flex items-center w-full md:w-fit gap-2">
-             <DocumentChartBarIcon className='w-4 h-4' />
+             <Presentation size={16} color='#6f6f6f' />
              <span>Reporte</span>
            </Button>
          </Tooltip>
@@ -42,7 +44,7 @@ export default function Report<TData, TValue>({data}: DataTableProps<TData, TVal
                   onClick={() => {generateExcelReport(data as Array<Sale>)
                       toast({variant: 'default', title: "Generando reporte excel", description: "Se ha generado un nuevo informe de ventas."})
                   }}>
-                    <ChartBarIcon className='w-4 h-4'/>
+                    <FileSpreadsheet size={16} color='#6f6f6f'/>
                     <span>Generar en Excel</span>
                   </Button>
                 </Tooltip>

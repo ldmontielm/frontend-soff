@@ -37,7 +37,7 @@ export default function UpdateStatus({id_role, role}:Props) {
     return (
         
     <Tooltip title="Cambiar el estado del rol" arrow placement="top">
-        <Button onClick={()=>onSubmit(id_role, role)} className={`bg-${role.status === true ? "green": "red"}-500 w-[35%] h-[25px] hover:bg-gray-700`}>{role.status === true ? "Activo": "Inactivo"}</Button>
+        <Button onClick={()=>onSubmit(id_role, role)} className={`bg-${role.status === true ? "green": "red"}-500 w-fit h-[25px] hover:bg-gray-700`}>{role.status === true ? "Activo": "Inactivo"}</Button>
     </Tooltip>
     )
 }

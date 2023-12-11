@@ -30,7 +30,7 @@ import { fetcherDelete } from "@/context/swr-context-provider/SwrContextProvider
 import { useToast } from "@/components/ui/use-toast"
 // import { urlProvider } from "../../services/provider.services";
 import useSWR, { mutate, useSWRConfig } from "swr";
-
+import { Trash2 } from "lucide-react";
 const DeleteProviderFetch = async (url: string) => {
   return await fetcherDelete(url)
 }
@@ -52,11 +52,10 @@ export default function ProviderDeleteForm({ provider, id_provider }: Props) {
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button
-          variant="ghost"
-          
-          // onClick={() => setOpen(true)} // Abrir el diálogo de alerta al hacer clic en el botón
+          variant="outline"
+          className="w-full"
         >
-          <TrashIcon className="w-4 h-4 mr-2 group-hover:text-white" /><span>Eliminar</span>
+          <Trash2 size={16} color="#6f6f6f" className="mr-2" /><span>Eliminar</span>
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

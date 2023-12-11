@@ -47,7 +47,9 @@ const AuthContext = createContext({
         permissions: ['']
     },
     setUser: (user: User) => {},
-    setIsAuthenticated: (data: boolean) => {}
+    setIsAuthenticated: (data: boolean) => {},
+    isDrawer: false,
+    SetDrawer: (data: boolean) => {}
 })
 
 async function retrieveUserInfo(access_token: string){
@@ -82,6 +84,11 @@ export default function AuthContextProvider({children}:Props) {
         role: "",   
         permissions: []
     })
+    const [isDrawer, setIsDrawer] = useState(false)
+
+    function SetDrawer(data: boolean) {
+        setIsDrawer(data)
+    }
 
 
     function logout(){
@@ -136,7 +143,7 @@ export default function AuthContextProvider({children}:Props) {
 
 
     return (
-        <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated, saveSession, logout, user, setUser}}>
+        <AuthContext.Provider value={{isAuthenticated, setIsAuthenticated, saveSession, logout, user, setUser, isDrawer, SetDrawer}}>
             {children}
         </AuthContext.Provider>
     )

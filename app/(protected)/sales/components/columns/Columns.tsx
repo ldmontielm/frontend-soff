@@ -19,7 +19,7 @@ import { SeeDetail } from "../see-detail"
 export const columns: ColumnDef<Sale>[] = [
   {
     accessorKey: "invoice_number",
-    header: "Factura"
+    header: "Recibo"
   },
   {
     accessorKey: 'client',

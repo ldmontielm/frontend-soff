@@ -17,6 +17,10 @@ import {
 } from "@mui/material"
 import Link from 'next/link'
 import { Routes } from "@/models/routes.models";
+import { BookOpen, Columns } from 'lucide-react'
+
+
+
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
@@ -50,7 +54,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
       <div className='w-full flex flex-col md:flex-row items-center py-4 gap-3 justify-between'>
         <div className='w-full flex flex-col md:flex-row items-center gap-3'>
           <Input
-            placeholder="Filtrar por número de factura..."
+            placeholder="Filtrar por número de recibo..."
             value={(table.getColumn("invoice_number")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
               table.getColumn("invoice_number")?.setFilterValue(event.target.value)
@@ -61,9 +65,9 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
             <DropdownMenuTrigger asChild>
               <>
                 <Tooltip placement="top" title="Ver manual de usuario." arrow>
-                  <Link href={`${Routes.CREATESALE}/manual`} >
-                      <Button variant='outline' className="w-full md:w-fit ml-auto flex items-center gap-2">
-                          <BookOpenIcon className=" h-4 w-4"/>
+                  <Link href={`${Routes.CREATESALE}/manual`} className='w-full md:w-fit'>
+                      <Button variant='outline' size='icon'>
+                        <BookOpen size={16} color='#6f6f6f' />
                       </Button>
                   </Link>
                 </Tooltip>
@@ -72,7 +76,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
             <DropdownMenuTrigger asChild>
               <Tooltip placement="top" title="Aqui podrás ocultar las columnas de la tabla." arrow>
                 <Button variant="outline" className="w-full md:w-fit ml-auto flex items-center gap-2">
-                  <AdjustmentsHorizontalIcon className='w-4 h-4' />
+                  <Columns size={16} color='#6f6f6f'  />
                   <span>Columnas</span>
                 </Button>
               </Tooltip>
@@ -102,7 +106,7 @@ export function DataTable<TData, TValue>({columns, data, isLoading, error}: Data
                         column.id === 'total' ? 'Total' :
                         column.id === 'status' ? 'Estado' : 
                         column.id === 'actions' ? 'Acciones' : 
-                        column.id === 'invoice_number' ? 'Factura': column.id 
+                        column.id === 'invoice_number' ? 'Recibo': column.id 
 
                       }
                     </div>

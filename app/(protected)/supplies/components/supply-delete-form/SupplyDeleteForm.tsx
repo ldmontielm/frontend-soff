@@ -30,7 +30,7 @@ import { useState } from 'react'
 import { urlSupply } from "../../services/supply.services";
 import useSWR, { mutate, useSWRConfig } from "swr";
 import { fetcherDelete } from "@/context/swr-context-provider/SwrContextProvider";
-
+import { Trash2 } from "lucide-react";
 
 
 const DeleteSupplyFetch = async (url: string) => {
@@ -71,11 +71,8 @@ export default function SupplyDeleteForm({ supply, id_supply }: Props) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button
-          variant="ghost"
-
-        >
-          <TrashIcon className="w-4 h-4 mr-2 group-hover:text-white" /><span>Eliminar</span>
+        <Button variant='outline' className="w-full">
+          <Trash2 size={16} color='#6f6f6f' className="mr-2"/> Eliminar
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>

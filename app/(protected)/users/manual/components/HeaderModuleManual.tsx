@@ -4,6 +4,7 @@ import { Routes } from '@/models/routes.models'
 import Link from "next/link";
 import { Button } from '@/components/ui/button'
 import { ArrowSmallLeftIcon } from '@heroicons/react/24/outline'
+import { MoveLeft } from "lucide-react";
 
 
 export function HeaderModuleManual() {
@@ -16,8 +17,8 @@ export function HeaderModuleManual() {
             <div className='flex justify-end mr-5'>
             <Tooltip placement="top" title="Volver a Roles." arrow>
                 <Link href={`${Routes.USERS}`} >  
-                <Button variant="outline">
-                    <ArrowSmallLeftIcon className='w-5 h-5'/>
+                <Button variant="outline" size='icon'>
+                    <MoveLeft size={16} color="#6f6f6f"/>
                 </Button>
                 </Link>
             </Tooltip>

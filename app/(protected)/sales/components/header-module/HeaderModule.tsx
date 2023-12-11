@@ -1,6 +1,6 @@
 'use client'
 import React from 'react'
-import { Clock } from '@/app/(protected)/purchases/components'
+import { Clock } from '@/components/page-components'
 import { ArrowSmallLeftIcon } from '@heroicons/react/24/outline'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
@@ -13,7 +13,7 @@ export default function HeaderModule() {
       <p className='scroll-m-20 text-3xl font-extrabold tracking-tight transition-colors first:mt-0'>Ventas</p>
       <div className='flex justify-between items-center'>
         <p className="leading-7 [&:not(:first-child)]:mt-1 text-gray-500">¡Aquí tienes una lista de todas las ventas realizadas!</p>
-        <span className='text-right text-3xl'><Clock/></span>
+        <Clock/>
       </div>
     </div>
   )

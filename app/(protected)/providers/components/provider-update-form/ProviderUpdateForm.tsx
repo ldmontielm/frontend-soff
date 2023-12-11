@@ -19,7 +19,7 @@ import useSWR, { mutate, useSWRConfig } from "swr";
 import { fetcherPut } from "@/context/swr-context-provider/SwrContextProvider";
 import { Routes, RoutesApi } from "@/models/routes.models";
 import { useToast } from "@/components/ui/use-toast"
-
+import { Pencil } from 'lucide-react'
 
 
 
@@ -100,8 +100,8 @@ export default function ProviderUpdateForm({provider, id_provider}: Props) {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>  
-        <Button variant='ghost' > 
-          <PencilIcon className=" h-4 w-4 mr-2" onClick={() => setOpen(true)}/><span>Editar</span>
+        <Button variant='outline' className='w-full'> 
+          <Pencil size={16} color='#6f6f6f' className="mr-2"/><span>Editar</span>
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
