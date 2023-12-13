@@ -11,7 +11,7 @@ export default function Content({children}: Props) {
   const {isDrawer} = useAuth()
 
   return (
-    <div className={`w-full md:ml-[68px] ${isDrawer ? 'md:ml-[400px]': ''} min-h-screen flex-col`}>
+    <div className={`w-full  ${isDrawer ? 'md:ml-[400px]': 'md:ml-[68px]'} min-h-screen flex-col`}>
         <Navbar />
         {children}
         <Footer />

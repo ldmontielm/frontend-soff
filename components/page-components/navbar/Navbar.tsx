@@ -11,7 +11,7 @@ import { useAuth } from '@/context/auth-context/AuthContextProvider'
 export default function Navbar() {
   const {SetDrawer, isDrawer} = useAuth()
   return (
-    <div className='border-b  py-2 w-full bg-white sticky top-0' >
+    <div className='border-b  py-2 w-full bg-white' >
       <div className='mx-auto flex items-center gap-4 justify-between px-4'>
         <div className='flex items-center gap-2'>
           <Sidebar />
