@@ -24,7 +24,7 @@ export default function RootLayout({
           <AuthContextProvider>
             <SwrContextProvider>
               {children}  
-              <Toaster /> 
+              <Toaster />
             </SwrContextProvider>
           </AuthContextProvider>
         </NextAuthContext>

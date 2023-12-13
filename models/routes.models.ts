@@ -6,7 +6,8 @@ export enum Routes{
   USERS='/users',
   ROLES='/roles',
   SUPPLIES='/supplies',
-  DASHBOARD='/dashboard'
+  DASHBOARD='/dashboard',
+  HELPCENTER='/help-center'
 }
 
 export enum RoutesApi {

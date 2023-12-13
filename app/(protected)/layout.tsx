@@ -1,6 +1,6 @@
 import React from 'react'
-import { Navbar, Footer } from '@/components/page-components'
 import {SheetNavbar} from '@/components/page-components'
+import Content from './Content'
 
 interface Props {
     children: React.ReactNode
@@ -12,11 +12,9 @@ export default function layout({children}: Props) {
       <div className='flex w-full'>
         <div className='flex w-full'>
           <SheetNavbar />
-          <div className='w-full min-h-screen flex-col'>
-            <Navbar />
+          <Content>
             {children}
-            <Footer />
-          </div>
+          </Content>
         </div>
       </div>
     </ div>

@@ -61,7 +61,7 @@ export default function SheetNavbar() {
   const {isDrawer, SetDrawer} = useAuth()
 
   return (
-    <div className={`bg-blue-600 px-3 transition ${isDrawer ? 'w-[400px]': ''} hidden md:block`}>
+    <div className={`bg-blue-600 px-3 transition ${isDrawer ? 'w-[400px]': ''} hidden md:block fixed h-screen`}>
          <div className='flex flex-row items-start gap-4 text-white pt-5'>
             <Image src={SoffLogo} alt='logo soff'/>
             <div className={`${isDrawer ? 'block': 'hidden'}`}>

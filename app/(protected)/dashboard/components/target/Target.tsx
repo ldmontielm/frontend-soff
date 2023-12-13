@@ -7,7 +7,8 @@ interface Target {
     category: string,
     target: string,
     percentage: string,
-    message: string
+    message: string,
+    color: string
 }
 
 
@@ -17,7 +18,7 @@ interface Props {
 
 export default function Target({target}: Props) {
   return (
-    <Card key={target.percentage} className="p-4">
+    <Card key={target.percentage} className={`p-4 border-l-1 border-r-1 border-b-1 border-t-8 border-t-blue-500`}>
         <div className="flex items-center gap-2 text-gray-500">
             <CardTitle>{target.category}</CardTitle>
         </div>

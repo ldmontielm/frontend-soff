@@ -132,58 +132,58 @@ return (
 
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-              control={form.control}
-              name ="nit"
-              render={({ field }) => (
-                <FormItem>
-                <FormLabel>NIT </FormLabel>
-                <FormControl>
-                  <Input placeholder="Ingrese el NIT" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-              )}
-              />
-          <FormField
-              control={form.control}
-              name ="name"
-              render={({ field }) => (
-                <FormItem>
-                <FormLabel>Nombre </FormLabel>
-                <FormControl>
-                  <Input placeholder="Ingrese el Nombre" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-              )}
-              />
             <FormField
-              control={form.control}
-              name ="company"
-              render={({ field }) => (
-                <FormItem>
-                <FormLabel>Empresa </FormLabel>
-                <FormControl>
-                  <Input placeholder="Ingrese la Empresa" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-              )}
-              />
+                control={form.control}
+                name ="nit"
+                render={({ field }) => (
+                  <FormItem>
+                  <FormLabel>NIT </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ingrese el NIT" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+                )}
+                />
             <FormField
-              control={form.control}
-              name ="address"
-              render={({ field }) => (
-                <FormItem>
-                <FormLabel>Dirección</FormLabel>
-                <FormControl>
-                  <Input placeholder="Ingrese la Dirección" {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-              )}
-              />
+                control={form.control}
+                name ="name"
+                render={({ field }) => (
+                  <FormItem>
+                  <FormLabel>Nombre </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ingrese el Nombre" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+                )}
+                />
+              <FormField
+                control={form.control}
+                name ="company"
+                render={({ field }) => (
+                  <FormItem>
+                  <FormLabel>Empresa </FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ingrese la Empresa" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+                )}
+                />
+              <FormField
+                control={form.control}
+                name ="address"
+                render={({ field }) => (
+                  <FormItem>
+                  <FormLabel>Dirección</FormLabel>
+                  <FormControl>
+                    <Input placeholder="Ingrese la Dirección" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+                )}
+                />
             {/* <FormField
               control={form.control}
               name ="email"

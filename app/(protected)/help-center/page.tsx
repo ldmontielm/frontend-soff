@@ -19,25 +19,29 @@ const listManuales = [
     "id": 1,
     "name": "Ventas",
     "icon": <Wallet size={20} color='#6f6f6f' />,
-    "text": ""
+    "text": "",
+    "link": `${Routes.CREATESALE}/manual`
   },
   {
     "id": 2,
     "name": "Compras",
     "icon": <ShoppingBag size={20} color='#6f6f6f' />,
-    "text": ""
+    "text": "",
+    "link": `${Routes.CREATEPURCHASE}/manual`
   },
   {
     "id": 3,
     "name": "Productos",
     "icon": <Pizza size={20} color='#6f6f6f' />,
-    "text": ""
+    "text": "",
+    "link": `${Routes.CREATEPRODUCT}/manual`
   },
   {
     "id": 4,
     "name": "Insumos",
     "icon": <Beef size={20} color='#6f6f6f' />,
-    "text": ""
+    "text": "",
+    "link": `${Routes.SUPPLIES}/manual`
   },
   {
     "id": 5,
@@ -49,19 +53,22 @@ const listManuales = [
     "id": 6,
     "name": "Roles",
     "icon": <Fingerprint size={20} color='#6f6f6f' />,
-    "text": ""
+    "text": "",
+    "link": `${Routes.ROLES}/manual`
   },
   {
     "id": 7,
     "name": "Usuarios",
     "icon": <Users size={20} color='#6f6f6f' />,
-    "text": ""
+    "text": "",
+    "link": `${Routes.USERS}/manual`
   },
   {
     "id": 8,
     "name": "Autenticación",
     "icon": <ShieldCheck size={20} color='#6f6f6f' />,
-    "text": ""
+    "text": "",
+    "link": `${Routes.HELPCENTER}/manual`
   },
 ]
 
@@ -76,7 +83,7 @@ export default function page() {
         {
           listManuales.map(manual => (
             <div key={manual.id}>
-              <Link href={`${Routes.CREATESALE}/manual`}
+              <Link href={`${manual.link}`}
               className="flex flex-col space-y-2 justify-between border rounded bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary shadow-md [&:has([data-state=checked])]:border-primary"
               >
                 {manual.icon}
@@ -86,6 +93,13 @@ export default function page() {
             </div>
           ))
         }
+        {/* <Link href={}
+          className="flex flex-col space-y-2 justify-between border rounded bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary shadow-md [&:has([data-state=checked])]:border-primary"
+          >
+            <ShieldCheck size={20} color='#6f6f6f' />
+            <p className='font-semibold'>Autenticación</p>
+            <p className='text-sm'>Ir al manual técnico de Autenticación, aprender funcionalidades.</p>
+          </Link> */}
       </div>
     </div>
   )

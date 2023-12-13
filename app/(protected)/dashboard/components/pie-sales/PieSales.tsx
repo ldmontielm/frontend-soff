@@ -1,11 +1,26 @@
 'use client'
 import { Chart as ChartJS, LinearScale,PointElement, Tooltip, Legend, LineElement, Title, CategoryScale } from "chart.js";
-import { Line } from 'react-chartjs-2';
+import { Line, Bar } from 'react-chartjs-2';
 import useSWR from 'swr'
 import { RoutesApi } from '@/models/routes.models'
 import React, { useEffect, useState, useMemo } from 'react';
 import Image from 'next/image'
 import SoffLogo from "@/public/soff.svg"
+import { Select, SelectContent, SelectItem, SelectTrigger } from "@/components/ui/select";
+import { SelectValue } from "@radix-ui/react-select";
+import numeral from 'numeral'
+
+import { Activity } from "lucide-react";
+
+interface SalePayment {
+  Año: number
+  Mes: string
+  Ventas_Totales: number
+  Ventas_Efectivo: number
+  Ventas_Transferencia: number
+  Porcentaje_Efectivo: number
+  Porcentaje_Transferencia: number
+}
 
 ChartJS.register(
   CategoryScale,
@@ -16,8 +31,10 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
 export default function PieSales() {
   const {data: salesMonth, error } = useSWR(`${RoutesApi.DASHBOARD}/grafic_sales`)
+  const {data: salesPayment} = useSWR<SalePayment>(`${RoutesApi.DASHBOARD}/grafic_payment`)
   const allMonths = useMemo(() => [
     'Ene.', 'Feb.', 'Mar.', 'Abr.', 'May.', 'Jun.',
     'Jul.', 'Ago.', 'Sep.', 'Oct.', 'Nov.', 'Dic.'
@@ -28,16 +45,38 @@ export default function PieSales() {
   const [minSaleValue, setMinSaleValue] = useState<number | null>(null)
   const [differenceSale, setDifferenceSale] = useState<number | null>(null)
   const [selectedYear, setSelectedYear] = useState(new Date().getFullYear())
+  const [dataPayment, setDataPayment] = useState<any>([])
+
+
   const [chartData, setChartData] = useState({
     labels:allMonths,
     datasets: [{
-    label: "",
-    data:Array(allMonths.length).fill(0),
-    fill: true,
-    borderColor: '#0453F4',
-    backgroundColor: '#00000',
-    tension: 0.1
+      data:Array(allMonths.length).fill(0),
+      borderColor: '#3b82f6',
+      backgroundColor: 'transparent',
+      pointBorderColor: 'transparent',
+      pointBorderWith: 4,
+      tension: 0.5
     }]
+  })
+
+  const [barData, setBarData] = useState({
+    labels: ["Efectivo", "Transferencia"],
+    datasets: [
+      {
+        axis: 'y',
+        data: dataPayment,
+        backgroundColor: [
+          '#3b82f6',
+          '#10b981'
+        ],
+        borderColor: [
+          '#3b82f6',
+          '#10b981'
+        ],
+        borderWidth: 1
+      }
+    ]
   })
 
   const convertToCOP = (money: number | null) => {
@@ -89,12 +128,12 @@ export default function PieSales() {
       setChartData({
         labels: allMonths,
         datasets: [{
-        label: "",
-        data: filledData,
-        fill: true,
-        borderColor: '#0453F4',
-        backgroundColor: '#0453F4',
-        tension: 0.1
+          data: filledData,
+          borderColor: '#3b82f6',
+          backgroundColor: 'transparent',
+          pointBorderColor: 'transparent',
+          pointBorderWith: 4,
+          tension: 0.5
         }]
       });
     }
@@ -113,95 +152,94 @@ export default function PieSales() {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        display: false
       },
     },
     scales:{
       x:{
         title:{
-          display:true,
-          text: 'Meses'        
+          display:false,      
         },
       },
       y:{
-        title:{
-          display:true,
-          text:'Ventas'
-        }
+        min: 0,
+        max: maxSaleValue,
+        ticks: {
+          stepSize: 200000,
+          callback: (value: string) => numeral(value).format('0.0a')
+        },
+        grid: {
+          tickBorderDash: [1000]
+        },
       }
     }
   }
 
+  const USDollar = new Intl.NumberFormat()
+
   return (
-    <div className="w-full flex flex-col md:flex-row items-center py-4 gap-3 justify-between">
-    <div className="p-3 w-[900px] gap-3 border rounded ">
-      <div className="flex justify-between items-center">
-        <div className="flex items-center ml-10 mt-2">
-          <p className="text-gray-600 font-bold">Total Ventas {selectedYear}</p>
-        </div>
-        <div className="text-right col-span-12 flex items-center mr-6">
-          <select
-            id="yearSelector"
-            value={selectedYear}
-            onChange={(e) => setSelectedYear(Number(e.target.value))}
-            className="text-blue-500 p-2 pl-4  w-[150px] mr-8 mt-4 border rounded"
-          >
-            {Array.from({ length: 10 }, (_, index) => new Date().getFullYear() - index).map((year) => (
-              <option key={year} value={year} className="mr-4">
-                {year}
-              </option>
+    <div className="grid grid-cols-12 gap-4">
+      <div className="p-4 rounded border col-span-12 md:col-start-1 md:col-end-9 rounded-xl border bg-card text-card-foreground shadow p-4">
+        <div className="flex justify-between items-center mb-5">
+          <p className="text-gray-600 font-medium">Total Ventas {selectedYear}</p>
+          <Select 
+            defaultValue={selectedYear.toString()}
+            onValueChange={(e) => setSelectedYear(Number(e))}
+            >
+            <SelectTrigger className="w-fit md:w-36">
+              <SelectValue placeholder="Select a fruit" />
+            </SelectTrigger>
+            <SelectContent>
+              {Array.from({ length: 10 }, (_, index) => new Date().getFullYear() - index).map((year) => (
+                <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
             ))}
-          </select>
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="w-full p-4">
+          <Line className="w-full"  data={chartData}  />
         </div>
       </div>
-      <div className="w-[850px]">
-        <Line options={options} data={chartData}  />
+      <div className="col-span-12 md:col-start-9 md:col-end-13 space-y-4">
+        <div className="rounded-xl border bg-card text-card-foreground shadow space-y-4 border-l-1 border-r-1 border-b-1 border-t-8 border-t-emerald-500">
+          <div className="flex items-center justify-between border-b p-4">
+            <div className="w-10 h-10 flex items-center justify-center border rounded-lg">
+              <Activity size={24} color="#6f6f6f" />
+            </div>
+            <p className="font-medium">Efectivo</p>
+            <div className="h-10 px-2 flex items-center justify-center border rounded-lg">
+              <p className="font-medium">{salesPayment?.Porcentaje_Efectivo}%</p>
+            </div>
+          </div>
+          <div className="p-4 space-y-4">
+            <div>
+              <p className="font-semibold text-3xl text-center">${USDollar.format(salesPayment?.Ventas_Efectivo!)}</p>
+            </div>
+            <div>
+              <p className="text-sm text-center text-neutral-700">Se han logrado recaudar un total de ${USDollar.format(salesPayment?.Ventas_Efectivo!)} en ventas en efectivo, llegando a un total del {salesPayment?.Porcentaje_Efectivo}% de las ventas en total</p>
+            </div>
+          </div>
+        </div>
+        <div className="rounded-xl border bg-card text-card-foreground shadow space-y-4 border-l-1 border-r-1 border-b-1 border-t-8 border-t-violet-500">
+          <div className="flex items-center justify-between border-b p-4">
+            <div className="w-10 h-10 flex items-center justify-center border rounded-lg">
+              <Activity size={24} color="#6f6f6f" />
+            </div>
+            <p className="font-medium">Transferencia</p>
+            <div className="h-10 px-2 flex items-center justify-center border rounded-lg">
+              <p className="font-medium">{salesPayment?.Porcentaje_Transferencia}%</p>
+            </div>
+          </div>
+          <div className="p-4 space-y-4">
+            <div>
+              <p className="font-semibold text-3xl text-center">${USDollar.format(salesPayment?.Ventas_Transferencia!)}</p>
+            </div>
+            <div>
+              <p className="text-sm text-center text-neutral-700">Se han logrado recaudar un total de ${USDollar.format(salesPayment?.Ventas_Transferencia!)} en ventas por transferencia, llegando a un total del {salesPayment?.Porcentaje_Transferencia}% de las ventas en total</p>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-    <div className="border rounded w-auto h-auto ml-2 p-2">
-      <div className="flex justify-between items-center pt-4">
-        <Image className="pl-4" src={SoffLogo} alt='logo soff'/>
-        <p className="text-black font-bold text-sm pr-20">Aplicación SOFF</p>
-      </div>
-      {
-        maxSaleValue === 0 ?(
-          <p className="text-center font-bold p-5 w-full">No hay ventas registradas.</p>
-        )
-        :
-        (
-          <>
-            <p className="text-blue-700 font-bold text-md pr-5 pt-7 pl-4">
-              Interpretación gráfica
-            </p>
-            <p className="pl-4 pt-5 pr-2">Para el año {selectedYear} puedes ver que:</p>
-            {
-              minSaleMonth === maxSaleMonth && minSaleValue === maxSaleValue ? (
-                <>
-                  <p className="pl-4 pt-4 text-green-500 font-bold">Valor Alto</p>
-                  <p className="pl-4 pt-4 text-black text-2xl font-bold">{convertToCOP(maxSaleValue)}</p>
-                  <p className="pl-9 text-gray-500 font-bold">{maxSaleMonth}</p>
-                  <p className="pl-9 pb-2">Alcanza su punto máximo.</p>
-                </>
-              )
-              :
-              (
-                <>
-                  <p className="pl-4 pt-4 text-red-500 font-bold">Valor bajo</p>
-                  <p className="pl-4 pt-4 text-black text-2xl font-bold">{convertToCOP(minSaleValue)}</p>
-                  <p className="pl-9 text-gray-500 font-bold">{minSaleMonth}</p>
-                  <p className="pl-9 pr-1">Las ventas son relativamente bajas.</p>
-                  <p className="pl-4 pt-4 text-green-500 font-bold">Valor Alto</p>
-                  <p className="pl-4 pt-4 text-black text-2xl font-bold">{convertToCOP(maxSaleValue)}</p>
-                  <p className="pl-9 text-gray-500 font-bold">{maxSaleMonth}</p>
-                  <p className="pl-9">Alcanza su punto máximo.</p>
-                  <p className="text-blue-700 text-1xl pl-4 font-bold pt-4 pb-2">Diferencia: {convertToCOP(differenceSale)}</p>
-                </>
-              )
-            } 
-          </>
-        )
-      } 
-    </div>
   </div>
   )
 }

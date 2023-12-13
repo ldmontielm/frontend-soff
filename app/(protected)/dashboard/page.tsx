@@ -20,16 +20,6 @@ export default async function page() {
         <div className="col-span-2">
           <PieSales />
         </div>
-        <div className="flex w-full space-x-4">
-          {/* Ajustamos el ancho a 80% */}
-          <div className="w-4/5">
-            <ChartSales />
-          </div>
-          {/* Ajustamos el ancho a 50% */}
-          <div className="w-[100%]">
-            <ChartSales2 />
-          </div>
-        </div>
       </div>
     </main>
   )
